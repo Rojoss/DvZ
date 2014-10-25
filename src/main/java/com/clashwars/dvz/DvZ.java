@@ -1,10 +1,8 @@
 package com.clashwars.dvz;
 
 import com.clashwars.cwcore.CWCore;
-import com.clashwars.cwcore.utils.CWUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
