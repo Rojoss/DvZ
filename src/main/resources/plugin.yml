@@ -1,0 +1,9 @@
+main : com.clashwars.dvz.DvZ
+name: ${project.artifactId}
+version: ${project.version}
+description: ${project.description}
+depend: [CWCore]
+commands:
+  dvz:
+    description: Main dvz command
+    usage: /<command>
