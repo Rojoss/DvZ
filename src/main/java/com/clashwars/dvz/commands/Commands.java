@@ -2,12 +2,10 @@ package com.clashwars.dvz.commands;
 
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
-import com.clashwars.dvz.Util;
+import com.clashwars.dvz.util.Util;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.*;
 
 public class Commands {
     private DvZ dvz;

@@ -1,4 +1,4 @@
-package com.clashwars.dvz;
+package com.clashwars.dvz.util;
 
 import com.clashwars.cwcore.utils.CWUtil;
 
