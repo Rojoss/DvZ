@@ -1,5 +1,7 @@
 package com.clashwars.dvz.classes;
 
+import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +32,7 @@ public enum DvZClass {
 
     private ClassType type;
     private List<String> aliases = new ArrayList<String>();
+    private Gson gson = new Gson();
 
     DvZClass(ClassType type, String[] aliases) {
         this.type = type;
@@ -62,4 +65,10 @@ public enum DvZClass {
         }
         return null;
     }
+
+    public Gson getGson() {
+        return gson;
+    }
+
+
 }
