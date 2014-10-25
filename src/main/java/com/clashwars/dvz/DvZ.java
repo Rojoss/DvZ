@@ -1,8 +1,14 @@
 package com.clashwars.dvz;
 
 import com.clashwars.cwcore.CWCore;
+import com.clashwars.dvz.commands.Commands;
+import com.clashwars.dvz.config.PluginCfg;
+import com.clashwars.dvz.events.MainEvents;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;
@@ -10,6 +16,10 @@ import java.util.logging.Logger;
 public class DvZ extends JavaPlugin {
     private static DvZ instance;
     private CWCore cwcore;
+
+    private PluginCfg cfg;
+
+    private Commands cmds;
 
     private final Logger log = Logger.getLogger("Minecraft");
 
@@ -31,15 +41,22 @@ public class DvZ extends JavaPlugin {
         }
         cwcore = (CWCore) plugin;
 
-        //TODO: Configs
+        cfg = new PluginCfg("plugins/DvZ/DvZ.yml");
+        cfg.load();
 
         //TODO: Managers
 
-        //TODO: Events
+        PluginManager pm = getServer().getPluginManager();
+        pm.registerEvents(new MainEvents(this), this);
 
-        //TODO: Commands
+        cmds = new Commands(this);
 
         log("loaded successfully");
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        return cmds.onCommand(sender, cmd, label, args);
     }
 
 
@@ -50,5 +67,11 @@ public class DvZ extends JavaPlugin {
 
     public static DvZ inst() {
         return instance;
+    }
+
+
+    /* Getters & Setters */
+    public PluginCfg getCfg() {
+        return cfg;
     }
 }
