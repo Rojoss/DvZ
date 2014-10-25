@@ -32,7 +32,7 @@ public class DvZ extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-
+    //Commit test
         Plugin plugin = getServer().getPluginManager().getPlugin("CWCore");
         if (plugin == null || !(plugin instanceof CWCore)) {
             log("CWCore dependency couldn't be loaded!");
@@ -62,7 +62,7 @@ public class DvZ extends JavaPlugin {
 
 
     public void log(Object msg) {
-        log.info("[CWBounty " + getDescription().getVersion() + "] " + msg.toString());
+        log.info("[DvZ " + getDescription().getVersion() + "] " + msg.toString());
     }
 
     public static DvZ inst() {
