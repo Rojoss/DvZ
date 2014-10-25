@@ -1,6 +1,11 @@
 package com.clashwars.dvz;
 
 import com.clashwars.cwcore.CWCore;
+import com.clashwars.dvz.classes.BaseClass;
+import com.clashwars.dvz.classes.ClassManager;
+import com.clashwars.dvz.classes.DvZClass;
+import com.clashwars.dvz.classes.dwarves.DwarfClass;
+import com.clashwars.dvz.classes.dwarves.Miner;
 import com.clashwars.dvz.commands.Commands;
 import com.clashwars.dvz.config.PluginCfg;
 import com.clashwars.dvz.events.MainEvents;
@@ -20,6 +25,8 @@ public class DvZ extends JavaPlugin {
     private PluginCfg cfg;
 
     private Commands cmds;
+
+    private ClassManager cm;
 
     private final Logger log = Logger.getLogger("Minecraft");
 
@@ -44,7 +51,7 @@ public class DvZ extends JavaPlugin {
         cfg = new PluginCfg("plugins/DvZ/DvZ.yml");
         cfg.load();
 
-        //TODO: Managers
+        ClassManager cm = new ClassManager(this);
 
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new MainEvents(this), this);
@@ -73,5 +80,9 @@ public class DvZ extends JavaPlugin {
     /* Getters & Setters */
     public PluginCfg getCfg() {
         return cfg;
+    }
+
+    public ClassManager getCM() {
+        return cm;
     }
 }
