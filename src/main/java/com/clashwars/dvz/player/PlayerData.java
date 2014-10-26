@@ -1,12 +1,8 @@
 package com.clashwars.dvz.player;
 
-import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvZClass;
-import org.bukkit.entity.Player;
-
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 public class PlayerData {
 

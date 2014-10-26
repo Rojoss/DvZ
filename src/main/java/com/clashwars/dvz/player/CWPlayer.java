@@ -1,6 +1,5 @@
 package com.clashwars.dvz.player;
 
-import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvZClass;
 import com.clashwars.dvz.config.PlayerCfg;
 import org.bukkit.Bukkit;

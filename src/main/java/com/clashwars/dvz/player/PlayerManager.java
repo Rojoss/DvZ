@@ -1,7 +1,6 @@
 package com.clashwars.dvz.player;
 
 import com.clashwars.dvz.DvZ;
-import com.clashwars.dvz.classes.DvZClass;
 import com.clashwars.dvz.config.PlayerCfg;
 import org.bukkit.entity.Player;
 
@@ -17,8 +16,6 @@ public class PlayerManager {
     Map<UUID, CWPlayer> players = new HashMap<UUID, CWPlayer>();
 
     public void populate() {
-        //Go through all the players in the config
-        //Create CWPlayer's of each
         for (UUID uuid : pcfg.getPlayerData().keySet()) {
             players.put(uuid, new CWPlayer(uuid, pcfg.getPlayerData().get(uuid)));
         }
@@ -57,6 +54,31 @@ public class PlayerManager {
 
     public void savePlayer(Player p) {
         pcfg.setPlayer(p.getUniqueId(), getPlayer(p).getPlayerData());
+    }
+
+    public void removePlayer(UUID uuid) {
+        pcfg.removePlayer(uuid);
+    }
+
+    public void removePlayer(CWPlayer p) {
+        pcfg.removePlayer(p.getUUID())
+    }
+
+    public void removePlayer(Player p) {
+        pcfg.removePlayer(p.getUniqueId());
+    }
+
+    public void savePlayers() {
+        for(UUID uuid : players.keySet()) {
+            pcfg.setPlayer(uuid, getPlayer(uuid).getPlayerData());
+        }
+    }
+
+    public void clearPlayers(boolean mode) {
+        players.clear();
+        if(mode = true) {
+            pcfg.PLAYERS.clear();
+        }
     }
 
 }

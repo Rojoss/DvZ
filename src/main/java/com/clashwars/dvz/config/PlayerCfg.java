@@ -2,7 +2,6 @@ package com.clashwars.dvz.config;
 
 import com.clashwars.cwcore.config.internal.EasyConfig;
 import com.clashwars.dvz.DvZ;
-import com.clashwars.dvz.classes.DvZClass;
 import com.clashwars.dvz.player.PlayerData;
 
 import java.util.HashMap;
