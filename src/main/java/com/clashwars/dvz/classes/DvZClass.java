@@ -32,7 +32,6 @@ public enum DvZClass {
 
     private ClassType type;
     private List<String> aliases = new ArrayList<String>();
-    private Gson gson = new Gson();
 
     DvZClass(ClassType type, String[] aliases) {
         this.type = type;
@@ -64,10 +63,6 @@ public enum DvZClass {
             }
         }
         return null;
-    }
-
-    public Gson getGson() {
-        return gson;
     }
 
 

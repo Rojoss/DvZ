@@ -3,6 +3,7 @@ package com.clashwars.dvz.classes;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
+import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -17,7 +18,7 @@ public class BaseClass {
 
     protected DvZClass dvzClass = null;
     protected Set<CWItem> equipment = new HashSet<CWItem>();
-    protected Set<BaseAbility> abilities = new HashSet<BaseAbility>();
+    protected Set<Ability> abilities = new HashSet<Ability>();
 
     protected CWItem classItem = null;
     protected double weight = 0.0d;
@@ -75,12 +76,16 @@ public class BaseClass {
         return equipment;
     }
 
-    public Set<BaseAbility> getAbilities() {
+    public Set<Ability> getAbilities() {
         return abilities;
     }
 
     public DvZClass getDvZClass() {
         return dvzClass;
+    }
+
+    public ClassType getClassType() {
+        return dvzClass.getType();
     }
 
     public ClassType getType() {
