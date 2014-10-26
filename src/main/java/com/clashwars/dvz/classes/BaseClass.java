@@ -23,7 +23,10 @@ public class BaseClass {
 
     public BaseClass() {
         dvz = DvZ.inst();
-        double w = dvz.getClassesCfg().WEIGHTS.get(getName());
+        double w = -1;
+        if (dvz.getClassesCfg().WEIGHTS.get(getName()) != null) {
+            w = dvz.getClassesCfg().WEIGHTS.get(getName());
+        }
         if (w > 0) {
             weight = w;
         }
@@ -72,6 +75,9 @@ public class BaseClass {
     }
 
     public String getName() {
-        return CWUtil.capitalize(dvzClass.toString().toLowerCase());
+        if (dvzClass != null) {
+            return CWUtil.capitalize(dvzClass.toString().toLowerCase());
+        }
+        return "";
     }
 }
