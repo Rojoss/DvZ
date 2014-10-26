@@ -22,7 +22,7 @@ public class PlayerCfg extends EasyConfig {
 
     public Map<UUID, PlayerData> getPlayerData() {
         Map<UUID, PlayerData> players = new HashMap<UUID, PlayerData>();
-        for(String key : PLAYERS.keySet()) {
+        for (String key : PLAYERS.keySet()) {
             players.put(UUID.fromString(key), dc.getGson().fromJson(PLAYERS.get(key), PlayerData.class));
         }
         return players;

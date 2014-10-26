@@ -20,16 +20,16 @@ public class PlayerManager {
     public void populate() {
         //Go through all the players in the config
         //Create CWPlayer's of each
-        for(UUID uuid : pcfg.getPlayerData().keySet()) {
+        for (UUID uuid : pcfg.getPlayerData().keySet()) {
             players.put(uuid, new CWPlayer(uuid, pcfg.getPlayerData().get(uuid)));
         }
     }
 
     public CWPlayer getPlayer(Player p) {
         UUID uuid = p.getUniqueId();
-        if(players.containsKey(uuid)) {
+        if (players.containsKey(uuid)) {
             return players.get(uuid);
-        } else if(pcfg.PLAYERS.containsKey(uuid.toString())) {
+        } else if (pcfg.PLAYERS.containsKey(uuid.toString())) {
             return new CWPlayer(uuid, dc.getGson().fromJson(pcfg.PLAYERS.get(uuid), PlayerData.class));
         } else {
             return new CWPlayer(uuid, new PlayerData());
@@ -39,9 +39,9 @@ public class PlayerManager {
     public CWPlayer getPlayer(String name) {
         Player p = dvz.getServer().getPlayer(name);
         UUID uuid = p.getUniqueId();
-        if(players.containsKey(uuid)) {
+        if (players.containsKey(uuid)) {
             return players.get(uuid);
-        } else if(pcfg.PLAYERS.containsKey(uuid.toString())) {
+        } else if (pcfg.PLAYERS.containsKey(uuid.toString())) {
             return new CWPlayer(uuid, dc.getGson().fromJson(pcfg.PLAYERS.get(uuid), PlayerData.class));
         } else {
             return new CWPlayer(uuid, new PlayerData());
