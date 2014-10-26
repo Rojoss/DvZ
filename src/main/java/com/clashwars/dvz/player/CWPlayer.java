@@ -1,7 +1,7 @@
 package com.clashwars.dvz.player;
 
-import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvZClass;
+import com.clashwars.dvz.config.PlayerCfg;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -10,10 +10,9 @@ import java.util.UUID;
 
 public class CWPlayer {
 
-    private DvZ dvz;
-
     private UUID uuid;
     private PlayerData data;
+    private PlayerCfg pcfg;
 
     public CWPlayer(UUID uuid, PlayerData data) {
         this.uuid = uuid;
@@ -24,20 +23,12 @@ public class CWPlayer {
         return uuid;
     }
 
-    public void setUUID(UUID uuid) {
-        this.uuid = uuid;
-    }
-
     public Player getPlayer() {
-        return dvz.getServer().getPlayer(uuid);
+        return Bukkit.getPlayer(uuid);
     }
 
     public PlayerData getPlayerData() {
         return data;
-    }
-
-    public void setPlayerData(PlayerData playerData) {
-        this.data = playerData;
     }
 
     public DvZClass getPlayerClass() {
@@ -62,6 +53,10 @@ public class CWPlayer {
 
     public void setClassOptions(Set<DvZClass> classOptions) {
         data.setClassOptions(classOptions);
+    }
+
+    public void savePlayer() {
+        pcfg.setPlayer(uuid, data);
     }
 
 }
