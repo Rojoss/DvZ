@@ -1,6 +1,8 @@
 package com.clashwars.dvz.events;
 
 import com.clashwars.dvz.DvZ;
+import com.clashwars.dvz.player.CWPlayer;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class MainEvents implements Listener {
@@ -9,6 +11,12 @@ public class MainEvents implements Listener {
 
     public MainEvents(DvZ dvz) {
         this.dvz = dvz;
+    }
+
+    @EventHandler
+    public void levelUp(CWPlayer.ClassLevelupEvent event) {
+        CWPlayer cwp = event.getCWPlayer();
+        //TODO: Complete event tasks
     }
 
 }
