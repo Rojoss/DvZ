@@ -8,6 +8,7 @@ import com.clashwars.dvz.config.ClassesCfg;
 import com.clashwars.dvz.config.PlayerCfg;
 import com.clashwars.dvz.config.PluginCfg;
 import com.clashwars.dvz.events.MainEvents;
+import com.clashwars.dvz.events.WorkShopEvents;
 import com.clashwars.dvz.player.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -75,6 +76,7 @@ public class DvZ extends JavaPlugin {
     private void registerEvents() {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new MainEvents(this), this);
+        pm.registerEvents(new WorkShopEvents(this), this);
         for (Ability a : Ability.values()) {
             pm.registerEvents(a.getAbilityClass(), this);
         }
