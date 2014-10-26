@@ -12,6 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import java.security.Timestamp;
+import java.util.Calendar;
 import java.util.Set;
 import java.util.UUID;
 
@@ -22,6 +24,8 @@ public class CWPlayer {
     private PlayerCfg pcfg;
     private DvZ dvz;
     private ExpUtil exputil = new ExpUtil(getPlayer());
+    Calendar calendar = Calendar.getInstance();
+    private long lastSave = System.currentTimeMillis();
 
     public CWPlayer(UUID uuid, PlayerData data) {
         this.uuid = uuid;
@@ -77,11 +81,19 @@ public class CWPlayer {
             data.setClassExp(getClassExp() + exp);
             exputil.changeExp(exp);
         }
+        checkLastSave();
     }
 
     public void takeClassExp(int exp) {
         data.setClassExp(getClassExp() - exp);
         exputil.changeExp(-exp);
+        checkLastSave();
+    }
+
+    private void checkLastSave() {
+        if(System.currentTimeMillis() - lastSave >= 30) {
+            savePlayer();
+        }
     }
 
     public Set<DvzClass> getClassOptions() {
