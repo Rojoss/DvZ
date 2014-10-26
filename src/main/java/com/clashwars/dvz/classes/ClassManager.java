@@ -29,28 +29,25 @@ public class ClassManager {
     private void populate() {
         dwarfClasses.put(DvZClass.DWARF, new DwarfClass());
         dwarfClasses.put(DvZClass.MINER, new Miner());
-        dwarfClasses.put(DvZClass.BUILDER, new Builder());
-        dwarfClasses.put(DvZClass.HUNTER, new Hunter());
-        dwarfClasses.put(DvZClass.TAILOR, new Tailor());
-        dwarfClasses.put(DvZClass.ALCHEMIST, new Alchemist());
-        //TODO: Make dwarf classes
+//        dwarfClasses.put(DvZClass.BUILDER, new Builder());
+//        dwarfClasses.put(DvZClass.HUNTER, new Hunter());
+//        dwarfClasses.put(DvZClass.TAILOR, new Tailor());
+//        dwarfClasses.put(DvZClass.ALCHEMIST, new Alchemist());
 
         monsterClasses.put(DvZClass.MONSTER, new MobClass());
         monsterClasses.put(DvZClass.ZOMBIE, new Zombie());
-        monsterClasses.put(DvZClass.SKELETON, new Skeleton());
-        monsterClasses.put(DvZClass.SPIDER, new Spider());
-        monsterClasses.put(DvZClass.CREEPER, new Creeper());
-        monsterClasses.put(DvZClass.ENDERMAN, new Enderman());
-        monsterClasses.put(DvZClass.BLAZE, new Blaze());
-        monsterClasses.put(DvZClass.PIG, new Pig());
-        monsterClasses.put(DvZClass.VILLAGER, new Villager());
-        //TODO: Make monster classes
+//        monsterClasses.put(DvZClass.SKELETON, new Skeleton());
+//        monsterClasses.put(DvZClass.SPIDER, new Spider());
+//        monsterClasses.put(DvZClass.CREEPER, new Creeper());
+//        monsterClasses.put(DvZClass.ENDERMAN, new Enderman());
+//        monsterClasses.put(DvZClass.BLAZE, new Blaze());
+//        monsterClasses.put(DvZClass.PIG, new Pig());
+//        monsterClasses.put(DvZClass.VILLAGER, new Villager());
 
         dragonClasses.put(DvZClass.DRAGON, new DragonClass());
         dragonClasses.put(DvZClass.FIREDRAGON, new FireDragon());
-        dragonClasses.put(DvZClass.WATERDRAGON, new WaterDragon());
-        dragonClasses.put(DvZClass.AIRDRAGON, new AirDragon());
-        //TODO: Fill up dragon classes
+//        dragonClasses.put(DvZClass.WATERDRAGON, new WaterDragon());
+//        dragonClasses.put(DvZClass.AIRDRAGON, new AirDragon());
 
         allClasses.putAll(dwarfClasses);
         allClasses.putAll(monsterClasses);
