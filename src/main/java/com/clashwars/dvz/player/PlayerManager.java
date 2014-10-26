@@ -26,7 +26,7 @@ public class PlayerManager {
         if (players.containsKey(uuid)) {
             return players.get(uuid);
         } else if (pcfg.PLAYERS.containsKey(uuid.toString())) {
-            return new CWPlayer(uuid, DvZ.inst().getGson().getGson().fromJson(pcfg.PLAYERS.get(uuid), PlayerData.class));
+            return new CWPlayer(uuid, dvz.getGson().fromJson(pcfg.PLAYERS.get(uuid), PlayerData.class));
         } else {
             return new CWPlayer(uuid, new PlayerData());
         }
@@ -61,7 +61,7 @@ public class PlayerManager {
     }
 
     public void removePlayer(CWPlayer p) {
-        pcfg.removePlayer(p.getUUID())
+        pcfg.removePlayer(p.getUUID());
     }
 
     public void removePlayer(Player p) {
