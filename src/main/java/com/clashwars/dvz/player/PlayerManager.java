@@ -15,7 +15,13 @@ public class PlayerManager {
 
     Map<UUID, CWPlayer> players = new HashMap<UUID, CWPlayer>();
 
-    public void populate() {
+    public PlayerManager(DvZ dvz, PlayerCfg pcfg) {
+        this.dvz = dvz;
+        this.pcfg = pcfg;
+        populate();
+    }
+
+    private void populate() {
         for (UUID uuid : pcfg.getPlayerData().keySet()) {
             players.put(uuid, new CWPlayer(uuid, pcfg.getPlayerData().get(uuid)));
         }
@@ -26,9 +32,13 @@ public class PlayerManager {
         if (players.containsKey(uuid)) {
             return players.get(uuid);
         } else if (pcfg.PLAYERS.containsKey(uuid.toString())) {
-            return new CWPlayer(uuid, dvz.getGson().fromJson(pcfg.PLAYERS.get(uuid), PlayerData.class));
+            CWPlayer cw = new CWPlayer(uuid, dvz.getGson().fromJson(pcfg.PLAYERS.get(uuid), PlayerData.class));
+            players.put(cw.getUUID(), cw);
+            return cw;
         } else {
-            return new CWPlayer(uuid, new PlayerData());
+            CWPlayer cwp = new CWPlayer(uuid, new PlayerData());
+            players.put(cwp.getUUID(), cwp);
+            return cwp;
         }
     }
 
@@ -44,39 +54,30 @@ public class PlayerManager {
         return players;
     }
 
-    public void savePlayer(UUID uuid, PlayerData pd) {
-        pcfg.setPlayer(uuid, pd);
-    }
-
-    public void savePlayer(CWPlayer p) {
-        pcfg.setPlayer(p.getUUID(), p.getPlayerData());
-    }
-
-    public void savePlayer(Player p) {
-        pcfg.setPlayer(p.getUniqueId(), getPlayer(p).getPlayerData());
-    }
-
-    public void removePlayer(UUID uuid) {
-        pcfg.removePlayer(uuid);
-    }
-
-    public void removePlayer(CWPlayer p) {
-        pcfg.removePlayer(p.getUUID());
-    }
-
-    public void removePlayer(Player p) {
-        pcfg.removePlayer(p.getUniqueId());
-    }
-
     public void savePlayers() {
-        for(UUID uuid : players.keySet()) {
-            pcfg.setPlayer(uuid, getPlayer(uuid).getPlayerData());
+        for(CWPlayer p : players.values()) {
+            p.savePlayer();
         }
     }
 
-    public void clearPlayers(boolean mode) {
+    public void removePlayer(UUID uuid, boolean fromConfig) {
+        players.remove(uuid);
+        if (fromConfig = true) {
+            pcfg.removePlayer(uuid);
+        }
+    }
+
+    public void removePlayer(CWPlayer p, boolean fromConfig) {
+        removePlayer(p.getUUID(), fromConfig);
+    }
+
+    public void removePlayer(Player p, boolean fromConfig) {
+        removePlayer(p.getPlayer(), fromConfig);
+    }
+
+    public void removePlayers(boolean fromConfig) {
         players.clear();
-        if(mode = true) {
+        if(fromConfig = true) {
             pcfg.PLAYERS.clear();
         }
     }

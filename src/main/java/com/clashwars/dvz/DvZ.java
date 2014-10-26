@@ -5,8 +5,10 @@ import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.ClassManager;
 import com.clashwars.dvz.commands.Commands;
 import com.clashwars.dvz.config.ClassesCfg;
+import com.clashwars.dvz.config.PlayerCfg;
 import com.clashwars.dvz.config.PluginCfg;
 import com.clashwars.dvz.events.MainEvents;
+import com.clashwars.dvz.player.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -24,6 +26,8 @@ public class DvZ extends JavaPlugin {
 
     private PluginCfg cfg;
     private ClassesCfg classesCfg;
+    private PlayerCfg pcfg;
+    private PlayerManager pm;
 
     private Commands cmds;
 
@@ -56,6 +60,7 @@ public class DvZ extends JavaPlugin {
         classesCfg.load();
 
         cm = new ClassManager(this);
+        pm = new PlayerManager(this, pcfg);
 
         registerEvents();
 
@@ -103,5 +108,9 @@ public class DvZ extends JavaPlugin {
 
     public ClassManager getCM() {
         return cm;
+    }
+
+    public PlayerManager getPM() {
+        return pm;
     }
 }
