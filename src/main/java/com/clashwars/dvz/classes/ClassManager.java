@@ -1,5 +1,6 @@
 package com.clashwars.dvz.classes;
 
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.dragons.DragonClass;
 import com.clashwars.dvz.classes.dragons.FireDragon;
@@ -8,6 +9,7 @@ import com.clashwars.dvz.classes.dwarves.Miner;
 import com.clashwars.dvz.classes.monsters.MobClass;
 import com.clashwars.dvz.classes.monsters.Zombie;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class ClassManager {
@@ -64,6 +66,26 @@ public class ClassManager {
             return dragonClasses;
         }
         return null;
+    }
+
+    //Same as getClasses but return the specified amount of classes randomly picked from the type specified.
+    public HashMap<DvZClass, BaseClass> getRandomClasses(ClassType type, int amount) {
+        HashMap<DvZClass, BaseClass> classes = new HashMap<DvZClass, BaseClass>();
+        HashMap<DvZClass, BaseClass> randomclasses = new HashMap<DvZClass, BaseClass>();
+        if (type == null) {
+            classes = allClasses;
+        } else if (type == ClassType.DWARF) {
+            classes = dwarfClasses;
+        } else if (type == ClassType.MONSTER) {
+            classes = monsterClasses;
+        } else if (type == ClassType.DRAGON) {
+            classes = dragonClasses;
+        }
+        DvZClass c = (DvZClass)CWUtil.random(classes.keySet().toArray());
+        for (int i = 0; i < amount; i++) {
+            randomclasses.put(c, classes.get(c));
+        }
+        return randomclasses;
     }
 
 
