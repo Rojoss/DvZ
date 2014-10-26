@@ -91,7 +91,7 @@ public class CWPlayer {
     }
 
     private void checkLastSave() {
-        if(System.currentTimeMillis() - lastSave >= 30) {
+        if(System.currentTimeMillis() - lastSave >= 30000) {
             savePlayer();
         }
     }
