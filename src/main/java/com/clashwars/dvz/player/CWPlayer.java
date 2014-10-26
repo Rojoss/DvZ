@@ -72,7 +72,6 @@ public class CWPlayer {
     public void addClassExp(int exp) {
         if(getClassExp() + exp >= dvz.getCfg().XP_NEEDED_TO_LVL) {
             data.setClassExp(0);
-            exputil.changeExp(-exp);
             Bukkit.getServer().getPluginManager().callEvent(new ClassLevelupEvent(this));
         } else {
             data.setClassExp(getClassExp() + exp);
