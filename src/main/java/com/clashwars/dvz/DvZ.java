@@ -7,6 +7,7 @@ import com.clashwars.dvz.classes.DvZClass;
 import com.clashwars.dvz.classes.dwarves.DwarfClass;
 import com.clashwars.dvz.classes.dwarves.Miner;
 import com.clashwars.dvz.commands.Commands;
+import com.clashwars.dvz.config.ClassesCfg;
 import com.clashwars.dvz.config.PluginCfg;
 import com.clashwars.dvz.events.MainEvents;
 import org.bukkit.Bukkit;
@@ -23,6 +24,7 @@ public class DvZ extends JavaPlugin {
     private CWCore cwcore;
 
     private PluginCfg cfg;
+    private ClassesCfg classesCfg;
 
     private Commands cmds;
 
@@ -50,6 +52,9 @@ public class DvZ extends JavaPlugin {
 
         cfg = new PluginCfg("plugins/DvZ/DvZ.yml");
         cfg.load();
+
+        classesCfg = new ClassesCfg("plugins/DvZ/Classes.yml");
+        classesCfg.load();
 
         ClassManager cm = new ClassManager(this);
 
@@ -80,6 +85,10 @@ public class DvZ extends JavaPlugin {
     /* Getters & Setters */
     public PluginCfg getCfg() {
         return cfg;
+    }
+
+    public ClassesCfg getClassesCfg() {
+        return classesCfg;
     }
 
     public ClassManager getCM() {
