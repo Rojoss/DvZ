@@ -5,8 +5,8 @@ import com.clashwars.dvz.player.CWPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.server.PluginDisableEvent;
 
 public class MainEvents implements Listener {
 
@@ -17,24 +17,24 @@ public class MainEvents implements Listener {
     }
 
     @EventHandler
-    public void levelUp(CWPlayer.ClassLevelupEvent event) {
+    private void levelUp(CWPlayer.ClassLevelupEvent event) {
         CWPlayer cwp = event.getCWPlayer();
         //TODO: Complete event tasks
     }
 
     @EventHandler
-    public void playerJoin(PlayerJoinEvent event) {
+    private void playerJoin(PlayerJoinEvent event) {
 
     }
 
     @EventHandler
-    public void playerQuit(PlayerQuitEvent event) {
+    private void playerQuit(PlayerQuitEvent event) {
         dvz.getPM().getPlayer(event.getPlayer()).savePlayer();
     }
 
     @EventHandler
-    public void pluginDisable(PluginDisableEvent event) {
-        dvz.getPM().savePlayers();
+    private void playerKick(PlayerKickEvent event) {
+        dvz.getPM().getPlayer(event.getPlayer()).savePlayer();
     }
 
 }

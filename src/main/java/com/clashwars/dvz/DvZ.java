@@ -39,6 +39,7 @@ public class DvZ extends JavaPlugin {
     @Override
     public void onDisable() {
         Bukkit.getScheduler().cancelTasks(this);
+        getPM().savePlayers();
         log("disabled");
     }
 
