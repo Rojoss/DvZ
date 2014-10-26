@@ -11,9 +11,6 @@ import java.util.UUID;
 
 public class PlayerCfg extends EasyConfig {
 
-    private DvZ dvz;
-    private DvZClass dc;
-
     public HashMap<String, String> PLAYERS = new HashMap<String, String>();
 
     public PlayerCfg(String fileName) {
@@ -23,9 +20,23 @@ public class PlayerCfg extends EasyConfig {
     public Map<UUID, PlayerData> getPlayerData() {
         Map<UUID, PlayerData> players = new HashMap<UUID, PlayerData>();
         for (String key : PLAYERS.keySet()) {
-            players.put(UUID.fromString(key), dc.getGson().fromJson(PLAYERS.get(key), PlayerData.class));
+            players.put(UUID.fromString(key), DvZ.inst().getGson().fromJson(PLAYERS.get(key), PlayerData.class));
         }
         return players;
     }
+
+    public void setPlayer(UUID uuid, PlayerData pd) {
+        PLAYERS.put(uuid.toString(), convertToString(pd));
+        save();
+    }
+    public void removePlayer(UUID uuid) {
+        PLAYERS.remove(uuid.toString());
+        save();
+    }
+
+    public String convertToString(PlayerData pd) {
+        return DvZ.inst().getGson().toJson(pd, PlayerData.class);
+    }
+
 
 }

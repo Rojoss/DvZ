@@ -10,12 +10,13 @@ import java.util.UUID;
 
 public class PlayerData {
 
-    private UUID uuid;
     private DvZClass playerClass = DvZClass.DWARF;
     private int classExp = 0;
     private Set<DvZClass> classOptions = new HashSet<DvZClass>();
 
-    public PlayerData() {}
+    public PlayerData() {
+        //--
+    }
 
     public PlayerData(DvZClass playerClass, int classExp, Set<DvZClass> classOptions) {
         this.playerClass = playerClass;

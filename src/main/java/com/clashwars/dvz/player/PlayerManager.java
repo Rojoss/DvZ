@@ -12,7 +12,6 @@ import java.util.UUID;
 public class PlayerManager {
 
     private DvZ dvz;
-    private DvZClass dc;
     private PlayerCfg pcfg;
 
     Map<UUID, CWPlayer> players = new HashMap<UUID, CWPlayer>();
@@ -30,26 +29,34 @@ public class PlayerManager {
         if (players.containsKey(uuid)) {
             return players.get(uuid);
         } else if (pcfg.PLAYERS.containsKey(uuid.toString())) {
-            return new CWPlayer(uuid, dc.getGson().fromJson(pcfg.PLAYERS.get(uuid), PlayerData.class));
+            return new CWPlayer(uuid, DvZ.inst().getGson().getGson().fromJson(pcfg.PLAYERS.get(uuid), PlayerData.class));
         } else {
             return new CWPlayer(uuid, new PlayerData());
         }
     }
 
     public CWPlayer getPlayer(String name) {
-        Player p = dvz.getServer().getPlayer(name);
-        UUID uuid = p.getUniqueId();
-        if (players.containsKey(uuid)) {
-            return players.get(uuid);
-        } else if (pcfg.PLAYERS.containsKey(uuid.toString())) {
-            return new CWPlayer(uuid, dc.getGson().fromJson(pcfg.PLAYERS.get(uuid), PlayerData.class));
-        } else {
-            return new CWPlayer(uuid, new PlayerData());
-        }
+        return getPlayer(dvz.getServer().getPlayer(name));
+    }
+
+    public CWPlayer getPlayer(UUID uuid) {
+        return getPlayer(dvz.getServer().getPlayer(uuid));
     }
 
     public Map<UUID, CWPlayer> getPlayers(){
         return players;
+    }
+
+    public void savePlayer(UUID uuid, PlayerData pd) {
+        pcfg.setPlayer(uuid, pd);
+    }
+
+    public void savePlayer(CWPlayer p) {
+        pcfg.setPlayer(p.getUUID(), p.getPlayerData());
+    }
+
+    public void savePlayer(Player p) {
+        pcfg.setPlayer(p.getUniqueId(), getPlayer(p).getPlayerData());
     }
 
 }
