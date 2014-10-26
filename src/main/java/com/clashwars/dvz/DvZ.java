@@ -26,12 +26,12 @@ public class DvZ extends JavaPlugin {
 
     private PluginCfg cfg;
     private ClassesCfg classesCfg;
-    private PlayerCfg pcfg;
-    private PlayerManager pm;
+    private PlayerCfg playerCfg;
 
     private Commands cmds;
 
     private ClassManager cm;
+    private PlayerManager pm;
 
     private final Logger log = Logger.getLogger("Minecraft");
 
@@ -59,8 +59,11 @@ public class DvZ extends JavaPlugin {
         classesCfg = new ClassesCfg("plugins/DvZ/Classes.yml");
         classesCfg.load();
 
+        playerCfg = new PlayerCfg("plugins/DvZ/Players.yml");
+        playerCfg.load();
+
         cm = new ClassManager(this);
-        pm = new PlayerManager(this, pcfg);
+        pm = new PlayerManager(this);
 
         registerEvents();
 
@@ -98,6 +101,7 @@ public class DvZ extends JavaPlugin {
         return gson;
     }
 
+
     public PluginCfg getCfg() {
         return cfg;
     }
@@ -105,6 +109,11 @@ public class DvZ extends JavaPlugin {
     public ClassesCfg getClassesCfg() {
         return classesCfg;
     }
+
+    public PlayerCfg getPlayerCfg() {
+        return playerCfg;
+    }
+
 
     public ClassManager getCM() {
         return cm;

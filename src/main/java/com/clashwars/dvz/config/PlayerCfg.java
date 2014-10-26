@@ -16,7 +16,7 @@ public class PlayerCfg extends EasyConfig {
         this.setFile(fileName);
     }
 
-    public Map<UUID, PlayerData> getPlayerData() {
+    public Map<UUID, PlayerData> getPlayers() {
         Map<UUID, PlayerData> players = new HashMap<UUID, PlayerData>();
         for (String key : PLAYERS.keySet()) {
             players.put(UUID.fromString(key), DvZ.inst().getGson().fromJson(PLAYERS.get(key), PlayerData.class));
@@ -24,18 +24,17 @@ public class PlayerCfg extends EasyConfig {
         return players;
     }
 
+    public PlayerData getPlayer(UUID uuid) {
+        return DvZ.inst().getGson().fromJson(PLAYERS.get(uuid.toString()), PlayerData.class);
+    }
+
     public void setPlayer(UUID uuid, PlayerData pd) {
-        PLAYERS.put(uuid.toString(), convertToString(pd));
+        PLAYERS.put(uuid.toString(), DvZ.inst().getGson().toJson(pd, PlayerData.class));
         save();
     }
+
     public void removePlayer(UUID uuid) {
         PLAYERS.remove(uuid.toString());
         save();
     }
-
-    public String convertToString(PlayerData pd) {
-        return DvZ.inst().getGson().toJson(pd, PlayerData.class);
-    }
-
-
 }
