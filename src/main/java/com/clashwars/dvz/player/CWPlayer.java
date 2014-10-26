@@ -1,5 +1,6 @@
 package com.clashwars.dvz.player;
 
+import com.clashwars.cwcore.CooldownManager;
 import com.clashwars.cwcore.utils.ExpUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
@@ -12,8 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import java.security.Timestamp;
-import java.util.Calendar;
 import java.util.Set;
 import java.util.UUID;
 
@@ -24,13 +23,14 @@ public class CWPlayer {
     private PlayerCfg pcfg;
     private DvZ dvz;
     private ExpUtil exputil = new ExpUtil(getPlayer());
-    Calendar calendar = Calendar.getInstance();
     private long lastSave = System.currentTimeMillis();
+    private CooldownManager cdm = new CooldownManager();
 
     public CWPlayer(UUID uuid, PlayerData data) {
         this.uuid = uuid;
         this.data = data;
         this.dvz = DvZ.inst();
+        this.pcfg = dvz.getPlayerCfg();
     }
 
     @Override
@@ -92,6 +92,7 @@ public class CWPlayer {
 
     private void checkLastSave() {
         if(System.currentTimeMillis() - lastSave >= 30000) {
+            lastSave = 0;
             savePlayer();
         }
     }
@@ -132,6 +133,10 @@ public class CWPlayer {
 
     public boolean isOnline() {
         return getPlayer().isOnline();
+    }
+
+    public CooldownManager getCDM() {
+        return cdm;
     }
 
 
