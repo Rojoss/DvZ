@@ -1,6 +1,6 @@
 package com.clashwars.dvz.player;
 
-import com.clashwars.dvz.classes.DvZClass;
+import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.PlayerCfg;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -31,11 +31,11 @@ public class CWPlayer {
         return data;
     }
 
-    public DvZClass getPlayerClass() {
+    public DvzClass getPlayerClass() {
         return data.getPlayerClass();
     }
 
-    public void setPlayerClass(DvZClass playerClass) {
+    public void setPlayerClass(DvzClass playerClass) {
         data.setPlayerClass(playerClass);
     }
 
@@ -47,11 +47,11 @@ public class CWPlayer {
         data.setClassExp(exp);
     }
 
-    public Set<DvZClass> getClassOptions() {
+    public Set<DvzClass> getClassOptions() {
         return data.getClassOptions();
     }
 
-    public void setClassOptions(Set<DvZClass> classOptions) {
+    public void setClassOptions(Set<DvzClass> classOptions) {
         data.setClassOptions(classOptions);
     }
 

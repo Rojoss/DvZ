@@ -2,29 +2,29 @@ package com.clashwars.dvz.abilities;
 
 import com.clashwars.dvz.abilities.monsters.Hammer;
 import com.clashwars.dvz.abilities.monsters.Suicide;
-import com.clashwars.dvz.classes.DvZClass;
+import com.clashwars.dvz.classes.DvzClass;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public enum Ability {
-    BASE(DvZClass.DWARF, new BaseAbility(), new String[] {}),
-    SUICIDE(DvZClass.MONSTER, new Suicide(), new String[] {}),
-    HAMMER(DvZClass.MONSTER, new Hammer(), new String[] {});
+    BASE(DvzClass.DWARF, new BaseAbility(), new String[] {}),
+    SUICIDE(DvzClass.MONSTER, new Suicide(), new String[] {}),
+    HAMMER(DvzClass.MONSTER, new Hammer(), new String[] {});
 
-    private DvZClass dvzClass;
+    private DvzClass dvzClass;
     private BaseAbility abilityClass;
     private List<String> aliases = new ArrayList<String>();
 
-    Ability(DvZClass dvzClass, BaseAbility abilityClass, String[] aliases) {
+    Ability(DvzClass dvzClass, BaseAbility abilityClass, String[] aliases) {
         this.dvzClass = dvzClass;
         this.abilityClass = abilityClass;
         abilityClass.setAbility(this);
         this.aliases = Arrays.asList(aliases);
     }
 
-    public DvZClass getDvzClass() {
+    public DvzClass getDvzClass() {
         return dvzClass;
     }
 

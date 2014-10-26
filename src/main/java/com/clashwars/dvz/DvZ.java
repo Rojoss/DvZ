@@ -2,12 +2,7 @@ package com.clashwars.dvz;
 
 import com.clashwars.cwcore.CWCore;
 import com.clashwars.dvz.abilities.Ability;
-import com.clashwars.dvz.abilities.BaseAbility;
-import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.ClassManager;
-import com.clashwars.dvz.classes.DvZClass;
-import com.clashwars.dvz.classes.dwarves.DwarfClass;
-import com.clashwars.dvz.classes.dwarves.Miner;
 import com.clashwars.dvz.commands.Commands;
 import com.clashwars.dvz.config.ClassesCfg;
 import com.clashwars.dvz.config.PluginCfg;
@@ -20,7 +15,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
 import java.util.logging.Logger;
 
 public class DvZ extends JavaPlugin {

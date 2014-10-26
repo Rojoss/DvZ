@@ -4,7 +4,6 @@ import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.abilities.Ability;
-import com.clashwars.dvz.abilities.BaseAbility;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,7 +15,7 @@ public class BaseClass {
 
     protected DvZ dvz;
 
-    protected DvZClass dvzClass = null;
+    protected DvzClass dvzClass = null;
     protected Set<CWItem> equipment = new HashSet<CWItem>();
     protected Set<Ability> abilities = new HashSet<Ability>();
 
@@ -80,7 +79,7 @@ public class BaseClass {
         return abilities;
     }
 
-    public DvZClass getDvZClass() {
+    public DvzClass getDvZClass() {
         return dvzClass;
     }
 

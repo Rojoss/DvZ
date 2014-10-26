@@ -3,9 +3,8 @@ package com.clashwars.dvz.abilities;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
-import com.clashwars.dvz.classes.DvZClass;
+import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.Util;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -41,7 +40,7 @@ public class BaseAbility implements Listener {
         this.ability = ability;
     }
 
-    public DvZClass getDvzClass() {
+    public DvzClass getDvzClass() {
         if (ability == null) {
             return null;
         }

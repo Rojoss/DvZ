@@ -1,12 +1,10 @@
 package com.clashwars.dvz.classes;
 
-import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public enum DvZClass {
+public enum DvzClass {
     DWARF(ClassType.DWARF, new String[] {"dwarves"}),
     BUILDER(ClassType.DWARF, new String[] {"builders", "constructor", "constructors"}),
     MINER(ClassType.DWARF, new String[] {"miners", "smith", "smiths"}),
@@ -33,7 +31,7 @@ public enum DvZClass {
     private ClassType type;
     private List<String> aliases = new ArrayList<String>();
 
-    DvZClass(ClassType type, String[] aliases) {
+    DvzClass(ClassType type, String[] aliases) {
         this.type = type;
         this.aliases = Arrays.asList(aliases);
     }
@@ -47,9 +45,9 @@ public enum DvZClass {
     }
 
     //Get class by name or alias and return null if no class was found.
-    public static DvZClass fromString(String name) {
+    public static DvzClass fromString(String name) {
         //First check by name.
-        for (DvZClass c : values()) {
+        for (DvzClass c : values()) {
             if (c.toString().equalsIgnoreCase(name)) {
                 return c;
             }
@@ -57,7 +55,7 @@ public enum DvZClass {
 
         //Check by alias
         name = name.toLowerCase();
-        for (DvZClass c : values()) {
+        for (DvzClass c : values()) {
             if (c.getAliases().contains(name)) {
                 return c;
             }
