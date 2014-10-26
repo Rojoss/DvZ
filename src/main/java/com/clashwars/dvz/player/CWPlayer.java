@@ -22,6 +22,16 @@ public class CWPlayer {
         this.data = data;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof CWPlayer) {
+            CWPlayer other = (CWPlayer) obj;
+
+            return other.getUUID() == getUUID();
+        }
+        return false;
+    }
+
     public UUID getUUID() {
         return uuid;
     }
@@ -86,4 +96,9 @@ public class CWPlayer {
     public void playSound(Location loc, Sound sound, float volume, float pitch) {
         getPlayer().playSound(loc, sound, volume, pitch);
     }
+
+    public boolean isOnline() {
+        return getPlayer().isOnline();
+    }
+
 }
