@@ -2,7 +2,6 @@ package com.clashwars.dvz.abilities.monsters;
 
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
-import com.clashwars.cwcore.packet.reflection.ReflectionHandler;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import org.bukkit.Location;
@@ -12,7 +11,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Hammer extends MobAbility {

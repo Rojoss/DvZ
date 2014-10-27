@@ -6,8 +6,8 @@ import com.clashwars.dvz.abilities.Ability;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
 public class Rush extends MobAbility {
@@ -19,17 +19,8 @@ public class Rush extends MobAbility {
     }
 
     @Override
-    public void setAbility(Ability ability) {
-        this.ability = ability;
-    }
-
-    @Override
     public void castAbility(Player player, Location triggerloc) {
         if (CWUtil.getTargetedPlayer(player, getIntOption("range")) == null) {
-            return;
-        }
-
-        if(!canCast(player)) {
             return;
         }
 
@@ -37,6 +28,11 @@ public class Rush extends MobAbility {
         player.setVelocity(new Vector(dir.getX() * getDoubleOption("multiplier"), 0.2, dir.getZ() * getDoubleOption("multiplier")));
         //TODO: Add particle and sound effects
 
+    }
+
+    @EventHandler
+    public void interact(PlayerInteractEvent event) {
+        super.interact(event);
     }
 
 }
