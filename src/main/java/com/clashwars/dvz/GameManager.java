@@ -2,12 +2,18 @@ package com.clashwars.dvz;
 
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.classes.BaseClass;
+import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.GameCfg;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.UUID;
 
 public class GameManager {
 
@@ -40,7 +46,23 @@ public class GameManager {
     }
 
 
-    public void createDragon(Player player, DvzClass dragonType) {
+    public void createDragon() {
+        Player player = getDragonPlayer();
+        if (player == null) {
+            for (Player p : dvz.getServer().getOnlinePlayers()) {
+                if (player.isOp() || player.hasPermission("dvz.admin")) {
+                    p.sendMessage(Util.formatMsg("&cNo dragon was set up so you have been set as dragon!"));
+                    player = p;
+                }
+            }
+        }
+        if (player == null) {
+            Bukkit.broadcastMessage(Util.formatMsg("&4&lThere is no staff member to player the dragon. &c&lPlease wait..."));
+            Bukkit.broadcastMessage(Util.formatMsg("&7If there has been no dragon when the sun rises again, the monsters will be automatically released. Random dwarves will be killed!"));
+            return;
+        }
+        DvzClass dragonType = getDragonType();
+
         Bukkit.broadcastMessage(CWUtil.integrateColor("&7======= &a&lThe " + CWUtil.capitalize(dragonType.toString().toLowerCase()) + "dragon arises! &7======="));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Stop working and get to the walls!"));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Kill the dragon and become the &bDragonSlayer&7!"));
@@ -60,7 +82,10 @@ public class GameManager {
     }
 
 
-    public void releaseMonsters() {
+    public void releaseMonsters(boolean doExecution) {
+        if (doExecution) {
+            //TODO: Kill players till 10% of the online players are monsters.
+        }
         Bukkit.broadcastMessage(CWUtil.integrateColor("&7===== &a&lThe monsters have been released! &7====="));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Get to the front wall to hold the monsters of!"));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Don't let them break the shrine at the wall."));
@@ -129,6 +154,35 @@ public class GameManager {
 
     public void setSpeed(int speed) {
         gCfg.GAME__SPEED = speed;
+        gCfg.save();
+    }
+
+
+    public DvzClass getDragonType() {
+        DvzClass dvzClass = DvzClass.valueOf(gCfg.GAME__DRAGON_TYPE);
+        if (dvzClass == null) {
+            Set<DvzClass> dragons = dvz.getCM().getClasses(ClassType.DRAGON).keySet();
+            dvzClass = CWUtil.random(new ArrayList<DvzClass>(dragons));
+        }
+        return dvzClass;
+    }
+
+    public void setDragonType(DvzClass dvzClass) {
+        gCfg.GAME__DRAGON_TYPE = dvzClass.toString();
+        gCfg.save();
+    }
+
+
+    public Player getDragonPlayer() {
+        UUID uuid = UUID.fromString(gCfg.GAME__DRAGON_PLAYER);
+        if (uuid == null) {
+            return null;
+        }
+        return dvz.getServer().getPlayer(uuid);
+    }
+
+    public void setDragonPlayer(UUID uuid) {
+        gCfg.GAME__DRAGON_PLAYER = uuid.toString();
         gCfg.save();
     }
 }
