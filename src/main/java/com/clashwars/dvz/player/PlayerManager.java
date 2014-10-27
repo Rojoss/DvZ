@@ -2,6 +2,10 @@ package com.clashwars.dvz.player;
 
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.config.PlayerCfg;
+import com.clashwars.dvz.config.WorkShopCfg;
+import com.clashwars.dvz.workshop.WorkShop;
+import com.clashwars.dvz.workshop.WorkShopData;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -12,12 +16,15 @@ public class PlayerManager {
 
     private DvZ dvz;
     private PlayerCfg pcfg;
+    private WorkShopCfg wsCfg;
 
     Map<UUID, CWPlayer> players = new HashMap<UUID, CWPlayer>();
+    Map<UUID, WorkShop> workshops = new HashMap<UUID, WorkShop>();
 
     public PlayerManager(DvZ dvz) {
         this.dvz = dvz;
         this.pcfg = dvz.getPlayerCfg();
+        this.wsCfg = dvz.getWSCfg();
         populate();
     }
 
@@ -26,6 +33,10 @@ public class PlayerManager {
         Map<UUID, PlayerData> cfgPlayers = pcfg.getPlayers();
         for (UUID uuid : cfgPlayers.keySet()) {
             players.put(uuid, new CWPlayer(uuid, cfgPlayers.get(uuid)));
+        }
+        Map<UUID, WorkShopData> cfgWorkshops = wsCfg.getWorkShops();
+        for (UUID uuid : cfgWorkshops.keySet()) {
+            workshops.put(uuid, new WorkShop(uuid, cfgWorkshops.get(uuid)));
         }
     }
 
@@ -54,8 +65,29 @@ public class PlayerManager {
     }
 
 
+    public WorkShop getWorkshop(Player p) {
+        UUID uuid = p.getUniqueId();
+        if (workshops.containsKey(uuid)) {
+            return workshops.get(uuid);
+        } else if (wsCfg.WORKSHOPS.containsKey(uuid.toString())) {
+            WorkShop wsd = new WorkShop(uuid, wsCfg.getWorkShop(uuid));
+            workshops.put(uuid, wsd);
+            return wsd;
+        } else {
+            WorkShop wsd = new WorkShop(uuid, new WorkShopData());
+            workshops.put(uuid, wsd);
+            return wsd;
+        }
+    }
+
+
     public Map<UUID, CWPlayer> getPlayers(){
         return players;
+    }
+
+
+    public Map<UUID, WorkShop> getWorkShops(){
+        return workshops;
     }
 
 
@@ -63,13 +95,18 @@ public class PlayerManager {
         for(CWPlayer cwp : players.values()) {
             cwp.savePlayer();
         }
+        for(WorkShop wsd : workshops.values()) {
+            wsd.save();
+        }
     }
 
 
     public void removePlayer(UUID uuid, boolean fromConfig) {
         players.remove(uuid);
+        workshops.remove(uuid);
         if (fromConfig == true) {
             pcfg.removePlayer(uuid);
+            wsCfg.removeWorkShop(uuid);
         }
     }
 
@@ -84,8 +121,10 @@ public class PlayerManager {
 
     public void removePlayers(boolean fromConfig) {
         players.clear();
+        workshops.clear();
         if (fromConfig == true) {
             pcfg.PLAYERS.clear();
+            wsCfg.WORKSHOPS.clear();
         }
     }
 

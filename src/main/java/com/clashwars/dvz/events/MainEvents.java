@@ -24,7 +24,7 @@ public class MainEvents implements Listener {
 
     @EventHandler
     private void playerJoin(PlayerJoinEvent event) {
-
+        CWPlayer cwp = dvz.getPM().getPlayer(event.getPlayer());
     }
 
     @EventHandler

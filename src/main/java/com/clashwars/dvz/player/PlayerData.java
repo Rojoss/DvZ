@@ -1,6 +1,9 @@
 package com.clashwars.dvz.player;
 
+import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.workshop.WorkShop;
+import com.clashwars.dvz.workshop.WorkShopData;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +18,7 @@ public class PlayerData {
         //--
     }
 
-    public PlayerData(DvzClass playerClass, int classExp, Set<DvzClass> classOptions) {
+    public PlayerData(DvzClass playerClass, int classExp, Set<DvzClass> classOptions, String workshopData) {
         this.playerClass = playerClass;
         this.classExp = classExp;
         this.classOptions = classOptions;

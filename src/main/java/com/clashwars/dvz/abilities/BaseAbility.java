@@ -113,6 +113,9 @@ public class BaseAbility implements Listener {
 
     public boolean isCastItem(ItemStack item) {
         CWItem castI = getCastItem();
+        if (item == null || castI == null) {
+            return false;
+        }
         if (item.getType() != castI.getType()) {
             return false;
         }

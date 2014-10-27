@@ -18,13 +18,15 @@ import java.util.UUID;
 
 public class CWPlayer {
 
+private DvZ dvz;
+    private PlayerCfg pcfg;
+
     private UUID uuid;
     private PlayerData data;
-    private PlayerCfg pcfg;
-    private DvZ dvz;
-    private ExpUtil exputil = new ExpUtil(getPlayer());
     private long lastSave = System.currentTimeMillis();
+
     private CooldownManager cdm = new CooldownManager();
+
 
     public CWPlayer(UUID uuid, PlayerData data) {
         this.uuid = uuid;
@@ -33,23 +35,7 @@ public class CWPlayer {
         this.pcfg = dvz.getPlayerCfg();
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof CWPlayer) {
-            CWPlayer other = (CWPlayer) obj;
 
-            return other.getUUID() == getUUID();
-        }
-        return false;
-    }
-
-    public UUID getUUID() {
-        return uuid;
-    }
-
-    public Player getPlayer() {
-        return Bukkit.getPlayer(uuid);
-    }
 
     public PlayerData getPlayerData() {
         return data;
@@ -65,38 +51,6 @@ public class CWPlayer {
     }
 
 
-    public int getClassExp() {
-        return data.getClassExp();
-    }
-
-    public void setClassExp(int exp) {
-        data.setClassExp(exp);
-    }
-
-    public void addClassExp(int exp) {
-        if(getClassExp() + exp >= dvz.getCfg().XP_NEEDED_TO_LVL) {
-            data.setClassExp(0);
-            Bukkit.getServer().getPluginManager().callEvent(new ClassLevelupEvent(this));
-        } else {
-            data.setClassExp(getClassExp() + exp);
-            exputil.changeExp(exp);
-        }
-        checkLastSave();
-    }
-
-    public void takeClassExp(int exp) {
-        data.setClassExp(getClassExp() - exp);
-        exputil.changeExp(-exp);
-        checkLastSave();
-    }
-
-    private void checkLastSave() {
-        if(System.currentTimeMillis() - lastSave >= 30000) {
-            lastSave = 0;
-            savePlayer();
-        }
-    }
-
     public Set<DvzClass> getClassOptions() {
         return data.getClassOptions();
     }
@@ -106,10 +60,52 @@ public class CWPlayer {
     }
 
 
+    public int getClassExp() {
+        return data.getClassExp();
+    }
+
+    public void setClassExp(int exp) {
+        data.setClassExp(exp);
+    }
+
+
+    public void addClassExp(int exp) {
+        if(getClassExp() + exp >= dvz.getCfg().XP_NEEDED_TO_LVL) {
+            data.setClassExp(0);
+            Bukkit.getServer().getPluginManager().callEvent(new ClassLevelupEvent(this));
+        } else {
+            data.setClassExp(getClassExp() + exp);
+            ExpUtil xpu = new ExpUtil(getPlayer());
+            xpu.changeExp(exp);
+        }
+        if(System.currentTimeMillis() - lastSave >= 30000) {
+            lastSave = 0;
+            savePlayer();
+        }
+    }
+
+    public void takeClassExp(int exp) {
+        data.setClassExp(getClassExp() - exp);
+    }
+
+
+    public CooldownManager getCDM() {
+        return cdm;
+    }
+
+
     public void savePlayer() {
         pcfg.setPlayer(uuid, data);
     }
 
+
+    public UUID getUUID() {
+        return uuid;
+    }
+
+    public Player getPlayer() {
+        return Bukkit.getPlayer(uuid);
+    }
 
     public void sendMessage(String msg) {
         getPlayer().sendMessage(msg);
@@ -135,8 +131,15 @@ public class CWPlayer {
         return getPlayer().isOnline();
     }
 
-    public CooldownManager getCDM() {
-        return cdm;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof CWPlayer) {
+            CWPlayer other = (CWPlayer) obj;
+
+            return other.getUUID() == getUUID();
+        }
+        return false;
     }
 
 

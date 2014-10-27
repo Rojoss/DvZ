@@ -7,6 +7,7 @@ import com.clashwars.dvz.commands.Commands;
 import com.clashwars.dvz.config.ClassesCfg;
 import com.clashwars.dvz.config.PlayerCfg;
 import com.clashwars.dvz.config.PluginCfg;
+import com.clashwars.dvz.config.WorkShopCfg;
 import com.clashwars.dvz.events.MainEvents;
 import com.clashwars.dvz.events.WorkShopEvents;
 import com.clashwars.dvz.player.PlayerManager;
@@ -28,6 +29,7 @@ public class DvZ extends JavaPlugin {
     private PluginCfg cfg;
     private ClassesCfg classesCfg;
     private PlayerCfg playerCfg;
+    private WorkShopCfg wsCfg;
 
     private Commands cmds;
 
@@ -63,6 +65,9 @@ public class DvZ extends JavaPlugin {
 
         playerCfg = new PlayerCfg("plugins/DvZ/Players.yml");
         playerCfg.load();
+
+        wsCfg = new WorkShopCfg("plugins/DvZ/Workshops.yml");
+        wsCfg.load();
 
         cm = new ClassManager(this);
         pm = new PlayerManager(this);
@@ -115,6 +120,10 @@ public class DvZ extends JavaPlugin {
 
     public PlayerCfg getPlayerCfg() {
         return playerCfg;
+    }
+
+    public WorkShopCfg getWSCfg() {
+        return wsCfg;
     }
 
 
