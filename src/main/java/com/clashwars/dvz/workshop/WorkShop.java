@@ -4,16 +4,14 @@ import com.clashwars.cwcore.dependencies.CWWorldGuard;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.util.Util;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.FilenameException;
 import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.data.DataException;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -63,28 +61,6 @@ public class WorkShop {
                     setCraftBlock(block.getLocation());
                 }
             }
-            //TODO: Test if loop above works and if it does remove this loop below.
-            //(Might be that it doesn't work because the blocks might not be created yet)
-
-//            Location blockLoc = null;
-//            BaseBlock block = null;
-//            for (int x = 0; x < cc.getWidth(); x++) {
-//                for (int z = 0; z < cc.getLength(); z++) {
-//                    for (int y = 0; y < cc.getHeight(); y++) {
-//                        block = cc.getBlock(new Vector(x, y, z));
-//                        blockLoc = new Location(getCenter().getWorld(), getLocation().getBlockX() + x, getLocation().getBlockY() + y, getLocation().getBlockZ() + z);
-//                        //Particle for each block.
-//                        if (block.getType() != 0) {
-//                            ParticleEffect.displayBlockCrack(blockLoc, block.getType(), (byte)block.getData(), 0.5f, 0.5f, 0.5f, 10);
-//                        }
-//                        //Workbench found.
-//                        if (block.getType() == 58) {
-//                            ParticleEffect.WITCH_MAGIC.display(blockLoc, 0.3f, 0.3f, 0.3f, 0.0001f, 50);
-//                            setCraftBlock(blockLoc);
-//                        }
-//                    }
-//                }
-//            }
             return true;
         } catch (FilenameException e) {
         } catch (CommandException e) {
@@ -148,8 +124,7 @@ public class WorkShop {
 
     public Vector getLocation2(boolean recalculate) {
         if (recalculate || location2 == null) {
-            location2 = new Vector(getWidth(), getHeight(), getLength());
-            location2.add(getLocation().getBlockX(), getLocation().getBlockY(), getLocation().getBlockZ());
+            location2 = new Vector(getWidth() + getLocation().getBlockX(), getHeight() + getLocation().getBlockY(), getLength() + getLocation().getBlockZ());
         }
         return location2;
     }
@@ -163,7 +138,7 @@ public class WorkShop {
         if (recalculate || min == null) {
             Location loc1 = getLocation();
             Vector loc2 = getLocation2(true);
-            min = new Vector(Math.min(loc1.getBlockX(), loc2.getBlockX()), Math.min(loc1.getBlockY(), loc2.getBlockX()), Math.min(loc1.getBlockZ(), loc2.getBlockX()));
+            min = new Vector(Math.min(loc1.getBlockX(), loc2.getBlockX()), Math.min(loc1.getBlockY(), loc2.getBlockY()), Math.min(loc1.getBlockZ(), loc2.getBlockZ()));
         }
         return min;
     }
@@ -177,7 +152,7 @@ public class WorkShop {
         if (recalculate || max == null) {
             Location loc1 = getLocation();
             Vector loc2 = getLocation2(true);
-            max = new Vector(Math.max(loc1.getBlockX(), loc2.getBlockX()), Math.max(loc1.getBlockY(), loc2.getBlockX()), Math.max(loc1.getBlockZ(), loc2.getBlockX()));
+            max = new Vector(Math.max(loc1.getBlockX(), loc2.getBlockX()) -1, Math.max(loc1.getBlockY(), loc2.getBlockY()) -1, Math.max(loc1.getBlockZ(), loc2.getBlockZ()) -1);
     }
         return max;
     }

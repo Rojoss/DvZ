@@ -6,6 +6,7 @@ import com.clashwars.dvz.config.WorkShopCfg;
 import com.clashwars.dvz.workshop.WorkShop;
 import com.clashwars.dvz.workshop.WorkShopData;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -126,6 +127,29 @@ public class PlayerManager {
             pcfg.PLAYERS.clear();
             wsCfg.WORKSHOPS.clear();
         }
+    }
+
+
+    //Returns 1 if in own workshop 0 if it's in another workshop and -1 if it's not in a workshop.
+    public int locIsOwnWorkshop(UUID uuid, Location location) {
+        WorkShop ws = locGetWorkShop(location);
+        if (ws == null) {
+            return -1;
+        }
+        if (ws.isOwner(uuid)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public WorkShop locGetWorkShop(Location location) {
+        for (WorkShop ws : getWorkShops().values()) {
+            if (ws.isLocWithinWorkShop(location)) {
+                return ws;
+            }
+        }
+        return null;
     }
 
 }
