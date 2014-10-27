@@ -6,6 +6,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.Util;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -70,11 +71,12 @@ public class BaseAbility implements Listener {
     }
 
     public CWItem getCastItem() {
-        if (castItem != null && castItem.hasItemMeta() && !castItem.getItemMeta().hasLore()) {
+        if (castItem != null && castItem.hasItemMeta()) {
             List<String> lore = new ArrayList<String>();
             lore.addAll(CWUtil.splitToList(getDesc(), "\n", true));
             lore.addAll(CWUtil.splitToList(getUsage(), "\n", true));
             castItem.setLore(lore);
+            castItem.setName(getDisplayName());
         }
         return castItem;
     }
