@@ -8,6 +8,7 @@ import com.clashwars.dvz.config.*;
 import com.clashwars.dvz.events.MainEvents;
 import com.clashwars.dvz.events.WorkShopEvents;
 import com.clashwars.dvz.player.PlayerManager;
+import com.clashwars.dvz.runnables.GameRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -24,6 +25,7 @@ public class DvZ extends JavaPlugin {
     private Gson gson = new Gson();
 
     private PluginCfg cfg;
+    private GameCfg gameCfg;
     private ClassesCfg classesCfg;
     private AbilityCfg abilityCfg;
     private PlayerCfg playerCfg;
@@ -31,6 +33,7 @@ public class DvZ extends JavaPlugin {
 
     private Commands cmds;
 
+    private GameManager gm;
     private ClassManager cm;
     private PlayerManager pm;
 
@@ -62,23 +65,29 @@ public class DvZ extends JavaPlugin {
         cfg = new PluginCfg("plugins/DvZ/DvZ.yml");
         cfg.load();
 
+        gameCfg = new GameCfg("plugins/DvZ/data/Game.yml");
+        gameCfg.load();
+
         classesCfg = new ClassesCfg("plugins/DvZ/Classes.yml");
         classesCfg.load();
 
         abilityCfg = new AbilityCfg("plugins/DvZ/Abilities.yml");
 
-        playerCfg = new PlayerCfg("plugins/DvZ/Players.yml");
+        playerCfg = new PlayerCfg("plugins/DvZ/data/Players.yml");
         playerCfg.load();
 
-        wsCfg = new WorkShopCfg("plugins/DvZ/Workshops.yml");
+        wsCfg = new WorkShopCfg("plugins/DvZ/data/Workshops.yml");
         wsCfg.load();
 
+        gm = new GameManager(this);
         cm = new ClassManager(this);
         pm = new PlayerManager(this);
 
         registerEvents();
 
         cmds = new Commands(this);
+
+        startRunnables();
 
         log("loaded successfully");
     }
@@ -90,6 +99,10 @@ public class DvZ extends JavaPlugin {
         for (Ability a : Ability.values()) {
             pm.registerEvents(a.getAbilityClass(), this);
         }
+    }
+
+    private void startRunnables() {
+        new GameRunnable(this).runTaskTimer(this, 0 , 2);
     }
 
     @Override
@@ -118,6 +131,10 @@ public class DvZ extends JavaPlugin {
         return cfg;
     }
 
+    public GameCfg getGameCfg() {
+        return gameCfg;
+    }
+
     public ClassesCfg getClassesCfg() {
         return classesCfg;
     }
@@ -134,6 +151,10 @@ public class DvZ extends JavaPlugin {
         return wsCfg;
     }
 
+
+    public GameManager getGM() {
+        return gm;
+    }
 
     public ClassManager getCM() {
         return cm;
