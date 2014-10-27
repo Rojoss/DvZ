@@ -1,6 +1,11 @@
 package com.clashwars.dvz;
 
+import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.dvz.classes.BaseClass;
+import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.GameCfg;
+import com.clashwars.dvz.player.CWPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -17,38 +22,75 @@ public class GameManager {
 
 
     public void openGame() {
-
+        //TODO: Reset stuff...
+        setState(GameState.OPENED);
     }
 
 
     public void startGame() {
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&7========== &a&lDvZ has started! &7=========="));
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7You can now choose a dwarf class!"));
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7You get one and a half day to prepare."));
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Do your tasks and get fully equipped!."));
 
+        //TODO: Give class item options to all players.
+
+        getWorld().setTime(23000);
+        setState(GameState.DAY_ONE);
     }
 
 
-    public void createDragon() {
+    public void createDragon(Player player, DvzClass dragonType) {
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&7======= &a&lThe " + CWUtil.capitalize(dragonType.toString().toLowerCase()) + "dragon arises! &7======="));
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Stop working and get to the walls!"));
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Kill the dragon and become the &bDragonSlayer&7!"));
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &8Remember: &7If you die you become a monster."));
 
+        CWPlayer cwp = dvz.getPM().getPlayer(player);
+        cwp.setPlayerClass(dragonType);
+        BaseClass c = dvz.getCM().getClass(dragonType);
+
+        //TODO: Teleport player to dragon spawn.
+        player.setFlying(true);
+        player.setAllowFlight(true);
+        player.getInventory().clear();
+        c.equipItems(player);
+        //TODO: Disguise player
+        setState(GameState.DRAGON);
     }
 
 
     public void releaseMonsters() {
-
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&7===== &a&lThe monsters have been released! &7====="));
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Get to the front wall to hold the monsters of!"));
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Don't let them break the shrine at the wall."));
+        setState(GameState.MONSTERS);
     }
 
 
     public void captureWall() {
-
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&7===== &a&lThe wall has been captured! &7====="));
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Get back to the fortress to defend the main shrine!"));
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Monsters will now spawn at the wall."));
+        setState(GameState.MONSTERS_WALL);
+        //TODO: Set monster spawn at wall.
+        //TODO: Replace blocks in wall to nether style.
     }
 
 
     public void stopGame(boolean force, String reason) {
+        if (force) {
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&7===== &4&lThe game has been stopped! &7====="));
+            if (reason != null && !reason.isEmpty()) {
+                Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &8Reason: &7" + reason));
 
-    }
-
-
-    public boolean joinGame(Player player) {
-
-        return false;
+            }
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &7You will be teleported back to the lobby."));
+        } else {
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&7=== &a&lThe monsters have destroyed the shrine! &7==="));
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7You will be teleported back to the lobby."));
+        }
+        //TODO: Teleport all players back to lobby and reset all players.
     }
 
 
