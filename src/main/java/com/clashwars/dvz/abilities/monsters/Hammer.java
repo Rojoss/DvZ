@@ -2,6 +2,7 @@ package com.clashwars.dvz.abilities.monsters;
 
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.packet.reflection.ReflectionHandler;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import org.bukkit.Location;
@@ -18,10 +19,10 @@ public class Hammer extends MobAbility {
 
     public Hammer() {
         super();
-        ability = Ability.SUICIDE;
-        displayName = "&6Hammer";
-        description = "&7Hammer stone to break it!";
-        usage = "&7or spam left click on stone to hammer it.";
+        ability = Ability.HAMMER;
+        //displayName = "&6Hammer";
+        //description = "&7Hammer stone to break it!";
+        //usage = "&7or spam left click on stone to hammer it.";
         castItem = new CWItem(Material.TRIPWIRE_HOOK, 1, (short)0, displayName);
     }
 
@@ -59,7 +60,7 @@ public class Hammer extends MobAbility {
             ParticleEffect.SMOKE.display(CWUtil.getBlockCenterByBlockface(event.getClickedBlock().getLocation(), event.getBlockFace()), 0.0f, 0.3f, 0.3f, 0.00001f, 3);
         }
         player.getWorld().playSound(event.getClickedBlock().getLocation(), Sound.ZOMBIE_WOOD, 0.2f, 2.4f - CWUtil.randomFloat());
-        if (CWUtil.randomFloat() < 0.03f) {
+        if (CWUtil.randomFloat() < getFloatOption("chance")) {
             event.getClickedBlock().setType(Material.AIR);
             ParticleEffect.LARGE_SMOKE.display(event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f), 0.3f, 0.3f, 0.3f, 0.00001f, 15);
             ParticleEffect.CRIT.display(event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f), 0.6f, 0.6f, 0.6f, 0.1f, 10);

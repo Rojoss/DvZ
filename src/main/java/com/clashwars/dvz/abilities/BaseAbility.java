@@ -1,6 +1,7 @@
 package com.clashwars.dvz.abilities;
 
 import com.clashwars.cwcore.helpers.CWItem;
+import com.clashwars.cwcore.packet.reflection.ReflectionHandler;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
@@ -36,6 +37,27 @@ public class BaseAbility implements Listener {
     }
 
 
+    public String getStrOption(String option) {
+        return dvz.getAbilityCfg().getOption(ability, option);
+    }
+
+    public boolean getBoolOption(String option) {
+        return Boolean.valueOf(getStrOption(option));
+    }
+
+    public int getIntOption(String option) {
+        return Integer.valueOf(getStrOption(option));
+    }
+
+    public float getFloatOption(String option) {
+        return Float.valueOf(getStrOption(option));
+    }
+
+    public double getDoubleOption(String option) {
+        return Double.valueOf(getStrOption(option));
+    }
+
+
     public void setAbility(Ability ability) {
         this.ability = ability;
     }
@@ -61,6 +83,10 @@ public class BaseAbility implements Listener {
         return cooldown;
     }
 
+    public void setCooldown(int cooldown) {
+        this.cooldown = cooldown;
+    }
+
     public boolean hasCooldown() {
         return cooldown > 0;
     }
@@ -69,12 +95,20 @@ public class BaseAbility implements Listener {
         return displayName;
     }
 
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
     public String getDesc() {
         if (description == null || description.isEmpty()) {
             return "&a&lDESC&8&l: &cNo description available.";
         } else {
             return "&a&lDESC&8&l: " + description;
         }
+    }
+
+    public void setDesc(String desc) {
+        this.description = desc;
     }
 
     public String getUsage() {
@@ -86,6 +120,10 @@ public class BaseAbility implements Listener {
             }
         }
         return "&a&lUSAGE&8&l: " + usage;
+    }
+
+    public void setUsage(String usage) {
+        this.usage = usage;
     }
 
 

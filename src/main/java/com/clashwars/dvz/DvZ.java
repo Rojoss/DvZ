@@ -4,10 +4,7 @@ import com.clashwars.cwcore.CWCore;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.ClassManager;
 import com.clashwars.dvz.commands.Commands;
-import com.clashwars.dvz.config.ClassesCfg;
-import com.clashwars.dvz.config.PlayerCfg;
-import com.clashwars.dvz.config.PluginCfg;
-import com.clashwars.dvz.config.WorkShopCfg;
+import com.clashwars.dvz.config.*;
 import com.clashwars.dvz.events.MainEvents;
 import com.clashwars.dvz.events.WorkShopEvents;
 import com.clashwars.dvz.player.PlayerManager;
@@ -28,6 +25,7 @@ public class DvZ extends JavaPlugin {
 
     private PluginCfg cfg;
     private ClassesCfg classesCfg;
+    private AbilityCfg abilityCfg;
     private PlayerCfg playerCfg;
     private WorkShopCfg wsCfg;
 
@@ -42,6 +40,10 @@ public class DvZ extends JavaPlugin {
     public void onDisable() {
         Bukkit.getScheduler().cancelTasks(this);
         getPM().savePlayers();
+
+        abilityCfg.load();
+        abilityCfg.save();
+
         log("disabled");
     }
 
@@ -62,6 +64,8 @@ public class DvZ extends JavaPlugin {
 
         classesCfg = new ClassesCfg("plugins/DvZ/Classes.yml");
         classesCfg.load();
+
+        abilityCfg = new AbilityCfg("plugins/DvZ/Abilities.yml");
 
         playerCfg = new PlayerCfg("plugins/DvZ/Players.yml");
         playerCfg.load();
@@ -116,6 +120,10 @@ public class DvZ extends JavaPlugin {
 
     public ClassesCfg getClassesCfg() {
         return classesCfg;
+    }
+
+    public AbilityCfg getAbilityCfg() {
+        return abilityCfg;
     }
 
     public PlayerCfg getPlayerCfg() {

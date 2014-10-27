@@ -30,8 +30,8 @@ public class Infect extends MobAbility {
 
             if(dvz.getPM().getPlayer(damager).getPlayerClass().getType().equals(ClassType.MONSTER) &&
                dvz.getPM().getPlayer(damaged).getPlayerClass().getType().equals(ClassType.DWARF)) {
-                if(r.nextFloat() <= dvz.getCfg().INFECT_CHANCE) {
-                    damaged.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, dvz.getCfg().INFECT_DURATION, 1));
+                if(r.nextFloat() <= getFloatOption("chance")) {
+                    damaged.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, getIntOption("duration"), 1));
                 }
             }
 

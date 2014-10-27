@@ -15,8 +15,8 @@ public class Suicide extends MobAbility {
     public Suicide() {
         super();
         ability = Ability.SUICIDE;
-        displayName = "&4&lSuicide";
-        description = "&4Kill &7yourself when you're stuck somewhere.\n&cYou will get the same classes as before.\n&cSo you &4can't abuse &cit to get new classes!";
+        //displayName = "&4&lSuicide";
+        //description = "&4Kill &7yourself when you're stuck somewhere.\n&cYou will get the same classes as before.\n&cSo you &4can't abuse &cit to get new classes!";
         castItem = new CWItem(Material.GHAST_TEAR, 1, (short)0, displayName);
     }
 
