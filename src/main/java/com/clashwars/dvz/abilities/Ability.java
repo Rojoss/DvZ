@@ -2,6 +2,7 @@ package com.clashwars.dvz.abilities;
 
 import com.clashwars.dvz.abilities.monsters.Hammer;
 import com.clashwars.dvz.abilities.monsters.Infect;
+import com.clashwars.dvz.abilities.monsters.Rush;
 import com.clashwars.dvz.abilities.monsters.Suicide;
 import com.clashwars.dvz.classes.DvzClass;
 
@@ -13,7 +14,8 @@ public enum Ability {
     BASE(DvzClass.DWARF, new BaseAbility(), new String[] {}),
     SUICIDE(DvzClass.MONSTER, new Suicide(), new String[] {}),
     HAMMER(DvzClass.MONSTER, new Hammer(), new String[] {}),
-    INFECT(DvzClass.MONSTER, new Infect(), new String[] {});
+    INFECT(DvzClass.ZOMBIE, new Infect(), new String[] {}),
+    RUSH(DvzClass.ZOMBIE, new Rush(), new String[] {});
 
     private DvzClass dvzClass;
     private BaseAbility abilityClass;
