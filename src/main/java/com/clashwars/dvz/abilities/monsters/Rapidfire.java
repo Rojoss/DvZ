@@ -38,6 +38,7 @@ public class Rapidfire extends MobAbility {
                         }
                     }
                 }, getIntOption("duration") * 1000);
+        //TODO: Add particle and sound effects.
     }
 
     @EventHandler
