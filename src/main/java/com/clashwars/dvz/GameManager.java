@@ -12,6 +12,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
 
@@ -39,7 +40,14 @@ public class GameManager {
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7You get one and a half day to prepare."));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Do your tasks and get fully equipped!."));
 
-        //TODO: Give class item options to all players.
+        for (Player player : dvz.getServer().getOnlinePlayers()) {
+            HashMap<DvzClass, BaseClass> classOptions = dvz.getCM().getRandomClasses(ClassType.DWARF, 2);
+            CWPlayer cwp = dvz.getPM().getPlayer(player);
+            for (DvzClass c : classOptions.keySet()) {
+                classOptions.get(c).getClassItem().giveToPlayer(player);
+                cwp.setClassOptions(classOptions.keySet());
+            }
+        }
 
         getWorld().setTime(23000);
         setState(GameState.DAY_ONE);
