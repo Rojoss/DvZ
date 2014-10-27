@@ -10,11 +10,12 @@ import java.io.Serializable;
 
 public class WorkShopData {
 
-    private String location;
+    private String center = null;
+    private String location = null;
+    private String craftBlock = null;
     private int width = 0;
     private int length = 0;
     private int height = 0;
-    private String craftBlock;
     private DvzClass type;
 
     public WorkShopData() {
@@ -28,7 +29,15 @@ public class WorkShopData {
 
     public void setLocation(Location location) {
         this.location = CWUtil.locToString(location);
-        Bukkit.broadcastMessage(this.location);
+    }
+
+
+    public Location getCenter() {
+        return CWUtil.locFromString(center);
+    }
+
+    public void setCenter(Location center) {
+        this.center = CWUtil.locToString(center);
     }
 
 

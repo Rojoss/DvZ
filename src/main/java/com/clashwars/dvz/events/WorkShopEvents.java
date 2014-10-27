@@ -53,7 +53,7 @@ public class WorkShopEvents implements Listener {
         }
 
         WorkShop ws = dvz.getPM().getWorkshop(player);
-        ws.setLocation(event.getBlockPlaced().getLocation());
+        ws.setCenter(event.getBlockPlaced().getLocation());
         ws.setType(dvz.getPM().getPlayer(player).getPlayerClass());
         if (ws.build()) {
             event.getBlockPlaced().setType(Material.AIR);
