@@ -1,10 +1,7 @@
 package com.clashwars.dvz.abilities.monsters;
 
-import com.clashwars.dvz.DvZ;
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
-import com.clashwars.dvz.classes.ClassType;
-import com.clashwars.dvz.player.PlayerManager;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -22,20 +19,23 @@ public class Infect extends MobAbility {
     }
 
     @EventHandler
-    public void a(EntityDamageByEntityEvent event) {
-        if(event.getDamager().getType().equals(EntityType.PLAYER) && event.getEntity().getType().equals(EntityType.PLAYER)) {
-            Random r = new Random();
-            Player damager = (Player) event.getDamager();
-            Player damaged = (Player) event.getEntity();
+    public void onPlayerDamagedByPlayer(EntityDamageByEntityEvent event) {
 
-            if(dvz.getPM().getPlayer(damager).getPlayerClass().getType().equals(ClassType.MONSTER) &&
-               dvz.getPM().getPlayer(damaged).getPlayerClass().getType().equals(ClassType.DWARF)) {
-                if(r.nextFloat() <= getFloatOption("chance")) {
-                    damaged.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, getIntOption("duration"), 1));
-                }
-            }
-
+        if(!(event.getDamager() instanceof Player) || !(event.getEntity() instanceof Player)) {
+            return;
         }
+
+        Player damager = (Player) event.getDamager();
+        Player damaged = (Player) event.getEntity();
+
+        if(!canCast(damager)) {
+            return;
+        }
+        if(CWUtil.randomFloat() <= getFloatOption("chance")) {
+            damaged.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, getIntOption("duration"), 1));
+            //TODO: Add particle and sound effects.
+        }
+
     }
 
 }
