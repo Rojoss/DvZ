@@ -8,6 +8,7 @@ public enum GameState {
     DAY_ONE("(Dwarves) First day", ChatColor.DARK_GRAY),
     NIGHT_ONE("(Dwarves) First night", ChatColor.DARK_GRAY),
     DAY_TWO("(Dwarves) Second day", ChatColor.DARK_GRAY),
+    NIGHT_TWO("(Dwarves) Second night", ChatColor.DARK_GRAY), /* This is when there is no staff online to be dragon */
     DRAGON("Dragon", ChatColor.DARK_PURPLE),
     MONSTERS("Monsters", ChatColor.RED),
     MONSTERS_WALL("Monsters Wall", ChatColor.DARK_RED),

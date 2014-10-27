@@ -32,14 +32,19 @@ public class GameRunnable extends BukkitRunnable {
             }
             if (gm.getState() == GameState.DAY_TWO) {
                 gm.setState(GameState.DRAGON);
-                //TODO: Create dragon etc...
-                Bukkit.broadcastMessage("Dragon...");
+                gm.createDragon();
             }
         } else if (time > 22500 || time < 14000) {
             if (gm.getState() == GameState.NIGHT_ONE) {
                 gm.setState(GameState.DAY_TWO);
                 Bukkit.broadcastMessage(Util.formatMsg("&6The sun is rising..."));
                 Bukkit.broadcastMessage(Util.formatMsg("&6This is the last day you can prepare for the fight!"));
+            }
+            if (gm.getState() == GameState.NIGHT_TWO) {
+                gm.setState(GameState.DAY_TWO);
+                Bukkit.broadcastMessage(Util.formatMsg("&6The sun is rising..."));
+                Bukkit.broadcastMessage(Util.formatMsg("&6There has been no dragon. &8(&7You might die now..&8)"));
+                gm.releaseMonsters(true);
             }
         }
     }

@@ -3,9 +3,11 @@ package com.clashwars.dvz.commands;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
+import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.classes.ClassManager;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.classes.dragons.DragonClass;
 import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.command.Command;
@@ -38,7 +40,7 @@ public class Commands {
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " help &8- &5Show this page."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " spawn &8- &5Teleport to dwarf/monster spawn."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " class {name} &8- &5Detailed class info."));
-                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " abilities [class] &8- &5List all abilities you can use."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " abilities &8- &5List all abilities you can use."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " ability {name} &8- &5Detailed ability info."));
                     if (sender.isOp() || sender.hasPermission("dvz.admin")) {
                         sender.sendMessage(CWUtil.integrateColor("&8===== &4&lAdmin Commands &8====="));
@@ -57,12 +59,9 @@ public class Commands {
 
                 //TODO: Spawn cmd
 
-
                 //TODO: class cmd
 
-
                 //TODO: Abilities cmd
-
 
                 //TODO: Ability cmd
 
@@ -145,26 +144,32 @@ public class Commands {
                 //################################################### /dvz dragon [type] ###################################################
                 //##########################################################################################################################
                 if (args[0].equalsIgnoreCase("dragon")) {
-                    if (!sender.isOp() && !sender.hasPermission("dvz.admin")) {
-                        sender.sendMessage(Util.formatMsg("Insufficient permissions."));
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                        return true;
+                    }
+                    Player player = (Player)sender;
+
+                    if (!player.isOp() && !player.hasPermission("dvz.admin")) {
+                        player.sendMessage(Util.formatMsg("Insufficient permissions."));
                         return true;
                     }
 
-                    if (args.length < 2) {
-                        //TODO: Set player as dragon.
-                        //TODO: Print out dragon type with getDragon() which needs to return random one if its not set.
-                        sender.sendMessage(Util.formatMsg("&6You will be the dragon when the second night falls."));
-                        return true;
+                    if (args.length > 1) {
+                        DvzClass dragonType = DvzClass.fromString(args[1]);
+                        if (dragonType == null || dragonType.getType() != ClassType.DRAGON) {
+                            player.sendMessage(Util.formatMsg("&cInvalid dragon type specified."));
+                            return true;
+                        }
+                        gm.setDragonType(dragonType);
                     }
 
-                    DvzClass dragonType = DvzClass.fromString(args[1]);
-                    if (dragonType == null || dragonType.getType() != ClassType.DRAGON) {
-                        sender.sendMessage(Util.formatMsg("&cInvalid dragon type specified."));
-                        return true;
+                    gm.setDragonPlayer(player.getUniqueId());
+                    if (gm.getState() == GameState.NIGHT_TWO) {
+                        gm.createDragon();
+                    } else {
+                        player.sendMessage(Util.formatMsg("&6You will be the " + CWUtil.capitalize(gm.getDragonType().toString().toLowerCase()) + " when the second night falls."));
                     }
-
-                    //TODO: Set dragon and type
-                    sender.sendMessage(Util.formatMsg("&6You will be the &5" + CWUtil.capitalize(dragonType.toString().toLowerCase()) + " &6when the second night falls."));
                     return true;
                 }
 
