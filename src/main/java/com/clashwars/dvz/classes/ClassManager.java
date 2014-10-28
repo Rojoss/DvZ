@@ -4,17 +4,18 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.dragons.DragonClass;
 import com.clashwars.dvz.classes.dragons.FireDragon;
-import com.clashwars.dvz.classes.dwarves.DwarfClass;
-import com.clashwars.dvz.classes.dwarves.Miner;
+import com.clashwars.dvz.classes.dwarves.*;
 import com.clashwars.dvz.classes.monsters.MobClass;
 import com.clashwars.dvz.classes.monsters.Zombie;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ClassManager {
 
     private DvZ dvz;
 
+    private HashMap<DvzClass, BaseClass> baseClasses = new HashMap<DvzClass, BaseClass>();
     private HashMap<DvzClass, BaseClass> dwarfClasses = new HashMap<DvzClass, BaseClass>();
     private HashMap<DvzClass, BaseClass> monsterClasses = new HashMap<DvzClass, BaseClass>();
     private HashMap<DvzClass, BaseClass> dragonClasses = new HashMap<DvzClass, BaseClass>();
@@ -26,14 +27,14 @@ public class ClassManager {
     }
 
     private void populate() {
-        dwarfClasses.put(DvzClass.DWARF, new DwarfClass());
+        baseClasses.put(DvzClass.DWARF, new DwarfClass());
         dwarfClasses.put(DvzClass.MINER, new Miner());
-//        dwarfClasses.put(DvZClass.BUILDER, new Builder());
-//        dwarfClasses.put(DvZClass.HUNTER, new Hunter());
-//        dwarfClasses.put(DvZClass.TAILOR, new Tailor());
-//        dwarfClasses.put(DvZClass.ALCHEMIST, new Alchemist());
+        dwarfClasses.put(DvzClass.BUILDER, new Builder());
+        dwarfClasses.put(DvzClass.HUNTER, new Hunter());
+        dwarfClasses.put(DvzClass.TAILOR, new Tailor());
+        dwarfClasses.put(DvzClass.ALCHEMIST, new Alchemist());
 
-        monsterClasses.put(DvzClass.MONSTER, new MobClass());
+        baseClasses.put(DvzClass.MONSTER, new MobClass());
         monsterClasses.put(DvzClass.ZOMBIE, new Zombie());
 //        monsterClasses.put(DvZClass.SKELETON, new Skeleton());
 //        monsterClasses.put(DvZClass.SPIDER, new Spider());
@@ -43,7 +44,7 @@ public class ClassManager {
 //        monsterClasses.put(DvZClass.PIG, new Pig());
 //        monsterClasses.put(DvZClass.VILLAGER, new Villager());
 
-        dragonClasses.put(DvzClass.DRAGON, new DragonClass());
+        baseClasses.put(DvzClass.DRAGON, new DragonClass());
         dragonClasses.put(DvzClass.FIREDRAGON, new FireDragon());
 //        dragonClasses.put(DvZClass.WATERDRAGON, new WaterDragon());
 //        dragonClasses.put(DvZClass.AIRDRAGON, new AirDragon());
@@ -90,8 +91,12 @@ public class ClassManager {
         } else if (type == ClassType.DRAGON) {
             classes = dragonClasses;
         }
-        DvzClass c = (DvzClass)CWUtil.random(classes.keySet().toArray());
         for (int i = 0; i < amount; i++) {
+            DvzClass c = CWUtil.random(new ArrayList<DvzClass>(classes.keySet()));
+            if (randomclasses.containsKey(c)) {
+                i--;
+                continue;
+            }
             randomclasses.put(c, classes.get(c));
         }
         return randomclasses;

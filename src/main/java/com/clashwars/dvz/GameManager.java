@@ -42,6 +42,7 @@ public class GameManager {
 
         for (Player player : dvz.getServer().getOnlinePlayers()) {
             HashMap<DvzClass, BaseClass> classOptions = dvz.getCM().getRandomClasses(ClassType.DWARF, 2);
+            Bukkit.broadcastMessage(classOptions.toString());
             CWPlayer cwp = dvz.getPM().getPlayer(player);
             for (DvzClass c : classOptions.keySet()) {
                 classOptions.get(c).getClassItem().giveToPlayer(player);
@@ -58,9 +59,10 @@ public class GameManager {
         Player player = getDragonPlayer();
         if (player == null) {
             for (Player p : dvz.getServer().getOnlinePlayers()) {
-                if (player.isOp() || player.hasPermission("dvz.admin")) {
+                if (p.isOp() || p.hasPermission("dvz.admin")) {
                     p.sendMessage(Util.formatMsg("&cNo dragon was set up so you have been set as dragon!"));
                     player = p;
+                    setDragonPlayer(p.getUniqueId());
                 }
             }
         }
@@ -70,6 +72,7 @@ public class GameManager {
             return;
         }
         DvzClass dragonType = getDragonType();
+        setDragonType(dragonType);
 
         Bukkit.broadcastMessage(CWUtil.integrateColor("&7======= &a&lThe " + CWUtil.capitalize(dragonType.toString().toLowerCase()) + "dragon arises! &7======="));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Stop working and get to the walls!"));
@@ -79,13 +82,15 @@ public class GameManager {
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         cwp.setPlayerClass(dragonType);
         BaseClass c = dvz.getCM().getClass(dragonType);
+        cwp.savePlayer();
 
-        //TODO: Teleport player to dragon spawn.
-        player.setFlying(true);
+
         player.setAllowFlight(true);
+        player.setFlying(true);
+        //TODO: Teleport player to dragon spawn.
         player.getInventory().clear();
         c.equipItems(player);
-        //TODO: Disguise player
+        Util.disguisePlayer(player, "enderdragon");
         setState(GameState.DRAGON);
     }
 
@@ -167,7 +172,7 @@ public class GameManager {
 
 
     public DvzClass getDragonType() {
-        DvzClass dvzClass = DvzClass.valueOf(gCfg.GAME__DRAGON_TYPE);
+        DvzClass dvzClass = DvzClass.fromString(gCfg.GAME__DRAGON_TYPE);
         if (dvzClass == null) {
             Set<DvzClass> dragons = dvz.getCM().getClasses(ClassType.DRAGON).keySet();
             dvzClass = CWUtil.random(new ArrayList<DvzClass>(dragons));
@@ -182,7 +187,12 @@ public class GameManager {
 
 
     public Player getDragonPlayer() {
-        UUID uuid = UUID.fromString(gCfg.GAME__DRAGON_PLAYER);
+        UUID uuid = null;
+        try {
+            uuid = UUID.fromString(gCfg.GAME__DRAGON_PLAYER);
+        } catch (Exception e) {
+            return null;
+        }
         if (uuid == null) {
             return null;
         }
