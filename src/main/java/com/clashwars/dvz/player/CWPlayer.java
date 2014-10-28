@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -57,6 +58,10 @@ private DvZ dvz;
 
     public void setClassOptions(Set<DvzClass> classOptions) {
         data.setClassOptions(classOptions);
+    }
+
+    public void clearClassOptions() {
+        data.setClassOptions(new HashSet<DvzClass>());
     }
 
 

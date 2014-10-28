@@ -12,10 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class GameManager {
 
@@ -97,13 +94,7 @@ public class GameManager {
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Do your tasks and get fully equipped!."));
 
         for (Player player : dvz.getServer().getOnlinePlayers()) {
-            HashMap<DvzClass, BaseClass> classOptions = dvz.getCM().getRandomClasses(ClassType.DWARF, 2);
-            Bukkit.broadcastMessage(classOptions.toString());
-            CWPlayer cwp = dvz.getPM().getPlayer(player);
-            for (DvzClass c : classOptions.keySet()) {
-                classOptions.get(c).getClassItem().giveToPlayer(player);
-                cwp.setClassOptions(classOptions.keySet());
-            }
+            giveClassItems(player, ClassType.DWARF, false);
         }
 
         getUsedWorld().setTime(23000);
@@ -178,12 +169,31 @@ public class GameManager {
                 Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &8Reason: &7" + reason));
 
             }
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &7You will be teleported back to the lobby."));
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &7The game will be closed soon."));
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &7Don't log off yet! There might be another round."));
         } else {
             Bukkit.broadcastMessage(CWUtil.integrateColor("&7=== &a&lThe monsters have destroyed the shrine! &7==="));
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7You will be teleported back to the lobby."));
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7The game will be closed soon."));
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Don't log off yet! There might be another round."));
         }
-        //TODO: Teleport all players back to lobby and reset all players.
+    }
+
+
+    public void giveClassItems(Player player, ClassType type, boolean forcePrevious) {
+        CWPlayer cwp = dvz.getPM().getPlayer(player);
+        if (forcePrevious) {
+            for (DvzClass c : cwp.getClassOptions()) {
+                dvz.getCM().getClass(c).getClassItem().giveToPlayer(player);
+            }
+            return;
+        }
+        //TODO: Get classes based on weights from class manager.
+        HashMap<DvzClass, BaseClass> classOptions = dvz.getCM().getRandomClasses(type, 2);
+        cwp.clearClassOptions();
+        cwp.setClassOptions(classOptions.keySet());
+        for (DvzClass c : classOptions.keySet()) {
+            classOptions.get(c).getClassItem().giveToPlayer(player);
+        }
     }
 
 

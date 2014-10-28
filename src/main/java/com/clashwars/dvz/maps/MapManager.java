@@ -74,7 +74,7 @@ public class MapManager {
         }
 
         return true;
-    }
+        }
 
 
     public boolean loadMap(String mapName) {
@@ -136,6 +136,19 @@ public class MapManager {
         //Map loaded!
         activeMap = mapName;
         return true;
+    }
+
+    public Set<String> isSetProperly(DvzMap map) {
+        MapData data = map.getData();
+        Set<String> missingData = new HashSet<String>();
+
+        for (String locType : mapCfg.getLocationNames()) {
+            if (map.getLocation(locType) == null) {
+                missingData.add("location:" + locType);
+            }
+        }
+
+        return missingData;
     }
 
     public World getUsedWorld() {

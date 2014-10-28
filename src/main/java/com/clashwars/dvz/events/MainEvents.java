@@ -1,8 +1,10 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
+import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.Util;
@@ -34,7 +36,7 @@ public class MainEvents implements Listener {
         Player player = event.getPlayer();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
 
-        if (cwp.getPlayerClass() != DvzClass.DWARF) {
+        if (cwp.getPlayerClass() != null && cwp.getPlayerClass() != DvzClass.DWARF) {
             player.sendMessage(Util.formatMsg("&6Welcome back!"));
             return;
         }
@@ -42,9 +44,11 @@ public class MainEvents implements Listener {
         if (gm.isDwarves()) {
             player.sendMessage(Util.formatMsg("&6You have joined DvZ as a &8Dwarf&6!"));
             cwp.setPlayerClass(DvzClass.DWARF);
+            dvz.getGM().giveClassItems(player, ClassType.DWARF, false);
         } else if (gm.isMonsters()) {
             player.sendMessage(Util.formatMsg("&6You have joined DvZ as a &4Monster&6!"));
             player.sendMessage(Util.formatMsg("&6This is because the dragon has been killed already."));
+            dvz.getGM().giveClassItems(player, ClassType.MONSTER, false);
             cwp.setPlayerClass(DvzClass.MONSTER);
         } else if (gm.getState() == GameState.OPENED) {
             player.sendMessage(Util.formatMsg("&6The game hasn't started yet but it will start soon."));

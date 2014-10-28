@@ -91,6 +91,7 @@ public class ClassManager {
         } else if (type == ClassType.DRAGON) {
             classes = dragonClasses;
         }
+        //TODO: Get clases based on weight.
         for (int i = 0; i < amount; i++) {
             DvzClass c = CWUtil.random(new ArrayList<DvzClass>(classes.keySet()));
             if (randomclasses.containsKey(c)) {

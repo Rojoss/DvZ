@@ -10,11 +10,15 @@ import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.classes.dragons.DragonClass;
 import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.util.Util;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 public class Commands {
     private DvZ dvz;
@@ -40,22 +44,40 @@ public class Commands {
                     sender.sendMessage(CWUtil.integrateColor("&8===== &4&lPlayer Commands &8====="));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " &8- &5Show game information."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " help &8- &5Show this page."));
+                    if (sender.isOp() || sender.hasPermission("dvz.admin")) {
+                        sender.sendMessage(CWUtil.integrateColor("&6/" + label + " admin &8- &5Help for admin commands."));
+                    }
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " switch &8- &5Switch to another class."));
+                    sender.sendMessage(CWUtil.integrateColor("&7(You will get the same class options again!)"));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " spawn &8- &5Teleport to dwarf/monster spawn."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " class {name} &8- &5Detailed class info."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " abilities &8- &5List all abilities you can use."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " ability {name} &8- &5Detailed ability info."));
-                    if (sender.isOp() || sender.hasPermission("dvz.admin")) {
-                        sender.sendMessage(CWUtil.integrateColor("&8===== &4&lAdmin Commands &8====="));
-                        sender.sendMessage(CWUtil.integrateColor("&6/" + label + " reset [mapName] &8- &5Reset the game."));
-                        sender.sendMessage(CWUtil.integrateColor("&6/" + label + " open &8- &5Open the game."));
-                        sender.sendMessage(CWUtil.integrateColor("&6/" + label + " start &8- &5Start the game."));
-                        sender.sendMessage(CWUtil.integrateColor("&6/" + label + " stop [reason] &8- &5Stop the game."));
-                        sender.sendMessage(CWUtil.integrateColor("&6/" + label + " speed [value] &8- &5Set the game speed (def:0)"));
-                        sender.sendMessage(CWUtil.integrateColor("&6/" + label + " dragon [type] &8- &5Set yourself to be the dragon."));
-                        sender.sendMessage(CWUtil.integrateColor("&6/" + label + " save &8- &5Save everything."));
-                        sender.sendMessage(CWUtil.integrateColor("&6/" + label + " reload [force] &8- &5Reload configs."));
-                        sender.sendMessage(CWUtil.integrateColor("&7(If you use force it wont first save the configs. &4Careful&7!)"));
+                    return true;
+                }
+
+
+                //##########################################################################################################################
+                //####################################################### /dvz admin #######################################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("admin")) {
+                    if (!sender.isOp() && !sender.hasPermission("dvz.admin")) {
+                        sender.sendMessage(Util.formatMsg("Insufficient permissions."));
+                        return true;
                     }
+
+                    sender.sendMessage(CWUtil.integrateColor("&8===== &4&lAdmin Commands &8====="));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " reset [mapName] &8- &5Reset the game."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " open &8- &5Open the game."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " start &8- &5Start the game."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " stop [reason] &8- &5Stop the game."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " speed [value] &8- &5Set the game speed (def:0)"));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " dragon [type] &8- &5Set yourself to be the dragon."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " loc {name} [block] &8- &5Set a location at ur location."));
+                    sender.sendMessage(CWUtil.integrateColor("&7(Or at the block on cursor within 5 blocks if 'block' is specified)"));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " save &8- &5Save everything."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " reload [force] &8- &5Reload configs."));
+                    sender.sendMessage(CWUtil.integrateColor("&7(If you use force it wont first save the configs. &4Careful&7!)"));
                     return true;
                 }
 
@@ -70,7 +92,7 @@ public class Commands {
 
 
                 //##########################################################################################################################
-                //############################################### /dvz reset {nextgame} [map]###############################################
+                //############################################### /dvz reset {nextgame} [map] ##############################################
                 //##########################################################################################################################
                 if (args[0].equalsIgnoreCase("reset")) {
                     if (!sender.isOp() && !sender.hasPermission("dvz.admin")) {
@@ -93,7 +115,7 @@ public class Commands {
                     if (args.length > 2) {
                         if (!dvz.getMM().getMaps().containsKey(args[2])) {
                             sender.sendMessage(Util.formatMsg("&cInvalid map name specified."));
-                            sender.sendMessage(Util.formatMsg("&4Maps&8: &4" + CWUtil.implode(dvz.getMM().getMaps().keySet().toArray(new String[dvz.getMM().getMaps().size()]), "&8, &c")));
+                            sender.sendMessage(Util.formatMsg("&4Maps&8: &c" + CWUtil.implode(dvz.getMM().getMaps().keySet().toArray(new String[dvz.getMM().getMaps().size()]), "&8, &c")));
                             return true;
                         }
                         mapName = args[2];
@@ -111,6 +133,13 @@ public class Commands {
                 if (args[0].equalsIgnoreCase("open")) {
                     if (!sender.isOp() && !sender.hasPermission("dvz.admin")) {
                         sender.sendMessage(Util.formatMsg("Insufficient permissions."));
+                        return true;
+                    }
+
+                    Set<String> setupOptions = dvz.getMM().isSetProperly(dvz.getMM().getActiveMap());
+                    if (!setupOptions.isEmpty()) {
+                        sender.sendMessage(Util.formatMsg("&cThis map is not set up properly."));
+                        sender.sendMessage(Util.formatMsg("&4Missing&8: &c" + CWUtil.implode(setupOptions.toArray(new String[dvz.getMM().getMaps().size()]), "&8, &c")));
                         return true;
                     }
 
@@ -211,6 +240,43 @@ public class Commands {
                     }
                     return true;
                 }
+
+
+                //##########################################################################################################################
+                //################################################ /dvz loc {type} [block] #################################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("loc")) {
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                        return true;
+                    }
+                    Player player = (Player) sender;
+
+                    if (!player.isOp() && !player.hasPermission("dvz.admin")) {
+                        player.sendMessage(Util.formatMsg("Insufficient permissions."));
+                        return true;
+                    }
+
+                    if (args.length < 2) {
+                        sender.sendMessage(Util.formatMsg("&cInvalid usage. &7/" + label + " " + args[0] + " {type/name}"));
+                        sender.sendMessage(Util.formatMsg("&4Names&8: &c" + CWUtil.implode(dvz.getMapCfg().getLocationNames(), "&8, &c")));
+                        return true;
+                    }
+
+                    Location loc = player.getLocation();
+                    if (args.length > 2) {
+                        if (args[2].equalsIgnoreCase("block") || args[2].equalsIgnoreCase("target")) {
+                            Block block = player.getTargetBlock(null, 5);
+                            if (block.getType() != Material.AIR) {
+                                loc = block.getLocation();
+                            }
+                        }
+                    }
+
+                    dvz.getMM().getActiveMap().setLocation(args[1], loc);
+                    player.sendMessage(Util.formatMsg("&6Set location &8'&5" + args[1] + "&8' &6at: &8(&5" + loc.getBlockX() + "&8, &5" + loc.getBlockY() + "&8, &5" + loc.getBlockZ() + "&8)"));
+                }
+
 
 
                 //##########################################################################################################################
