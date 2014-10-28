@@ -14,7 +14,7 @@ public class Rush extends MobAbility {
 
     public Rush() {
         super();
-        this.ability = Ability.RUSH;
+        ability = Ability.RUSH;
         castItem = new CWItem(Material.SUGAR, 1, (short) 0, displayName);
     }
 

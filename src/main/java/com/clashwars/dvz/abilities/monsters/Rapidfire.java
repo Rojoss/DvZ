@@ -20,16 +20,14 @@ public class Rapidfire extends MobAbility {
 
     public Rapidfire() {
         super();
-        this.ability = Ability.RAPIDFIRE;
+        ability = Ability.RAPIDFIRE;
         castItem = new CWItem(Material.BOW, 1, (short) 0, displayName);
         castActions = new ArrayList<Action>(Arrays.asList(new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}));
     }
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
-        final DvZ dvzf = dvz;
-        //ArrowsPerSec and Duration
-        Bukkit.getScheduler().scheduleSyncDelayedTask(dvzf,
+        Bukkit.getScheduler().scheduleSyncDelayedTask(dvz,
                 new BukkitRunnable() {
                     @Override
                     public void run() {

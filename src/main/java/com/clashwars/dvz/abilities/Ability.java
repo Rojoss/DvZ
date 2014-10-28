@@ -14,7 +14,8 @@ public enum Ability {
     INFECT(DvzClass.ZOMBIE, new Infect(), new String[] {}),
     RUSH(DvzClass.ZOMBIE, new Rush(), new String[] {}),
     RAPIDFIRE(DvzClass.SKELETON, new Rapidfire(), new String[] {}),
-    POISONATTACK(DvzClass.SPIDER, new PoisonAttack(), new String[] {});
+    POISONATTACK(DvzClass.SPIDER, new PoisonAttack(), new String[] {}),
+    POISON(DvzClass.SPIDER, new Poison(), new String[] {});
 
     private DvzClass dvzClass;
     private BaseAbility abilityClass;

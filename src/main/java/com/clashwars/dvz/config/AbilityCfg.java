@@ -40,6 +40,17 @@ public class AbilityCfg extends EasyConfig {
         if (a == Ability.HAMMER) {
             abilityData = loadDefault(abilityData, "chance", "0.03");
         }
+        if (a == Ability.POISONATTACK) {
+            abilityData = loadDefault(abilityData, "duration", "6000");
+        }
+        if (a == Ability.RUSH) {
+            abilityData = loadDefault(abilityData, "range", "20");
+            abilityData = loadDefault(abilityData, "multiplier", "0.2");
+        }
+        if (a == Ability.POISON) {
+            abilityData = loadDefault(abilityData, "range", "4");
+            abilityData = loadDefault(abilityData, "duration", "6000");
+        }
 
         return abilityData;
     }
