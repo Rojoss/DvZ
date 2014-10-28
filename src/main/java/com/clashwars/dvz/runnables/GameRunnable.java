@@ -20,9 +20,12 @@ public class GameRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        Long time = gm.getWorld().getTime();
+        if (!gm.isStarted() || gm.isMonsters()) {
+            return;
+        }
+        Long time = gm.getUsedWorld().getTime();
         if (gm.getSpeed() != 0) {
-            gm.getWorld().setTime(time + gm.getSpeed());
+            gm.getUsedWorld().setTime(time + gm.getSpeed());
         }
         if (time > 14000 && time < 22500) {
             if (gm.getState() == GameState.DAY_ONE) {
