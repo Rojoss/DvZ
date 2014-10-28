@@ -8,6 +8,7 @@ import com.clashwars.dvz.config.GameCfg;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -28,9 +29,64 @@ public class GameManager {
 
 
 
+    public void resetGame(boolean nextGame, String mapName) {
+        setState(GameState.CLOSED);
+        if (!nextGame) {
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&7========== &a&lDvZ has ended! &7=========="));
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Come back again later for more DvZ!"));
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Make sure to follow us on Twitch to know when DvZ starts!"));
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &9&lhttp://twitch.tv/clashwars"));
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Use &6&l/leave &7to go to the pvp server!"));
+        } else {
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&7========== &a&lDvZ is resetting! &7=========="));
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7A new game will be starting soon."));
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7If you're not watching the stream yet make sure to do!"));
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &9&lhttp://twitch.tv/clashwars"));
+        }
+        //Tp all players to default world.
+        for (Player player : dvz.getMM().getActiveMap().getWorld().getPlayers()) {
+            player.teleport(dvz.getCfg().getDefaultWorld().getSpawnLocation());
+        }
+
+        //Remove the map
+        if (dvz.getMM().removeActiveMap()) {
+            Bukkit.broadcastMessage(Util.formatMsg("&6Reset progress&8: &5Previous map has been removed"));
+        } else {
+            Bukkit.broadcastMessage(Util.formatMsg("&6Reset progress&8: &4Failed at removing previous map"));
+        }
+
+        //Reset data
+        //TODO: Reset all other data
+
+        //Load in new map.
+        if (dvz.getMM().loadMap(mapName)) {
+            Bukkit.broadcastMessage(Util.formatMsg("&6Reset progress&8: &5New map loaded."));
+        } else {
+            Bukkit.broadcastMessage(Util.formatMsg("&6Reset progress&8: &4Failed at loading new map"));
+        }
+    }
+
     public void openGame() {
-        //TODO: Reset stuff...
+        if (dvz.getMM().getActiveMap() == null || !dvz.getMM().getActiveMap().isLoaded()) {
+            dvz.getMM().loadMap(null);
+        }
+
+        if (dvz.getMM().getActiveMap() == null || !dvz.getMM().getActiveMap().isLoaded()) {
+            Bukkit.broadcastMessage(Util.formatMsg("&6The game couldn't be opened because there is no map loaded."));
+            return;
+        }
+
         setState(GameState.OPENED);
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&7========== &a&lDvZ has opened! &7=========="));
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7The game will be starting soon so please wait."));
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Beat the parkour to get 3 classes instead of 2!"));
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7If you're not watching the stream yet make sure to do!"));
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &9&lhttp://twitch.tv/clashwars"));
+
+        //Tp all players to active world.
+        for (Player player : dvz.getServer().getOnlinePlayers()) {
+            player.teleport(dvz.getMM().getUsedWorld().getSpawnLocation());
+        }
     }
 
 
@@ -50,7 +106,7 @@ public class GameManager {
             }
         }
 
-        getWorld().setTime(23000);
+        getUsedWorld().setTime(23000);
         setState(GameState.DAY_ONE);
     }
 
@@ -87,7 +143,7 @@ public class GameManager {
 
         player.setAllowFlight(true);
         player.setFlying(true);
-        //TODO: Teleport player to dragon spawn.
+        player.teleport(dvz.getMM().getActiveMap().getLocation("dragon"));
         player.getInventory().clear();
         c.equipItems(player);
         Util.disguisePlayer(player, "enderdragon");
@@ -111,7 +167,6 @@ public class GameManager {
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Get back to the fortress to defend the main shrine!"));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Monsters will now spawn at the wall."));
         setState(GameState.MONSTERS_WALL);
-        //TODO: Set monster spawn at wall.
         //TODO: Replace blocks in wall to nether style.
     }
 
@@ -133,11 +188,9 @@ public class GameManager {
 
 
 
-
-    public World getWorld() {
-        return dvz.getServer().getWorld(gCfg.WORLD);
+    public World getUsedWorld() {
+        return dvz.getMM().getUsedWorld();
     }
-
 
     public GameState getState() {
         return GameState.valueOf(gCfg.GAME__STATE);
@@ -149,7 +202,7 @@ public class GameManager {
     }
 
     public boolean isStarted() {
-        return (getState() != GameState.CLOSED && getState() != GameState.ENDED);
+        return (getState() != GameState.CLOSED && getState() != GameState.ENDED && getState() != GameState.SETUP);
     }
 
     public boolean isDwarves() {

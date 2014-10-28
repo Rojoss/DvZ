@@ -14,6 +14,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+
 public class Commands {
     private DvZ dvz;
     private GameManager gm;
@@ -44,6 +46,7 @@ public class Commands {
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " ability {name} &8- &5Detailed ability info."));
                     if (sender.isOp() || sender.hasPermission("dvz.admin")) {
                         sender.sendMessage(CWUtil.integrateColor("&8===== &4&lAdmin Commands &8====="));
+                        sender.sendMessage(CWUtil.integrateColor("&6/" + label + " reset [mapName] &8- &5Reset the game."));
                         sender.sendMessage(CWUtil.integrateColor("&6/" + label + " open &8- &5Open the game."));
                         sender.sendMessage(CWUtil.integrateColor("&6/" + label + " start &8- &5Start the game."));
                         sender.sendMessage(CWUtil.integrateColor("&6/" + label + " stop [reason] &8- &5Stop the game."));
@@ -64,6 +67,42 @@ public class Commands {
                 //TODO: Abilities cmd
 
                 //TODO: Ability cmd
+
+
+                //##########################################################################################################################
+                //############################################### /dvz reset {nextgame} [map]###############################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("reset")) {
+                    if (!sender.isOp() && !sender.hasPermission("dvz.admin")) {
+                        sender.sendMessage(Util.formatMsg("Insufficient permissions."));
+                        return true;
+                    }
+
+                    if (args.length < 2) {
+                        sender.sendMessage(Util.formatMsg("&cInvalid usage. &7/" + label + " " + args[0] + " {nextgame} [map]"));
+                        sender.sendMessage(Util.formatMsg("&cSpecify true|false for next game if there is gonna be a next game."));
+                        return true;
+                    }
+
+                    boolean nextGame = true;
+                    if (args[1].equalsIgnoreCase("false") || args[1].equalsIgnoreCase("no")) {
+                        nextGame = false;
+                    }
+
+                    String mapName = "";
+                    if (args.length > 2) {
+                        if (!dvz.getMM().getMaps().containsKey(args[2])) {
+                            sender.sendMessage(Util.formatMsg("&cInvalid map name specified."));
+                            sender.sendMessage(Util.formatMsg("&4Maps&8: &4" + CWUtil.implode(dvz.getMM().getMaps().keySet().toArray(new String[dvz.getMM().getMaps().size()]), "&8, &c")));
+                            return true;
+                        }
+                        mapName = args[2];
+                    }
+
+                    gm.resetGame(nextGame, mapName);
+                    sender.sendMessage(Util.formatMsg("&6You have reset the game!"));
+                    return true;
+                }
 
 
                 //##########################################################################################################################

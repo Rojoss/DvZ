@@ -7,6 +7,7 @@ import com.clashwars.dvz.commands.Commands;
 import com.clashwars.dvz.config.*;
 import com.clashwars.dvz.events.MainEvents;
 import com.clashwars.dvz.events.WorkShopEvents;
+import com.clashwars.dvz.maps.MapManager;
 import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.runnables.GameRunnable;
 import org.bukkit.Bukkit;
@@ -26,6 +27,7 @@ public class DvZ extends JavaPlugin {
 
     private PluginCfg cfg;
     private GameCfg gameCfg;
+    private MapCfg mapCfg;
     private ClassesCfg classesCfg;
     private AbilityCfg abilityCfg;
     private PlayerCfg playerCfg;
@@ -34,6 +36,7 @@ public class DvZ extends JavaPlugin {
     private Commands cmds;
 
     private GameManager gm;
+    private MapManager mm;
     private ClassManager cm;
     private PlayerManager pm;
 
@@ -68,6 +71,9 @@ public class DvZ extends JavaPlugin {
         gameCfg = new GameCfg("plugins/DvZ/data/Game.yml");
         gameCfg.load();
 
+        mapCfg = new MapCfg("plugins/DvZ/maps/Maps.yml");
+        mapCfg.load();
+
         classesCfg = new ClassesCfg("plugins/DvZ/Classes.yml");
         classesCfg.load();
 
@@ -80,6 +86,7 @@ public class DvZ extends JavaPlugin {
         wsCfg.load();
 
         gm = new GameManager(this);
+        mm = new MapManager(this);
         cm = new ClassManager(this);
         pm = new PlayerManager(this);
 
@@ -135,6 +142,10 @@ public class DvZ extends JavaPlugin {
         return gameCfg;
     }
 
+    public MapCfg getMapCfg() {
+        return mapCfg;
+    }
+
     public ClassesCfg getClassesCfg() {
         return classesCfg;
     }
@@ -154,6 +165,10 @@ public class DvZ extends JavaPlugin {
 
     public GameManager getGM() {
         return gm;
+    }
+
+    public MapManager getMM() {
+        return mm;
     }
 
     public ClassManager getCM() {

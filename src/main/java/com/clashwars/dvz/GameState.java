@@ -12,7 +12,8 @@ public enum GameState {
     DRAGON("Dragon", ChatColor.DARK_PURPLE),
     MONSTERS("Monsters", ChatColor.RED),
     MONSTERS_WALL("Monsters Wall", ChatColor.DARK_RED),
-    ENDED("Ended", ChatColor.GRAY);
+    ENDED("Ended", ChatColor.GRAY),
+    SETUP("Setting up", ChatColor.BLUE);
 
     private String name;
     private ChatColor color;
