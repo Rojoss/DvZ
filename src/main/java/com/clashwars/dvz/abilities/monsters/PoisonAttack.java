@@ -8,12 +8,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class Infect extends MobAbility {
+public class PoisonAttack extends MobAbility {
 
-
-    public Infect() {
+    public PoisonAttack() {
         super();
-        ability = Ability.INFECT;
+        ability = Ability.POISONATTACK;
     }
 
     @EventHandler
@@ -30,7 +29,7 @@ public class Infect extends MobAbility {
             return;
         }
         if(CWUtil.randomFloat() <= getFloatOption("chance")) {
-            damaged.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, getIntOption("duration"), 1));
+            damaged.addPotionEffect(new PotionEffect(PotionEffectType.POISON, getIntOption("duration"), 1));
             //TODO: Add particle and sound effects.
         }
 
