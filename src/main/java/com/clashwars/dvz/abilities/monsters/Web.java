@@ -2,7 +2,6 @@ package com.clashwars.dvz.abilities.monsters;
 
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.dvz.abilities.Ability;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.FallingBlock;
@@ -25,7 +24,6 @@ public class Web extends MobAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
-        Bukkit.broadcastMessage("Cast web!");
         FallingBlock web = player.getLocation().getWorld().spawnFallingBlock(player.getLocation(), Material.WEB, (byte) 0);
         web.setVelocity(player.getLocation().getDirection().multiply(getDoubleOption("multiplier")));
     }
