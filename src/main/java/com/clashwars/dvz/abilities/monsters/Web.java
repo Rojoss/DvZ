@@ -24,6 +24,11 @@ public class Web extends MobAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
+
+        if(player.getLocation().getPitch() >= -10) {
+            return;
+        }
+
         FallingBlock web = player.getLocation().getWorld().spawnFallingBlock(player.getLocation(), Material.WEB, (byte) 0);
         web.setVelocity(player.getLocation().getDirection().multiply(getDoubleOption("multiplier")));
     }
