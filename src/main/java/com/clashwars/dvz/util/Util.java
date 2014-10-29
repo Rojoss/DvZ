@@ -15,4 +15,12 @@ public class Util {
         Bukkit.dispatchCommand(DvZ.inst().getServer().getConsoleSender(), "disguiseplayer " + player.getName() + " " + disguiseStr);
     }
 
+    public static void broadcastAdmins(String msg) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.isOp() || player.hasPermission("dvz.admin")) {
+                player.sendMessage(msg);
+            }
+        }
+    }
+
 }

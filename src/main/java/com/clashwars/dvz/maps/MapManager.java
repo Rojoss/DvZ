@@ -5,6 +5,7 @@ import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.config.MapCfg;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -83,24 +84,24 @@ public class MapManager {
         }
         //If map is still null it means there are no maps in the map manager.
         if (mapName == null || mapName.isEmpty()) {
-            dvz.log("Failed to load the map '" + mapName + "'");
-            dvz.log("You probably forgot to add maps to '/plugins/dvz/maps'");
+            Util.broadcastAdmins(Util.formatMsg("&cFailed to load the map '" + mapName + "'"));
+            Util.broadcastAdmins(Util.formatMsg("&cYou probably forgot to add maps to '/plugins/dvz/maps'"));
             return false;
         }
 
         //Set active map and make sure it's a valid map.
         DvzMap newMap = getMap(mapName);
         if (newMap == null) {
-            dvz.log("Failed to load the map '" + mapName + "'");
-            dvz.log("This is not a valid DvZ map!");
+            Util.broadcastAdmins(Util.formatMsg("&cFailed to load the map '" + mapName + "'"));
+            Util.broadcastAdmins(Util.formatMsg("&cThis is not a valid DvZ map!"));
             return false;
         }
 
         //Map is already loaded.
         if (newMap.isLoaded()) {
             activeMap = mapName;
-            dvz.log("Failed to load the map '" + mapName + "'");
-            dvz.log("Map was already loaded.");
+            Util.broadcastAdmins(Util.formatMsg("&cFailed to load the map '" + mapName + "'"));
+            Util.broadcastAdmins(Util.formatMsg("&cMap was already loaded."));
             return true;
         }
 
@@ -109,27 +110,26 @@ public class MapManager {
             try {
                 CWUtil.copyDirectory(new File("plugins/DvZ/maps/" + mapName), new File(mapName));
             } catch (IOException e) {
-                dvz.log("Failed to load the map '" + mapName + "'");
-                dvz.log("Could not copy the map to the root.");
+                Util.broadcastAdmins(Util.formatMsg("&cFailed to load the map '" + mapName + "'"));
+                Util.broadcastAdmins(Util.formatMsg("&cCould not copy the map to the root."));
                 return false;
             }
         }
 
-        //TODO: Probably need schedulers in here.
         //Check if map is found in the root. (If it was copied successfully)
         if (newMap != null && newMap.isReadyToLoad()) {
             WorldCreator wc = new WorldCreator(mapName);
             wc.createWorld();
         } else {
-            dvz.log("Failed to load the map '" + mapName + "'");
-            dvz.log("Could not find the map while trying to create the world.");
+            Util.broadcastAdmins(Util.formatMsg("&cFailed to load the map '" + mapName + "'"));
+            Util.broadcastAdmins(Util.formatMsg("&cCould not find the map while trying to create the world."));
             return false;
         }
 
         //Check if the map is loaded.
         if (!newMap.isLoaded()) {
-            dvz.log("Failed to load the map '" + mapName + "'");
-            dvz.log("The world didn't get loaded properly.");
+            Util.broadcastAdmins(Util.formatMsg("&cFailed to load the map '" + mapName + "'"));
+            Util.broadcastAdmins(Util.formatMsg("&cThe world didn't get loaded properly."));
             return false;
         }
 

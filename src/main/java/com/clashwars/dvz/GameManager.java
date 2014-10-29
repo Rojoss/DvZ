@@ -27,7 +27,7 @@ public class GameManager {
 
 
     public void resetGame(boolean nextGame, String mapName) {
-        setState(GameState.CLOSED);
+        setState(GameState.SETUP);
         if (!nextGame) {
             Bukkit.broadcastMessage(CWUtil.integrateColor("&7========== &a&lDvZ has ended! &7=========="));
             Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Come back again later for more DvZ!"));
@@ -49,9 +49,9 @@ public class GameManager {
 
             //Remove the map
             if (dvz.getMM().removeActiveMap()) {
-                Bukkit.broadcastMessage(Util.formatMsg("&6Reset progress&8: &5Previous map has been removed"));
+                Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &5Previous map has been removed"));
             } else {
-                Bukkit.broadcastMessage(Util.formatMsg("&6Reset progress&8: &4Failed at removing previous map"));
+                Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &4Failed at removing previous map"));
             }
         }
 
@@ -60,9 +60,9 @@ public class GameManager {
 
         //Load in new map.
         if (dvz.getMM().loadMap(mapName)) {
-            Bukkit.broadcastMessage(Util.formatMsg("&6Reset progress&8: &5New map loaded."));
+            Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &5New map loaded."));
         } else {
-            Bukkit.broadcastMessage(Util.formatMsg("&6Reset progress&8: &4Failed at loading new map"));
+            Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &4Failed at loading new map"));
         }
     }
 
@@ -72,14 +72,14 @@ public class GameManager {
         }
 
         if (dvz.getMM().getActiveMap() == null || !dvz.getMM().getActiveMap().isLoaded()) {
-            Bukkit.broadcastMessage(Util.formatMsg("&6The game couldn't be opened because there is no map loaded."));
+            Util.broadcastAdmins(Util.formatMsg("&6The game couldn't be opened because there is no map loaded."));
             return;
         }
 
         Set<String> setupOptions = dvz.getMM().isSetProperly(dvz.getMM().getActiveMap());
         if (!setupOptions.isEmpty()) {
-            dvz.log("Could not open the game because the map is not set up properly.");
-            dvz.log("Missing: " + CWUtil.implode(setupOptions.toArray(new String[dvz.getMM().getMaps().size()]), ", "));
+            Util.broadcastAdmins(CWUtil.integrateColor("&cCould not open the game because the map is not set up properly."));
+            Util.broadcastAdmins(CWUtil.integrateColor("&4Missing&8: &c" + CWUtil.implode(setupOptions.toArray(new String[dvz.getMM().getMaps().size()]), "&8, &c")));
             return;
         }
 
@@ -154,7 +154,24 @@ public class GameManager {
 
     public void releaseMonsters(boolean doExecution) {
         if (doExecution) {
-            //TODO: Kill players till 10% of the online players are monsters.
+            List<CWPlayer> dwarves = dvz.getPM().getPlayers(ClassType.DWARF);
+            List<CWPlayer> monsters = dvz.getPM().getPlayers(ClassType.MONSTER);
+            List<CWPlayer> killed = new ArrayList<CWPlayer>();
+
+            int dwarvesToKill = (int)Math.round((monsters.size() + dwarves.size()) * dvz.getCfg().MONSTER_PERCENTAGE_MIN);
+            int attempts = 20;
+            for (int i = 0; i < dwarvesToKill && attempts > 0; i++) {
+                CWPlayer randomDwarf = CWUtil.random(dwarves);
+                if (killed.contains(randomDwarf)) {
+                    i--;
+                    attempts--;
+                    continue;
+                }
+                attempts = 20;
+                killed.add(randomDwarf);
+                randomDwarf.getPlayer().setHealth(0);
+                Bukkit.broadcastMessage(Util.formatMsg("&8" + randomDwarf.getName() + " &7has been killed!"));
+            }
         }
         Bukkit.broadcastMessage(CWUtil.integrateColor("&7===== &a&lThe monsters have been released! &7====="));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Get to the front wall to hold the monsters of!"));
