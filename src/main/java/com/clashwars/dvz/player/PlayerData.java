@@ -12,6 +12,7 @@ public class PlayerData {
 
     private DvzClass playerClass = DvzClass.DWARF;
     private int classExp = 0;
+    private boolean parkourCompleted = false;
     private Set<DvzClass> classOptions = new HashSet<DvzClass>();
 
     public PlayerData() {
@@ -38,6 +39,14 @@ public class PlayerData {
 
     public void setClassExp(int classExp) {
         this.classExp = classExp;
+    }
+
+    public boolean hasCompletedParkour() {
+        return parkourCompleted;
+    }
+
+    public void setParkourCompleted(boolean completed) {
+        this.parkourCompleted = completed;
     }
 
     public Set<DvzClass> getClassOptions() {

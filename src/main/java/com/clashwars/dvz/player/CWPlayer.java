@@ -112,6 +112,15 @@ private DvZ dvz;
     }
 
 
+    public boolean hasCompletedParkour() {
+        return data.hasCompletedParkour();
+    }
+
+    public void setParkourCompleted(boolean completed) {
+        data.setParkourCompleted(completed);
+    }
+
+
     public int getClassExp() {
         return data.getClassExp();
     }

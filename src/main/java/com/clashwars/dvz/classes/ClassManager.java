@@ -8,6 +8,7 @@ import com.clashwars.dvz.classes.dwarves.*;
 import com.clashwars.dvz.classes.monsters.MobClass;
 import com.clashwars.dvz.classes.monsters.Zombie;
 import com.clashwars.dvz.player.CWPlayer;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,19 +48,71 @@ public class ClassManager {
     //For dwarf classes it will only return the configured amount of classes.
     //It will also calculate extra classes for example if a player completed parkour.
     //For monster classes it will try give each class based on weight. (The zombie class is always given)
-    public Map<DvzClass, BaseClass> getRandomClasses(ClassType type) {
+    public Map<DvzClass, BaseClass> getRandomClasses(Player player, ClassType type) {
         Map<DvzClass, BaseClass> classes = getClasses(type);
         HashMap<DvzClass, BaseClass> randomclasses = new HashMap<DvzClass, BaseClass>();
+        BaseClass c;
 
-        //TODO: remake this method to work as described above.
-
-        for (int i = 0; i < 2; i++) {
-            DvzClass c = CWUtil.random(new ArrayList<DvzClass>(classes.keySet()));
-            if (randomclasses.containsKey(c)) {
-                i--;
-                continue;
+        if (type == ClassType.MONSTER) {
+            //Loop through all monsters and check weight/chance.
+            for (DvzClass dvzClass : classes.keySet()) {
+                c = classes.get(dvzClass);
+                if (CWUtil.randomFloat() <= c.getWeight()) {
+                    randomclasses.put(dvzClass, c);
+                }
             }
-            randomclasses.put(c, classes.get(c));
+            //Make sure to always give zombie
+            randomclasses.put(DvzClass.ZOMBIE, DvzClass.ZOMBIE.getClassClass());
+
+        } else if (type == ClassType.DWARF) {
+            CWPlayer cwp = dvz.getPM().getPlayer(player);
+            //Default amount of classes to give.
+            int classCount = dvz.getCfg().DWARF_CLASS_COUNT;
+
+            //Add bonus class if parkour is completed.
+            if (cwp.hasCompletedParkour()) {
+                classCount++;
+            }
+
+            //Get bonus classes by permissions for example dvz.extraclasses.2 (Max is 10)
+            for (int i = 10; i > 0; i--) {
+                if (player.hasPermission("dvz.extraclasses." + i)) {
+                    classCount += i;
+                    break;
+                }
+            }
+
+            if (classCount > classes.size()) {
+                classCount = classes.size();
+            }
+
+            //Get total weight of all classes together.
+            Double totalWeight = 0.0d;
+            for (BaseClass bc : classes.values()) {
+                totalWeight += bc.getWeight();
+            }
+
+            //Get the 'classCount' amount of classes based on weight.
+            DvzClass randomClass = null;
+            int attempts = 20;
+            for (int i = 0; i < classCount && attempts > 0; i++) {
+                double random = Math.random() * totalWeight;
+                for (DvzClass dvzClass : classes.keySet()) {
+                    if (random <= 0.0d) {
+                        randomClass = dvzClass;
+                        break;
+                    }
+                }
+
+                //If this class was already picked then pick a new one to make sure we get 'classCount' classes.
+                if (randomclasses.containsKey(randomClass)) {
+                    i--;
+                    attempts--;
+                    continue;
+                }
+                attempts = 20;
+                randomclasses.put(randomClass, randomClass.getClassClass());
+            }
         }
         return randomclasses;
     }
