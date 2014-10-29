@@ -1,6 +1,7 @@
 package com.clashwars.dvz.maps;
 
 import com.clashwars.cwcore.utils.CWUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 public class MapData {
@@ -29,6 +30,7 @@ public class MapData {
 
     public void setLocLobby(Location locLobby) {
         this.locLobby = CWUtil.locToString(locLobby);
+        Bukkit.broadcastMessage("Set lobby location to: " + this.locLobby);
     }
 
     public Location getLocDwarf() {

@@ -8,6 +8,7 @@ import com.clashwars.dvz.classes.dwarves.*;
 import com.clashwars.dvz.classes.monsters.MobClass;
 import com.clashwars.dvz.classes.monsters.Zombie;
 import com.clashwars.dvz.player.CWPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -75,10 +76,12 @@ public class ClassManager {
             }
 
             //Get bonus classes by permissions for example dvz.extraclasses.2 (Max is 10)
-            for (int i = 10; i > 0; i--) {
-                if (player.hasPermission("dvz.extraclasses." + i)) {
-                    classCount += i;
-                    break;
+            if (!player.isOp()) {
+                for (int i = 10; i > 0; i--) {
+                    if (player.hasPermission("dvz.extraclasses." + i)) {
+                        classCount += i;
+                        break;
+                    }
                 }
             }
 
@@ -98,6 +101,7 @@ public class ClassManager {
             for (int i = 0; i < classCount && attempts > 0; i++) {
                 double random = Math.random() * totalWeight;
                 for (DvzClass dvzClass : classes.keySet()) {
+                    random -= dvzClass.getClassClass().getWeight();
                     if (random <= 0.0d) {
                         randomClass = dvzClass;
                         break;
@@ -105,7 +109,7 @@ public class ClassManager {
                 }
 
                 //If this class was already picked then pick a new one to make sure we get 'classCount' classes.
-                if (randomclasses.containsKey(randomClass)) {
+                if (randomClass == null || randomclasses.containsKey(randomClass)) {
                     i--;
                     attempts--;
                     continue;

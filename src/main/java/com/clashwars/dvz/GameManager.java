@@ -8,7 +8,6 @@ import com.clashwars.dvz.config.GameCfg;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -80,7 +79,7 @@ public class GameManager {
         if (!setupOptions.isEmpty()) {
             Util.broadcastAdmins(CWUtil.integrateColor("&cCould not open the game because the map is not set up properly."));
             Util.broadcastAdmins(CWUtil.integrateColor("&4Missing&8: &c" + CWUtil.implode(setupOptions.toArray(new String[dvz.getMM().getMaps().size()]), "&8, &c")));
-            return;
+            //return;
         }
 
         setState(GameState.OPENED);

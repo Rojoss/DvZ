@@ -9,14 +9,15 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum DvzClass {
-    DWARF(ClassType.DWARF, new DwarfClass(), new String[] {"dwarves"}),
+    BASE(ClassType.BASE, new BaseClass(), new String[] {}),
+    DWARF(ClassType.BASE, new DwarfClass(), new String[] {"dwarves"}),
     BUILDER(ClassType.DWARF, new Builder(), new String[] {"builders", "constructor", "constructors"}),
     MINER(ClassType.DWARF, new Miner(), new String[] {"miners", "smith", "smiths"}),
     HUNTER(ClassType.DWARF, new Hunter(), new String[] {"hunters"}),
     TAILOR(ClassType.DWARF, new Tailor(), new String[] {"tailors"}),
-    ALCHEMIST(ClassType.DWARF, new Miner(), new String[] {"alchemists", "brewer", "brewers"}),
+    ALCHEMIST(ClassType.DWARF, new Alchemist(), new String[] {"alchemists", "brewer", "brewers"}),
 
-    MONSTER(ClassType.MONSTER, new MobClass(), new String[] {"monsters", "mob", "mobs"}),
+    MONSTER(ClassType.BASE, new MobClass(), new String[] {"monsters", "mob", "mobs"}),
     ZOMBIE(ClassType.MONSTER, new Zombie(), new String[] {"zombies"}),
     SKELETON(ClassType.MONSTER, new Skeleton(), new String[] {"skeletons"}),
     SPIDER(ClassType.MONSTER, new Spider(), new String[] {"spiders"}),
@@ -26,7 +27,7 @@ public enum DvzClass {
     PIG(ClassType.MONSTER, new Pig(), new String[] {"pigs", "babypig", "babypigs", "pigman", "pigmans", "hungrypig", "hungrypigs"}),
     VILLAGER(ClassType.MONSTER, new Villager(), new String[] {"villagers", "witch", "witches"}),
 
-    DRAGON(ClassType.DRAGON, new DragonClass(), new String[] {"dragons"}),
+    DRAGON(ClassType.BASE, new DragonClass(), new String[] {"dragons"}),
     FIREDRAGON(ClassType.DRAGON, new FireDragon(), new String[] {"firedragons", "firedragon", "fire"}),
     WATERDRAGON(ClassType.DRAGON, new WaterDragon(), new String[] {"waterdragons", "waterdragon", "water"}),
     AIRDRAGON(ClassType.DRAGON, new AirDragon(), new String[] {"airdragons", "airdragon", "air"});

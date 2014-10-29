@@ -4,6 +4,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
+import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.ClassManager;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
@@ -18,6 +19,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class Commands {
@@ -138,7 +141,7 @@ public class Commands {
 
                     if (gm.getState() != GameState.SETUP) {
                         sender.sendMessage(Util.formatMsg("&cReset the game first before opening!"));
-                        return true;
+                        //return true;
                     }
 
                     gm.openGame();
@@ -158,7 +161,7 @@ public class Commands {
 
                     if (gm.getState() != GameState.OPENED) {
                         sender.sendMessage(Util.formatMsg("&cOpen the game first before starting!"));
-                        return true;
+                        //return true;
                     }
 
                     gm.startGame();
@@ -176,9 +179,9 @@ public class Commands {
                         return true;
                     }
 
-                    if (gm.isStarted()) {
+                    if (!gm.isStarted()) {
                         sender.sendMessage(Util.formatMsg("&cThe game has to be started before it can be stopped!"));
-                        return true;
+                        //return true;
                     }
 
                     String reason = "";
@@ -233,7 +236,7 @@ public class Commands {
 
                     if (!gm.isDwarves() && gm.getState() != GameState.NIGHT_TWO) {
                         sender.sendMessage(Util.formatMsg("&cYou can only set the dragon when the game is started."));
-                        return true;
+                        //return true;
                     }
 
                     if (args.length > 1) {
@@ -288,6 +291,7 @@ public class Commands {
 
                     dvz.getMM().getActiveMap().setLocation(args[1], loc);
                     player.sendMessage(Util.formatMsg("&6Set location &8'&5" + args[1] + "&8' &6at: &8(&5" + loc.getBlockX() + "&8, &5" + loc.getBlockY() + "&8, &5" + loc.getBlockZ() + "&8)"));
+                    return true;
                 }
 
 
@@ -304,6 +308,7 @@ public class Commands {
                     dvz.getGameCfg().save();
                     dvz.getPlayerCfg().save();
                     dvz.getWSCfg().save();
+                    dvz.getMapCfg().save();
                     sender.sendMessage(Util.formatMsg("&6All game data saved."));
                     return true;
                 }
@@ -327,6 +332,7 @@ public class Commands {
                         dvz.getGameCfg().save();
                         dvz.getPlayerCfg().save();
                         dvz.getWSCfg().save();
+                        dvz.getMapCfg().save();
                     }
 
                     dvz.getGameCfg().load();
@@ -334,11 +340,45 @@ public class Commands {
                     dvz.getWSCfg().load();
                     dvz.getAbilityCfg().load();
                     dvz.getClassesCfg().load();
+                    dvz.getMapCfg().load();
 
                     sender.sendMessage(Util.formatMsg("&6All configs reloaded" + (force ? " with force. &8(&4Not saved!&8)" : ".")));
                     return true;
                 }
 
+
+                //##########################################################################################################################
+                //####################################################### /dvz test ########################################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("test")) {
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                        return true;
+                    }
+                    Player player = (Player) sender;
+
+                    if (!sender.isOp() && !sender.hasPermission("dvz.admin")) {
+                        sender.sendMessage(Util.formatMsg("Insufficient permissions."));
+                        return true;
+                    }
+
+                    Map<DvzClass, Integer> picks = new HashMap<DvzClass, Integer>();
+                    for (int i = 0; i < (args.length > 2 && CWUtil.getInt(args[2]) > 0 ? CWUtil.getInt(args[2]) : 100); i++) {
+                        Map<DvzClass, BaseClass> classes = dvz.getCM().getRandomClasses(player, args.length > 1 && args[1].equalsIgnoreCase("monster") ? ClassType.MONSTER : ClassType.DWARF);
+                        for (DvzClass dvzClass : classes.keySet()) {
+                            if (picks.containsKey(dvzClass)) {
+                                picks.put(dvzClass, picks.get(dvzClass) + 1);
+                            } else {
+                                picks.put(dvzClass, 1);
+                            }
+                        }
+                    }
+                    player.sendMessage(Util.formatMsg("&4&lTest results&8&l:"));
+                    for (DvzClass dvzClass : picks.keySet()) {
+                        player.sendMessage(CWUtil.integrateColor("&6" + dvzClass.toString() + ": &5" + picks.get(dvzClass)));
+                    }
+                    return true;
+                }
             }
 
             sender.sendMessage(CWUtil.integrateColor("&8========== &4&lDvZ Game Information &8=========="));
