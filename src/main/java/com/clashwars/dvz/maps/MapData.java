@@ -30,7 +30,6 @@ public class MapData {
 
     public void setLocLobby(Location locLobby) {
         this.locLobby = CWUtil.locToString(locLobby);
-        Bukkit.broadcastMessage("Set lobby location to: " + this.locLobby);
     }
 
     public Location getLocDwarf() {

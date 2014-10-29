@@ -144,7 +144,7 @@ public class MapManager {
 
         for (String locType : getLocationNames()) {
             if (map.getLocation(locType) == null) {
-                missingData.add("location:" + locType);
+                missingData.add("&4loc&7:&c" + locType);
             }
         }
 

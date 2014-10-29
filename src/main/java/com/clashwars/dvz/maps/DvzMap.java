@@ -71,6 +71,7 @@ public class DvzMap {
 
     public void setData(MapData data) {
         this.data = data;
+        dvz.getMapCfg().setMap(mapName, data);
     }
 
 
@@ -153,6 +154,7 @@ public class DvzMap {
         } else if (s.equals("innerwall2")) {
             data.setLocInnerWall2(loc);
         }
+        dvz.getMapCfg().setMap(mapName, data);
         return null;
     }
 }

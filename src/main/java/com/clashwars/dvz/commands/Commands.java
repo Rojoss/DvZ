@@ -279,6 +279,24 @@ public class Commands {
                         return true;
                     }
 
+                    if (dvz.getMM().getActiveMap() == null) {
+                        sender.sendMessage(Util.formatMsg("&cThere is no map active right now."));
+                        return true;
+                    }
+
+                    boolean locMatch = false;
+                    for (String locName : dvz.getMM().getLocationNames()) {
+                        if (locName.equalsIgnoreCase(args[1])) {
+                            locMatch = true;
+                            break;
+                        }
+                    }
+                    if (!locMatch) {
+                        sender.sendMessage(Util.formatMsg("&cInvalid location name specified!"));
+                        sender.sendMessage(Util.formatMsg("&4Names&8: &c" + CWUtil.implode(dvz.getMM().getLocationNames(), "&8, &c")));
+                        return true;
+                    }
+
                     Location loc = player.getLocation();
                     if (args.length > 2) {
                         if (args[2].equalsIgnoreCase("block") || args[2].equalsIgnoreCase("target")) {
