@@ -51,6 +51,9 @@ public class AbilityCfg extends EasyConfig {
             abilityData = loadDefault(abilityData, "range", "4");
             abilityData = loadDefault(abilityData, "duration", "6000");
         }
+        if (a == Ability.WEB) {
+            abilityData = loadDefault(abilityData, "multiplier", "0.6");
+        }
 
         return abilityData;
     }
