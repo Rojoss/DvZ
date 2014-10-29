@@ -138,9 +138,6 @@ public class BaseAbility implements Listener {
 
     public boolean canCast(Player player) {
         //TODO: Compare class with player class to make sure he can cast it.
-        if (getDvzClass() == null) {
-            return false;
-        }
 
         if (hasCooldown()) {
             //TODO: Check cooldown.
