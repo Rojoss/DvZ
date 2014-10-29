@@ -2,6 +2,7 @@ package com.clashwars.dvz.player;
 
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.ClassType;
+import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.PlayerCfg;
 import com.clashwars.dvz.config.WorkShopCfg;
 import com.clashwars.dvz.workshop.WorkShop;
@@ -92,6 +93,19 @@ public class PlayerManager {
                 continue;
             }
             if (cwp.getPlayerClass().getType() == classType) {
+                playersByClass.add(cwp);
+            }
+        }
+        return playersByClass;
+    }
+
+    public List<CWPlayer> getPlayers(DvzClass dvzClass) {
+        List<CWPlayer> playersByClass = new ArrayList<CWPlayer>();
+        for (CWPlayer cwp : players.values()) {
+            if (cwp.getPlayerClass() == null) {
+                continue;
+            }
+            if (cwp.getPlayerClass() == dvzClass) {
                 playersByClass.add(cwp);
             }
         }

@@ -47,10 +47,9 @@ private DvZ dvz;
         player.setAllowFlight(false);
         player.setFireTicks(0);
         player.setGameMode(GameMode.SURVIVAL);
-        //TODO: Check what default is.
-        //player.setSaturation(0);
-        //player.setWalkSpeed(0.2f);
-        //player.setFlySpeed(0.1f);
+        player.setSaturation(10);
+        player.setWalkSpeed(0.2f);
+        player.setFlySpeed(0.1f);
         player.setTotalExperience(0);
         player.setLevel(0);
         player.setExp(0);
