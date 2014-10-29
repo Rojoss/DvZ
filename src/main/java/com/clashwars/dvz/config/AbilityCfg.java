@@ -33,26 +33,34 @@ public class AbilityCfg extends EasyConfig {
         abilityData = loadDefault(abilityData, "cooldown", "0");
         a.getAbilityClass().setCooldown(CWUtil.getInt(abilityData.get("cooldown")));
 
-        if (a == Ability.INFECT) {
-            abilityData = loadDefault(abilityData, "chance", "0.1");
-            abilityData = loadDefault(abilityData, "duration", "12000");
-        }
-        if (a == Ability.HAMMER) {
-            abilityData = loadDefault(abilityData, "chance", "0.03");
-        }
-        if (a == Ability.POISONATTACK) {
-            abilityData = loadDefault(abilityData, "duration", "6000");
-        }
-        if (a == Ability.RUSH) {
-            abilityData = loadDefault(abilityData, "range", "20");
-            abilityData = loadDefault(abilityData, "multiplier", "0.2");
-        }
-        if (a == Ability.POISON) {
-            abilityData = loadDefault(abilityData, "range", "4");
-            abilityData = loadDefault(abilityData, "duration", "6000");
-        }
-        if (a == Ability.WEB) {
-            abilityData = loadDefault(abilityData, "multiplier", "0.6");
+        switch (a) {
+            case INFECT:
+                abilityData = loadDefault(abilityData, "chance", "0.1");
+                abilityData = loadDefault(abilityData, "duration", "12000");
+                break;
+            case HAMMER:
+                abilityData = loadDefault(abilityData, "chance", "0.03");
+                break;
+            case RAPIDFIRE:
+                abilityData = loadDefault(abilityData, "arrows", "20");
+                abilityData = loadDefault(abilityData, "arrowspershot", "1");
+                abilityData = loadDefault(abilityData, "tickdelay", "1");
+                abilityData = loadDefault(abilityData, "randomoffset", "0.2");
+                break;
+            case POISONATTACK:
+                abilityData = loadDefault(abilityData, "duration", "6000");
+                break;
+            case RUSH:
+                abilityData = loadDefault(abilityData, "range", "20");
+                abilityData = loadDefault(abilityData, "multiplier", "0.2");
+                break;
+            case POISON:
+                abilityData = loadDefault(abilityData, "range", "4");
+                abilityData = loadDefault(abilityData, "duration", "6000");
+                break;
+            case WEB:
+                abilityData = loadDefault(abilityData, "multiplier", "0.6");
+                break;
         }
 
         return abilityData;
