@@ -68,13 +68,13 @@ public class MapManager {
         activeMap = null;
 
         //Try remove the map.
-        if (!CWUtil.deleteDirectory(new File(activeName))) {
+        if (!CWUtil.deleteFolder(new File(activeName))) {
             dvz.log("Failed to remove the map '" + activeName + "'. The map has been unloaded though so it can be manually deleted.");
             return false;
         }
 
         return true;
-        }
+    }
 
 
     public boolean loadMap(String mapName) {
@@ -107,7 +107,7 @@ public class MapManager {
         //Copy the map to root if it's not in there already.
         if (!newMap.isReadyToLoad()) {
             try {
-                CWUtil.copyDirectory(new File("plugins/DvZ/maps/" + mapName), new File(""));
+                CWUtil.copyDirectory(new File("plugins/DvZ/maps/" + mapName), new File(mapName));
             } catch (IOException e) {
                 dvz.log("Failed to load the map '" + mapName + "'");
                 dvz.log("Could not copy the map to the root.");
@@ -127,7 +127,7 @@ public class MapManager {
         }
 
         //Check if the map is loaded.
-        if (!getActiveMap().isLoaded()) {
+        if (!newMap.isLoaded()) {
             dvz.log("Failed to load the map '" + mapName + "'");
             dvz.log("The world didn't get loaded properly.");
             return false;
@@ -142,13 +142,19 @@ public class MapManager {
         MapData data = map.getData();
         Set<String> missingData = new HashSet<String>();
 
-        for (String locType : mapCfg.getLocationNames()) {
+        for (String locType : getLocationNames()) {
             if (map.getLocation(locType) == null) {
                 missingData.add("location:" + locType);
             }
         }
 
         return missingData;
+    }
+
+
+    public String[] getLocationNames() {
+        return new String[] {"lobby", "dwarf", "monster", "monsterlobby", "wall", "dragon",
+                "shrine1", "shrine2", "shrinewall1", "shrinewall2", "fortress1", "fortress2", "innerwall1", "innerwall2"};
     }
 
     public World getUsedWorld() {
@@ -172,6 +178,9 @@ public class MapManager {
     }
 
     public String getRandomMapName() {
+        if (maps.size() <= 0) {
+            return null;
+        }
         return CWUtil.random(new ArrayList<String>(maps.keySet()));
     }
 

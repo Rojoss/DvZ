@@ -9,9 +9,6 @@ import java.util.*;
 public class MapCfg extends EasyConfig {
 
     public HashMap<String, String> MAPS = new HashMap<String, String>();
-    private final String[] locationNames = new String[] {"lobby", "dwarf", "monster", "monsterlobby", "wall", "dragon",
-            "shrine1", "shrine2", "shrinewall1", "shrinewall2", "fortress1", "fortress2", "innerwall1", "innerwall2"};
-
 
     public MapCfg(String fileName) {
         this.setFile(fileName);
@@ -32,9 +29,5 @@ public class MapCfg extends EasyConfig {
     public void setMap(String mapName, MapData data) {
         MAPS.put(mapName, DvZ.inst().getGson().toJson(data, MapData.class));
         save();
-    }
-
-    public String[] getLocationNames() {
-        return locationNames;
     }
 }

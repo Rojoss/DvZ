@@ -136,13 +136,6 @@ public class Commands {
                         return true;
                     }
 
-                    Set<String> setupOptions = dvz.getMM().isSetProperly(dvz.getMM().getActiveMap());
-                    if (!setupOptions.isEmpty()) {
-                        sender.sendMessage(Util.formatMsg("&cThis map is not set up properly."));
-                        sender.sendMessage(Util.formatMsg("&4Missing&8: &c" + CWUtil.implode(setupOptions.toArray(new String[dvz.getMM().getMaps().size()]), "&8, &c")));
-                        return true;
-                    }
-
                     gm.openGame();
                     sender.sendMessage(Util.formatMsg("&6You have opened the game!"));
                     return true;
@@ -259,7 +252,7 @@ public class Commands {
 
                     if (args.length < 2) {
                         sender.sendMessage(Util.formatMsg("&cInvalid usage. &7/" + label + " " + args[0] + " {type/name}"));
-                        sender.sendMessage(Util.formatMsg("&4Names&8: &c" + CWUtil.implode(dvz.getMapCfg().getLocationNames(), "&8, &c")));
+                        sender.sendMessage(Util.formatMsg("&4Names&8: &c" + CWUtil.implode(dvz.getMM().getLocationNames(), "&8, &c")));
                         return true;
                     }
 

@@ -2,10 +2,13 @@ package com.clashwars.dvz.maps;
 
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.io.File;
+import java.util.List;
+import java.util.Set;
 
 public class DvzMap {
 
@@ -28,12 +31,23 @@ public class DvzMap {
 
     //Check if the map is is loaded as bukkit world.
     public boolean isLoaded() {
-        return dvz.getServer().getWorlds().contains(mapName);
+        for (World world : dvz.getServer().getWorlds()) {
+            if (world.getName().equalsIgnoreCase(mapName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //Check if this map is in root ready to be loaded.
     public boolean isReadyToLoad() {
-        return CWUtil.getDirectories(new File("")).contains(mapName);
+        List<File> dirs = CWUtil.getDirectories(new File("."));
+        for (File dir : dirs) {
+            if (dir.getName().equalsIgnoreCase(mapName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //Check if this is the active map used for dvz..

@@ -40,16 +40,19 @@ public class GameManager {
             Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7If you're not watching the stream yet make sure to do!"));
             Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &9&lhttp://twitch.tv/clashwars"));
         }
-        //Tp all players to default world.
-        for (Player player : dvz.getMM().getActiveMap().getWorld().getPlayers()) {
-            player.teleport(dvz.getCfg().getDefaultWorld().getSpawnLocation());
-        }
 
-        //Remove the map
-        if (dvz.getMM().removeActiveMap()) {
-            Bukkit.broadcastMessage(Util.formatMsg("&6Reset progress&8: &5Previous map has been removed"));
-        } else {
-            Bukkit.broadcastMessage(Util.formatMsg("&6Reset progress&8: &4Failed at removing previous map"));
+        if (dvz.getMM().getActiveMap() != null) {
+            //Tp all players to default world.
+            for (Player player : dvz.getMM().getActiveMap().getWorld().getPlayers()) {
+                player.teleport(dvz.getCfg().getDefaultWorld().getSpawnLocation());
+            }
+
+            //Remove the map
+            if (dvz.getMM().removeActiveMap()) {
+                Bukkit.broadcastMessage(Util.formatMsg("&6Reset progress&8: &5Previous map has been removed"));
+            } else {
+                Bukkit.broadcastMessage(Util.formatMsg("&6Reset progress&8: &4Failed at removing previous map"));
+            }
         }
 
         //Reset data
@@ -70,6 +73,13 @@ public class GameManager {
 
         if (dvz.getMM().getActiveMap() == null || !dvz.getMM().getActiveMap().isLoaded()) {
             Bukkit.broadcastMessage(Util.formatMsg("&6The game couldn't be opened because there is no map loaded."));
+            return;
+        }
+
+        Set<String> setupOptions = dvz.getMM().isSetProperly(dvz.getMM().getActiveMap());
+        if (!setupOptions.isEmpty()) {
+            dvz.log("Could not open the game because the map is not set up properly.");
+            dvz.log("Missing: " + CWUtil.implode(setupOptions.toArray(new String[dvz.getMM().getMaps().size()]), ", "));
             return;
         }
 
