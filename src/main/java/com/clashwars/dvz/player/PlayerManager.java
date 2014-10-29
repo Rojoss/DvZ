@@ -1,6 +1,7 @@
 package com.clashwars.dvz.player;
 
 import com.clashwars.dvz.DvZ;
+import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.config.PlayerCfg;
 import com.clashwars.dvz.config.WorkShopCfg;
 import com.clashwars.dvz.workshop.WorkShop;
@@ -9,9 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class PlayerManager {
 
@@ -84,6 +83,32 @@ public class PlayerManager {
 
     public Map<UUID, CWPlayer> getPlayers(){
         return players;
+    }
+
+    public List<CWPlayer> getPlayers(ClassType classType) {
+        List<CWPlayer> playersByClass = new ArrayList<CWPlayer>();
+        for (CWPlayer cwp : players.values()) {
+            if (cwp.getPlayerClass() == null) {
+                continue;
+            }
+            if (cwp.getPlayerClass().getType() == classType) {
+                playersByClass.add(cwp);
+            }
+        }
+        return playersByClass;
+    }
+
+    public List<CWPlayer> getPlayingPlayers() {
+        List<CWPlayer> playingPlayers = new ArrayList<CWPlayer>();
+        for (CWPlayer cwp : players.values()) {
+            if (cwp.getPlayerClass() == null) {
+                continue;
+            }
+            if (cwp.getPlayerClass().getType() == ClassType.DWARF || cwp.getPlayerClass().getType() == ClassType.MONSTER) {
+                playingPlayers.add(cwp);
+            }
+        }
+        return playingPlayers;
     }
 
 

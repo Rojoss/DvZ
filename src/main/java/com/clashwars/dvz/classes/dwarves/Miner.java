@@ -10,7 +10,6 @@ public class Miner extends DwarfClass {
     public Miner() {
         super();
         dvzClass = DvzClass.MINER;
-        color = ChatColor.DARK_GRAY;
         classItem = new CWItem(Material.DIAMOND_PICKAXE, 1, (byte)0, "&8&lMiner");
     }
 }

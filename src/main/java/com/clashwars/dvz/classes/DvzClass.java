@@ -1,43 +1,52 @@
 package com.clashwars.dvz.classes;
 
+import com.clashwars.dvz.classes.dragons.*;
+import com.clashwars.dvz.classes.dwarves.*;
+import com.clashwars.dvz.classes.monsters.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public enum DvzClass {
-    DWARF(ClassType.DWARF, new String[] {"dwarves"}),
-    BUILDER(ClassType.DWARF, new String[] {"builders", "constructor", "constructors"}),
-    MINER(ClassType.DWARF, new String[] {"miners", "smith", "smiths"}),
-    HUNTER(ClassType.DWARF, new String[] {"hunters"}),
-    TAILOR(ClassType.DWARF, new String[] {"tailors"}),
-    ALCHEMIST(ClassType.DWARF, new String[] {"alchemists", "brewer", "brewers"}),
+    DWARF(ClassType.DWARF, new DwarfClass(), new String[] {"dwarves"}),
+    BUILDER(ClassType.DWARF, new Builder(), new String[] {"builders", "constructor", "constructors"}),
+    MINER(ClassType.DWARF, new Miner(), new String[] {"miners", "smith", "smiths"}),
+    HUNTER(ClassType.DWARF, new Hunter(), new String[] {"hunters"}),
+    TAILOR(ClassType.DWARF, new Tailor(), new String[] {"tailors"}),
+    ALCHEMIST(ClassType.DWARF, new Miner(), new String[] {"alchemists", "brewer", "brewers"}),
 
-    MONSTER(ClassType.MONSTER, new String[] {"monsters", "mob", "mobs"}),
-    ZOMBIE(ClassType.MONSTER, new String[] {"zombies"}),
-    SKELETON(ClassType.MONSTER, new String[] {"skeletons"}),
-    SPIDER(ClassType.MONSTER, new String[] {"spiders"}),
-    CREEPER(ClassType.MONSTER, new String[] {"creepers"}),
-    ENDERMAN(ClassType.MONSTER, new String[] {"endermans"}),
-    BLAZE(ClassType.MONSTER, new String[] {"blazes"}),
-    PIG(ClassType.MONSTER, new String[] {"pigs", "babypig", "babypigs", "pigman", "pigmans", "hungrypig", "hungrypigs"}),
-    //TODO: Change villager to proper name.
-    VILLAGER(ClassType.MONSTER, new String[] {"villagers", "witch", "witches"}),
+    MONSTER(ClassType.MONSTER, new MobClass(), new String[] {"monsters", "mob", "mobs"}),
+    ZOMBIE(ClassType.MONSTER, new Zombie(), new String[] {"zombies"}),
+    SKELETON(ClassType.MONSTER, new Skeleton(), new String[] {"skeletons"}),
+    SPIDER(ClassType.MONSTER, new Spider(), new String[] {"spiders"}),
+    CREEPER(ClassType.MONSTER, new Creeper(), new String[] {"creepers"}),
+    ENDERMAN(ClassType.MONSTER, new Enderman(), new String[] {"endermans"}),
+    BLAZE(ClassType.MONSTER, new Blaze(), new String[] {"blazes"}),
+    PIG(ClassType.MONSTER, new Pig(), new String[] {"pigs", "babypig", "babypigs", "pigman", "pigmans", "hungrypig", "hungrypigs"}),
+    VILLAGER(ClassType.MONSTER, new Villager(), new String[] {"villagers", "witch", "witches"}),
 
-    DRAGON(ClassType.DRAGON, new String[] {"dragons"}),
-    FIREDRAGON(ClassType.DRAGON, new String[] {"firedragons", "firedragon", "fire"}),
-    WATERDRAGON(ClassType.DRAGON, new String[] {"waterdragons", "waterdragon", "water"}),
-    AIRDRAGON(ClassType.DRAGON, new String[] {"airdragons", "airdragon", "air"});
+    DRAGON(ClassType.DRAGON, new DragonClass(), new String[] {"dragons"}),
+    FIREDRAGON(ClassType.DRAGON, new FireDragon(), new String[] {"firedragons", "firedragon", "fire"}),
+    WATERDRAGON(ClassType.DRAGON, new WaterDragon(), new String[] {"waterdragons", "waterdragon", "water"}),
+    AIRDRAGON(ClassType.DRAGON, new AirDragon(), new String[] {"airdragons", "airdragon", "air"});
 
     private ClassType type;
+    private BaseClass classClass;
     private List<String> aliases = new ArrayList<String>();
 
-    DvzClass(ClassType type, String[] aliases) {
+    DvzClass(ClassType type, BaseClass classClass, String[] aliases) {
         this.type = type;
+        this.classClass = classClass;
         this.aliases = Arrays.asList(aliases);
     }
 
     public ClassType getType() {
         return type;
+    }
+
+    public BaseClass getClassClass() {
+        return classClass;
     }
 
     public List<String> getAliases() {

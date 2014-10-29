@@ -10,7 +10,6 @@ public class MobClass extends BaseClass {
     public MobClass() {
         super();
         dvzClass = DvzClass.MONSTER;
-        color = ChatColor.RED;
 
         abilities.add(Ability.SUICIDE);
         abilities.add(Ability.HAMMER);

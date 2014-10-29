@@ -10,7 +10,6 @@ public class Builder extends DwarfClass {
     public Builder() {
         super();
         dvzClass = DvzClass.BUILDER;
-        color = ChatColor.YELLOW;
         classItem = new CWItem(Material.CLAY_BRICK, 1, (byte)0, "&e&lBuilder");
     }
 }

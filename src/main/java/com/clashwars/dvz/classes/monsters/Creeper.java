@@ -4,12 +4,12 @@ import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.dvz.classes.DvzClass;
 import org.bukkit.Material;
 
-public class Zombie extends MobClass {
+public class Creeper extends MobClass {
 
-    public Zombie() {
+    public Creeper() {
         super();
-        dvzClass = DvzClass.ZOMBIE;
-        classItem = new CWItem(Material.MONSTER_EGGS, 1, (short)54, displayName);
+        dvzClass = DvzClass.CREEPER;
+        classItem = new CWItem(Material.MONSTER_EGGS, 1, (short)50, displayName);
     }
 
 }

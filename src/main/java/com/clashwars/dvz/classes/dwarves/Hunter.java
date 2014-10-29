@@ -10,7 +10,6 @@ public class Hunter extends DwarfClass {
     public Hunter() {
         super();
         dvzClass = DvzClass.HUNTER;
-        color = ChatColor.DARK_GREEN;
         classItem = new CWItem(Material.WOOD_SWORD, 1, (byte)0, "&2&lHunter");
     }
 }

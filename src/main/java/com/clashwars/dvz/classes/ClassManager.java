@@ -7,92 +7,53 @@ import com.clashwars.dvz.classes.dragons.FireDragon;
 import com.clashwars.dvz.classes.dwarves.*;
 import com.clashwars.dvz.classes.monsters.MobClass;
 import com.clashwars.dvz.classes.monsters.Zombie;
+import com.clashwars.dvz.player.CWPlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ClassManager {
 
     private DvZ dvz;
 
-    private HashMap<DvzClass, BaseClass> baseClasses = new HashMap<DvzClass, BaseClass>();
-    private HashMap<DvzClass, BaseClass> dwarfClasses = new HashMap<DvzClass, BaseClass>();
-    private HashMap<DvzClass, BaseClass> monsterClasses = new HashMap<DvzClass, BaseClass>();
-    private HashMap<DvzClass, BaseClass> dragonClasses = new HashMap<DvzClass, BaseClass>();
-    private HashMap<DvzClass, BaseClass> allClasses = new HashMap<DvzClass, BaseClass>();
-
     public ClassManager(DvZ dvz) {
         this.dvz = dvz;
-        populate();
-    }
-
-    private void populate() {
-        baseClasses.put(DvzClass.DWARF, new DwarfClass());
-        dwarfClasses.put(DvzClass.MINER, new Miner());
-        dwarfClasses.put(DvzClass.BUILDER, new Builder());
-        dwarfClasses.put(DvzClass.HUNTER, new Hunter());
-        dwarfClasses.put(DvzClass.TAILOR, new Tailor());
-        dwarfClasses.put(DvzClass.ALCHEMIST, new Alchemist());
-
-        baseClasses.put(DvzClass.MONSTER, new MobClass());
-        monsterClasses.put(DvzClass.ZOMBIE, new Zombie());
-//        monsterClasses.put(DvZClass.SKELETON, new Skeleton());
-//        monsterClasses.put(DvZClass.SPIDER, new Spider());
-//        monsterClasses.put(DvZClass.CREEPER, new Creeper());
-//        monsterClasses.put(DvZClass.ENDERMAN, new Enderman());
-//        monsterClasses.put(DvZClass.BLAZE, new Blaze());
-//        monsterClasses.put(DvZClass.PIG, new Pig());
-//        monsterClasses.put(DvZClass.VILLAGER, new Villager());
-
-        baseClasses.put(DvzClass.DRAGON, new DragonClass());
-        dragonClasses.put(DvzClass.FIREDRAGON, new FireDragon());
-//        dragonClasses.put(DvZClass.WATERDRAGON, new WaterDragon());
-//        dragonClasses.put(DvZClass.AIRDRAGON, new AirDragon());
-
-        allClasses.putAll(dwarfClasses);
-        allClasses.putAll(monsterClasses);
-        allClasses.putAll(dragonClasses);
     }
 
     //Get a Class by class type or name.
     public BaseClass getClass(String className) {
-        return allClasses.get(DvzClass.fromString(className));
+        return DvzClass.fromString(className).getClassClass();
     }
 
     public BaseClass getClass(DvzClass type) {
-        return allClasses.get(type);
+        return type.getClassClass();
     }
 
     //Get a map with classes based on classtype.
-    //If classtype is null it will return all classes from all types.
-    public HashMap<DvzClass, BaseClass> getClasses(ClassType type) {
-        if (type == null) {
-            return allClasses;
-        } else if (type == ClassType.DWARF) {
-            return dwarfClasses;
-        } else if (type == ClassType.MONSTER) {
-            return monsterClasses;
-        } else if (type == ClassType.DRAGON) {
-            return dragonClasses;
+    public Map<DvzClass, BaseClass> getClasses(ClassType type) {
+        Map<DvzClass, BaseClass> classes = new HashMap<DvzClass, BaseClass>();
+        for (DvzClass c : DvzClass.values()) {
+            if (c.getType() == type) {
+                classes.put(c, c.getClassClass());
+            }
         }
-        return null;
+        return classes;
     }
 
-    //Same as getClasses but return the specified amount of classes randomly picked from the type specified.
-    public HashMap<DvzClass, BaseClass> getRandomClasses(ClassType type, int amount) {
-        HashMap<DvzClass, BaseClass> classes = new HashMap<DvzClass, BaseClass>();
+    //Get a map with semi 'random' classes.
+    //It will get classes based on weight.
+    //For dwarf classes it will only return the configured amount of classes.
+    //It will also calculate extra classes for example if a player completed parkour.
+    //For monster classes it will try give each class based on weight. (The zombie class is always given)
+    public Map<DvzClass, BaseClass> getRandomClasses(ClassType type) {
+        Map<DvzClass, BaseClass> classes = getClasses(type);
         HashMap<DvzClass, BaseClass> randomclasses = new HashMap<DvzClass, BaseClass>();
-        if (type == null) {
-            classes = allClasses;
-        } else if (type == ClassType.DWARF) {
-            classes = dwarfClasses;
-        } else if (type == ClassType.MONSTER) {
-            classes = monsterClasses;
-        } else if (type == ClassType.DRAGON) {
-            classes = dragonClasses;
-        }
-        //TODO: Get clases based on weight.
-        for (int i = 0; i < amount; i++) {
+
+        //TODO: remake this method to work as described above.
+
+        for (int i = 0; i < 2; i++) {
             DvzClass c = CWUtil.random(new ArrayList<DvzClass>(classes.keySet()));
             if (randomclasses.containsKey(c)) {
                 i--;
@@ -102,6 +63,4 @@ public class ClassManager {
         }
         return randomclasses;
     }
-
-
 }

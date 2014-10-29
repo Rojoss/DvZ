@@ -8,7 +8,6 @@ public class FireDragon extends DragonClass {
     public FireDragon() {
         super();
         dvzClass = DvzClass.FIREDRAGON;
-        color = ChatColor.GOLD;
     }
 
 }

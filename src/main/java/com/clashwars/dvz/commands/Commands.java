@@ -136,6 +136,11 @@ public class Commands {
                         return true;
                     }
 
+                    if (gm.getState() != GameState.SETUP) {
+                        sender.sendMessage(Util.formatMsg("&cReset the game first before opening!"));
+                        return true;
+                    }
+
                     gm.openGame();
                     sender.sendMessage(Util.formatMsg("&6You have opened the game!"));
                     return true;
@@ -151,6 +156,11 @@ public class Commands {
                         return true;
                     }
 
+                    if (gm.getState() != GameState.OPENED) {
+                        sender.sendMessage(Util.formatMsg("&cOpen the game first before starting!"));
+                        return true;
+                    }
+
                     gm.startGame();
                     sender.sendMessage(Util.formatMsg("&6You have started the game!"));
                     return true;
@@ -160,9 +170,14 @@ public class Commands {
                 //##########################################################################################################################
                 //####################################################### /dvz stop #######################################################
                 //##########################################################################################################################
-                if (args[0].equalsIgnoreCase("start")) {
+                if (args[0].equalsIgnoreCase("stop")) {
                     if (!sender.isOp() && !sender.hasPermission("dvz.admin")) {
                         sender.sendMessage(Util.formatMsg("Insufficient permissions."));
+                        return true;
+                    }
+
+                    if (gm.isStarted()) {
+                        sender.sendMessage(Util.formatMsg("&cThe game has to be started before it can be stopped!"));
                         return true;
                     }
 
@@ -213,6 +228,11 @@ public class Commands {
 
                     if (!player.isOp() && !player.hasPermission("dvz.admin")) {
                         player.sendMessage(Util.formatMsg("Insufficient permissions."));
+                        return true;
+                    }
+
+                    if (!gm.isDwarves() && gm.getState() != GameState.NIGHT_TWO) {
+                        sender.sendMessage(Util.formatMsg("&cYou can only set the dragon when the game is started."));
                         return true;
                     }
 

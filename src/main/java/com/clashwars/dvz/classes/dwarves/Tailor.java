@@ -10,7 +10,6 @@ public class Tailor extends DwarfClass {
     public Tailor() {
         super();
         dvzClass = DvzClass.TAILOR;
-        color = ChatColor.DARK_AQUA;
         classItem = new CWItem(Material.SHEARS, 1, (byte)0, "&3&lTailor");
     }
 }

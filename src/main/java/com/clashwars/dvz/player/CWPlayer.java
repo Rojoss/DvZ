@@ -1,17 +1,18 @@
 package com.clashwars.dvz.player;
 
 import com.clashwars.cwcore.CooldownManager;
+import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.ExpUtil;
 import com.clashwars.dvz.DvZ;
+import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.PlayerCfg;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -37,11 +38,58 @@ private DvZ dvz;
     }
 
 
+    public void reset() {
+        Player player = getPlayer();
+        player.setMaxHealth(20);
+        player.setHealth(20);
+        player.setFoodLevel(20);
+        player.setFlying(false);
+        player.setAllowFlight(false);
+        player.setFireTicks(0);
+        player.setGameMode(GameMode.SURVIVAL);
+        //TODO: Check what default is.
+        //player.setSaturation(0);
+        //player.setWalkSpeed(0.2f);
+        //player.setFlySpeed(0.1f);
+        player.setTotalExperience(0);
+        player.setLevel(0);
+        player.setExp(0);
+        player.getInventory().clear();
+        player.getInventory().setHelmet(new CWItem(Material.AIR));
+        player.getInventory().setChestplate(new CWItem(Material.AIR));
+        player.getInventory().setLeggings(new CWItem(Material.AIR));
+        player.getInventory().setBoots(new CWItem(Material.AIR));
+        for (PotionEffect pe : player.getActivePotionEffects()) {
+            player.removePotionEffect(pe.getType());
+        }
+    }
+
+
+    public void setClass(DvzClass dvzClass) {
+        reset();
+        setClass(dvzClass);
+        //TODO: Class stuff. (disguise, tp, items etc...)
+    }
+
 
     public PlayerData getPlayerData() {
         return data;
     }
 
+
+    public boolean isDwarf() {
+        if (getPlayerClass() == null) {
+            return false;
+        }
+        return getPlayerClass().getType() == ClassType.DWARF;
+    }
+
+    public boolean isMonster() {
+        if (getPlayerClass() == null) {
+            return false;
+        }
+        return getPlayerClass().getType() == ClassType.MONSTER;
+    }
 
     public DvzClass getPlayerClass() {
         return data.getPlayerClass();

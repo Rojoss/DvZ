@@ -9,7 +9,6 @@ public class DwarfClass extends BaseClass {
     public DwarfClass() {
         super();
         dvzClass = DvzClass.DWARF;
-        color = ChatColor.GRAY;
     }
 
 }

@@ -198,7 +198,7 @@ public class GameManager {
             return;
         }
         //TODO: Get classes based on weights from class manager.
-        HashMap<DvzClass, BaseClass> classOptions = dvz.getCM().getRandomClasses(type, 2);
+        Map<DvzClass, BaseClass> classOptions = dvz.getCM().getRandomClasses(type);
         cwp.clearClassOptions();
         cwp.setClassOptions(classOptions.keySet());
         for (DvzClass c : classOptions.keySet()) {
