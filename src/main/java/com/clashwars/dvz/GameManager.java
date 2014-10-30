@@ -136,17 +136,9 @@ public class GameManager {
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &8Remember: &7If you die you become a monster."));
 
         CWPlayer cwp = dvz.getPM().getPlayer(player);
-        cwp.setPlayerClass(dragonType);
-        BaseClass c = dvz.getCM().getClass(dragonType);
-        cwp.savePlayer();
-
-
+        cwp.setClass(dragonType);
         player.setAllowFlight(true);
         player.setFlying(true);
-        player.teleport(dvz.getMM().getActiveMap().getLocation("dragon"));
-        player.getInventory().clear();
-        c.equipItems(player);
-        Util.disguisePlayer(player, "enderdragon");
         setState(GameState.DRAGON);
     }
 
@@ -202,6 +194,7 @@ public class GameManager {
             Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7The game will be closed soon."));
             Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Don't log off yet! There might be another round."));
         }
+        setState(GameState.ENDED);
     }
 
 

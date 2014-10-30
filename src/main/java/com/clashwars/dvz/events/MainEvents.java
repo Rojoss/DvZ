@@ -154,18 +154,21 @@ public class MainEvents implements Listener {
         Player player = event.getPlayer();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         ItemStack item = event.getItem();
+        if (item == null) {
+            return;
+        }
 
         //Check for class item usage.
         for (DvzClass dvzClass : DvzClass.values()) {
             BaseClass c = dvzClass.getClassClass();
-            if (c.getClassItem() == null || c.getClassItem().getType() != item.getType()) {
+            if (c == null || c.getClassItem() == null || c.getClassItem().getType() != item.getType()) {
                 continue;
             }
-            if (c.getClassItem().hasItemMeta() != !item.hasItemMeta()) {
+            if ((c.getClassItem().hasItemMeta() && !item.hasItemMeta()) || (!c.getClassItem().hasItemMeta() && item.hasItemMeta())) {
                 continue;
             }
             if (item.hasItemMeta()) {
-                if (!c.getDisplayName().equalsIgnoreCase(item.getItemMeta().getDisplayName())) {
+                if (!CWUtil.integrateColor(c.getDisplayName()).equalsIgnoreCase(CWUtil.integrateColor(item.getItemMeta().getDisplayName()))) {
                     continue;
                 }
             }
@@ -180,6 +183,7 @@ public class MainEvents implements Listener {
             }
             cwp.setClass(dvzClass);
             dvzClass.getClassClass().onEquipClass(player);
+            event.setCancelled(true);
         }
     }
 

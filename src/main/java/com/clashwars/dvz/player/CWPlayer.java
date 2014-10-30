@@ -66,6 +66,7 @@ private DvZ dvz;
         for (PotionEffect pe : player.getActivePotionEffects()) {
             player.removePotionEffect(pe.getType());
         }
+        player.updateInventory();
     }
 
 
@@ -76,7 +77,9 @@ private DvZ dvz;
         reset();
 
         //Disguise
-        Util.disguisePlayer(player, c.getDisguise());
+        if (dvzClass.getType() == ClassType.MONSTER || dvzClass.getType() == ClassType.DRAGON) {
+            Util.disguisePlayer(player, c.getDisguise());
+        }
 
         //Teleport
         if (dvzClass.getType() == ClassType.DWARF) {
@@ -87,15 +90,18 @@ private DvZ dvz;
             } else {
                 player.teleport(dvz.getMM().getActiveMap().getLocation("monster"));
             }
+        } else if (dvzClass.getType() == ClassType.DRAGON) {
+            player.teleport(dvz.getMM().getActiveMap().getLocation("dragon"));
         }
 
         //Equip class and items etc.
         c.equipItems(player);
-        setClass(dvzClass);
+        setPlayerClass(dvzClass);
         player.setMaxHealth(c.getHealth());
         player.setHealth(c.getHealth());
         player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));
-        player.sendMessage(CWUtil.integrateColor("&8&l❝&7" + c.getDescription() + "&8&l❞"));
+        player.sendMessage(CWUtil.integrateColor("&8&l❝&7" + c.getDescription().replace("\n", "") + "&8&l❞"));
+        savePlayer();
     }
 
 
