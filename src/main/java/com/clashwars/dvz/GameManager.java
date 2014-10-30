@@ -103,7 +103,7 @@ public class GameManager {
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Do your tasks and get fully equipped!."));
 
         for (Player player : dvz.getServer().getOnlinePlayers()) {
-            giveClassItems(player, ClassType.DWARF, false);
+            dvz.getPM().getPlayer(player).giveClassItems(ClassType.DWARF, false);
         }
 
         getUsedWorld().setTime(23000);
@@ -201,24 +201,6 @@ public class GameManager {
             Bukkit.broadcastMessage(CWUtil.integrateColor("&7=== &a&lThe monsters have destroyed the shrine! &7==="));
             Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7The game will be closed soon."));
             Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Don't log off yet! There might be another round."));
-        }
-    }
-
-
-    public void giveClassItems(Player player, ClassType type, boolean forcePrevious) {
-        CWPlayer cwp = dvz.getPM().getPlayer(player);
-        if (forcePrevious) {
-            for (DvzClass c : cwp.getClassOptions()) {
-                dvz.getCM().getClass(c).getClassItem().giveToPlayer(player);
-            }
-            return;
-        }
-        //TODO: Get classes based on weights from class manager.
-        Map<DvzClass, BaseClass> classOptions = dvz.getCM().getRandomClasses(player, type);
-        cwp.clearClassOptions();
-        cwp.setClassOptions(classOptions.keySet());
-        for (DvzClass c : classOptions.keySet()) {
-            classOptions.get(c).getClassItem().giveToPlayer(player);
         }
     }
 

@@ -2,11 +2,15 @@ package com.clashwars.dvz.player;
 
 import com.clashwars.cwcore.CooldownManager;
 import com.clashwars.cwcore.helpers.CWItem;
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.ExpUtil;
 import com.clashwars.dvz.DvZ;
+import com.clashwars.dvz.GameState;
+import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.PlayerCfg;
+import com.clashwars.dvz.util.Util;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -15,6 +19,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -65,10 +70,53 @@ private DvZ dvz;
 
 
     public void setClass(DvzClass dvzClass) {
+        BaseClass c = dvzClass.getClassClass();
+        Player player = getPlayer();
+        //Reset
         reset();
+
+        //Disguise
+        Util.disguisePlayer(player, c.getDisguise());
+
+        //Teleport
+        if (dvzClass.getType() == ClassType.DWARF) {
+            player.teleport(dvz.getMM().getActiveMap().getLocation("dwarf"));
+        } else if (dvzClass.getType() == ClassType.MONSTER) {
+            if (dvz.getGM().getState() == GameState.MONSTERS_WALL) {
+                player.teleport(dvz.getMM().getActiveMap().getLocation("wall"));
+            } else {
+                player.teleport(dvz.getMM().getActiveMap().getLocation("monster"));
+            }
+        }
+
+        //Equip class and items etc.
+        c.equipItems(player);
         setClass(dvzClass);
-        //TODO: Class stuff. (disguise, tp, items etc...)
+        player.setMaxHealth(c.getHealth());
+        player.setHealth(c.getHealth());
+        player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));
+        player.sendMessage(CWUtil.integrateColor("&8&l❝&7" + c.getDescription() + "&8&l❞"));
     }
+
+
+    public void giveClassItems(ClassType type, boolean forcePrevious) {
+        Player player = getPlayer();
+        CWPlayer cwp = dvz.getPM().getPlayer(player);
+        if (forcePrevious) {
+            for (DvzClass c : cwp.getClassOptions()) {
+                dvz.getCM().getClass(c).getClassItem().giveToPlayer(player);
+            }
+            return;
+        }
+        Map<DvzClass, BaseClass> classOptions = dvz.getCM().getRandomClasses(player, type);
+        cwp.clearClassOptions();
+        cwp.setClassOptions(classOptions.keySet());
+        for (DvzClass c : classOptions.keySet()) {
+            classOptions.get(c).getClassItem().giveToPlayer(player);
+        }
+    }
+
+
 
 
     public PlayerData getPlayerData() {

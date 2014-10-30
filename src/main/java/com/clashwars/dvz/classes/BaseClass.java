@@ -4,9 +4,13 @@ import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.abilities.Ability;
+import com.clashwars.dvz.util.Util;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,7 +24,7 @@ public class BaseClass {
     protected CWItem classItem = null;
 
     protected String disguise = "";
-    protected String displayName = "&7Unknown class";
+    protected String displayName = "&7Unknown";
     protected String description = "";
     protected String produce = "";
     protected String task = "";
@@ -98,9 +102,9 @@ public class BaseClass {
 
     public String getDescription() {
         if (description == null || description.isEmpty()) {
-            return "&a&lDESC&8&l: &cNo description available.";
+            return "&cNo description available.";
         } else {
-            return "&a&lDESC&8&l: " + description;
+            return description;
         }
     }
 
@@ -108,11 +112,11 @@ public class BaseClass {
         this.description = description;
     }
 
-    public String getDesc() {
-        if (description == null || description.isEmpty()) {
-            return "&a&lPRODUCES&8&l: &cNo info available.";
+    public String getProduce() {
+        if (produce == null || produce.isEmpty()) {
+            return "&cNo info available.";
         } else {
-            return "&a&lPRODUCES&8&l: " + description;
+            return produce;
         }
     }
 
@@ -121,10 +125,10 @@ public class BaseClass {
     }
 
     public String getTask() {
-        if (description == null || description.isEmpty()) {
-            return "&a&lTASK&8&l: &cNo info available.";
+        if (task == null || task.isEmpty()) {
+            return "&cNo info available.";
         } else {
-            return "&a&lTASK&8&l: " + description;
+            return task;
         }
     }
 
@@ -156,6 +160,7 @@ public class BaseClass {
     }
 
     public void equipItems(Player player) {
+        //Class items
         for (CWItem item : equipment) {
             if (item.getType() == Material.LEATHER_HELMET || item.getType() == Material.CHAINMAIL_HELMET || item.getType() == Material.GOLD_HELMET
                     || item.getType() == Material.IRON_HELMET || item.getType() == Material.DIAMOND_HELMET) {
@@ -173,5 +178,17 @@ public class BaseClass {
                 item.giveToPlayer(player);
             }
         }
+        //Ability items
+        for (Ability ability : getAbilities()) {
+            if (ability.getAbilityClass().getCastItem() != null) {
+                ability.getAbilityClass().getCastItem().giveToPlayer(player);
+            }
+        }
+    }
+
+    //Called when player gets the class equiped.
+    //Override this method in other classes for example if you want to add a potion effect or set movement speed etc.
+    public void onEquipClass(Player player) {
+        //--
     }
 }

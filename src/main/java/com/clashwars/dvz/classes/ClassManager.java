@@ -89,34 +89,66 @@ public class ClassManager {
                 classCount = classes.size();
             }
 
-            //Get total weight of all classes together.
-            Double totalWeight = 0.0d;
-            for (BaseClass bc : classes.values()) {
-                totalWeight += bc.getWeight();
-            }
-
-            //Get the 'classCount' amount of classes based on weight.
-            DvzClass randomClass = null;
-            int attempts = 20;
-            for (int i = 0; i < classCount && attempts > 0; i++) {
-                double random = Math.random() * totalWeight;
-                for (DvzClass dvzClass : classes.keySet()) {
-                    random -= dvzClass.getClassClass().getWeight();
-                    if (random <= 0.0d) {
-                        randomClass = dvzClass;
-                        break;
+            //Get the amount of times each class is picked.
+            List<CWPlayer> dwarves = dvz.getPM().getPlayers(ClassType.DWARF);
+            HashMap<DvzClass, Double> classCounts = new HashMap<DvzClass, Double>();
+            for (CWPlayer dwarf : dwarves) {
+                DvzClass dwarfClass = dwarf.getPlayerClass();
+                if (dwarfClass != null) {
+                    if (classCounts.containsKey(dwarfClass)) {
+                        classCounts.put(dwarfClass, classCounts.get(dwarfClass) + 1.0);
+                    } else {
+                        classCounts.put(dwarfClass, 1.0);
                     }
                 }
-
-                //If this class was already picked then pick a new one to make sure we get 'classCount' classes.
-                if (randomClass == null || randomclasses.containsKey(randomClass)) {
-                    i--;
-                    attempts--;
-                    continue;
-                }
-                attempts = 20;
-                randomclasses.put(randomClass, randomClass.getClassClass());
             }
+
+            //Multiply classes by weight.
+            for (DvzClass dwarfClass : classCounts.keySet()) {
+                // Picks * (weight * 100) [the *100 is just to make it a little more accurate]
+                classCounts.put(dwarfClass, classCounts.get(dwarfClass) * (dwarfClass.getClassClass().getWeight()  * 100));
+            }
+
+            //Get the 'random' classes with the least players based on weights.
+            //So builder might have 10 players while miner has 8 but it would still pick builder if builder has a higher weight.
+            Map<DvzClass, Double> sortedClassCounts = CWUtil.sortByValue(classCounts);
+            for (Map.Entry<DvzClass, Double> entry : sortedClassCounts.entrySet()) {
+                randomclasses.put(entry.getKey(), entry.getKey().getClassClass());
+                classCount--;
+                if (classCount <= 0) {
+                    break;
+                }
+            }
+
+
+//            //Get total weight of all classes together.
+//            Double totalWeight = 0.0d;
+//            for (BaseClass bc : classes.values()) {
+//                totalWeight += bc.getWeight();
+//            }
+//
+//            //Get the 'classCount' amount of classes based on weight.
+//            DvzClass randomClass = null;
+//            int attempts = 20;
+//            for (int i = 0; i < classCount && attempts > 0; i++) {
+//                double random = Math.random() * totalWeight;
+//                for (DvzClass dvzClass : classes.keySet()) {
+//                    random -= dvzClass.getClassClass().getWeight();
+//                    if (random <= 0.0d) {
+//                        randomClass = dvzClass;
+//                        break;
+//                    }
+//                }
+//
+//                //If this class was already picked then pick a new one to make sure we get 'classCount' classes.
+//                if (randomClass == null || randomclasses.containsKey(randomClass)) {
+//                    i--;
+//                    attempts--;
+//                    continue;
+//                }
+//                attempts = 20;
+//                randomclasses.put(randomClass, randomClass.getClassClass());
+//            }
         }
         return randomclasses;
     }
