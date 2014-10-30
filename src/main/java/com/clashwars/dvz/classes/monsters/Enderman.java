@@ -9,7 +9,7 @@ public class Enderman extends MobClass {
     public Enderman() {
         super();
         dvzClass = DvzClass.ENDERMAN;
-        classItem = new CWItem(Material.MONSTER_EGGS, 1, (short)58, displayName);
+        classItem = new CWItem(Material.MONSTER_EGG, 1, (short)58, displayName);
     }
 
 }

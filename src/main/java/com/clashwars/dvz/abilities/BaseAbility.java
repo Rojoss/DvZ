@@ -4,6 +4,7 @@ import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.reflection.ReflectionHandler;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
+import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Bukkit;
@@ -23,7 +24,7 @@ public class BaseAbility implements Listener {
     protected DvZ dvz = DvZ.inst();
     protected Ability ability;
 
-    protected String displayName = "&7Unknown ability";
+    protected String displayName = "&7Unknown";
     protected CWItem castItem = null;
     protected List<Action> castActions = new ArrayList<Action>(Arrays.asList(new Action[] {Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK}));
     protected int cooldown = 0;
@@ -71,12 +72,10 @@ public class BaseAbility implements Listener {
     }
 
     public CWItem getCastItem() {
-        if (castItem != null && castItem.hasItemMeta()) {
-            List<String> lore = new ArrayList<String>();
-            lore.addAll(CWUtil.splitToList(getDesc(), "\n", true));
-            lore.addAll(CWUtil.splitToList(getUsage(), "\n", true));
-            castItem.setLore(lore);
+        if (castItem != null) {
+            castItem.setLore(new String[] {}).addLore("&aDesc&8: &7" + getDesc()).addLore("&aUsage&8: &7" + getUsage());
             castItem.setName(getDisplayName());
+            castItem.replaceLoreNewLines();
         }
         return castItem;
     }
@@ -103,9 +102,9 @@ public class BaseAbility implements Listener {
 
     public String getDesc() {
         if (description == null || description.isEmpty()) {
-            return "&a&lDESC&8&l: &cNo description available.";
+            return "&cNo description available.";
         } else {
-            return "&a&lDESC&8&l: " + description;
+            return description;
         }
     }
 
@@ -116,12 +115,12 @@ public class BaseAbility implements Listener {
     public String getUsage() {
         if (usage == null || usage.isEmpty()) {
             if (castItem != null) {
-                return "&a&lUSAGE&8&l: &7Click while holding this item to use it.";
+                return "&7Click while holding this item to use it.";
             } else {
-                return "&a&lUSAGE&8&l: &cNo info available.";
+                return "&cNo info available.";
             }
         }
-        return "&a&lUSAGE&8&l: " + usage;
+        return usage;
     }
 
     public void setUsage(String usage) {

@@ -9,7 +9,7 @@ public class Pig extends MobClass {
     public Pig() {
         super();
         dvzClass = DvzClass.PIG;
-        classItem = new CWItem(Material.MONSTER_EGGS, 1, (short)90, displayName);
+        classItem = new CWItem(Material.MONSTER_EGG, 1, (short)90, displayName);
     }
 
 }

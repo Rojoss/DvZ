@@ -137,8 +137,13 @@ public class BaseClass {
     }
 
     public CWItem getClassItem() {
-        if (classItem != null && classItem.hasItemMeta() && !classItem.getItemMeta().hasLore()) {
-            classItem.addLore("&7Click to become a &8" + classItem.getName());
+        if (classItem != null) {
+            classItem.setLore(new String[] {}).addLore("&7Click to become a &8" + getDisplayName()).addLore("&aDesc&8: &7" + getDescription());
+            if (dvzClass != null && dvzClass.getType() == ClassType.DWARF) {
+                classItem.addLore("&aTask&8: &7" + getTask()).addLore("&aProduce&8: &7" + getProduce());
+            }
+            classItem.setName(getDisplayName());
+            classItem.replaceLoreNewLines();
         }
         return classItem;
     }

@@ -9,7 +9,7 @@ public class Blaze extends MobClass {
     public Blaze() {
         super();
         dvzClass = DvzClass.BLAZE;
-        classItem = new CWItem(Material.MONSTER_EGGS, 1, (short)61, displayName);
+        classItem = new CWItem(Material.MONSTER_EGG, 1, (short)61, displayName);
     }
 
 }

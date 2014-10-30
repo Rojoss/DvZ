@@ -18,6 +18,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class MainEvents implements Listener {
 
@@ -95,12 +96,12 @@ public class MainEvents implements Listener {
         //Death message
         if (killer != null) {
             if (dvz.getGM().getState() == GameState.DRAGON && dvz.getGM().getDragonPlayer().getName().equalsIgnoreCase(killer.getName())) {
-                event.setDeathMessage((cwp.getPlayerClass() != null ? cwp.getPlayerClass().getClassClass().getColor() : "&8") + " &7was killed by the dragon!");
+                event.setDeathMessage(CWUtil.integrateColor((cwp.getPlayerClass() != null ? cwp.getPlayerClass().getClassClass().getColor() : "&8") + " &7was killed by the dragon!"));
             } else {
-                event.setDeathMessage((cwp.getPlayerClass() != null ? cwp.getPlayerClass().getClassClass().getColor() : "&8") + " &7was killed by " + killer.getName() + "!");
+                event.setDeathMessage(CWUtil.integrateColor((cwp.getPlayerClass() != null ? cwp.getPlayerClass().getClassClass().getColor() : "&8") + " &7was killed by " + killer.getName() + "!"));
             }
         } else {
-            event.setDeathMessage((cwp.getPlayerClass() != null ? cwp.getPlayerClass().getClassClass().getColor() : "&8") + player.getName() + " &7died!");
+            event.setDeathMessage(CWUtil.integrateColor((cwp.getPlayerClass() != null ? cwp.getPlayerClass().getClassClass().getColor() : "&8") + player.getName() + " &7died!"));
         }
 
         //Dragon died.
@@ -119,7 +120,7 @@ public class MainEvents implements Listener {
 
     @EventHandler
     private void respawn(PlayerRespawnEvent event) {
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
         Location spawnLoc = dvz.getGM().getUsedWorld().getSpawnLocation();
         if (!dvz.getGM().isStarted()) {
             if (dvz.getMM().getActiveMap() != null && dvz.getMM().getActiveMap().getLocation("lobby") != null) {
@@ -128,7 +129,7 @@ public class MainEvents implements Listener {
             event.setRespawnLocation(spawnLoc);
             return;
         }
-        CWPlayer cwp = dvz.getPM().getPlayer(player);
+        final CWPlayer cwp = dvz.getPM().getPlayer(player);
 
         //Spawn at monster lobby.
         if (dvz.getMM().getActiveMap() != null && dvz.getMM().getActiveMap().getLocation("monsterlobby") != null) {
@@ -136,16 +137,20 @@ public class MainEvents implements Listener {
         }
         event.setRespawnLocation(spawnLoc);
 
-        if (dvz.getGM().isStarted()) {
-            if (cwp.isDwarf()) {
-                player.sendMessage(Util.formatMsg("&4&lYou have turned in to a monster!!!"));
-            }
+        new BukkitRunnable() {
+            public void run() {
+                if (dvz.getGM().isStarted()) {
+                    if (cwp.isDwarf()) {
+                        player.sendMessage(Util.formatMsg("&4&lYou have turned in to a monster!!!"));
+                    }
 
-            cwp.reset();
-            cwp.setPlayerClass(DvzClass.MONSTER);
-            //TODO: Suicide check for last arg
-            cwp.giveClassItems(ClassType.MONSTER, false);
-        }
+                    cwp.reset();
+                    cwp.setPlayerClass(DvzClass.MONSTER);
+                    //TODO: Suicide check for last arg
+                    cwp.giveClassItems(ClassType.MONSTER, false);
+                }
+            }
+        }.runTaskLater(dvz, 5);
     }
 
 

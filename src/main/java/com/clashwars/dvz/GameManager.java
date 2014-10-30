@@ -33,6 +33,7 @@ public class GameManager {
             Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Make sure to follow us on Twitch to know when DvZ starts!"));
             Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &9&lhttp://twitch.tv/clashwars"));
             Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Use &6&l/leave &7to go to the pvp server!"));
+            setState(GameState.CLOSED);
         } else {
             Bukkit.broadcastMessage(CWUtil.integrateColor("&7========== &a&lDvZ is resetting! &7=========="));
             Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7A new game will be starting soon."));
@@ -130,7 +131,7 @@ public class GameManager {
         DvzClass dragonType = getDragonType();
         setDragonType(dragonType);
 
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&7======= &a&lThe " + CWUtil.capitalize(dragonType.toString().toLowerCase()) + "dragon arises! &7======="));
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&7======= &a&lThe " + dragonType.getClassClass().getDisplayName() + " arises! &7======="));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Stop working and get to the walls!"));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Kill the dragon and become the &bDragonSlayer&7!"));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &8Remember: &7If you die you become a monster."));

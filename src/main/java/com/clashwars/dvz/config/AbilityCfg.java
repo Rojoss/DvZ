@@ -13,6 +13,11 @@ public class AbilityCfg extends EasyConfig {
     public AbilityCfg(String fileName) {
         this.setFile(fileName);
         load();
+    }
+
+    @Override
+    public void load() {
+        super.load();
         for (Ability a : Ability.values()) {
             if (!ABILITIES.containsKey(a.toString())) {
                 ABILITIES.put(a.toString(), new HashMap<String, String>());

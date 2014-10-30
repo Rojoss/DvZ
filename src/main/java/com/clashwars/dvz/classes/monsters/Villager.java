@@ -9,7 +9,7 @@ public class Villager extends MobClass {
     public Villager() {
         super();
         dvzClass = DvzClass.VILLAGER;
-        classItem = new CWItem(Material.MONSTER_EGGS, 1, (short)120, displayName);
+        classItem = new CWItem(Material.MONSTER_EGG, 1, (short)120, displayName);
     }
 
 }

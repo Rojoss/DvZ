@@ -15,6 +15,11 @@ public class ClassesCfg extends EasyConfig {
     public ClassesCfg(String fileName) {
         this.setFile(fileName);
         load();
+    }
+
+    @Override
+    public void load() {
+        super.load();
         for (DvzClass c : DvzClass.values()) {
             if (!CLASSES.containsKey(c.toString())) {
                 CLASSES.put(c.toString(), new HashMap<String, String>());

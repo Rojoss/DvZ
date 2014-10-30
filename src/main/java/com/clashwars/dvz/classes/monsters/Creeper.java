@@ -9,7 +9,7 @@ public class Creeper extends MobClass {
     public Creeper() {
         super();
         dvzClass = DvzClass.CREEPER;
-        classItem = new CWItem(Material.MONSTER_EGGS, 1, (short)50, displayName);
+        classItem = new CWItem(Material.MONSTER_EGG, 1, (short)50, displayName);
     }
 
 }
