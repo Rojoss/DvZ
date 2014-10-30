@@ -380,21 +380,21 @@ public class Commands {
                         return true;
                     }
 
-                    Map<DvzClass, Integer> picks = new HashMap<DvzClass, Integer>();
                     for (int i = 0; i < (args.length > 2 && CWUtil.getInt(args[2]) > 0 ? CWUtil.getInt(args[2]) : 100); i++) {
                         Map<DvzClass, BaseClass> classes = dvz.getCM().getRandomClasses(player, args.length > 1 && args[1].equalsIgnoreCase("monster") ? ClassType.MONSTER : ClassType.DWARF);
                         for (DvzClass dvzClass : classes.keySet()) {
-                            if (picks.containsKey(dvzClass)) {
-                                picks.put(dvzClass, picks.get(dvzClass) + 1);
+                            if (dvz.getPM().fakePlayers.containsKey(dvzClass)) {
+                                dvz.getPM().fakePlayers.put(dvzClass, dvz.getPM().fakePlayers.get(dvzClass) + 1);
                             } else {
-                                picks.put(dvzClass, 1);
+                                dvz.getPM().fakePlayers.put(dvzClass, 1);
                             }
                         }
                     }
                     player.sendMessage(Util.formatMsg("&4&lTest results&8&l:"));
-                    for (DvzClass dvzClass : picks.keySet()) {
-                        player.sendMessage(CWUtil.integrateColor("&6" + dvzClass.toString() + ": &5" + picks.get(dvzClass)));
+                    for (DvzClass dvzClass : dvz.getPM().fakePlayers.keySet()) {
+                        player.sendMessage(CWUtil.integrateColor("&6" + dvzClass.toString() + ": &5" + dvz.getPM().fakePlayers.get(dvzClass)));
                     }
+                    dvz.getPM().fakePlayers.clear();
                     return true;
                 }
             }

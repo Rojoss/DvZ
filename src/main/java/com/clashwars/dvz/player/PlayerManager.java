@@ -19,8 +19,9 @@ public class PlayerManager {
     private PlayerCfg pcfg;
     private WorkShopCfg wsCfg;
 
-    Map<UUID, CWPlayer> players = new HashMap<UUID, CWPlayer>();
-    Map<UUID, WorkShop> workshops = new HashMap<UUID, WorkShop>();
+    private Map<UUID, CWPlayer> players = new HashMap<UUID, CWPlayer>();
+    public Map<DvzClass, Integer> fakePlayers = new HashMap<DvzClass, Integer>();
+    private Map<UUID, WorkShop> workshops = new HashMap<UUID, WorkShop>();
 
     public PlayerManager(DvZ dvz) {
         this.dvz = dvz;

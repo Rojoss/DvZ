@@ -158,7 +158,7 @@ public class MainEvents implements Listener {
         //Check for class item usage.
         for (DvzClass dvzClass : DvzClass.values()) {
             BaseClass c = dvzClass.getClassClass();
-            if (c.getClassItem().getType() != item.getType()) {
+            if (c.getClassItem() == null || c.getClassItem().getType() != item.getType()) {
                 continue;
             }
             if (c.getClassItem().hasItemMeta() != !item.hasItemMeta()) {
