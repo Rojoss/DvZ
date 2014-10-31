@@ -54,8 +54,10 @@ public class Hammer extends MobAbility {
         //Shrine destroying stuff
         ParticleEffect effect = ParticleEffect.SMOKE;
         if (block.getType() == Material.ENDER_PORTAL_FRAME) {
+            player.sendMessage("ENDER_PORTAL_FRAME");
             ShrineBlock shrineBlock = dvz.getGM().getShrineBlock(block.getLocation());
             if (shrineBlock == null) {
+                player.sendMessage("Shrine block is null");
                 return;
             }
             if (dvz.getGM().getState() == GameState.MONSTERS) {
@@ -64,6 +66,7 @@ public class Hammer extends MobAbility {
                     return;
                 }
             }
+            player.sendMessage("damage");
             shrineBlock.damage();
             effect = ParticleEffect.WITCH_MAGIC;
         }

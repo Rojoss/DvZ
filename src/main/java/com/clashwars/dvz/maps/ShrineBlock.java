@@ -4,6 +4,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.gmail.filoghost.holograms.api.Hologram;
 import com.gmail.filoghost.holograms.api.HolographicDisplaysAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -24,7 +25,8 @@ public class ShrineBlock {
         this.location = location;
         this.type = type;
         this.hp = dvz.getCfg().SHRINE__BLOCK_HP;
-        hologram = HolographicDisplaysAPI.createHologram(dvz, location.add(0.5f, 1f, 0.5f), CWUtil.integrateColor(new String[]{getHpPercString()}));
+        Bukkit.broadcastMessage(getHpPercString());
+        hologram = HolographicDisplaysAPI.createHologram(dvz, location.add(0.5f, 1f, 0.5f), CWUtil.integrateColor(new String[]{CWUtil.integrateColor(getHpPercString())}));
     }
 
     public void destroy() {
@@ -62,7 +64,7 @@ public class ShrineBlock {
             return;
         }
         if (hologram != null) {
-            hologram.setLine(0, getHpPercString());
+            hologram.setLine(0, CWUtil.integrateColor(getHpPercString()));
             hologram.update();
         }
     }
@@ -73,7 +75,7 @@ public class ShrineBlock {
     }
 
     public String getHpPercString() {
-        Double percentage = CWUtil.getPercentage(hp, dvz.getCfg().SHRINE__BLOCK_HP);
+        Double percentage = getHpPerc();
         if (percentage > 0.8d) {
             return "&a" + percentage + "%";
         } else if (percentage > 0.6d) {

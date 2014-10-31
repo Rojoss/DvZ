@@ -10,6 +10,8 @@ import com.clashwars.dvz.events.WorkShopEvents;
 import com.clashwars.dvz.maps.MapManager;
 import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.runnables.GameRunnable;
+import com.gmail.filoghost.holograms.api.Hologram;
+import com.gmail.filoghost.holograms.api.HolographicDisplaysAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -50,6 +52,11 @@ public class DvZ extends JavaPlugin {
 
         abilityCfg.load();
         abilityCfg.save();
+
+        //Clean up holograms
+        for (Hologram hologram : HolographicDisplaysAPI.getHolograms(this)) {
+            hologram.delete();
+        }
 
         log("disabled");
     }

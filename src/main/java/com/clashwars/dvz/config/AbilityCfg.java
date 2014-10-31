@@ -66,6 +66,11 @@ public class AbilityCfg extends EasyConfig {
             case WEB:
                 abilityData = loadDefault(abilityData, "force", "0.8");
                 break;
+            case EXPLODE:
+                abilityData = loadDefault(abilityData, "powerpersec", "0.5");
+                abilityData = loadDefault(abilityData, "minpower", "0.5");
+                abilityData = loadDefault(abilityData, "maxpower", "6.0");
+                break;
         }
 
         return abilityData;

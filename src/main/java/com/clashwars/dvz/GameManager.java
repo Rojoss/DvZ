@@ -33,7 +33,6 @@ public class GameManager {
     }
 
 
-
     public void resetGame(boolean nextGame, String mapName) {
         setState(GameState.SETUP);
         if (!nextGame) {
@@ -227,7 +226,7 @@ public class GameManager {
     private boolean populateShrines(String loc1, String loc2, ShrineType type) {
         boolean foundBlocks = false;
         DvzMap map = dvz.getMM().getActiveMap();
-        Set<Block> shrineKeepBlocks = CWUtil.findBlocksInArea(map.getLocation("shrinewall1"), map.getLocation("shrinewall2"), new Material[]{Material.ENDER_PORTAL_FRAME});
+        Set<Block> shrineKeepBlocks = CWUtil.findBlocksInArea(map.getLocation(loc1), map.getLocation(loc2), new Material[]{Material.ENDER_PORTAL_FRAME});
         for (Block shrineBlock : shrineKeepBlocks) {
             shrineBlocks.add(new ShrineBlock(shrineBlock.getLocation(), ShrineType.KEEP));
             foundBlocks = true;

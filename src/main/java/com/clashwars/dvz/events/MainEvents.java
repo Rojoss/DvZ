@@ -45,7 +45,6 @@ public class MainEvents implements Listener {
         Player player = event.getPlayer();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         Location spawnLoc = dvz.getGM().getUsedWorld().getSpawnLocation();
-
         if (cwp.getClassOptions() != null && !cwp.getClassOptions().isEmpty()) {
             player.sendMessage(Util.formatMsg("&6Welcome back!"));
             return;
