@@ -34,14 +34,6 @@ public class Web extends MobAbility {
         final FallingBlock web = player.getLocation().getWorld().spawnFallingBlock(player.getLocation(), Material.WEB, (byte) 0);
         web.setDropItem(false);
         web.setVelocity(player.getLocation().getDirection().multiply(getDoubleOption("multiplier")));
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if(web.isOnGround()) {
-                    web.remove();
-                };
-            }
-        }.runTaskLater(dvz, getIntOption("removeAfter"));
     }
 
     @EventHandler

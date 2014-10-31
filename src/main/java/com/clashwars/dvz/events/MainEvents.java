@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
@@ -198,6 +198,21 @@ public class MainEvents implements Listener {
 
     @EventHandler
     public void onBlockPlace(final BlockPlaceEvent event) {
+        if(!event.getBlock().getType().equals(Material.WEB)) {
+            return;
+        }
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                event.getBlock().setType(Material.AIR);
+            }
+        }.runTaskLater(dvz, Integer.parseInt(dvz.getAbilityCfg().getOption(Ability.WEB, "removeAfter")));
+
+    }
+
+    @EventHandler
+    public void onBlockFormedByEntity(final EntityChangeBlockEvent event) {
         if(!event.getBlock().getType().equals(Material.WEB)) {
             return;
         }
