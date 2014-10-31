@@ -65,6 +65,7 @@ public class AbilityCfg extends EasyConfig {
                 break;
             case WEB:
                 abilityData = loadDefault(abilityData, "multiplier", "0.6");
+                abilityData = loadDefault(abilityData, "removeAfter", "5000");
                 break;
         }
 
