@@ -8,12 +8,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class BaseClass {
+
     protected DvZ dvz = DvZ.inst();
     protected DvzClass dvzClass = null;
 
@@ -136,7 +134,7 @@ public class BaseClass {
 
     public DvzItem getClassItem() {
         if (classItem != null) {
-            classItem.setLore(new String[] {}).addLore("&7Click to become a &8" + getDisplayName()).addLore("&aDesc&8: &7" + getDescription());
+            classItem.setLore(new String[]{}).addLore("&7Click to become a &8" + getDisplayName()).addLore("&aDesc&8: &7" + getDescription());
             if (dvzClass != null && dvzClass.getType() == ClassType.DWARF) {
                 classItem.addLore("&aTask&8: &7" + getTask()).addLore("&aProduce&8: &7" + getProduce());
             }
@@ -170,8 +168,8 @@ public class BaseClass {
             if (item.getType() == Material.LEATHER_HELMET || item.getType() == Material.CHAINMAIL_HELMET || item.getType() == Material.GOLD_HELMET
                     || item.getType() == Material.IRON_HELMET || item.getType() == Material.DIAMOND_HELMET) {
                 player.getInventory().setHelmet(item);
-            } else if (item.getType() == Material.LEATHER_CHESTPLATE || item.getType() == Material.CHAINMAIL_CHESTPLATE || item.getType() ==  Material.GOLD_CHESTPLATE
-                    || item.getType() ==  Material.IRON_CHESTPLATE || item.getType() == Material.DIAMOND_CHESTPLATE) {
+            } else if (item.getType() == Material.LEATHER_CHESTPLATE || item.getType() == Material.CHAINMAIL_CHESTPLATE || item.getType() == Material.GOLD_CHESTPLATE
+                    || item.getType() == Material.IRON_CHESTPLATE || item.getType() == Material.DIAMOND_CHESTPLATE) {
                 player.getInventory().setChestplate(item);
             } else if (item.getType() == Material.LEATHER_LEGGINGS || item.getType() == Material.CHAINMAIL_LEGGINGS || item.getType() == Material.GOLD_LEGGINGS
                     || item.getType() == Material.IRON_LEGGINGS || item.getType() == Material.DIAMOND_LEGGINGS) {

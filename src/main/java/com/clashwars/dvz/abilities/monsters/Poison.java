@@ -14,7 +14,7 @@ public class Poison extends MobAbility {
     public Poison() {
         super();
         ability = Ability.POISON;
-        castItem = new DvzItem(Material.SPIDER_EYE, 1, (short) 0, displayName, 50, -1);
+        castItem = new DvzItem(Material.SPIDER_EYE, 1, (short)0, displayName, 50, -1);
     }
 
     @Override
@@ -22,7 +22,7 @@ public class Poison extends MobAbility {
         int range = getIntOption("range");
         for (Entity ent : player.getNearbyEntities(range, range, range)) {
             if (ent instanceof Player) {
-                Player p = (Player) ent;
+                Player p = (Player)ent;
                 p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, getIntOption("duration"), 1));
             }
         }

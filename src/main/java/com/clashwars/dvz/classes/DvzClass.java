@@ -1,9 +1,6 @@
 package com.clashwars.dvz.classes;
 
-import com.clashwars.dvz.classes.dragons.AirDragon;
-import com.clashwars.dvz.classes.dragons.DragonClass;
-import com.clashwars.dvz.classes.dragons.FireDragon;
-import com.clashwars.dvz.classes.dragons.WaterDragon;
+import com.clashwars.dvz.classes.dragons.*;
 import com.clashwars.dvz.classes.dwarves.*;
 import com.clashwars.dvz.classes.monsters.*;
 
@@ -12,28 +9,28 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum DvzClass {
-    BASE(ClassType.BASE, new BaseClass(), new String[] {}),
-    DWARF(ClassType.BASE, new DwarfClass(), new String[] {"dwarves"}),
-    BUILDER(ClassType.DWARF, new Builder(), new String[] {"builders", "constructor", "constructors"}),
-    MINER(ClassType.DWARF, new Miner(), new String[] {"miners", "smith", "smiths"}),
-    FLETCHER(ClassType.DWARF, new Fletcher(), new String[] {"fletchers", "hunter", "hunters"}),
-    TAILOR(ClassType.DWARF, new Tailor(), new String[] {"tailors"}),
-    ALCHEMIST(ClassType.DWARF, new Alchemist(), new String[] {"alchemists", "brewer", "brewers"}),
+    BASE(ClassType.BASE, new BaseClass(), new String[]{}),
+    DWARF(ClassType.BASE, new DwarfClass(), new String[]{"dwarves"}),
+    BUILDER(ClassType.DWARF, new Builder(), new String[]{"builders", "constructor", "constructors"}),
+    MINER(ClassType.DWARF, new Miner(), new String[]{"miners", "smith", "smiths"}),
+    FLETCHER(ClassType.DWARF, new Fletcher(), new String[]{"fletchers", "hunter", "hunters"}),
+    TAILOR(ClassType.DWARF, new Tailor(), new String[]{"tailors"}),
+    ALCHEMIST(ClassType.DWARF, new Alchemist(), new String[]{"alchemists", "brewer", "brewers"}),
 
-    MONSTER(ClassType.BASE, new MobClass(), new String[] {"monsters", "mob", "mobs"}),
-    ZOMBIE(ClassType.MONSTER, new Zombie(), new String[] {"zombies"}),
-    SKELETON(ClassType.MONSTER, new Skeleton(), new String[] {"skeletons"}),
-    SPIDER(ClassType.MONSTER, new Spider(), new String[] {"spiders"}),
-    CREEPER(ClassType.MONSTER, new Creeper(), new String[] {"creepers"}),
-    ENDERMAN(ClassType.MONSTER, new Enderman(), new String[] {"endermans"}),
-    BLAZE(ClassType.MONSTER, new Blaze(), new String[] {"blazes"}),
-    PIG(ClassType.MONSTER, new Pig(), new String[] {"pigs", "babypig", "babypigs", "pigman", "pigmans", "hungrypig", "hungrypigs"}),
-    VILLAGER(ClassType.MONSTER, new Villager(), new String[] {"villagers", "witch", "witches"}),
+    MONSTER(ClassType.BASE, new MobClass(), new String[]{"monsters", "mob", "mobs"}),
+    ZOMBIE(ClassType.MONSTER, new Zombie(), new String[]{"zombies"}),
+    SKELETON(ClassType.MONSTER, new Skeleton(), new String[]{"skeletons"}),
+    SPIDER(ClassType.MONSTER, new Spider(), new String[]{"spiders"}),
+    CREEPER(ClassType.MONSTER, new Creeper(), new String[]{"creepers"}),
+    ENDERMAN(ClassType.MONSTER, new Enderman(), new String[]{"endermans"}),
+    BLAZE(ClassType.MONSTER, new Blaze(), new String[]{"blazes"}),
+    PIG(ClassType.MONSTER, new Pig(), new String[]{"pigs", "babypig", "babypigs", "pigman", "pigmans", "hungrypig", "hungrypigs"}),
+    VILLAGER(ClassType.MONSTER, new Villager(), new String[]{"villagers", "witch", "witches"}),
 
-    DRAGON(ClassType.BASE, new DragonClass(), new String[] {"dragons"}),
-    FIREDRAGON(ClassType.DRAGON, new FireDragon(), new String[] {"firedragons", "firedragon", "fire"}),
-    WATERDRAGON(ClassType.DRAGON, new WaterDragon(), new String[] {"waterdragons", "waterdragon", "water"}),
-    AIRDRAGON(ClassType.DRAGON, new AirDragon(), new String[] {"airdragons", "airdragon", "air"});
+    DRAGON(ClassType.BASE, new DragonClass(), new String[]{"dragons"}),
+    FIREDRAGON(ClassType.DRAGON, new FireDragon(), new String[]{"firedragons", "firedragon", "fire"}),
+    WATERDRAGON(ClassType.DRAGON, new WaterDragon(), new String[]{"waterdragons", "waterdragon", "water"}),
+    AIRDRAGON(ClassType.DRAGON, new AirDragon(), new String[]{"airdragons", "airdragon", "air"});
 
     private ClassType type;
     private BaseClass classClass;

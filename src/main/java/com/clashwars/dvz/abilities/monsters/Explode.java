@@ -13,11 +13,11 @@ public class Explode extends MobAbility {
     public Explode() {
         super();
         ability = Ability.EXPLODE;
-        castItem = new DvzItem(Material.SULPHUR, 1, (short) 0, displayName, 50, -1);
+        castItem = new DvzItem(Material.SULPHUR, 1, (short)0, displayName, 50, -1);
     }
 
     public void castAbility(Player player, Location triggerLoc) {
-        
+
     }
 
     @EventHandler

@@ -129,7 +129,7 @@ public class WorkShopEvents implements Listener {
         event.setCancelled(true);
         WorkShop ws = dvz.getPM().getWorkshop(player);
         if (ws != null && ws.getCraftBlock() != null && ws.getCraftBlock().equals(block.getLocation())) {
-            ParticleEffect.WITCH_MAGIC.display(block.getLocation().add(0.5f,0.5f,0.5f), 0.2f, 0.2f, 0.2f, 0.0001f, 20);
+            ParticleEffect.WITCH_MAGIC.display(block.getLocation().add(0.5f, 0.5f, 0.5f), 0.2f, 0.2f, 0.2f, 0.0001f, 20);
 
             //TODO: Crafting implementation.
 

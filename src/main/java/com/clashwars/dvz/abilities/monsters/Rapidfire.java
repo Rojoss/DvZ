@@ -21,7 +21,7 @@ public class Rapidfire extends MobAbility {
     public Rapidfire() {
         super();
         ability = Ability.RAPIDFIRE;
-        castItem = new DvzItem(Material.BOW, 1, (short) 0, displayName, 1, -1);
+        castItem = new DvzItem(Material.BOW, 1, (short)0, displayName, 1, -1);
         castActions = new ArrayList<Action>(Arrays.asList(new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}));
     }
 
@@ -38,7 +38,7 @@ public class Rapidfire extends MobAbility {
             public void run() {
                 for (int i = 0; i < amt; i++) {
                     Arrow arrow = player.launchProjectile(Arrow.class);
-                    arrow.setVelocity(arrow.getVelocity().add(new Vector((CWUtil.randomFloat()-0.5f) * m, (CWUtil.randomFloat()-0.5f) * m, (CWUtil.randomFloat()-0.5f) * m)));
+                    arrow.setVelocity(arrow.getVelocity().add(new Vector((CWUtil.randomFloat() - 0.5f) * m, (CWUtil.randomFloat() - 0.5f) * m, (CWUtil.randomFloat() - 0.5f) * m)));
                     arrows--;
                     if (arrows <= 0) {
                         this.cancel();

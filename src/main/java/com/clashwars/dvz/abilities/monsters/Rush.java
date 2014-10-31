@@ -15,7 +15,7 @@ public class Rush extends MobAbility {
     public Rush() {
         super();
         ability = Ability.RUSH;
-        castItem = new DvzItem(Material.SUGAR, 1, (short) 0, displayName, 50, -1);
+        castItem = new DvzItem(Material.SUGAR, 1, (short)0, displayName, 50, -1);
     }
 
     @Override
