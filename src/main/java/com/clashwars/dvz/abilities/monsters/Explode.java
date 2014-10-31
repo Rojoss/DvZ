@@ -35,7 +35,15 @@ public class Explode extends MobAbility {
                     power = getFloatOption("maxpower");
                 }
 
-                triggerLoc.getWorld().createExplosion(player.getLocation(), power);
+                if (x > getFloatOption("maxTime")) {
+                    cancel();
+                }
+
+                if (player.isDead()) {
+                    triggerLoc.getWorld().createExplosion(player.getLocation(), power);
+                    cancel();
+                }
+
                 //TODO: Add sound effects and particles.
 
             }
