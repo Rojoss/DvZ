@@ -1,8 +1,7 @@
 package com.clashwars.dvz.abilities.monsters;
 
-import com.clashwars.cwcore.helpers.CWItem;
-import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.dvz.abilities.Ability;
+import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -15,7 +14,7 @@ public class Poison extends MobAbility {
     public Poison() {
         super();
         ability = Ability.POISON;
-        castItem = new CWItem(Material.SPIDER_EYE, 1, (short) 0, displayName);
+        castItem = new DvzItem(Material.SPIDER_EYE, 1, (short) 0, displayName, 50, -1);
     }
 
     @Override

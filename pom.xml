@@ -62,6 +62,14 @@
             <scope>compile</scope>
             <type>jar</type>
         </dependency>
+
+        <dependency>
+            <groupId>com.gmail.filoghost.holograms</groupId>
+            <artifactId>HolographicDisplays</artifactId>
+            <version>LATEST</version>
+            <scope>compile</scope>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
 

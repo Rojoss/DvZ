@@ -1,8 +1,8 @@
 package com.clashwars.dvz.abilities.monsters;
 
-import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
+import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
@@ -21,7 +21,7 @@ public class Rapidfire extends MobAbility {
     public Rapidfire() {
         super();
         ability = Ability.RAPIDFIRE;
-        castItem = new CWItem(Material.BOW, 1, (short) 0, displayName);
+        castItem = new DvzItem(Material.BOW, 1, (short) 0, displayName, 1, -1);
         castActions = new ArrayList<Action>(Arrays.asList(new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}));
     }
 

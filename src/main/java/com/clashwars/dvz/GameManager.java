@@ -5,10 +5,16 @@ import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.GameCfg;
+import com.clashwars.dvz.maps.DvzMap;
+import com.clashwars.dvz.maps.ShrineBlock;
+import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -17,6 +23,7 @@ public class GameManager {
 
     private DvZ dvz;
     private GameCfg gCfg;
+    private Set<ShrineBlock> shrineBlocks = new HashSet<ShrineBlock>();
 
     public GameManager(DvZ dvz) {
         this.dvz = dvz;
@@ -56,6 +63,7 @@ public class GameManager {
         }
 
         //Reset data
+        shrineBlocks.clear();
         //TODO: Reset all other data
 
         //Load in new map.
@@ -81,6 +89,12 @@ public class GameManager {
             Util.broadcastAdmins(CWUtil.integrateColor("&cCould not open the game because the map is not set up properly."));
             Util.broadcastAdmins(CWUtil.integrateColor("&4Missing&8: &c" + CWUtil.implode(setupOptions.toArray(new String[dvz.getMM().getMaps().size()]), "&8, &c")));
             //return;
+        }
+
+        if (!populateShrines()) {
+            Util.broadcastAdmins(CWUtil.integrateColor("&cCould not open the game because the map is not set up properly."));
+            Util.broadcastAdmins(CWUtil.integrateColor("&cMissing end portal frames between shrine locations."));
+            Util.broadcastAdmins(CWUtil.integrateColor("&cThere has to be at least 1 shrine block for the wall and one for the keep."));
         }
 
         setState(GameState.OPENED);
@@ -199,6 +213,27 @@ public class GameManager {
     }
 
 
+    public boolean populateShrines() {
+        boolean keepShrine = populateShrines("shrine1", "shrine2", ShrineType.KEEP);
+        boolean wallShrine = populateShrines("shrinewall1", "shrinewall2", ShrineType.WALL);
+        if (keepShrine && wallShrine) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean populateShrines(String loc1, String loc2, ShrineType type) {
+        boolean foundBlocks = false;
+        DvzMap map = dvz.getMM().getActiveMap();
+        Set<Block> shrineKeepBlocks = CWUtil.findBlocksInArea(map.getLocation("shrinewall1"), map.getLocation("shrinewall2"), new Material[]{Material.ENDER_PORTAL_FRAME});
+        for (Block shrineBlock : shrineKeepBlocks) {
+            shrineBlocks.add(new ShrineBlock(shrineBlock.getLocation(), ShrineType.KEEP));
+            foundBlocks = true;
+        }
+        return foundBlocks;
+    }
+
+
 
     public World getUsedWorld() {
         return dvz.getMM().getUsedWorld();
@@ -267,5 +302,28 @@ public class GameManager {
     public void setDragonPlayer(UUID uuid) {
         gCfg.GAME__DRAGON_PLAYER = uuid.toString();
         gCfg.save();
+    }
+
+    public Set<ShrineBlock> getShrineBlocks() {
+        return shrineBlocks;
+    }
+
+    public Set<ShrineBlock> getShrineBlocks(ShrineType type) {
+        Set<ShrineBlock> blocks = new HashSet<ShrineBlock>();
+        for (ShrineBlock block : shrineBlocks) {
+            if (block.getType() == type) {
+                blocks.add(block);
+            }
+        }
+        return blocks;
+    }
+
+    public ShrineBlock getShrineBlock(Location loc) {
+        for (ShrineBlock block : shrineBlocks) {
+            if (block.getLocation().getBlockX() == loc.getBlockX() && block.getLocation().getBlockY() == loc.getBlockY() && block.getLocation().getBlockZ() == loc.getBlockZ()) {
+                return block;
+            }
+        }
+        return null;
     }
 }

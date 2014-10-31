@@ -1,7 +1,7 @@
 package com.clashwars.dvz.abilities.monsters;
 
-import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.dvz.abilities.Ability;
+import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,7 +13,7 @@ public class Explode extends MobAbility {
     public Explode() {
         super();
         ability = Ability.EXPLODE;
-        castItem = new CWItem(Material.SULPHUR, 1, (short) 0, displayName);
+        castItem = new DvzItem(Material.SULPHUR, 1, (short) 0, displayName, 50, -1);
     }
 
     public void castAbility(Player player, Location triggerLoc) {

@@ -1,7 +1,7 @@
 package com.clashwars.dvz.abilities.monsters;
 
-import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.dvz.abilities.Ability;
+import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,7 +16,7 @@ public class Suicide extends MobAbility {
         ability = Ability.SUICIDE;
         //displayName = "&4&lSuicide";
         //description = "&4Kill &7yourself when you're stuck somewhere.\n&cYou will get the same classes as before.\n&cSo you &4can't abuse &cit to get new classes!";
-        castItem = new CWItem(Material.GHAST_TEAR, 1, (short)0, displayName);
+        castItem = new DvzItem(Material.GHAST_TEAR, 1, (short)0, displayName, 0, 8);
     }
 
     @Override

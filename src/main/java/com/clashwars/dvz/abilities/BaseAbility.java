@@ -1,13 +1,9 @@
 package com.clashwars.dvz.abilities;
 
-import com.clashwars.cwcore.helpers.CWItem;
-import com.clashwars.cwcore.packet.reflection.ReflectionHandler;
-import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
-import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -25,7 +21,7 @@ public class BaseAbility implements Listener {
     protected Ability ability;
 
     protected String displayName = "&7Unknown";
-    protected CWItem castItem = null;
+    protected DvzItem castItem = null;
     protected List<Action> castActions = new ArrayList<Action>(Arrays.asList(new Action[] {Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK}));
     protected int cooldown = 0;
 
@@ -71,7 +67,7 @@ public class BaseAbility implements Listener {
         return ability.getDvzClass();
     }
 
-    public CWItem getCastItem() {
+    public DvzItem getCastItem() {
         if (castItem != null) {
             castItem.setLore(new String[] {}).addLore("&aDesc&8: &7" + getDesc()).addLore("&aUsage&8: &7" + getUsage());
             castItem.setName(getDisplayName());
@@ -148,7 +144,7 @@ public class BaseAbility implements Listener {
     }
 
     public boolean isCastItem(ItemStack item) {
-        CWItem castI = getCastItem();
+        DvzItem castI = getCastItem();
         if (item == null || castI == null) {
             return false;
         }

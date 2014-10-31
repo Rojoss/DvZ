@@ -2,16 +2,9 @@ package com.clashwars.dvz.classes;
 
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
-import com.clashwars.dvz.classes.dragons.DragonClass;
-import com.clashwars.dvz.classes.dragons.FireDragon;
-import com.clashwars.dvz.classes.dwarves.*;
-import com.clashwars.dvz.classes.monsters.MobClass;
-import com.clashwars.dvz.classes.monsters.Zombie;
 import com.clashwars.dvz.player.CWPlayer;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

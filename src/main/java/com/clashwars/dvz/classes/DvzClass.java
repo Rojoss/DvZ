@@ -1,6 +1,9 @@
 package com.clashwars.dvz.classes;
 
-import com.clashwars.dvz.classes.dragons.*;
+import com.clashwars.dvz.classes.dragons.AirDragon;
+import com.clashwars.dvz.classes.dragons.DragonClass;
+import com.clashwars.dvz.classes.dragons.FireDragon;
+import com.clashwars.dvz.classes.dragons.WaterDragon;
 import com.clashwars.dvz.classes.dwarves.*;
 import com.clashwars.dvz.classes.monsters.*;
 
@@ -13,7 +16,7 @@ public enum DvzClass {
     DWARF(ClassType.BASE, new DwarfClass(), new String[] {"dwarves"}),
     BUILDER(ClassType.DWARF, new Builder(), new String[] {"builders", "constructor", "constructors"}),
     MINER(ClassType.DWARF, new Miner(), new String[] {"miners", "smith", "smiths"}),
-    HUNTER(ClassType.DWARF, new Hunter(), new String[] {"hunters"}),
+    FLETCHER(ClassType.DWARF, new Fletcher(), new String[] {"fletchers", "hunter", "hunters"}),
     TAILOR(ClassType.DWARF, new Tailor(), new String[] {"tailors"}),
     ALCHEMIST(ClassType.DWARF, new Alchemist(), new String[] {"alchemists", "brewer", "brewers"}),
 
