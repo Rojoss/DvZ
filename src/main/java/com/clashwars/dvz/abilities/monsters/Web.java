@@ -37,7 +37,9 @@ public class Web extends MobAbility {
         new BukkitRunnable() {
             @Override
             public void run() {
-                web.remove();
+                if(web.isOnGround()) {
+                    web.remove();
+                };
             }
         }.runTaskLater(dvz, getIntOption("removeAfter"));
     }
@@ -45,25 +47,6 @@ public class Web extends MobAbility {
     @EventHandler
     public void interact(PlayerInteractEvent event) {
         super.interact(event);
-    }
-
-    @EventHandler
-    public void onBlockPlace(final BlockPlaceEvent event) {
-        if(!event.getBlock().getType().equals(Material.WEB)) {
-            return;
-        }
-
-        if(!canCast(event.getPlayer())) {
-            return;
-        }
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                event.getBlock().setType(Material.AIR);
-            }
-        }.runTaskLater(dvz, getIntOption("removeAfter"));
-
     }
 
 }

@@ -4,6 +4,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
+import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
@@ -11,9 +12,11 @@ import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
@@ -190,6 +193,22 @@ public class MainEvents implements Listener {
             dvzClass.getClassClass().onEquipClass(player);
             event.setCancelled(true);
         }
+    }
+
+
+    @EventHandler
+    public void onBlockPlace(final BlockPlaceEvent event) {
+        if(!event.getBlock().getType().equals(Material.WEB)) {
+            return;
+        }
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                event.getBlock().setType(Material.AIR);
+            }
+        }.runTaskLater(dvz, Integer.parseInt(dvz.getAbilityCfg().getOption(Ability.WEB, "removeAfter")));
+
     }
 
 }
