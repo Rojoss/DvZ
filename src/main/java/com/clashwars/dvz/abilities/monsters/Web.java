@@ -8,7 +8,9 @@ import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,13 +31,39 @@ public class Web extends MobAbility {
             return;
         }
 
-        FallingBlock web = player.getLocation().getWorld().spawnFallingBlock(player.getLocation(), Material.WEB, (byte) 0);
+        final FallingBlock web = player.getLocation().getWorld().spawnFallingBlock(player.getLocation(), Material.WEB, (byte) 0);
+        web.setDropItem(false);
         web.setVelocity(player.getLocation().getDirection().multiply(getDoubleOption("multiplier")));
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                web.remove();
+            }
+        }.runTaskLater(dvz, getIntOption("removeAfter"));
     }
 
     @EventHandler
     public void interact(PlayerInteractEvent event) {
         super.interact(event);
+    }
+
+    @EventHandler
+    public void onBlockPlace(final BlockPlaceEvent event) {
+        if(!event.getBlock().getType().equals(Material.WEB)) {
+            return;
+        }
+
+        if(!canCast(event.getPlayer())) {
+            return;
+        }
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                event.getBlock().setType(Material.AIR);
+            }
+        }.runTaskLater(dvz, getIntOption("removeAfter"));
+
     }
 
 }
