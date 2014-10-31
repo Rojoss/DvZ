@@ -13,6 +13,8 @@ import com.clashwars.dvz.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -197,32 +199,40 @@ public class MainEvents implements Listener {
 
 
     @EventHandler
-    public void onBlockPlace(final BlockPlaceEvent event) {
-        if(!event.getBlock().getType().equals(Material.WEB)) {
+    public void onBlockPlace(BlockPlaceEvent event) {
+        final Block block = event.getBlock();
+        if (block.getType() != Material.WEB) {
             return;
         }
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                event.getBlock().setType(Material.AIR);
+                if (block.getType() == Material.WEB) {
+                    block.setType(Material.AIR);
+                }
             }
-        }.runTaskLater(dvz, Integer.parseInt(dvz.getAbilityCfg().getOption(Ability.WEB, "removeAfter")));
-
+        }.runTaskLater(dvz, dvz.getCfg().WEB_REMOVAL_TIME);
     }
 
     @EventHandler
-    public void onBlockFormedByEntity(final EntityChangeBlockEvent event) {
-        if(!event.getBlock().getType().equals(Material.WEB)) {
+    public void onBlockFormedByEntity(EntityChangeBlockEvent event) {
+        if (!(event.getEntity() instanceof FallingBlock)) {
+            return;
+        }
+        if (event.getTo() != Material.WEB) {
             return;
         }
 
+        final Block block = event.getBlock();
         new BukkitRunnable() {
             @Override
             public void run() {
-                event.getBlock().setType(Material.AIR);
+                if (block.getType() == Material.WEB) {
+                    block.setType(Material.AIR);
+                }
             }
-        }.runTaskLater(dvz, Integer.parseInt(dvz.getAbilityCfg().getOption(Ability.WEB, "removeAfter")));
+        }.runTaskLater(dvz, dvz.getCfg().WEB_REMOVAL_TIME);
 
     }
 

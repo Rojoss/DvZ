@@ -8,9 +8,7 @@ import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,13 +25,15 @@ public class Web extends MobAbility {
     @Override
     public void castAbility(Player player, Location triggerLoc) {
 
-        if(player.getLocation().getPitch() >= -10) {
+        if(player.getLocation().getPitch() >= -5) {
             return;
         }
 
+        //TODO: Remove 1 item.
+
         final FallingBlock web = player.getLocation().getWorld().spawnFallingBlock(player.getLocation(), Material.WEB, (byte) 0);
         web.setDropItem(false);
-        web.setVelocity(player.getLocation().getDirection().multiply(getDoubleOption("multiplier")));
+        web.setVelocity(player.getLocation().getDirection().multiply(getDoubleOption("force")));
     }
 
     @EventHandler
