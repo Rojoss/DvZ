@@ -24,10 +24,16 @@ public class GameManager {
     private DvZ dvz;
     private GameCfg gCfg;
     private Set<ShrineBlock> shrineBlocks = new HashSet<ShrineBlock>();
+    private int dragonPower = 1;
 
     public GameManager(DvZ dvz) {
         this.dvz = dvz;
         gCfg = dvz.getGameCfg();
+
+        //Load shrines if server crashed/restarted during game.
+        if (dvz.getMM().getActiveMap() != null && (isStarted() || getState() == GameState.OPENED)) {
+            populateShrines();
+        }
     }
 
 
@@ -302,6 +308,14 @@ public class GameManager {
     public void setDragonPlayer(UUID uuid) {
         gCfg.GAME__DRAGON_PLAYER = uuid.toString();
         gCfg.save();
+    }
+
+    public int getDragonPower() {
+        return dragonPower;
+    }
+
+    public void setDragonPower(int dragonPower) {
+        this.dragonPower = dragonPower;
     }
 
     public Set<ShrineBlock> getShrineBlocks() {

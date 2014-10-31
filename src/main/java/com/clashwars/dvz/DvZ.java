@@ -85,8 +85,8 @@ public class DvZ extends JavaPlugin {
         wsCfg = new WorkShopCfg("plugins/DvZ/data/Workshops.yml");
         wsCfg.load();
 
-        gm = new GameManager(this);
         mm = new MapManager(this);
+        gm = new GameManager(this);
         cm = new ClassManager(this);
         pm = new PlayerManager(this);
 
