@@ -4,7 +4,6 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
-import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
@@ -45,7 +44,7 @@ public class MainEvents implements Listener {
     private void playerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
-        Location spawnLoc = dvz.getGM().getUsedWorld().getSpawnLocation();;
+        Location spawnLoc = dvz.getGM().getUsedWorld().getSpawnLocation();
 
         if (cwp.getClassOptions() != null && !cwp.getClassOptions().isEmpty()) {
             player.sendMessage(Util.formatMsg("&6Welcome back!"));

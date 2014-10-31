@@ -105,7 +105,7 @@ public class ClassManager {
             //Multiply classes by weight.
             for (DvzClass dwarfClass : classCounts.keySet()) {
                 // Picks * (weight * 100) [the *100 is just to make it a little more accurate]
-                classCounts.put(dwarfClass, classCounts.get(dwarfClass) / (dwarfClass.getClassClass().getWeight()  * 100));
+                classCounts.put(dwarfClass, classCounts.get(dwarfClass) / (dwarfClass.getClassClass().getWeight() * 100));
             }
 
             //Get the 'random' classes with the least players based on weights.

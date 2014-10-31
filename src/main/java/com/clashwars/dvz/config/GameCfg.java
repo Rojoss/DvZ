@@ -1,7 +1,6 @@
 package com.clashwars.dvz.config;
 
 import com.clashwars.cwcore.config.internal.EasyConfig;
-import com.clashwars.dvz.GameState;
 
 public class GameCfg extends EasyConfig {
 

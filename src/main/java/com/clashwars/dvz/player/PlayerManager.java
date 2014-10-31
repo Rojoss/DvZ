@@ -7,7 +7,6 @@ import com.clashwars.dvz.config.PlayerCfg;
 import com.clashwars.dvz.config.WorkShopCfg;
 import com.clashwars.dvz.workshop.WorkShop;
 import com.clashwars.dvz.workshop.WorkShopData;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -83,7 +82,7 @@ public class PlayerManager {
     }
 
 
-    public Map<UUID, CWPlayer> getPlayers(){
+    public Map<UUID, CWPlayer> getPlayers() {
         return players;
     }
 
@@ -127,16 +126,16 @@ public class PlayerManager {
     }
 
 
-    public Map<UUID, WorkShop> getWorkShops(){
+    public Map<UUID, WorkShop> getWorkShops() {
         return workshops;
     }
 
 
     public void savePlayers() {
-        for(CWPlayer cwp : players.values()) {
+        for (CWPlayer cwp : players.values()) {
             cwp.savePlayer();
         }
-        for(WorkShop wsd : workshops.values()) {
+        for (WorkShop wsd : workshops.values()) {
             wsd.save();
         }
     }

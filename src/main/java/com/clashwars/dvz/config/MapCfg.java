@@ -4,7 +4,8 @@ import com.clashwars.cwcore.config.internal.EasyConfig;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.maps.MapData;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MapCfg extends EasyConfig {
 

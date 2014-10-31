@@ -19,17 +19,17 @@ public class Infect extends MobAbility {
     @EventHandler
     public void onPlayerDamagedByPlayer(EntityDamageByEntityEvent event) {
 
-        if(!(event.getDamager() instanceof Player) || !(event.getEntity() instanceof Player)) {
+        if (!(event.getDamager() instanceof Player) || !(event.getEntity() instanceof Player)) {
             return;
         }
 
-        Player damager = (Player) event.getDamager();
-        Player damaged = (Player) event.getEntity();
+        Player damager = (Player)event.getDamager();
+        Player damaged = (Player)event.getEntity();
 
-        if(!canCast(damager)) {
+        if (!canCast(damager)) {
             return;
         }
-        if(CWUtil.randomFloat() <= getFloatOption("chance")) {
+        if (CWUtil.randomFloat() <= getFloatOption("chance")) {
             damaged.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, getIntOption("duration"), 1));
             //TODO: Add particle and sound effects.
         }

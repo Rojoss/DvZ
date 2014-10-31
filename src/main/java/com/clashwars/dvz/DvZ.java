@@ -21,6 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.logging.Logger;
 
 public class DvZ extends JavaPlugin {
+
     private static DvZ instance;
     private CWCore cwcore;
     private Gson gson = new Gson();
@@ -63,7 +64,7 @@ public class DvZ extends JavaPlugin {
             setEnabled(false);
             return;
         }
-        cwcore = (CWCore) plugin;
+        cwcore = (CWCore)plugin;
 
         cfg = new PluginCfg("plugins/DvZ/DvZ.yml");
         cfg.load();
@@ -109,7 +110,7 @@ public class DvZ extends JavaPlugin {
     }
 
     private void startRunnables() {
-        new GameRunnable(this).runTaskTimer(this, 0 , 2);
+        new GameRunnable(this).runTaskTimer(this, 0, 2);
     }
 
     @Override

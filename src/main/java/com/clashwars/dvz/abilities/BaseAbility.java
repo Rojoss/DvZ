@@ -22,7 +22,7 @@ public class BaseAbility implements Listener {
 
     protected String displayName = "&7Unknown";
     protected DvzItem castItem = null;
-    protected List<Action> castActions = new ArrayList<Action>(Arrays.asList(new Action[] {Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK}));
+    protected List<Action> castActions = new ArrayList<Action>(Arrays.asList(new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR, Action.RIGHT_CLICK_BLOCK}));
     protected int cooldown = 0;
 
     //You can put \n for new lines in these.
@@ -69,7 +69,7 @@ public class BaseAbility implements Listener {
 
     public DvzItem getCastItem() {
         if (castItem != null) {
-            castItem.setLore(new String[] {}).addLore("&aDesc&8: &7" + getDesc()).addLore("&aUsage&8: &7" + getUsage());
+            castItem.setLore(new String[]{}).addLore("&aDesc&8: &7" + getDesc()).addLore("&aUsage&8: &7" + getUsage());
             castItem.setName(getDisplayName());
             castItem.replaceLoreNewLines();
         }

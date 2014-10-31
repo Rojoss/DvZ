@@ -4,14 +4,11 @@ import com.clashwars.cwcore.dependencies.CWWorldGuard;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
-import com.clashwars.dvz.util.Util;
 import com.sk89q.minecraft.util.commands.CommandException;
-import com.sk89q.worldedit.CuboidClipboard;
-import com.sk89q.worldedit.FilenameException;
-import com.sk89q.worldedit.MaxChangedBlocksException;
-import com.sk89q.worldedit.Vector;
+import com.sk89q.worldedit.*;
 import com.sk89q.worldedit.data.DataException;
 import org.bukkit.*;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -152,8 +149,8 @@ public class WorkShop {
         if (recalculate || max == null) {
             Location loc1 = getLocation();
             Vector loc2 = getLocation2(true);
-            max = new Vector(Math.max(loc1.getBlockX(), loc2.getBlockX()) -1, Math.max(loc1.getBlockY(), loc2.getBlockY()) -1, Math.max(loc1.getBlockZ(), loc2.getBlockZ()) -1);
-    }
+            max = new Vector(Math.max(loc1.getBlockX(), loc2.getBlockX()) - 1, Math.max(loc1.getBlockY(), loc2.getBlockY()) - 1, Math.max(loc1.getBlockZ(), loc2.getBlockZ()) - 1);
+        }
         return max;
     }
 

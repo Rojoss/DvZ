@@ -18,20 +18,19 @@ public class Web extends MobAbility {
     public Web() {
         super();
         ability = Ability.WEB;
-        castItem = new DvzItem(Material.WEB, 1, (short) 0, displayName, 51, -1);
+        castItem = new DvzItem(Material.WEB, 1, (short)0, displayName, 51, -1);
         castActions = new ArrayList<Action>(Arrays.asList(new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}));
     }
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
 
-        if(player.getLocation().getPitch() >= -5) {
+        if (player.getLocation().getPitch() >= -5) {
             return;
         }
-
         //TODO: Remove 1 item.
 
-        final FallingBlock web = player.getLocation().getWorld().spawnFallingBlock(player.getLocation(), Material.WEB, (byte) 0);
+        final FallingBlock web = player.getLocation().getWorld().spawnFallingBlock(player.getLocation(), Material.WEB, (byte)0);
         web.setDropItem(false);
         web.setVelocity(player.getLocation().getDirection().multiply(getDoubleOption("force")));
     }

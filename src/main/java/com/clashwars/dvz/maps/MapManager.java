@@ -4,7 +4,6 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.config.MapCfg;
-import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -153,7 +152,7 @@ public class MapManager {
 
 
     public String[] getLocationNames() {
-        return new String[] {"lobby", "dwarf", "monster", "monsterlobby", "wall", "dragon",
+        return new String[]{"lobby", "dwarf", "monster", "monsterlobby", "wall", "dragon",
                 "shrine1", "shrine2", "shrinewall1", "shrinewall2", "fortress1", "fortress2", "innerwall1", "innerwall2"};
     }
 
@@ -184,7 +183,7 @@ public class MapManager {
         return CWUtil.random(new ArrayList<String>(maps.keySet()));
     }
 
-    public Map<String, DvzMap> getMaps(){
+    public Map<String, DvzMap> getMaps() {
         return maps;
     }
 

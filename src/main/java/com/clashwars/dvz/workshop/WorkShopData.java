@@ -1,12 +1,8 @@
 package com.clashwars.dvz.workshop;
 
 import com.clashwars.cwcore.utils.CWUtil;
-import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-
-import java.io.Serializable;
 
 public class WorkShopData {
 

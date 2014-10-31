@@ -16,16 +16,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class CWPlayer {
 
-private DvZ dvz;
+    private DvZ dvz;
     private PlayerCfg pcfg;
 
     private UUID uuid;
@@ -126,7 +122,6 @@ private DvZ dvz;
 
 
 
-
     public PlayerData getPlayerData() {
         return data;
     }
@@ -187,7 +182,7 @@ private DvZ dvz;
 
 
     public void addClassExp(int exp) {
-        if(getClassExp() + exp >= dvz.getCfg().XP_NEEDED_TO_LVL) {
+        if (getClassExp() + exp >= dvz.getCfg().XP_NEEDED_TO_LVL) {
             data.setClassExp(0);
             Bukkit.getServer().getPluginManager().callEvent(new ClassLevelupEvent(this));
         } else {
@@ -195,7 +190,7 @@ private DvZ dvz;
             ExpUtil xpu = new ExpUtil(getPlayer());
             xpu.changeExp(exp);
         }
-        if(System.currentTimeMillis() - lastSave >= 30000) {
+        if (System.currentTimeMillis() - lastSave >= 30000) {
             lastSave = 0;
             savePlayer();
         }
@@ -252,7 +247,7 @@ private DvZ dvz;
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof CWPlayer) {
-            CWPlayer other = (CWPlayer) obj;
+            CWPlayer other = (CWPlayer)obj;
 
             return other.getUUID() == getUUID();
         }
@@ -262,6 +257,7 @@ private DvZ dvz;
 
     //Custom ClassLevelupEvent.
     public static class ClassLevelupEvent extends Event {
+
         private CWPlayer cwp;
 
         public ClassLevelupEvent(CWPlayer cwp) {
@@ -278,6 +274,7 @@ private DvZ dvz;
         public HandlerList getHandlers() {
             return handlers;
         }
+
         public static HandlerList getHandlerList() {
             return handlers;
         }

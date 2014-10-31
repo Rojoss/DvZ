@@ -1,6 +1,5 @@
 package com.clashwars.dvz.config;
 
-import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.config.internal.EasyConfig;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.classes.DvzClass;

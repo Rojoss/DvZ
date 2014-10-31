@@ -4,11 +4,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
-import com.clashwars.dvz.classes.BaseClass;
-import com.clashwars.dvz.classes.ClassManager;
-import com.clashwars.dvz.classes.ClassType;
-import com.clashwars.dvz.classes.DvzClass;
-import com.clashwars.dvz.classes.dragons.DragonClass;
+import com.clashwars.dvz.classes.*;
 import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
@@ -18,12 +14,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class Commands {
+
     private DvZ dvz;
     private GameManager gm;
     private PlayerManager pm;
@@ -266,7 +260,7 @@ public class Commands {
                         sender.sendMessage(Util.formatMsg("&cPlayer command only."));
                         return true;
                     }
-                    Player player = (Player) sender;
+                    Player player = (Player)sender;
 
                     if (!player.isOp() && !player.hasPermission("dvz.admin")) {
                         player.sendMessage(Util.formatMsg("Insufficient permissions."));
@@ -373,7 +367,7 @@ public class Commands {
                         sender.sendMessage(Util.formatMsg("&cPlayer command only."));
                         return true;
                     }
-                    Player player = (Player) sender;
+                    Player player = (Player)sender;
 
                     if (!sender.isOp() && !sender.hasPermission("dvz.admin")) {
                         sender.sendMessage(Util.formatMsg("Insufficient permissions."));

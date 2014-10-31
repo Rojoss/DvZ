@@ -8,16 +8,16 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum Ability {
-    BASE(DvzClass.DWARF, new BaseAbility(), new String[] {}),
-    SUICIDE(DvzClass.MONSTER, new Suicide(), new String[] {}),
-    HAMMER(DvzClass.MONSTER, new Hammer(), new String[] {}),
-    INFECT(DvzClass.ZOMBIE, new Infect(), new String[] {}),
-    RUSH(DvzClass.ZOMBIE, new Rush(), new String[] {}),
-    RAPIDFIRE(DvzClass.SKELETON, new Rapidfire(), new String[] {}),
-    POISONATTACK(DvzClass.SPIDER, new PoisonAttack(), new String[] {}),
-    POISON(DvzClass.SPIDER, new Poison(), new String[] {}),
-    WEB(DvzClass.SPIDER, new Web(), new String[] {}),
-    EXPLODE(DvzClass.CREEPER, new Explode(), new String[] {});
+    BASE(DvzClass.DWARF, new BaseAbility(), new String[]{}),
+    SUICIDE(DvzClass.MONSTER, new Suicide(), new String[]{}),
+    HAMMER(DvzClass.MONSTER, new Hammer(), new String[]{}),
+    INFECT(DvzClass.ZOMBIE, new Infect(), new String[]{}),
+    RUSH(DvzClass.ZOMBIE, new Rush(), new String[]{}),
+    RAPIDFIRE(DvzClass.SKELETON, new Rapidfire(), new String[]{}),
+    POISONATTACK(DvzClass.SPIDER, new PoisonAttack(), new String[]{}),
+    POISON(DvzClass.SPIDER, new Poison(), new String[]{}),
+    WEB(DvzClass.SPIDER, new Web(), new String[]{}),
+    EXPLODE(DvzClass.CREEPER, new Explode(), new String[]{});
 
     private DvzClass dvzClass;
     private BaseAbility abilityClass;

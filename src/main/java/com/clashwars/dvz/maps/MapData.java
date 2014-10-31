@@ -1,7 +1,6 @@
 package com.clashwars.dvz.maps;
 
 import com.clashwars.cwcore.utils.CWUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 public class MapData {

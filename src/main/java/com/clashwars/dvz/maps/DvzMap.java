@@ -2,13 +2,11 @@ package com.clashwars.dvz.maps;
 
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.io.File;
 import java.util.List;
-import java.util.Set;
 
 public class DvzMap {
 
