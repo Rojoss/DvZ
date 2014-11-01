@@ -228,7 +228,7 @@ public class GameManager {
         DvzMap map = dvz.getMM().getActiveMap();
         Set<Block> shrineKeepBlocks = CWUtil.findBlocksInArea(map.getLocation(loc1), map.getLocation(loc2), new Material[]{Material.ENDER_PORTAL_FRAME});
         for (Block shrineBlock : shrineKeepBlocks) {
-            shrineBlocks.add(new ShrineBlock(shrineBlock.getLocation(), ShrineType.KEEP));
+            shrineBlocks.add(new ShrineBlock(shrineBlock.getLocation(), type));
             foundBlocks = true;
         }
         return foundBlocks;

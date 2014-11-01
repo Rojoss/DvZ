@@ -4,7 +4,6 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.gmail.filoghost.holograms.api.Hologram;
 import com.gmail.filoghost.holograms.api.HolographicDisplaysAPI;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -25,8 +24,8 @@ public class ShrineBlock {
         this.location = location;
         this.type = type;
         this.hp = dvz.getCfg().SHRINE__BLOCK_HP;
-        Bukkit.broadcastMessage(getHpPercString());
-        hologram = HolographicDisplaysAPI.createHologram(dvz, location.add(0.5f, 1f, 0.5f), CWUtil.integrateColor(new String[]{CWUtil.integrateColor(getHpPercString())}));
+        Location hologramLoc = new Location(location.getWorld(), location.getBlockX() + 0.5f, location.getBlockY() + 1.2f, location.getBlockZ() + 0.5f);
+        hologram = HolographicDisplaysAPI.createHologram(dvz, hologramLoc, CWUtil.integrateColor(new String[]{CWUtil.integrateColor(getHpPercString())}));
     }
 
     public void destroy() {
@@ -76,16 +75,16 @@ public class ShrineBlock {
 
     public String getHpPercString() {
         Double percentage = getHpPerc();
-        if (percentage > 0.8d) {
-            return "&a" + percentage + "%";
-        } else if (percentage > 0.6d) {
-            return "&6" + percentage + "%";
-        } else if (percentage > 0.4d) {
-            return "&e" + percentage + "%";
-        } else if (percentage > 0.2d) {
-            return "&c" + percentage + "%";
-        } else if (percentage <= 0.2d) {
-            return "&4&l" + percentage + "%";
+        if (percentage > 80) {
+            return "&a" + Math.round(percentage) + "%";
+        } else if (percentage > 60) {
+            return "&6" + Math.round(percentage) + "%";
+        } else if (percentage > 40) {
+            return "&e" + Math.round(percentage) + "%";
+        } else if (percentage > 20) {
+            return "&c" + Math.round(percentage) + "%";
+        } else if (percentage <= 20) {
+            return "&4&l" + Math.round(percentage) + "%";
         }
         return "&7" + percentage + "%";
     }
