@@ -81,7 +81,7 @@ public class AbilityCfg extends EasyConfig {
                 abilityData = loadDefault(abilityData, "damage", "2");
                 abilityData = loadDefault(abilityData, "fire-duration", "40");
                 abilityData = loadDefault(abilityData, "fire-radius", "3");
-                abilityData = loadDefault(abilityData, "fire-change", "0.5");
+                abilityData = loadDefault(abilityData, "fire-chance", "0.5");
         }
 
         return abilityData;

@@ -68,13 +68,16 @@ public class Fireball extends MobAbility {
 
         int radius = getIntOption("fire-radius");
 
-        for(int x = l.getBlockX(); x <= x - radius; x++) {
-            for(int y = l.getBlockY(); y <= y - radius; y++) {
-                for(int z = l.getBlockZ(); z <= y - radius; z++) {
+        for(int x = l.getBlockX() - radius; x <= l.getBlockX() + radius; x++) {
+            for(int y = l.getBlockY() - radius; y <= l.getBlockY() + radius; y++) {
+                for(int z = l.getBlockZ() - radius; z <= l.getBlockZ() + radius; z++) {
                     Block b = l.getWorld().getBlockAt(x, y, z);
-                    if(b.getRelative(BlockFace.UP).getType() == Material.AIR) {
-                        if(CWUtil.randomFloat() <= getDoubleOption("fire-chance")) {
-                            b.getRelative(BlockFace.UP).setType(Material.FIRE);
+                    if(b.getType().isSolid()) {
+                        if (b.getRelative(BlockFace.UP).getType() == Material.AIR) {
+                            if (CWUtil.randomFloat() <= getDoubleOption("fire-chance")) {
+                                b.getRelative(BlockFace.UP).setType(Material.FIRE);
+                                //TODO: Add sound and particle effects.
+                            }
                         }
                     }
                 }
