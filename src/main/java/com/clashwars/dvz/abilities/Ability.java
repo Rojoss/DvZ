@@ -19,7 +19,8 @@ public enum Ability {
     WEB(DvzClass.SPIDER, new Web(), new String[]{}),
     EXPLODE(DvzClass.CREEPER, new Explode(), new String[]{}),
     SHOOT(DvzClass.BLAZE, new Shoot(), new String[]{}),
-    GLIDE(DvzClass.BLAZE, new Glide(), new String[]{});
+    GLIDE(DvzClass.BLAZE, new Glide(), new String[]{}),
+    FIREBALL(DvzClass.BLAZE, new Fireball(), new String[]{});
 
     private DvzClass dvzClass;
     private BaseAbility abilityClass;

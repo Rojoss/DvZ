@@ -76,6 +76,12 @@ public class AbilityCfg extends EasyConfig {
                 break;
             case GLIDE:
                 abilityData = loadDefault(abilityData, "force", "0.4");
+                break;
+            case FIREBALL:
+                abilityData = loadDefault(abilityData, "damage", "2");
+                abilityData = loadDefault(abilityData, "fire-duration", "40");
+                abilityData = loadDefault(abilityData, "fire-radius", "3");
+                abilityData = loadDefault(abilityData, "fire-change", "0.5");
         }
 
         return abilityData;

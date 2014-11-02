@@ -14,7 +14,7 @@ public class Blaze extends MobClass {
 
         abilities.add(Ability.SHOOT);
         abilities.add(Ability.GLIDE);
-
+        abilities.add(Ability.FIREBALL);
     }
 
 }
