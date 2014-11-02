@@ -18,7 +18,7 @@ public class Glide extends MobAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
-        player.setVelocity(player.getLocation().getDirection().multiply(getIntOption("force")).setY(0));
+        player.setVelocity(player.getLocation().getDirection().multiply(getDoubleOption("force")).setY(0));
         //TODO: Add particle and sound effects.
     }
 

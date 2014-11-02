@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.monsters;
 
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
@@ -19,7 +20,8 @@ public class Shoot extends MobAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
-        player.setVelocity(new Vector(0, getIntOption("force"), 0));
+        player.setVelocity(new Vector(0, getDoubleOption("force"), 0));
+        CWUtil.removeItems(player.getInventory(), player.getItemInHand(), 1, true);
         //TODO: Add particle and sound effects.
     }
 
