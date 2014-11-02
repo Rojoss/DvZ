@@ -5,8 +5,7 @@ import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.PlayerCfg;
 import com.clashwars.dvz.config.WorkShopCfg;
-import com.clashwars.dvz.workshop.WorkShop;
-import com.clashwars.dvz.workshop.WorkShopData;
+import com.clashwars.dvz.workshop.*;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -37,7 +36,26 @@ public class PlayerManager {
         }
         Map<UUID, WorkShopData> cfgWorkshops = wsCfg.getWorkShops();
         for (UUID uuid : cfgWorkshops.keySet()) {
-            workshops.put(uuid, new WorkShop(uuid, cfgWorkshops.get(uuid)));
+            DvzClass type = cfgWorkshops.get(uuid).getType();
+            WorkShop ws;
+            switch(type) {
+                case MINER:
+                    ws = new MinerWorkshop(uuid, cfgWorkshops.get(uuid));
+                    break;
+                case FLETCHER:
+                    ws = new FletcherWorkshop(uuid, cfgWorkshops.get(uuid));
+                    break;
+                case TAILOR:
+                    ws = new TailorWorkshop(uuid, cfgWorkshops.get(uuid));
+                    break;
+                case ALCHEMIST:
+                    ws = new AlchemistWorkshop(uuid, cfgWorkshops.get(uuid));
+                    break;
+                default:
+                    ws = new WorkShop(uuid, cfgWorkshops.get(uuid));
+            }
+            ws.onLoad();
+            workshops.put(uuid, ws);
         }
     }
 
@@ -70,14 +88,27 @@ public class PlayerManager {
         UUID uuid = p.getUniqueId();
         if (workshops.containsKey(uuid)) {
             return workshops.get(uuid);
-        } else if (wsCfg.WORKSHOPS.containsKey(uuid.toString())) {
-            WorkShop wsd = new WorkShop(uuid, wsCfg.getWorkShop(uuid));
-            workshops.put(uuid, wsd);
-            return wsd;
         } else {
-            WorkShop wsd = new WorkShop(uuid, new WorkShopData());
-            workshops.put(uuid, wsd);
-            return wsd;
+            DvzClass type = getPlayer(p).getPlayerClass();
+            WorkShop ws;
+            switch(type) {
+                case MINER:
+                    ws = new MinerWorkshop(uuid, new WorkShopData());
+                    break;
+                case FLETCHER:
+                    ws = new FletcherWorkshop(uuid, new WorkShopData());
+                    break;
+                case TAILOR:
+                    ws = new TailorWorkshop(uuid, new WorkShopData());
+                    break;
+                case ALCHEMIST:
+                    ws = new AlchemistWorkshop(uuid, new WorkShopData());
+                    break;
+                default:
+                    ws = new WorkShop(uuid, new WorkShopData());
+            }
+            workshops.put(uuid, ws);
+            return ws;
         }
     }
 

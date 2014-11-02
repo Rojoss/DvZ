@@ -4,6 +4,7 @@ import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.ClassManager;
+import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.commands.Commands;
 import com.clashwars.dvz.config.*;
 import com.clashwars.dvz.events.MainEvents;
@@ -119,6 +120,9 @@ public class DvZ extends JavaPlugin {
         pm.registerEvents(new WorkShopEvents(this), this);
         for (Ability a : Ability.values()) {
             pm.registerEvents(a.getAbilityClass(), this);
+        }
+        for (DvzClass c : DvzClass.values()) {
+            pm.registerEvents(c.getClassClass(), this);
         }
     }
 

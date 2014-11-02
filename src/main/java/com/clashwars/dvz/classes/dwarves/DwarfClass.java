@@ -9,5 +9,4 @@ public class DwarfClass extends BaseClass {
         super();
         dvzClass = DvzClass.DWARF;
     }
-
 }

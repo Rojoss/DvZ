@@ -7,10 +7,11 @@ import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 
 import java.util.*;
 
-public class BaseClass {
+public class BaseClass implements Listener {
 
     protected DvZ dvz = DvZ.inst();
     protected DvzClass dvzClass = null;

@@ -71,6 +71,7 @@ public class ClassesCfg extends EasyConfig {
                 break;
             case ALCHEMIST:
                 classData = loadDefault(classData, "workshop-types", "1");
+                classData = loadDefault(classData, "cauldron-refill-delay", "4");
                 break;
             case PIG:
                 classData = loadDefault(classData, "disguise-grown", "pig");

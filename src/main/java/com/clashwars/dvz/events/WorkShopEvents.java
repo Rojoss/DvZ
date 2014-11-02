@@ -2,6 +2,7 @@ package com.clashwars.dvz.events;
 
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.dvz.DvZ;
+import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.Location;
@@ -76,12 +77,14 @@ public class WorkShopEvents implements Listener {
 
         WorkShop ws = dvz.getPM().getWorkshop(player);
         ws.setCenter(event.getBlockPlaced().getLocation());
-        ws.setType(dvz.getPM().getPlayer(player).getPlayerClass());
+        DvzClass playerClass = dvz.getPM().getPlayer(player).getPlayerClass();
+        ws.setType(playerClass);
         event.getBlockPlaced().setType(Material.AIR);
         if (ws.build()) {
             player.sendMessage(Util.formatMsg("&6Workshop created!"));
             player.playSound(player.getLocation(), Sound.LEVEL_UP, 1.0f, 0.8f);
             ws.save();
+            ws.onBuild();
         } else {
             event.setCancelled(true);
             player.sendMessage(Util.formatMsg("&4ERROR&8: &cCould not create workshop."));

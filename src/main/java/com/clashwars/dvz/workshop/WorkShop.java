@@ -21,13 +21,13 @@ import java.util.UUID;
 
 public class WorkShop {
 
-    private DvZ dvz;
+    protected DvZ dvz;
 
-    private WorkShopData data;
-    private UUID owner;
-    private Vector location2 = null;
-    private Vector min = null;
-    private Vector max = null;
+    protected WorkShopData data;
+    protected UUID owner;
+    protected Vector location2 = null;
+    protected Vector min = null;
+    protected Vector max = null;
 
 
     public WorkShop(UUID owner, WorkShopData wsd) {
@@ -73,6 +73,19 @@ public class WorkShop {
         } catch (IOException e) {
         }
         return false;
+    }
+
+
+    public void onBuild() {
+        //-- To be overridden
+    }
+
+    public void onLoad() {
+        //-- To be overridden
+    }
+
+    public void onRemove() {
+        //-- To be overridden
     }
 
 
