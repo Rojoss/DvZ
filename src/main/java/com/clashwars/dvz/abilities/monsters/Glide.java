@@ -7,19 +7,18 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.util.Vector;
 
-public class Shoot extends MobAbility {
+public class Glide extends MobAbility {
 
-    public Shoot() {
+    public Glide() {
         super();
-        ability = Ability.SHOOT;
-        castItem = new DvzItem(Material.BLAZE_ROD, 1, (short)0, displayName, 200, -1);
+        ability = Ability.GLIDE;
+        castItem = new DvzItem(Material.BLAZE_POWDER, 1, (short)0, displayName, 199, -1);
     }
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
-        player.setVelocity(new Vector(0, getIntOption("force"), 0));
+        player.setVelocity(player.getLocation().getDirection().multiply(getIntOption("force")).setY(0));
         //TODO: Add particle and sound effects.
     }
 

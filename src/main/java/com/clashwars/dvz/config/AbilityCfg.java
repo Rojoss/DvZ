@@ -72,8 +72,10 @@ public class AbilityCfg extends EasyConfig {
                 abilityData = loadDefault(abilityData, "maxpower", "6.0");
                 break;
             case SHOOT:
-                abilityData = loadDefault(abilityData, "force", "");
+                abilityData = loadDefault(abilityData, "force", "0.4");
                 break;
+            case GLIDE:
+                abilityData = loadDefault(abilityData, "force", "0.4");
         }
 
         return abilityData;
