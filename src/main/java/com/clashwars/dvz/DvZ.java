@@ -1,6 +1,7 @@
 package com.clashwars.dvz;
 
 import com.clashwars.cwcore.CWCore;
+import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.ClassManager;
 import com.clashwars.dvz.commands.Commands;
@@ -38,6 +39,7 @@ public class DvZ extends JavaPlugin {
 
     private Commands cmds;
 
+    private EffectManager em;
     private GameManager gm;
     private MapManager mm;
     private ClassManager cm;
@@ -47,6 +49,8 @@ public class DvZ extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        em.dispose();
+
         Bukkit.getScheduler().cancelTasks(this);
         getPM().savePlayers();
 
@@ -72,6 +76,8 @@ public class DvZ extends JavaPlugin {
             return;
         }
         cwcore = (CWCore)plugin;
+
+        em = new EffectManager(cwcore);
 
         cfg = new PluginCfg("plugins/DvZ/DvZ.yml");
         cfg.load();
@@ -170,6 +176,10 @@ public class DvZ extends JavaPlugin {
         return wsCfg;
     }
 
+
+    public EffectManager getEM() {
+        return em;
+    }
 
     public GameManager getGM() {
         return gm;
