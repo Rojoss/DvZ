@@ -156,6 +156,10 @@ public class BaseClass {
         return dvzClass;
     }
 
+    public void setClass(DvzClass dvzClass) {
+        this.dvzClass = dvzClass;
+    }
+
     public ClassType getType() {
         return dvzClass.getType();
     }

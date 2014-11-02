@@ -18,6 +18,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 public class WorkShopEvents implements Listener {
 
@@ -32,42 +33,52 @@ public class WorkShopEvents implements Listener {
         if (event.getPlayer() == null) {
             return;
         }
+        if (!dvz.getGM().isStarted()) {
+            return;
+        }
         Player player = event.getPlayer();
         ItemStack item = event.getItemInHand();
         Location loc = event.getBlockPlaced().getLocation();
 
         //Check block placement in other people their workshop.
-        //TODO: Check if monsters have been released then allow it.
-        if (dvz.getPM().locIsOwnWorkshop(player.getUniqueId(), loc) == 0) {
-            player.sendMessage(Util.formatMsg("&cCan't place blocks in other people their workshop!"));
-            event.setCancelled(true);
-            return;
-        }
-
-        if (item.getType() != Material.PISTON_BASE || !item.hasItemMeta() || !item.getItemMeta().getDisplayName().toLowerCase().contains("workshop")) {
-            return;
-        }
-
-        //TODO: Check y position.
-
-        //TODO: Check if it's placed inside inner walls.
-
-        //TODO: Check if it's placed outside the main building.
-
-        for (WorkShop ws : dvz.getPM().getWorkShops().values()) {
-            if (ws.getCenter().distance(loc) <= 8) {
-                player.sendMessage(Util.formatMsg("&cCan't create your workshop here."));
-                player.sendMessage(Util.formatMsg("&cIt's too close to another workshop."));
+        if (!dvz.getGM().isDwarves()) {
+            if (dvz.getPM().locIsOwnWorkshop(player.getUniqueId(), loc) == 0) {
+                player.sendMessage(Util.formatMsg("&cCan't place blocks in other people their workshop!"));
                 event.setCancelled(true);
                 return;
             }
         }
 
+        if (item.getType() != Material.WORKBENCH || !item.hasItemMeta() || !item.getItemMeta().getDisplayName().toLowerCase().contains("workshop")) {
+            return;
+        }
+
+        if (!dvz.getMM().getActiveMap().isLocWithin(loc, "innerwall", new Vector(-5, 2, -5))) {
+            player.sendMessage(Util.formatMsg("&cCan't create your workshop here."));
+            player.sendMessage(Util.formatMsg("&cIt has to be created within the inner walls."));
+            event.setCancelled(true);
+            return;
+        }
+
+        if (dvz.getMM().getActiveMap().isLocWithin(loc, "keep", new Vector(5, 50, 5))) {
+            player.sendMessage(Util.formatMsg("&cCan't create your workshop here."));
+            player.sendMessage(Util.formatMsg("&cIt has to be created outside the keep."));
+            event.setCancelled(true);
+            return;
+        }
+
+        if (event.getBlockAgainst().getType() != Material.PISTON_BASE) {
+            player.sendMessage(Util.formatMsg("&cCan't create your workshop here."));
+            player.sendMessage(Util.formatMsg("&cYou have to place it on one of the pistons."));
+            event.setCancelled(true);
+            return;
+        }
+
         WorkShop ws = dvz.getPM().getWorkshop(player);
         ws.setCenter(event.getBlockPlaced().getLocation());
         ws.setType(dvz.getPM().getPlayer(player).getPlayerClass());
+        event.getBlockPlaced().setType(Material.AIR);
         if (ws.build()) {
-            event.getBlockPlaced().setType(Material.AIR);
             player.sendMessage(Util.formatMsg("&6Workshop created!"));
             player.playSound(player.getLocation(), Sound.LEVEL_UP, 1.0f, 0.8f);
             ws.save();
@@ -79,7 +90,9 @@ public class WorkShopEvents implements Listener {
 
     @EventHandler
     private void blockBreak(BlockBreakEvent event) {
-        //TODO: Check if monsters have been released then allow it.
+        if (!dvz.getGM().isStarted() || !dvz.getGM().isDwarves()) {
+            return;
+        }
 
         //Check block breaking in other people their workshop.
         if (dvz.getPM().locIsOwnWorkshop(event.getPlayer().getUniqueId(), event.getBlock().getLocation()) == 0) {
@@ -91,12 +104,13 @@ public class WorkShopEvents implements Listener {
 
     @EventHandler
     private void entityDamage(EntityDamageByEntityEvent event) {
+        if (!dvz.getGM().isStarted() || !dvz.getGM().isDwarves()) {
+            return;
+        }
         if (!(event.getDamager() instanceof Player)) {
             return;
         }
         Player damager = (Player)event.getDamager();
-
-        //TODO: Check if monsters have been released then allow it.
 
         //Check killing mobs in other people their workshop
         if (dvz.getPM().locIsOwnWorkshop(damager.getUniqueId(), event.getEntity().getLocation()) == 0) {
@@ -114,6 +128,22 @@ public class WorkShopEvents implements Listener {
         Block block = event.getClickedBlock();
         Player player = event.getPlayer();
 
+        if (block.getType() == Material.WORKBENCH) {
+            event.setCancelled(true);
+            WorkShop ws = dvz.getPM().getWorkshop(player);
+            if (ws != null && ws.getCraftBlock() != null && ws.getCraftBlock().equals(block.getLocation())) {
+                ParticleEffect.WITCH_MAGIC.display(block.getLocation().add(0.5f, 0.5f, 0.5f), 0.2f, 0.2f, 0.2f, 0.0001f, 20);
+
+                //TODO: Crafting implementation.
+
+                return;
+            }
+            player.sendMessage(Util.formatMsg("&cUse your own crafting table."));
+        }
+
+        if (!dvz.getGM().isStarted() || !dvz.getGM().isDwarves()) {
+            return;
+        }
         //Check opening containers in other people their workshop
         if (block.getState() instanceof InventoryHolder) {
             if (dvz.getPM().locIsOwnWorkshop(player.getUniqueId(), block.getLocation()) == 0) {
@@ -122,20 +152,6 @@ public class WorkShopEvents implements Listener {
                 return;
             }
         }
-
-        if (block.getType() != Material.WORKBENCH) {
-            return;
-        }
-        event.setCancelled(true);
-        WorkShop ws = dvz.getPM().getWorkshop(player);
-        if (ws != null && ws.getCraftBlock() != null && ws.getCraftBlock().equals(block.getLocation())) {
-            ParticleEffect.WITCH_MAGIC.display(block.getLocation().add(0.5f, 0.5f, 0.5f), 0.2f, 0.2f, 0.2f, 0.0001f, 20);
-
-            //TODO: Crafting implementation.
-
-            return;
-        }
-        player.sendMessage(Util.formatMsg("&cUse your own crafting table."));
     }
 
 }

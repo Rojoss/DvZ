@@ -1,7 +1,9 @@
 package com.clashwars.dvz.workshop;
 
 import com.clashwars.cwcore.dependencies.CWWorldGuard;
+import com.clashwars.cwcore.effect.effects.AnimatedBallEffect;
 import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
 import com.sk89q.minecraft.util.commands.CommandException;
@@ -37,8 +39,8 @@ public class WorkShop {
 
     public boolean build() {
         try {
-            //TODO: Name of workshop (maybe system with random workshop designs?)
-            CuboidClipboard cc = CWWorldGuard.pasteSchematic(getCenter().getWorld(), CWWorldGuard.getSchematicFile("workshop-test"), getCenter(), true, 0, true);
+            int typeID = CWUtil.random(0, data.getType().getClassClass().getIntOption("workshop-types")-1);
+            CuboidClipboard cc = CWWorldGuard.pasteSchematic(getCenter().getWorld(), CWWorldGuard.getSchematicFile("ws-" + data.getType().toString().toLowerCase() + "-" + typeID), getCenter(), true, 0, true);
             setWidth(cc.getWidth());
             setLength(cc.getLength());
             setHeight(cc.getHeight());
@@ -54,8 +56,13 @@ public class WorkShop {
                     ParticleEffect.displayBlockCrack(block.getLocation(), block.getTypeId(), (byte)block.getData(), 0.5f, 0.5f, 0.5f, 10);
                 }
                 if (block.getType() == Material.WORKBENCH) {
-                    ParticleEffect.WITCH_MAGIC.display(block.getLocation(), 0.3f, 0.3f, 0.3f, 0.0001f, 50);
                     setCraftBlock(block.getLocation());
+                    AnimatedBallEffect effect = new AnimatedBallEffect(dvz.getEM());
+                    effect.setLocation(block.getLocation().add(0.5f,0.5f,0.5f));
+                    effect.yFactor = 1;
+                    effect.iterations = 200;
+                    effect.particles = 75;
+                    effect.start();
                 }
             }
             return true;

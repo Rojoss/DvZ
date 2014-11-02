@@ -4,6 +4,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.util.List;
@@ -74,15 +75,19 @@ public class DvzMap {
 
 
     public boolean isLocWithin(Location loc, String name) {
+        return isLocWithin(loc, name, new Vector(0,0,0));
+    }
+
+    public boolean isLocWithin(Location loc, String name, Vector offset) {
         String s = name.toLowerCase();
         if (s.equals("shrinewall")) {
-            return CWUtil.isLocWithin(loc, data.getLocShrineWall1(), data.getLocShrineWall2());
+            return CWUtil.isLocWithin(loc, data.getLocShrineWall1(), data.getLocShrineWall2(), offset);
         } else if (s.equals("shrine")) {
-            return CWUtil.isLocWithin(loc, data.getLocShrine1(), data.getLocShrine2());
-        } else if (s.equals("fortress") || s.equals("tower1")) {
-            return CWUtil.isLocWithin(loc, data.getLocFortress1(), data.getLocFortress2());
+            return CWUtil.isLocWithin(loc, data.getLocShrine1(), data.getLocShrine2(), offset);
+        } else if (s.equals("fortress") || s.equals("keep")) {
+            return CWUtil.isLocWithin(loc, data.getLocFortress1(), data.getLocFortress2(), offset);
         } else if (s.equals("innerwall")) {
-            return CWUtil.isLocWithin(loc, data.getLocInnerWall1(), data.getLocInnerWall2());
+            return CWUtil.isLocWithin(loc, data.getLocInnerWall1(), data.getLocInnerWall2(), offset);
         }
         return false;
     }
@@ -109,9 +114,9 @@ public class DvzMap {
             return data.getLocShrine1();
         } else if (s.equals("shrine2")) {
             return data.getLocShrine2();
-        } else if (s.equals("fortress1") || s.equals("tower1")) {
+        } else if (s.equals("fortress1") || s.equals("keep1")) {
             return data.getLocFortress1();
-        } else if (s.equals("fortress2") || s.equals("tower2")) {
+        } else if (s.equals("fortress2") || s.equals("keep2")) {
             return data.getLocFortress2();
         } else if (s.equals("innerwall1")) {
             return data.getLocInnerWall1();
