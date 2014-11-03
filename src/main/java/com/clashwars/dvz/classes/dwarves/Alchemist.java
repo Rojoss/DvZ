@@ -1,5 +1,6 @@
 package com.clashwars.dvz.classes.dwarves;
 
+import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
@@ -51,7 +52,7 @@ public class Alchemist extends DwarfClass {
     //Check for using buckets/bottles on cauldrons.
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
-        if (event.getItem() == null || event.getItem().getType() != Material.BUCKET || event.getItem().getType() != Material.POTION) {
+        if (event.getItem() == null || event.getItem().getType() != Material.BUCKET) {
             return;
         }
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
@@ -59,11 +60,6 @@ public class Alchemist extends DwarfClass {
         }
         Block block = event.getClickedBlock();
         if (block.getType() != Material.CAULDRON) {
-            return;
-        }
-
-        if (event.getItem().getType() != Material.POTION) {
-            event.setCancelled(true);
             return;
         }
 
@@ -158,19 +154,26 @@ public class Alchemist extends DwarfClass {
                             if (itemStack.getType() == Material.MELON) {
                                 if (aws.getSugar() > 0) {
                                     aws.wrongIngredientAdded();
+                                    ParticleEffect.ANGRY_VILLAGER.display(item.getLocation(), 0.2f, 0.4f, 0.2f, 0.0001f, 5);
                                 } else {
                                     item.remove();
                                     aws.addMelon(itemStack.getAmount());
+                                    player.playSound(item.getLocation(), Sound.SPLASH2, 0.8f, 1.0f);
+                                    ParticleEffect.WITCH_MAGIC.display(item.getLocation(), 0.2f, 0.4f, 0.2f, 0.0001f, 10);
                                 }
                             } else if (itemStack.getType() == Material.SUGAR) {
                                 if (aws.getMelons() > 0) {
                                     aws.wrongIngredientAdded();
+                                    ParticleEffect.ANGRY_VILLAGER.display(item.getLocation(), 0.2f, 0.4f, 0.2f, 0.0001f, 5);
                                 } else {
                                     item.remove();
                                     aws.addSugar(itemStack.getAmount());
+                                    player.playSound(item.getLocation(), Sound.SPLASH2, 0.8f, 1.0f);
+                                    ParticleEffect.WITCH_MAGIC.display(item.getLocation(), 0.2f, 0.4f, 0.2f, 0.0001f, 10);
                                 }
                             } else {
                                 aws.wrongIngredientAdded();
+                                ParticleEffect.ANGRY_VILLAGER.display(item.getLocation(), 0.2f, 0.4f, 0.2f, 0.0001f, 5);
                             }
                         }
                     }
