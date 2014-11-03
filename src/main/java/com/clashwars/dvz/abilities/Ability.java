@@ -1,5 +1,7 @@
 package com.clashwars.dvz.abilities;
 
+import com.clashwars.dvz.abilities.dwarves.HealPotion;
+import com.clashwars.dvz.abilities.dwarves.SpeedPotion;
 import com.clashwars.dvz.abilities.monsters.*;
 import com.clashwars.dvz.classes.DvzClass;
 
@@ -9,6 +11,8 @@ import java.util.List;
 
 public enum Ability {
     BASE(DvzClass.DWARF, new BaseAbility(), new String[]{}),
+    HEAL_POTION(DvzClass.DWARF, new HealPotion(), new String[]{}),
+    SPEED_POTION(DvzClass.DWARF, new SpeedPotion(), new String[]{}),
     SUICIDE(DvzClass.MONSTER, new Suicide(), new String[]{}),
     HAMMER(DvzClass.MONSTER, new Hammer(), new String[]{}),
     INFECT(DvzClass.ZOMBIE, new Infect(), new String[]{}),

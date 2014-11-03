@@ -1,8 +1,14 @@
 package com.clashwars.dvz.workshop;
 
 import com.clashwars.cwcore.Debug;
+import com.clashwars.cwcore.effect.effects.BoilEffect;
+import com.clashwars.cwcore.effect.effects.IconEffect;
+import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.dvz.abilities.Ability;
+import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -10,18 +16,39 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.*;
+import org.bukkit.util.Vector;
 
 import java.util.*;
 
 public class AlchemistWorkshop extends WorkShop {
 
+    BoilEffect boilEffect;
+
     private Set<Block> cauldrons = new HashSet<Block>();
     private Inventory chest = null;
+    private Location chestLoc = null;
     private Location potLocMin = null;
     private Location potLocMax = null;
 
+    private boolean potFilled = false;
+    private int sugar = 0;
+    private int melons = 0;
+
     public AlchemistWorkshop(UUID owner, WorkShopData wsd) {
         super(owner, wsd);
+
+        boilEffect = new BoilEffect(dvz.getEM());
+        boilEffect.setLocation(getLocation());
+        if (getCenter() != null) {
+            boilEffect.setLocation(getCenter().add(0, 1, 0));
+        }
+        boilEffect.amt = 20;
+        boilEffect.particleOffset = new Vector(2, 1, 2);
+        boilEffect.popVolume = 0.1f;
+        boilEffect.popPitch = 1.8f;
+        boilEffect.soundVolume = 0.1f;
+        boilEffect.soundPitch = 1.5f;
     }
 
     @Override
@@ -104,6 +131,7 @@ public class AlchemistWorkshop extends WorkShop {
                 cauldrons.add(block);
             } else if (block.getType() == Material.CHEST) {
                 chest = ((Chest)block.getState()).getBlockInventory();
+                chestLoc = block.getLocation();
             }
         }
 
@@ -118,6 +146,60 @@ public class AlchemistWorkshop extends WorkShop {
         potLocMax.subtract(2, 0, 2);
         potLocMax.setY(potLocMin.getY() + 1);
         return true;
+    }
+
+    public void checkPotFilled() {
+        Set<Block> waterBlocks = CWUtil.findBlocksInArea(potLocMin, potLocMax, new Material[]{Material.STATIONARY_WATER});
+        if (waterBlocks.size() >= 18) {
+            potFilled = true;
+            getOwner().sendMessage(Util.formatMsg("&6Pot filled with water."));
+            getOwner().sendMessage(Util.formatMsg("&7You can now start adding ingredients."));
+            boilEffect.start();
+        }
+    }
+
+    public void wrongIngredientAdded() {
+        getOwner().sendMessage(Util.formatMsg("&cWrong ingredient added!"));
+        getOwner().sendMessage(Util.formatMsg("&cYou have to start over again with brewing."));
+
+        boilEffect.cancel();
+        potFilled = false;
+        melons = 0;
+        sugar = 0;
+
+        Location potLocMinClone = potLocMin.clone();
+        potLocMinClone.setY(potLocMin.getY() + 1);
+        Set<Block> waterBlocks = CWUtil.findBlocksInArea(potLocMinClone, potLocMax, new Material[]{Material.STATIONARY_WATER});
+        for (Block block : waterBlocks) {
+            block.setType(Material.AIR);
+        }
+    }
+
+    private void brew() {
+        getOwner().sendMessage(Util.formatMsg("&6Potion brewed!"));
+
+        CWItem item;
+        if (melons > 0) {
+            item = Ability.HEAL_POTION.getAbilityClass().getCastItem();
+        } else {
+            item = Ability.SPEED_POTION.getAbilityClass().getCastItem();
+        }
+        if (item != null) {
+            if (chest.getContents().length >= chest.getSize()) {
+                chestLoc.getWorld().dropItem(chestLoc, item);
+            } else {
+                chest.addItem(item);
+            }
+        }
+
+        boilEffect.cancel();
+        melons = 0;
+        sugar = 0;
+
+        Set<Block> waterBlocks = CWUtil.findBlocksInArea(potLocMin, potLocMax, new Material[]{Material.STATIONARY_WATER});
+        for (Block block : waterBlocks) {
+            block.setType(Material.AIR);
+        }
     }
 
 
@@ -135,5 +217,31 @@ public class AlchemistWorkshop extends WorkShop {
 
     public Set<Block> getCauldrons() {
         return cauldrons;
+    }
+
+    public boolean isPotFilled() {
+        return potFilled;
+    }
+
+    public int getMelons() {
+        return melons;
+    }
+
+    public void addMelon(int amt) {
+        melons += amt;
+        if (melons >= DvzClass.ALCHEMIST.getClassClass().getIntOption("melons-needed")) {
+            brew();
+        }
+    }
+
+    public int getSugar() {
+        return sugar;
+    }
+
+    public void addSugar(int amt) {
+        sugar += amt;
+        if (sugar >= DvzClass.ALCHEMIST.getClassClass().getIntOption("sugar-needed")) {
+            brew();
+        }
     }
 }

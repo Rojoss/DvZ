@@ -1,6 +1,5 @@
 package com.clashwars.dvz.classes.dwarves;
 
-import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
@@ -10,15 +9,13 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerBucketEmptyEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.Set;
 
 public class Alchemist extends DwarfClass {
 
@@ -51,9 +48,10 @@ public class Alchemist extends DwarfClass {
         }
     }
 
+    //Check for using buckets/bottles on cauldrons.
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {
-        if (event.getItem() == null || event.getItem().getType() != Material.BUCKET) {
+        if (event.getItem() == null || event.getItem().getType() != Material.BUCKET || event.getItem().getType() != Material.POTION) {
             return;
         }
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
@@ -61,6 +59,11 @@ public class Alchemist extends DwarfClass {
         }
         Block block = event.getClickedBlock();
         if (block.getType() != Material.CAULDRON) {
+            return;
+        }
+
+        if (event.getItem().getType() != Material.POTION) {
+            event.setCancelled(true);
             return;
         }
 
@@ -84,6 +87,7 @@ public class Alchemist extends DwarfClass {
         block.setData((byte)4);
     }
 
+    //Check for emptying bucket in pot.
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent event) {
         if (event.getBucket() != Material.WATER_BUCKET) {
@@ -97,32 +101,81 @@ public class Alchemist extends DwarfClass {
             return;
         }
 
-        WorkShop ws = dvz.getPM().getWorkshop(player);
+        final WorkShop ws = dvz.getPM().getWorkshop(player);
         if (ws != null && ws instanceof AlchemistWorkshop) {
-            final Location loc = event.getBlockClicked().getRelative(event.getBlockFace()).getLocation();
-            final Location min = ((AlchemistWorkshop)ws).getPotMin();
-            final Location max = ((AlchemistWorkshop)ws).getPotMax();
-            if (loc.getX() >= min.getX() && loc.getX() <= max.getX() && loc.getY() >= min.getY() && loc.getY() <= max.getY() && loc.getZ() >= min.getZ() && loc.getZ() <= max.getZ()) {
-                //Check if pot is filled with water.
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        //TODO: Move this stuff to workshop and keep track of filled status for particles and so it only checks it once etc...
-                        Set<Block> waterBlocks = CWUtil.findBlocksInArea(min, max, new Material[]{Material.WATER, Material.STATIONARY_WATER});
-                        if (waterBlocks.size() >= 18) {
-                            player.sendMessage(Util.formatMsg("&6Pot filled with water."));
-                            player.sendMessage(Util.formatMsg("&7You can now start adding ingredients."));
-                        }
-                    }
-                }.runTaskLater(dvz, 20);
-                return;
+            if (((AlchemistWorkshop) ws).isPotFilled()) {
+                player.sendMessage(Util.formatMsg("&7Pot is already filled. Add the ingredients now."));
             } else {
-                player.sendMessage(Util.formatMsg("&cPlace the water in your pot."));
-                event.setCancelled(true);
-                return;
+                final Location loc = event.getBlockClicked().getRelative(event.getBlockFace()).getLocation();
+                final Location min = ((AlchemistWorkshop)ws).getPotMin();
+                final Location max = ((AlchemistWorkshop)ws).getPotMax();
+                if (loc.getX() >= min.getX() && loc.getX() <= max.getX() && loc.getY() >= min.getY() && loc.getY() <= max.getY() && loc.getZ() >= min.getZ() && loc.getZ() <= max.getZ()) {
+                    //Check if pot is filled with water aftter a little delay because of water spread.
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            ((AlchemistWorkshop)ws).checkPotFilled();
+                        }
+                    }.runTaskLater(dvz, 30);
+                    return;
+                } else {
+                    player.sendMessage(Util.formatMsg("&cPlace the water in your pot."));
+                    event.setCancelled(true);
+                    return;
+                }
             }
         }
-
     }
 
+    //Block filling up buckets normally
+    @EventHandler
+    public void onBucketFill(PlayerBucketFillEvent event) {
+        event.setCancelled(true);
+    }
+
+    //Check for dropping ingredients in the pot.
+    @EventHandler
+    public void onItemDrop(PlayerDropItemEvent event) {
+        final Item item = event.getItemDrop();
+
+        final Player player = event.getPlayer();
+        if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.ALCHEMIST) {
+            return;
+        }
+
+        final WorkShop ws = dvz.getPM().getWorkshop(player);
+        if (ws != null && ws instanceof AlchemistWorkshop) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (((AlchemistWorkshop) ws).isPotFilled()) {
+                        AlchemistWorkshop aws = (AlchemistWorkshop)ws;
+                        Location loc = item.getLocation();
+                        Location min = aws.getPotMin();
+                        Location max = aws.getPotMax();
+                        if (loc.getX() >= min.getX() && loc.getX() <= max.getX() && loc.getY() >= min.getY() && loc.getY() <= max.getY()+2 && loc.getZ() >= min.getZ() && loc.getZ() <= max.getZ()) {
+                            ItemStack itemStack = item.getItemStack();
+                            if (itemStack.getType() == Material.MELON) {
+                                if (aws.getSugar() > 0) {
+                                    aws.wrongIngredientAdded();
+                                } else {
+                                    item.remove();
+                                    aws.addMelon(itemStack.getAmount());
+                                }
+                            } else if (itemStack.getType() == Material.SUGAR) {
+                                if (aws.getMelons() > 0) {
+                                    aws.wrongIngredientAdded();
+                                } else {
+                                    item.remove();
+                                    aws.addSugar(itemStack.getAmount());
+                                }
+                            } else {
+                                aws.wrongIngredientAdded();
+                            }
+                        }
+                    }
+                }
+            }.runTaskLater(dvz, 10);
+        }
+    }
 }
