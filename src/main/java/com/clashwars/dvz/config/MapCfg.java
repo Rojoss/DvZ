@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class MapCfg extends EasyConfig {
 
+    public String ACTIVE_MAP_NAME = "";
     public HashMap<String, String> MAPS = new HashMap<String, String>();
 
     public MapCfg(String fileName) {
@@ -29,6 +30,15 @@ public class MapCfg extends EasyConfig {
 
     public void setMap(String mapName, MapData data) {
         MAPS.put(mapName, DvZ.inst().getGson().toJson(data, MapData.class));
+        save();
+    }
+
+    public String getActiveMap() {
+        return ACTIVE_MAP_NAME;
+    }
+
+    public void setActiveMap(String mapName) {
+        this.ACTIVE_MAP_NAME = mapName;
         save();
     }
 }

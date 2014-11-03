@@ -37,6 +37,9 @@ public class PlayerManager {
         Map<UUID, WorkShopData> cfgWorkshops = wsCfg.getWorkShops();
         for (UUID uuid : cfgWorkshops.keySet()) {
             DvzClass type = cfgWorkshops.get(uuid).getType();
+            if (type == null) {
+                continue;
+            }
             WorkShop ws;
             switch(type) {
                 case MINER:
@@ -177,7 +180,14 @@ public class PlayerManager {
         workshops.remove(uuid);
         if (fromConfig == true) {
             pcfg.removePlayer(uuid);
+            pcfg.save();
+
+            WorkShop ws = getWorkshop(dvz.getServer().getPlayer(uuid));
+            if (ws != null) {
+                ws.onRemove();
+            }
             wsCfg.removeWorkShop(uuid);
+            wsCfg.save();
         }
     }
 
@@ -192,10 +202,21 @@ public class PlayerManager {
 
     public void removePlayers(boolean fromConfig) {
         players.clear();
-        workshops.clear();
         if (fromConfig == true) {
             pcfg.PLAYERS.clear();
+            pcfg.save();
+        }
+    }
+
+
+    public void removeWorkshops(boolean fromConfig) {
+        for (WorkShop ws : workshops.values()) {
+            ws.onRemove();
+        }
+        workshops.clear();
+        if (fromConfig == true) {
             wsCfg.WORKSHOPS.clear();
+            wsCfg.save();
         }
     }
 

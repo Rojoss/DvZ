@@ -89,7 +89,7 @@ public class Commands {
 
 
                 //##########################################################################################################################
-                //############################################### /dvz reset {nextgame} [map] ##############################################
+                //############################################### /dvz reset [map] [nextgame] ##############################################
                 //##########################################################################################################################
                 if (args[0].equalsIgnoreCase("reset")) {
                     if (!sender.isOp() && !sender.hasPermission("dvz.admin")) {
@@ -97,25 +97,21 @@ public class Commands {
                         return true;
                     }
 
-                    if (args.length < 2) {
-                        sender.sendMessage(Util.formatMsg("&cInvalid usage. &7/" + label + " " + args[0] + " {nextgame} [map]"));
-                        sender.sendMessage(Util.formatMsg("&cSpecify true|false for next game if there is gonna be a next game."));
-                        return true;
-                    }
-
-                    boolean nextGame = true;
-                    if (args[1].equalsIgnoreCase("false") || args[1].equalsIgnoreCase("no")) {
-                        nextGame = false;
-                    }
-
                     String mapName = "";
-                    if (args.length > 2) {
-                        if (!dvz.getMM().getMaps().containsKey(args[2])) {
+                    if (args.length > 1) {
+                        if (!dvz.getMM().getMaps().containsKey(args[1])) {
                             sender.sendMessage(Util.formatMsg("&cInvalid map name specified."));
                             sender.sendMessage(Util.formatMsg("&4Maps&8: &c" + CWUtil.implode(dvz.getMM().getMaps().keySet().toArray(new String[dvz.getMM().getMaps().size()]), "&8, &c")));
                             return true;
                         }
-                        mapName = args[2];
+                        mapName = args[1];
+                    }
+
+                    boolean nextGame = true;
+                    if (args.length > 2) {
+                        if (args[2].equalsIgnoreCase("false") || args[2].equalsIgnoreCase("no")) {
+                            nextGame = false;
+                        }
                     }
 
                     gm.resetGame(nextGame, mapName);
@@ -139,7 +135,6 @@ public class Commands {
                     }
 
                     gm.openGame();
-                    sender.sendMessage(Util.formatMsg("&6You have opened the game!"));
                     return true;
                 }
 

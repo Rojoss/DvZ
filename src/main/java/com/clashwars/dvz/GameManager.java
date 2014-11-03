@@ -36,11 +36,11 @@ public class GameManager {
     public void resetGame(boolean nextGame, String mapName) {
         setState(GameState.SETUP);
         if (!nextGame) {
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&7========== &a&lDvZ has ended! &7=========="));
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Come back again later for more DvZ!"));
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Make sure to follow us on Twitch to know when DvZ starts!"));
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &9&lhttp://twitch.tv/clashwars"));
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Use &6&l/leave &7to go to the pvp server!"));
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&7========== &c&lDvZ has ended! &7=========="));
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &7Come back again later for more DvZ!"));
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &7Make sure to follow us on Twitch to know when DvZ starts!"));
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &9&lhttp://twitch.tv/clashwars"));
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &7Use &6&l/leave &7to go to the pvp server!"));
             setState(GameState.CLOSED);
         } else {
             Bukkit.broadcastMessage(CWUtil.integrateColor("&7========== &a&lDvZ is resetting! &7=========="));
@@ -48,6 +48,16 @@ public class GameManager {
             Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7If you're not watching the stream yet make sure to do!"));
             Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &9&lhttp://twitch.tv/clashwars"));
         }
+
+        //Reset data
+        shrineBlocks.clear();
+        dvz.getPM().removePlayers(true);
+        dvz.getPM().removeWorkshops(true);
+        setDragonPlayer(null);
+        setDragonType(null);
+        setSpeed(0);
+        //TODO: Reset all other data
+        Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &5All data has been removed/reset"));
 
         if (dvz.getMM().getActiveMap() != null) {
             //Tp all players to default world.
@@ -62,10 +72,6 @@ public class GameManager {
                 Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &4Failed at removing previous map"));
             }
         }
-
-        //Reset data
-        shrineBlocks.clear();
-        //TODO: Reset all other data
 
         //Load in new map.
         if (dvz.getMM().loadMap(mapName)) {
@@ -107,6 +113,7 @@ public class GameManager {
 
         //Tp all players to active world.
         for (Player player : dvz.getServer().getOnlinePlayers()) {
+            dvz.getPM().getPlayer(player).reset();
             player.teleport(dvz.getMM().getUsedWorld().getSpawnLocation());
         }
     }
@@ -135,6 +142,9 @@ public class GameManager {
                     p.sendMessage(Util.formatMsg("&cNo dragon was set up so you have been set as dragon!"));
                     player = p;
                     setDragonPlayer(p.getUniqueId());
+                    if (getDragonType() == null) {
+                        setDragonType(DvzClass.FIREDRAGON);
+                    }
                 }
             }
         }
@@ -282,7 +292,11 @@ public class GameManager {
     }
 
     public void setDragonType(DvzClass dvzClass) {
-        gCfg.GAME__DRAGON_TYPE = dvzClass.toString();
+        if (dvzClass == null) {
+            gCfg.GAME__DRAGON_TYPE = "";
+        } else {
+            gCfg.GAME__DRAGON_TYPE = dvzClass.toString();
+        }
         gCfg.save();
     }
 
@@ -301,7 +315,11 @@ public class GameManager {
     }
 
     public void setDragonPlayer(UUID uuid) {
-        gCfg.GAME__DRAGON_PLAYER = uuid.toString();
+        if (uuid == null) {
+            gCfg.GAME__DRAGON_PLAYER = "";
+        } else {
+            gCfg.GAME__DRAGON_PLAYER = uuid.toString();
+        }
         gCfg.save();
     }
 

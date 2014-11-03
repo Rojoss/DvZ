@@ -24,7 +24,9 @@ public class MapManager {
     public MapManager(DvZ dvz) {
         this.dvz = dvz;
         mapCfg = dvz.getMapCfg();
-        activeMap = dvz.getServer().getWorlds().get(0).getName();
+        if (mapCfg.getActiveMap() != null && !mapCfg.getActiveMap().isEmpty()) {
+            activeMap = mapCfg.getActiveMap();
+        }
         populate();
     }
 
@@ -48,6 +50,26 @@ public class MapManager {
                 }
             }
         }
+
+        //Load active map in.
+        if (activeMap == null || activeMap.isEmpty() || getActiveMap() == null) {
+            dvz.log("No active map was found so loading in a random map.");
+            loadMap("");
+        } else if (!getActiveMap().isLoaded()) {
+            if (getActiveMap().isReadyToLoad()) {
+                dvz.log("The active map is not loaded anymore. Trying to load it again...");
+                WorldCreator wc = new WorldCreator(getActiveMapName());
+                wc.createWorld();
+                if (!getActiveMap().isLoaded()) {
+                    dvz.log("Failed at loading the map. Trying to load a new one in.");
+                    loadMap(activeMap);
+                }
+            } else {
+                dvz.log("The active map no longer exists so loading a new one in.");
+                loadMap(activeMap);
+            }
+        }
+        dvz.log("Active map loaded in successfully!");
     }
 
     public boolean removeActiveMap() {
@@ -66,6 +88,7 @@ public class MapManager {
         }
         String activeName = getActiveMapName();
         activeMap = null;
+        mapCfg.setActiveMap("");
 
         //Try remove the map.
         if (!CWUtil.deleteFolder(new File(activeName))) {
@@ -99,6 +122,7 @@ public class MapManager {
         //Map is already loaded.
         if (newMap.isLoaded()) {
             activeMap = mapName;
+            mapCfg.setActiveMap(activeMap);
             Util.broadcastAdmins(Util.formatMsg("&cFailed to load the map '" + mapName + "'"));
             Util.broadcastAdmins(Util.formatMsg("&cMap was already loaded."));
             return true;
@@ -134,6 +158,7 @@ public class MapManager {
 
         //Map loaded!
         activeMap = mapName;
+        mapCfg.setActiveMap(activeMap);
         return true;
     }
 

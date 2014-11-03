@@ -110,6 +110,7 @@ public class WorkShop {
         int yPos = getLocation().getBlockY();
         int zPos = getLocation().getBlockZ();
         World world = getLocation().getWorld();
+        Location loc;
         for (int x = 0; x < getWidth(); x++) {
             for (int z = 0; z < getLength(); z++) {
                 for (int y = 0; y < getHeight(); y++) {
