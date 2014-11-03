@@ -1,22 +1,24 @@
 package com.clashwars.dvz.workshop;
 
 import com.clashwars.cwcore.dependencies.CWWorldGuard;
-import com.clashwars.cwcore.effect.effects.AnimatedBallEffect;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.cwcore.utils.Cuboid;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
 import com.sk89q.minecraft.util.commands.CommandException;
-import com.sk89q.worldedit.*;
+import com.sk89q.worldedit.CuboidClipboard;
+import com.sk89q.worldedit.FilenameException;
+import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.data.DataException;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 public class WorkShop {
@@ -25,9 +27,7 @@ public class WorkShop {
 
     protected WorkShopData data;
     protected UUID owner;
-    protected Vector location2 = null;
-    protected Vector min = null;
-    protected Vector max = null;
+    protected Cuboid cuboid;
 
 
     public WorkShop(UUID owner, WorkShopData wsd) {
@@ -37,32 +37,25 @@ public class WorkShop {
     }
 
 
-    public boolean build() {
+    public boolean build(Location origin) {
         try {
+            //Get a random workshop based on type.
             int typeID = CWUtil.random(0, data.getType().getClassClass().getIntOption("workshop-types")-1);
-            CuboidClipboard cc = CWWorldGuard.pasteSchematic(getCenter().getWorld(), CWWorldGuard.getSchematicFile("ws-" + data.getType().toString().toLowerCase() + "-" + typeID), getCenter(), true, 0, true);
-            setWidth(cc.getWidth());
-            setLength(cc.getLength());
-            setHeight(cc.getHeight());
-            //Set location at 0,0,0 point in schematic
-            setLocation(new Location(getCenter().getWorld(), getCenter().getBlockX() + cc.getOffset().getBlockX(), getCenter().getBlockY() + cc.getOffset().getBlockY(),
-                    getCenter().getBlockZ() + cc.getOffset().getBlockZ()));
+            //Try and paste the schematic.
+            CuboidClipboard cc = CWWorldGuard.pasteSchematic(origin.getWorld(), CWWorldGuard.getSchematicFile("ws-" + data.getType().toString().toLowerCase() + "-" + typeID), origin, true, 0, true);
 
-            //Loop through the cuboid and check for a workbench and do particles etc.
-            Set<Block> blocks = getBlocks();
+            //Get the min location from the schematic.
+            Location min = new Location(origin.getWorld(), origin.getBlockX() + cc.getOffset().getBlockX(), origin.getBlockY() + cc.getOffset().getBlockY(), origin.getBlockZ() + cc.getOffset().getBlockZ());
+            //Create a new cuboid from the schematic clipboard.
+            cuboid = new Cuboid(min, cc.getWidth()-1, cc.getHeight()-1, cc.getLength()-1);
+            data.setCuboid(cuboid);
+            save();
+
+            //Loop through the blocks and do particles at each block.
+            List<Block> blocks = cuboid.getBlocks();
             for (Block block : blocks) {
-                //Particle for each block.
                 if (block.getType() != Material.AIR) {
                     ParticleEffect.displayBlockCrack(block.getLocation(), block.getTypeId(), (byte)block.getData(), 0.5f, 0.5f, 0.5f, 10);
-                }
-                if (block.getType() == Material.WORKBENCH) {
-                    setCraftBlock(block.getLocation());
-                    AnimatedBallEffect effect = new AnimatedBallEffect(dvz.getEM());
-                    effect.setLocation(block.getLocation().add(0.5f,0.5f,0.5f));
-                    effect.yFactor = 1;
-                    effect.iterations = 200;
-                    effect.particles = 75;
-                    effect.start();
                 }
             }
             return true;
@@ -89,92 +82,28 @@ public class WorkShop {
     }
 
 
-    public Set<org.bukkit.util.Vector> getVectors() {
-        Set<org.bukkit.util.Vector> vectors = new HashSet<org.bukkit.util.Vector>();
-        int xPos = getLocation().getBlockX();
-        int yPos = getLocation().getBlockY();
-        int zPos = getLocation().getBlockZ();
-        for (int x = 0; x < getWidth(); x++) {
-            for (int z = 0; z < getLength(); z++) {
-                for (int y = 0; y < getHeight(); y++) {
-                    vectors.add(new org.bukkit.util.Vector(xPos + x, yPos + y, zPos + z));
-                }
-            }
+    public Cuboid getCuboid() {
+        if (cuboid == null) {
+            cuboid = data.getCuboid();
         }
-        return vectors;
+        return cuboid;
     }
 
-    public Set<Block> getBlocks() {
-        Set<Block> blocks = new HashSet<Block>();
-        int xPos = getLocation().getBlockX();
-        int yPos = getLocation().getBlockY();
-        int zPos = getLocation().getBlockZ();
-        World world = getLocation().getWorld();
-        Location loc;
-        for (int x = 0; x < getWidth(); x++) {
-            for (int z = 0; z < getLength(); z++) {
-                for (int y = 0; y < getHeight(); y++) {
-                    blocks.add(world.getBlockAt(xPos + x, yPos + y, zPos + z));
-                }
-            }
+    public void setCuboid() {
+        if (cuboid != null) {
+            data.setCuboid(cuboid);
         }
-        return blocks;
     }
 
 
-    public boolean isLocWithinWorkShop(Location loc) {
-        return isLocWithinWorkShop(loc, false);
-    }
-
-    public boolean isLocWithinWorkShop(Location loc, boolean recalculate) {
-        getMin(recalculate);
-        getMax(recalculate);
-        if (loc.getX() >= min.getX() && loc.getX() <= max.getX() && loc.getY() >= min.getY() && loc.getY() <= max.getY() && loc.getZ() >= min.getZ() && loc.getZ() <= max.getZ()) {
-            return true;
+    public Location getOrigin() {
+        if (cuboid == null) {
+            cuboid = data.getCuboid();
         }
-        return false;
+        Location center = cuboid.getCenterLoc();
+        center.setY(cuboid.getMinY() + 1);
+        return center;
     }
-
-
-    public Vector getLocation2() {
-        return getLocation2(false);
-    }
-
-    public Vector getLocation2(boolean recalculate) {
-        if (recalculate || location2 == null) {
-            location2 = new Vector(getWidth() + getLocation().getBlockX(), getHeight() + getLocation().getBlockY(), getLength() + getLocation().getBlockZ());
-        }
-        return location2;
-    }
-
-
-    public Vector getMin() {
-        return getMin(false);
-    }
-
-    public Vector getMin(boolean recalculate) {
-        if (recalculate || min == null) {
-            Location loc1 = getLocation();
-            Vector loc2 = getLocation2(true);
-            min = new Vector(Math.min(loc1.getBlockX(), loc2.getBlockX()), Math.min(loc1.getBlockY(), loc2.getBlockY()), Math.min(loc1.getBlockZ(), loc2.getBlockZ()));
-        }
-        return min;
-    }
-
-
-    public Vector getMax() {
-        return getMax(false);
-    }
-
-    public Vector getMax(boolean recalculate) {
-        if (recalculate || max == null) {
-            Location loc1 = getLocation();
-            Vector loc2 = getLocation2(true);
-            max = new Vector(Math.max(loc1.getBlockX(), loc2.getBlockX()) - 1, Math.max(loc1.getBlockY(), loc2.getBlockY()) - 1, Math.max(loc1.getBlockZ(), loc2.getBlockZ()) - 1);
-        }
-        return max;
-    }
-
 
 
     public Player getOwner() {
@@ -187,58 +116,6 @@ public class WorkShop {
 
     public boolean isOwner(UUID uuid) {
         return (owner.compareTo(uuid) == 0);
-    }
-
-
-    public Location getLocation() {
-        return data.getLocation();
-    }
-
-    public void setLocation(Location location) {
-        data.setLocation(location);
-    }
-
-
-    public Location getCenter() {
-        return data.getCenter();
-    }
-
-    public void setCenter(Location center) {
-        data.setCenter(center);
-    }
-
-
-    public int getWidth() {
-        return data.getWidth();
-    }
-
-    public void setWidth(int amt) {
-        data.setWidth(amt);
-    }
-
-    public int getLength() {
-        return data.getLength();
-    }
-
-    public void setLength(int amt) {
-        data.setLength(amt);
-    }
-
-    public int getHeight() {
-        return data.getHeight();
-    }
-
-    public void setHeight(int amt) {
-        data.setHeight(amt);
-    }
-
-
-    public Location getCraftBlock() {
-        return data.getCraftBlock();
-    }
-
-    public void setCraftBlock(Location craftBlock) {
-        data.setCraftBlock(craftBlock);
     }
 
 

@@ -236,7 +236,7 @@ public class PlayerManager {
 
     public WorkShop locGetWorkShop(Location location) {
         for (WorkShop ws : getWorkShops().values()) {
-            if (ws.isLocWithinWorkShop(location)) {
+            if (ws.getCuboid().contains(location)) {
                 return ws;
             }
         }

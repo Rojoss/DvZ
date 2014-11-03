@@ -4,6 +4,7 @@ import com.clashwars.cwcore.effect.effects.BoilEffect;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.cwcore.utils.Cuboid;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.Util;
@@ -14,7 +15,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
 import java.util.*;
 
@@ -25,8 +25,7 @@ public class AlchemistWorkshop extends WorkShop {
     private Set<Block> cauldrons = new HashSet<Block>();
     private Inventory chest = null;
     private Location chestLoc = null;
-    private Location potLocMin = null;
-    private Location potLocMax = null;
+    private Cuboid pot = null;
 
     private boolean potFilled = false;
     private int sugar = 0;
@@ -34,19 +33,6 @@ public class AlchemistWorkshop extends WorkShop {
 
     public AlchemistWorkshop(UUID owner, WorkShopData wsd) {
         super(owner, wsd);
-
-        boilEffect = new BoilEffect(dvz.getEM());
-        boilEffect.setLocation(getLocation());
-        if (getCenter() != null) {
-            boilEffect.setLocation(getCenter().add(0, 1, 0));
-        }
-        boilEffect.amt = 20;
-        boilEffect.particleOffset = new Vector(1.3, 1, 1.3);
-        boilEffect.soundVolume = 0.1f;
-        boilEffect.soundPitch = 1.5f;
-        boilEffect.soundDelay = 10;
-        boilEffect.setPaused(true);
-        boilEffect.start();
     }
 
     @Override
@@ -58,31 +44,36 @@ public class AlchemistWorkshop extends WorkShop {
     public void onLoad() {
         calculateLocations();
 
+        //Initialize boiling effect.
+        boilEffect = new BoilEffect(dvz.getEM());
+        boilEffect.setLocation(getOrigin());
+        boilEffect.amt = 20;
+        boilEffect.particleOffset = new org.bukkit.util.Vector(1, 0.8f, 1);
+        boilEffect.soundVolume = 0.1f;
+        boilEffect.soundPitch = 1.5f;
+        boilEffect.soundDelay = 10;
+        boilEffect.setPaused(true);
+        boilEffect.start();
+
         //Cauldron refilling and rain effect.
         new BukkitRunnable() {
             int iterations = 0;
-            int recalculated = 0;
 
             @Override
             public void run() {
                 iterations++;
+                //Rain
                 for (Block cauldron : cauldrons) {
                     ParticleEffect.DRIP_WATER.display(cauldron.getLocation().add(0.5f, 10, 0.5f), 0.3f, 4, 0.3f, 0.001f, 1);
                 }
+
+                //Check if waited long enough as we don't wanna refill cauldrons every update.
                 if (iterations < getType().getClassClass().getIntOption("cauldron-refill-delay")) {
                     return;
                 }
                 iterations = 0;
-                if (cauldrons == null || cauldrons.isEmpty()) {
-                    recalculated++;
-                    if (recalculated >= 50) {
-                        this.cancel();
-                    }
-                    calculateLocations();
-                    if (cauldrons == null || cauldrons.isEmpty()) {
-                        return;
-                    }
-                }
+
+                //Refill a random cauldron that isn't full.
                 Block cauldron = CWUtil.random(new ArrayList<Block>(cauldrons));
                 for (int i = 0; i < 6; i++) {
                     //Check if it's already full
@@ -90,11 +81,13 @@ public class AlchemistWorkshop extends WorkShop {
                         cauldron = CWUtil.random(new ArrayList<Block>(cauldrons));
                         continue;
                     }
+                    //Add 1 layer
                     if (cauldron.getData() >= 4) {
                         cauldron.setData((byte)1);
                     } else {
                         cauldron.setData((byte)(cauldron.getData() + 1));
                     }
+                    //Effect/Sound
                     ParticleEffect.SPLASH.display(cauldron.getLocation().add(0.5f,0.7f,0.5f), 0.3f, 0.4f, 0.3f, 0.001f, 40);
                     if (cauldron.getData() == 3) {
                         cauldron.getWorld().playSound(cauldron.getLocation(), Sound.SPLASH, 0.15f, 2.0f);
@@ -111,16 +104,15 @@ public class AlchemistWorkshop extends WorkShop {
     public void onRemove() {
         cauldrons.clear();
         chest = null;
-        potLocMin = null;
-        potLocMax = null;
+        pot = null;
     }
 
     private boolean calculateLocations() {
-        if (getLocation().getWorld() == null) {
+        if (getCuboid() == null || cuboid.getWorld() == null) {
             return false;
         }
         //Get all cauldrons and the chest.
-        Set<Block> blocks = getBlocks();
+        List<Block> blocks = cuboid.getBlocks();
         for (Block block : blocks) {
             if (block.getType() == Material.CAULDRON) {
                 cauldrons.add(block);
@@ -131,20 +123,15 @@ public class AlchemistWorkshop extends WorkShop {
         }
 
         //Calculate the pot inside.
-        Location l1 = getLocation();
-        Location l2 = new Location(l1.getWorld(), getLocation2().getX(), getLocation2().getY(), getLocation2().getZ());
+        pot = cuboid.clone();
+        pot.inset(2, 1, 2);
+        pot.setMaxY(pot.getMinY() + 1);
 
-        potLocMin = new Location(l1.getWorld(), Math.min(l1.getBlockX(), l2.getBlockX()), Math.min(l1.getBlockY(), l2.getBlockY()), Math.min(l1.getBlockZ(), l2.getBlockZ()));
-        potLocMax = new Location(l1.getWorld(), Math.max(l1.getBlockX(), l2.getBlockX()), Math.max(l1.getBlockY(), l2.getBlockY()), Math.max(l1.getBlockZ(), l2.getBlockZ()));
-
-        potLocMin.add(2, 1, 2);
-        potLocMax.subtract(2, 0, 2);
-        potLocMax.setY(potLocMin.getY() + 1);
         return true;
     }
 
     public void checkPotFilled() {
-        Set<Block> waterBlocks = CWUtil.findBlocksInArea(potLocMin, potLocMax, new Material[]{Material.STATIONARY_WATER});
+        List<Block> waterBlocks = pot.getBlocks(new Material[]{Material.STATIONARY_WATER});
         if (waterBlocks.size() >= 18) {
             potFilled = true;
             getOwner().sendMessage(Util.formatMsg("&6Pot filled with water."));
@@ -157,16 +144,17 @@ public class AlchemistWorkshop extends WorkShop {
         getOwner().sendMessage(Util.formatMsg("&cWrong ingredient added!"));
         getOwner().sendMessage(Util.formatMsg("&cYou have to start over again with brewing."));
 
+        //Reset
         boilEffect.setPaused(true);
         potFilled = false;
         melons = 0;
         sugar = 0;
 
+        //Clear water and Effect/Sound
         getOwner().playSound(getOwner().getLocation(), Sound.FIZZ, 1.0f, 1.0f);
-
-        Location potLocMinClone = potLocMin.clone();
-        potLocMinClone.setY(potLocMin.getY() + 1);
-        Set<Block> waterBlocks = CWUtil.findBlocksInArea(potLocMinClone, potLocMax, new Material[]{Material.STATIONARY_WATER});
+        Cuboid potTop = pot.clone();
+        potTop.contract(Cuboid.Dir.DOWN, 1);
+        List<Block> waterBlocks = potTop.getBlocks(new Material[]{Material.STATIONARY_WATER});
         for (Block block : waterBlocks) {
             block.setType(Material.AIR);
             ParticleEffect.SMOKE.display(block.getLocation().add(0.5f, 0.5f, 0.5f), 0.3f, 0.3f, 0.3f, 0.0001f, 5);
@@ -176,6 +164,7 @@ public class AlchemistWorkshop extends WorkShop {
     private void brew() {
         getOwner().sendMessage(Util.formatMsg("&6Potion brewed!"));
 
+        //Put item in chest and if chest is full drop it at chest.
         CWItem item;
         if (melons > 0) {
             item = Ability.HEAL_POTION.getAbilityClass().getCastItem();
@@ -192,17 +181,19 @@ public class AlchemistWorkshop extends WorkShop {
                 }
             }
             if (!added) {
-                chestLoc.getWorld().dropItem(chestLoc, item);
+                chestLoc.getWorld().dropItem(chestLoc.add(0,1,0), item);
             }
             ParticleEffect.WITCH_MAGIC.display(chestLoc.add(0.5f, 0.5f, 0.5f), 0.2f, 0.2f, 0.2f, 0.0001f, 30);
         }
 
+        //Reset
         boilEffect.setPaused(true);
         potFilled = false;
         melons = 0;
         sugar = 0;
 
-        Set<Block> waterBlocks = CWUtil.findBlocksInArea(potLocMin, potLocMax, new Material[]{Material.STATIONARY_WATER});
+        //Clear water/Effect
+        List<Block> waterBlocks = pot.getBlocks(new Material[]{Material.STATIONARY_WATER});
         for (Block block : waterBlocks) {
             block.setType(Material.AIR);
             ParticleEffect.SMOKE.display(block.getLocation().add(0.5f, 0.5f, 0.5f), 0.3f, 0.3f, 0.3f, 0.0001f, 5);
@@ -210,20 +201,8 @@ public class AlchemistWorkshop extends WorkShop {
     }
 
 
-    public Location getPotMin() {
-        return potLocMin;
-    }
-
-    public Location getPotMax() {
-        return potLocMax;
-    }
-
-    public Inventory getChestInv() {
-        return chest;
-    }
-
-    public Set<Block> getCauldrons() {
-        return cauldrons;
+    public Cuboid getPot() {
+        return pot;
     }
 
     public boolean isPotFilled() {

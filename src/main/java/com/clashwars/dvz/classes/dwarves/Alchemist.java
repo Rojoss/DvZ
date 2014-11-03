@@ -1,6 +1,7 @@
 package com.clashwars.dvz.classes.dwarves;
 
 import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.utils.Cuboid;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
@@ -30,7 +31,7 @@ public class Alchemist extends DwarfClass {
 
     //Check for sneaking inside the pot to give player upward velocity to get out.
     @EventHandler
-    public void onSneak(PlayerToggleSneakEvent event) {
+    private void onSneak(PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
         if (player.isSneaking()) {
             return;
@@ -40,10 +41,7 @@ public class Alchemist extends DwarfClass {
                 continue;
             }
             AlchemistWorkshop aws = (AlchemistWorkshop)ws;
-            Location loc = player.getLocation();
-            Location min = aws.getPotMin();
-            Location max = aws.getPotMax();
-            if (loc.getX() >= min.getX() && loc.getX() <= max.getX() && loc.getY() >= min.getY() && loc.getY() <= max.getY()+1 && loc.getZ() >= min.getZ() && loc.getZ() <= max.getZ()) {
+            if (aws.getPot().contains(player)) {
                 player.setVelocity(player.getVelocity().setY(1.3f));
             }
         }
@@ -51,7 +49,7 @@ public class Alchemist extends DwarfClass {
 
     //Check for using buckets/bottles on cauldrons.
     @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
+    private void onInteract(PlayerInteractEvent event) {
         if (event.getItem() == null || event.getItem().getType() != Material.BUCKET) {
             return;
         }
@@ -68,7 +66,7 @@ public class Alchemist extends DwarfClass {
             return;
         }
 
-        if (!dvz.getPM().getWorkshop(player).isLocWithinWorkShop(block.getLocation())) {
+        if (!dvz.getPM().getWorkshop(player).getCuboid().contains(block.getLocation())) {
             player.sendMessage(Util.formatMsg("&cThis is not your cauldron."));
             return;
         }
@@ -85,7 +83,7 @@ public class Alchemist extends DwarfClass {
 
     //Check for emptying bucket in pot.
     @EventHandler
-    public void onBucketEmpty(PlayerBucketEmptyEvent event) {
+    private void onBucketEmpty(PlayerBucketEmptyEvent event) {
         if (event.getBucket() != Material.WATER_BUCKET) {
             event.setCancelled(true);
             return;
@@ -99,39 +97,38 @@ public class Alchemist extends DwarfClass {
 
         final WorkShop ws = dvz.getPM().getWorkshop(player);
         if (ws != null && ws instanceof AlchemistWorkshop) {
-            if (((AlchemistWorkshop) ws).isPotFilled()) {
-                player.sendMessage(Util.formatMsg("&7Pot is already filled. Add the ingredients now."));
-            } else {
-                final Location loc = event.getBlockClicked().getRelative(event.getBlockFace()).getLocation();
-                final Location min = ((AlchemistWorkshop)ws).getPotMin();
-                final Location max = ((AlchemistWorkshop)ws).getPotMax();
-                if (loc.getX() >= min.getX() && loc.getX() <= max.getX() && loc.getY() >= min.getY() && loc.getY() <= max.getY() && loc.getZ() >= min.getZ() && loc.getZ() <= max.getZ()) {
-                    //Check if pot is filled with water aftter a little delay because of water spread.
+            final Location loc = event.getBlockClicked().getRelative(event.getBlockFace()).getLocation();
+            if (((AlchemistWorkshop)ws).getPot().contains(loc)) {
+                //Check if pot is filled with water aftter a little delay because of water spread.
+                if (((AlchemistWorkshop)ws).isPotFilled()) {
+                    player.sendMessage(Util.formatMsg("&7Pot is already filled. Add melons or sugar now."));
+                    event.setCancelled(true);
+                } else {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             ((AlchemistWorkshop)ws).checkPotFilled();
                         }
                     }.runTaskLater(dvz, 30);
-                    return;
-                } else {
-                    player.sendMessage(Util.formatMsg("&cPlace the water in your pot."));
-                    event.setCancelled(true);
-                    return;
                 }
+            } else {
+                player.sendMessage(Util.formatMsg("&cPlace the water in your pot."));
+                event.setCancelled(true);
             }
+        } else {
+            event.setCancelled(true);
         }
     }
 
     //Block filling up buckets normally
     @EventHandler
-    public void onBucketFill(PlayerBucketFillEvent event) {
+    private void onBucketFill(PlayerBucketFillEvent event) {
         event.setCancelled(true);
     }
 
     //Check for dropping ingredients in the pot.
     @EventHandler
-    public void onItemDrop(PlayerDropItemEvent event) {
+    private void onItemDrop(PlayerDropItemEvent event) {
         final Item item = event.getItemDrop();
 
         final Player player = event.getPlayer();
@@ -147,9 +144,9 @@ public class Alchemist extends DwarfClass {
                     if (((AlchemistWorkshop) ws).isPotFilled()) {
                         AlchemistWorkshop aws = (AlchemistWorkshop)ws;
                         Location loc = item.getLocation();
-                        Location min = aws.getPotMin();
-                        Location max = aws.getPotMax();
-                        if (loc.getX() >= min.getX() && loc.getX() <= max.getX() && loc.getY() >= min.getY() && loc.getY() <= max.getY()+2 && loc.getZ() >= min.getZ() && loc.getZ() <= max.getZ()) {
+                        Cuboid potClone = aws.getPot().clone();
+                        potClone.expand(Cuboid.Dir.UP, 3);
+                        if (potClone.contains(loc)) {
                             ItemStack itemStack = item.getItemStack();
                             if (itemStack.getType() == Material.MELON) {
                                 if (aws.getSugar() > 0) {
