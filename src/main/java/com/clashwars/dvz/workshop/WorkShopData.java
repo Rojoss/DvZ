@@ -1,6 +1,6 @@
 package com.clashwars.dvz.workshop;
 
-import com.clashwars.cwcore.utils.Cuboid;
+import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.dvz.classes.DvzClass;
 
 public class WorkShopData {

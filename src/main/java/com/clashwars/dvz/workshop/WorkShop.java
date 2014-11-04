@@ -3,7 +3,7 @@ package com.clashwars.dvz.workshop;
 import com.clashwars.cwcore.dependencies.CWWorldGuard;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
-import com.clashwars.cwcore.utils.Cuboid;
+import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
 import com.sk89q.minecraft.util.commands.CommandException;
