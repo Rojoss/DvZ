@@ -24,7 +24,8 @@ public enum Ability {
     EXPLODE(DvzClass.CREEPER, new Explode(), new String[]{}),
     SHOOT(DvzClass.BLAZE, new Shoot(), new String[]{}),
     GLIDE(DvzClass.BLAZE, new Glide(), new String[]{}),
-    FIREBALL(DvzClass.BLAZE, new Fireball(), new String[]{});
+    FIREBALL(DvzClass.BLAZE, new Fireball(), new String[]{}),
+    PICKUP(DvzClass.ENDERMAN, new Pickup(), new String[]{});
 
     private DvzClass dvzClass;
     private BaseAbility abilityClass;
