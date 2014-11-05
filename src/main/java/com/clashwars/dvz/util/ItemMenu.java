@@ -180,7 +180,7 @@ public class ItemMenu implements Listener {
      * @param player If it's specified it wont change the menu but will only update the opened menu for the specified player with this item.
      */
     public void setSlot(CWItem item, int slot, Player player) {
-        if (player != null) {
+        if (player == null) {
             this.items[slot] = item;
         }
 
