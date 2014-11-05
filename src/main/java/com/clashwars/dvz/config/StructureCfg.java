@@ -8,7 +8,7 @@ public class StructureCfg extends EasyConfig {
 
     public String ENCHANT_DATA = "";
     public String FURNACE_DATA = "";
-    public String DEPOSIT_DATA = "";
+    public String DISPOSE_DATA = "";
     public String STORAGE_DATA = "";
 
     public StructureCfg(String fileName) {
@@ -36,12 +36,12 @@ public class StructureCfg extends EasyConfig {
     }
 
 
-    public DepositData getDepositData() {
-        return DvZ.inst().getGson().fromJson(DEPOSIT_DATA, DepositData.class);
+    public DisposeData getDisposeData() {
+        return DvZ.inst().getGson().fromJson(DISPOSE_DATA, DisposeData.class);
     }
 
-    public void setDepositData(DepositData data) {
-        DEPOSIT_DATA = DvZ.inst().getGson().toJson(data, DepositData.class);
+    public void setDisposeData(DisposeData data) {
+        DISPOSE_DATA = DvZ.inst().getGson().toJson(data, DisposeData.class);
         save();
     }
 

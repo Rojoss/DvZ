@@ -6,7 +6,7 @@ public enum StructureType {
     BASE(new Structure()),
     ENCHANT(new EnchantStruc()),
     FURNACE(new FurnaceStruc()),
-    DEPOSIT(new DepositStruc()),
+    DEPOSIT(new DisposeStruc()),
     STORAGE(new StorageStruc());
 
     private Structure structureClass;

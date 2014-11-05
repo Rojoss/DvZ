@@ -58,6 +58,9 @@ public class FurnaceStruc extends Structure {
         Player player = (Player)event.getWhoClicked();
         UUID uuid = player.getUniqueId();
         final ItemMenu menu = menus.get(uuid);
+        if (menu == null) {
+            return;
+        }
 
         ItemMenu itemMenu = event.getItemMenu();
         if (!itemMenu.getName().equals(menu.getName())) {
