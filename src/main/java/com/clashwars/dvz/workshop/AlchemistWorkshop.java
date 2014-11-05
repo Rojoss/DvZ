@@ -62,6 +62,14 @@ public class AlchemistWorkshop extends WorkShop {
             @Override
             public void run() {
                 iterations++;
+
+                if (cauldrons == null || cauldrons.size() <= 0) {
+                    calculateLocations();
+                    if (cauldrons == null || cauldrons.size() <= 0) {
+                        return;
+                    }
+                }
+
                 //Rain
                 for (Block cauldron : cauldrons) {
                     ParticleEffect.DRIP_WATER.display(cauldron.getLocation().add(0.5f, 10, 0.5f), 0.3f, 4, 0.3f, 0.001f, 1);
