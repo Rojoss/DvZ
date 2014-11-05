@@ -12,6 +12,7 @@ import com.clashwars.dvz.events.WorkShopEvents;
 import com.clashwars.dvz.maps.MapManager;
 import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.runnables.GameRunnable;
+import com.clashwars.dvz.structures.internal.StructureType;
 import com.gmail.filoghost.holograms.api.Hologram;
 import com.gmail.filoghost.holograms.api.HolographicDisplaysAPI;
 import org.bukkit.Bukkit;
@@ -33,6 +34,7 @@ public class DvZ extends JavaPlugin {
     private PluginCfg cfg;
     private GameCfg gameCfg;
     private MapCfg mapCfg;
+    private StructureCfg strucCfg;
     private ClassesCfg classesCfg;
     private AbilityCfg abilityCfg;
     private PlayerCfg playerCfg;
@@ -89,6 +91,9 @@ public class DvZ extends JavaPlugin {
         mapCfg = new MapCfg("plugins/DvZ/maps/Maps.yml");
         mapCfg.load();
 
+        strucCfg = new StructureCfg("plugins/DvZ/Structures.yml");
+        strucCfg.load();
+
         classesCfg = new ClassesCfg("plugins/DvZ/Classes.yml");
         classesCfg.load();
 
@@ -123,6 +128,9 @@ public class DvZ extends JavaPlugin {
         }
         for (DvzClass c : DvzClass.values()) {
             pm.registerEvents(c.getClassClass(), this);
+        }
+        for (StructureType s : StructureType.values()) {
+            pm.registerEvents(s.getStrucClass(), this);
         }
     }
 
@@ -162,6 +170,10 @@ public class DvZ extends JavaPlugin {
 
     public MapCfg getMapCfg() {
         return mapCfg;
+    }
+
+    public StructureCfg getStrucCfg() {
+        return strucCfg;
     }
 
     public ClassesCfg getClassesCfg() {

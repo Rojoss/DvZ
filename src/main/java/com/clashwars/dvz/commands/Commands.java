@@ -345,6 +345,7 @@ public class Commands {
                     dvz.getGameCfg().load();
                     dvz.getPlayerCfg().load();
                     dvz.getWSCfg().load();
+                    dvz.getStrucCfg().load();
                     dvz.getAbilityCfg().load();
                     dvz.getClassesCfg().load();
                     dvz.getMapCfg().load();
