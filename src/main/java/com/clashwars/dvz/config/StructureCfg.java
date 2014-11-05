@@ -6,11 +6,10 @@ import com.clashwars.dvz.structures.data.*;
 
 public class StructureCfg extends EasyConfig {
 
-    public String ENCHANT_DATA;
-    public String FURNACE_DATA;
-    public String DEPOSIT_DATA;
-    public String STORAGE_DATA;
-
+    public String ENCHANT_DATA = "";
+    public String FURNACE_DATA = "";
+    public String DEPOSIT_DATA = "";
+    public String STORAGE_DATA = "";
 
     public StructureCfg(String fileName) {
         this.setFile(fileName);
@@ -23,6 +22,7 @@ public class StructureCfg extends EasyConfig {
 
     public void setEnchantData(EnchantData data) {
         ENCHANT_DATA = DvZ.inst().getGson().toJson(data, EnchantData.class);
+        save();
     }
 
 
@@ -32,6 +32,7 @@ public class StructureCfg extends EasyConfig {
 
     public void setFurnaceData(FurnaceData data) {
         FURNACE_DATA = DvZ.inst().getGson().toJson(data, FurnaceData.class);
+        save();
     }
 
 
@@ -41,6 +42,7 @@ public class StructureCfg extends EasyConfig {
 
     public void setDepositData(DepositData data) {
         DEPOSIT_DATA = DvZ.inst().getGson().toJson(data, DepositData.class);
+        save();
     }
 
 
@@ -50,6 +52,7 @@ public class StructureCfg extends EasyConfig {
 
     public void setStorageData(StorageData data) {
         STORAGE_DATA = DvZ.inst().getGson().toJson(data, StorageData.class);
+        save();
     }
 
 }

@@ -8,7 +8,15 @@ public class FurnaceStruc extends Structure {
     private FurnaceData data;
 
     public FurnaceStruc() {
+        if (dvz.getStrucCfg().getFurnaceData() == null) {
+            dvz.getStrucCfg().setFurnaceData(new FurnaceData());
+        }
         data = dvz.getStrucCfg().getFurnaceData();
+    }
+
+    @Override
+    public String getRegion() {
+        return data.getRegion();
     }
 
 }
