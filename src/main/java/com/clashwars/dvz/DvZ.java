@@ -13,6 +13,7 @@ import com.clashwars.dvz.maps.MapManager;
 import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.runnables.GameRunnable;
 import com.clashwars.dvz.structures.internal.StructureType;
+import com.clashwars.dvz.util.ItemMenu;
 import com.gmail.filoghost.holograms.api.Hologram;
 import com.gmail.filoghost.holograms.api.HolographicDisplaysAPI;
 import org.bukkit.Bukkit;
@@ -132,6 +133,7 @@ public class DvZ extends JavaPlugin {
         for (StructureType s : StructureType.values()) {
             pm.registerEvents(s.getStrucClass(), this);
         }
+        pm.registerEvents(new ItemMenu.Events(), this);
     }
 
     private void startRunnables() {

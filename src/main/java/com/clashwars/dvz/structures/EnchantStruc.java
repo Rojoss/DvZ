@@ -1,36 +1,46 @@
 package com.clashwars.dvz.structures;
 
+import com.clashwars.cwcore.helpers.CWItem;
+import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.cwcore.utils.ExpUtil;
 import com.clashwars.dvz.structures.data.EnchantData;
 import com.clashwars.dvz.structures.extra.CustomEnchant;
 import com.clashwars.dvz.structures.internal.Structure;
+import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EnchantStruc extends Structure {
 
     private EnchantData data;
-    private Set<CustomEnchant> enchants = new HashSet<CustomEnchant>();
+    private List<CustomEnchant> enchants = new ArrayList<CustomEnchant>();
+    private ItemMenu menu;
 
     public EnchantStruc() {
         if (dvz.getStrucCfg().getEnchantData() == null) {
             dvz.getStrucCfg().setEnchantData(new EnchantData());
         }
         data = dvz.getStrucCfg().getEnchantData();
+        menu = new ItemMenu("enchant", data.getGuiSize(), CWUtil.integrateColor(data.getGuiTitle()));
         populateEnchants();
     }
+
 
     @Override
     public void onUse(Player player) {
         ItemStack item = player.getItemInHand();
 
         //Get list of all enchants with the item clicked.
-        Set<CustomEnchant> matchedEnchants = new HashSet<CustomEnchant>();
+        List<CustomEnchant> matchedEnchants = new ArrayList<CustomEnchant>();
         for (CustomEnchant enchant : enchants) {
             if (enchant.getItems().contains(item.getType())) {
                 matchedEnchants.add(enchant);
@@ -41,23 +51,102 @@ public class EnchantStruc extends Structure {
             player.sendMessage(Util.formatMsg("&cThis item can't be enchanted."));
             return;
         }
-        player.sendMessage(Util.formatMsg("&6Pick a enchantment!"));
+
+        menu.show(player);
+        menu.clear(player);
+        menu.setSlot(new CWItem(item), 0, player);
+        int slotID = 1;
+        for (CustomEnchant enchant : matchedEnchants) {
+            if (new ExpUtil(player).getCurrentExp() >= enchant.getXpNeeded()) {
+                if (item.getEnchantments().containsKey(enchant.getEnchant())) {
+                    if (item.getEnchantmentLevel(enchant.getEnchant()) >= enchant.getLevel()) {
+                        menu.setSlot(new CWItem(Material.BOOK).setName("&4&l" + enchant.getName()).addLore("&a&lExp Cost&8: &2" + enchant.getXpNeeded())
+                                .addLore("&7You already have this enchantment."), slotID, player);
+                        slotID++;
+                        continue;
+                    }
+                }
+                menu.setSlot(new CWItem(Material.ENCHANTED_BOOK).setName("&a&l" + enchant.getName()).addLore("&a&lExp Cost&8: &2" + enchant.getXpNeeded())
+                        .addLore("&7Click to purchase this enchantment."), slotID, player);
+            } else {
+                menu.setSlot(new CWItem(Material.BOOK).setName("&4&l" + enchant.getName()).addLore("&c&lExp Cost&8: &4" + enchant.getXpNeeded())
+                        .addLore("&7You don't have enough experience."), slotID, player);
+            }
+            slotID++;
+        }
     }
 
+
+    @EventHandler
+    private void menuClick(ItemMenu.ItemMenuClickEvent event) {
+        ItemMenu itemMenu = event.getItemMenu();
+        if (!itemMenu.getName().equals(menu.getName())) {
+            return;
+        }
+        if (itemMenu.getID() != menu.getID()) {
+            return;
+        }
+        Player player = (Player)event.getWhoClicked();
+        event.setCancelled(true);
+
+        ItemStack item = event.getCurrentItem();
+        if (item == null || !item.hasItemMeta() || !item.getItemMeta().hasDisplayName()) {
+            return;
+        }
+
+        CustomEnchant enchant = getEnchantByName(CWUtil.stripAllColor(item.getItemMeta().getDisplayName()));
+        if (enchant == null) {
+            player.sendMessage(Util.formatMsg("&cInvalid enchantment."));
+            player.closeInventory();
+            return;
+        }
+
+        ExpUtil xpu = new ExpUtil(player);
+        if (player.getItemInHand().getEnchantments().containsKey(enchant.getEnchant())) {
+            if (player.getItemInHand().getEnchantmentLevel(enchant.getEnchant()) >= enchant.getLevel()) {
+                player.sendMessage(Util.formatMsg("&cYou already have this enchantment!"));
+                player.closeInventory();
+                return;
+            }
+        }
+        if (xpu.getCurrentExp() >= enchant.getXpNeeded()) {
+            player.getItemInHand().addUnsafeEnchantment(enchant.getEnchant(), enchant.getLevel());
+            xpu.changeExp(-enchant.getXpNeeded());
+            player.sendMessage(Util.formatMsg("&6Enchanted your item with &5" + enchant.getName() + "&6!"));
+            player.getWorld().playSound(player.getLocation(), Sound.LEVEL_UP, 0.8f, 1.5f);
+            ParticleEffect.ENCHANTMENT_TABLE.display(player.getLocation().add(0, 1.0f, 0), 0.5f, 1f, 0.5f, 0.1f, 50);
+            player.closeInventory();
+        } else {
+            player.sendMessage(Util.formatMsg("&cYou don't have enough experience for this enchant."));
+            player.sendMessage(Util.formatMsg("&cGo do your tasks to earn XP."));
+            player.closeInventory();
+        }
+    }
+
+
+    private CustomEnchant getEnchantByName(String name) {
+        for (CustomEnchant enchant : enchants) {
+            if (enchant.getName().equalsIgnoreCase(name)) {
+                return enchant;
+            }
+        }
+        return null;
+    }
+
+
+    private void populateEnchants() {
+        enchants.add(new CustomEnchant(Enchantment.ARROW_DAMAGE, "Power 1", 1, 50, new Material[] {Material.BOW}));
+        enchants.add(new CustomEnchant(Enchantment.ARROW_DAMAGE, "Power 2", 2, 150, new Material[] {Material.BOW}));
+        enchants.add(new CustomEnchant(Enchantment.ARROW_DAMAGE, "Power 3", 3, 450, new Material[] {Material.BOW}));
+        enchants.add(new CustomEnchant(Enchantment.ARROW_KNOCKBACK, "Punch 1", 1, 75, new Material[] {Material.BOW}));
+        enchants.add(new CustomEnchant(Enchantment.ARROW_KNOCKBACK, "Punch 2", 2, 200, new Material[] {Material.BOW}));
+        enchants.add(new CustomEnchant(Enchantment.FIRE_ASPECT, "Fire Aspect 1", 1, 500, new Material[] {Material.GOLD_SWORD}));
+        //TODO: Add all enchantments.
+    }
 
 
     @Override
     public String getRegion() {
         return data.getRegion();
-    }
-
-
-    private void populateEnchants() {
-        enchants.add(new CustomEnchant(Enchantment.ARROW_DAMAGE, 1, 50, new Material[] {Material.BOW}));
-        enchants.add(new CustomEnchant(Enchantment.ARROW_DAMAGE, 2, 150, new Material[] {Material.BOW}));
-        enchants.add(new CustomEnchant(Enchantment.ARROW_DAMAGE, 3, 450, new Material[] {Material.BOW}));
-        enchants.add(new CustomEnchant(Enchantment.ARROW_KNOCKBACK, 1, 75, new Material[] {Material.BOW}));
-        enchants.add(new CustomEnchant(Enchantment.ARROW_KNOCKBACK, 2, 200, new Material[] {Material.BOW}));
-        enchants.add(new CustomEnchant(Enchantment.FIRE_ASPECT, 1, 500, new Material[] {Material.GOLD_SWORD}));
     }
 }
