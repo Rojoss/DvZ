@@ -128,23 +128,10 @@ public class WorkShopEvents implements Listener {
         Block block = event.getClickedBlock();
         Player player = event.getPlayer();
 
-        //TODO: Move this to class specific workshops.
-//        if (block.getType() == Material.WORKBENCH) {
-//            event.setCancelled(true);
-//            WorkShop ws = dvz.getPM().getWorkshop(player);
-//            if (ws != null && ws.getCraftBlock() != null && ws.getCraftBlock().equals(block.getLocation())) {
-//                ParticleEffect.WITCH_MAGIC.display(block.getLocation().add(0.5f, 0.5f, 0.5f), 0.2f, 0.2f, 0.2f, 0.0001f, 20);
-//
-//                //TODO: Crafting implementation.
-//
-//                return;
-//            }
-//            player.sendMessage(Util.formatMsg("&cUse your own crafting table."));
-//        }
-
         if (!dvz.getGM().isStarted() || !dvz.getGM().isDwarves()) {
             return;
         }
+
         //Check opening containers in other people their workshop
         if (block.getState() instanceof InventoryHolder) {
             if (dvz.getPM().locIsOwnWorkshop(player.getUniqueId(), block.getLocation()) == 0) {

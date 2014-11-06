@@ -24,6 +24,9 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class DvZ extends JavaPlugin {
@@ -50,6 +53,8 @@ public class DvZ extends JavaPlugin {
     private PlayerManager pm;
 
     private final Logger log = Logger.getLogger("Minecraft");
+
+    public Set<UUID> entities = new HashSet<UUID>();
 
     @Override
     public void onDisable() {
