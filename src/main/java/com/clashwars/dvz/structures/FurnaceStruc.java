@@ -3,6 +3,7 @@ package com.clashwars.dvz.structures;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.dvz.Product;
 import com.clashwars.dvz.structures.data.FurnaceData;
 import com.clashwars.dvz.structures.extra.FurnaceItem;
 import com.clashwars.dvz.structures.internal.Structure;
@@ -129,10 +130,10 @@ public class FurnaceStruc extends Structure {
 
 
     private void populateFurnaceItems() {
-        furnaceItems.add(new FurnaceItem(new CWItem(Material.PORK), new CWItem(Material.GRILLED_PORK), 200));
-        furnaceItems.add(new FurnaceItem(new CWItem(Material.DIAMOND_ORE), new CWItem(Material.DIAMOND), 400));
-        furnaceItems.add(new FurnaceItem(new CWItem(Material.IRON_ORE), new CWItem(Material.IRON_INGOT), 400));
-        furnaceItems.add(new FurnaceItem(new CWItem(Material.GOLD_ORE), new CWItem(Material.GOLD_INGOT), 400));
+        furnaceItems.add(new FurnaceItem(Product.RAW_PORK.getItem(), Product.COOKED_PORK.getItem(), 200));
+        furnaceItems.add(new FurnaceItem(Product.DIAMOND_ORE.getItem(), Product.DIAMOND.getItem(), 600));
+        furnaceItems.add(new FurnaceItem(Product.IRON_ORE.getItem(), Product.IRON_INGOT.getItem(), 500));
+        furnaceItems.add(new FurnaceItem(Product.GOLD_ORE.getItem(), Product.GOLD_INGOT.getItem(), 400));
     }
 
     public FurnaceItem getFurnaceItem(Material type) {
