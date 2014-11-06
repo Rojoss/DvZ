@@ -29,6 +29,7 @@ public class CWPlayer {
     private long lastSave = System.currentTimeMillis();
 
     private CooldownManager cdm = new CooldownManager();
+    public HashMap<String, Integer> productsTaken = new HashMap<String, Integer>();
 
 
     public CWPlayer(UUID uuid, PlayerData data) {
@@ -63,7 +64,18 @@ public class CWPlayer {
             player.removePotionEffect(pe.getType());
         }
         player.updateInventory();
-        Util.undisguisePlayer(player.getName());
+    }
+
+    public void undisguise() {
+        Util.undisguisePlayer(getPlayer().getName());
+    }
+
+    public void resetData() {
+        productsTaken.clear();
+        data.setClassOptions(new HashSet<DvzClass>());
+        data.setPlayerClass(DvzClass.DWARF);
+        data.setClassExp(0);
+        data.setParkourCompleted(false);
     }
 
 

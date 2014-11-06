@@ -4,6 +4,7 @@ import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.structures.data.StorageData;
 import com.clashwars.dvz.structures.extra.StorageItem;
 import com.clashwars.dvz.structures.internal.Structure;
@@ -15,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +42,27 @@ public class StorageStruc extends Structure {
         menu.setSlot(new CWItem(Material.BOW).setName("&2&lFletcher Items"), 9, null);
         menu.setSlot(new CWItem(Material.SHEARS).setName("&3&lTailor Items"), 18, null);
         menu.setSlot(new CWItem(Material.POTION).setName("&5&lAlchemist Items"), 27, null);
+
+        //Load in items from config
+        for (String name : dvz.getGameCfg().STORAGE_PRODUCTS.keySet()) {
+            StorageItem storageItem = getStorageItem(name);
+            if (storageItem != null) {
+                storageItem.setAmt(dvz.getGameCfg().STORAGE_PRODUCTS.get(name));
+                updateItem(storageItem);
+            }
+        }
+
+        //Save amount of products every 30 seconds.
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (StorageItem storageItem : items) {
+                    dvz.getGameCfg().STORAGE_PRODUCTS.put(storageItem.getName(), storageItem.getAmt());
+                }
+            }
+        }.runTaskTimer(dvz, 30, 30);
     }
+
 
     @Override
     public void onUse(Player player) {
@@ -84,8 +106,7 @@ public class StorageStruc extends Structure {
                 return;
             }
 
-            //TODO: Check limit with player amounts.
-
+            //Get the amount of items to transfer depending on click type.
             int amtToChange = 1;
             if (event.getClick() == ClickType.SHIFT_LEFT) {
                 amtToChange = Math.max(item.getMaxStackSize() / 2, 1);
@@ -94,15 +115,34 @@ public class StorageStruc extends Structure {
                 amtToChange = storageItem.getAmt();
             }
 
+            //Check item limits with products taken by player.
+            CWPlayer cwp = dvz.getPM().getPlayer(player);
+            if (!cwp.productsTaken.containsKey(storageItem.getName())) {
+                cwp.productsTaken.put(storageItem.getName(), 0);
+            }
+            int remainingTillLimit = storageItem.getLimit() - cwp.productsTaken.get(storageItem.getName());
+            if (remainingTillLimit >= amtToChange) {
+                cwp.productsTaken.put(storageItem.getName(), cwp.productsTaken.get(storageItem.getName()) + amtToChange);
+            } else if (remainingTillLimit > 0) {
+                amtToChange = remainingTillLimit;
+                cwp.productsTaken.put(storageItem.getName(), storageItem.getLimit());
+            } else {
+                player.sendMessage(Util.formatMsg("&cYou can not take more of this item."));
+                return;
+            }
+
+            //Take out item(s) from menu.
             storageItem.changeAmt(-amtToChange);
             updateItem(storageItem);
 
+            //Give item(s) to player
             CWItem itemToGive = storageItem.getItem().clone();
             itemToGive.setAmount(amtToChange);
             itemToGive.giveToPlayer(player);
             player.playSound(player.getLocation(), Sound.ORB_PICKUP, 0.8f, 1.6f);
 
         } else {
+            //Make sure a storage item is clicked.
             StorageItem storageItem = null;
             for (StorageItem si : items) {
                 if (si.getItem().getType() == item.getType() && si.getItem().getData().getData() == item.getData().getData()) {
@@ -115,6 +155,7 @@ public class StorageStruc extends Structure {
                 return;
             }
 
+            //Get the amount to transfer depending on click type.
             int amtToAdd = 1;
             if (event.getClick() == ClickType.SHIFT_LEFT) {
                 amtToAdd = item.getAmount();
@@ -124,14 +165,19 @@ public class StorageStruc extends Structure {
                 amtToAdd = item.getAmount() >= 16 ? 16 : item.getAmount();
             }
 
+            //Add item(s) to menu.
             storageItem.changeAmt(amtToAdd);
             updateItem(storageItem);
+
+            //Take item(s) from player.
             CWUtil.removeItemsFromSlot(player.getInventory(), event.getSlot(), amtToAdd);
             player.playSound(player.getLocation(), Sound.ORB_PICKUP, 0.8f, 1.6f);
         }
     }
 
 
+
+    //Update a item in the menu with the new amount.
     private void updateItem(StorageItem item) {
         int displayAmt = 1;
         if (item.getAmt() > 1) {
@@ -141,6 +187,8 @@ public class StorageStruc extends Structure {
                 .addLore("&a&lAvailable&8: &7" + item.getAmt()).addLore("&aLimit&8: &7" + (item.getLimit() >= 0 ? item.getLimit() : "Infinite")), item.getSlot(), null);
     }
 
+
+    //Get a StorageItem by name.
     private StorageItem getStorageItem(String name) {
         for (StorageItem item : items) {
             if (item.getName().equalsIgnoreCase(name)) {
@@ -149,6 +197,7 @@ public class StorageStruc extends Structure {
         }
         return null;
     }
+
 
     private void populateStorageItems() {
         items.add(new StorageItem("&bDiamond Swords", 2, Product.DIAMOND_SWORD.getItem(), DvzClass.MINER, 2));
@@ -170,6 +219,8 @@ public class StorageStruc extends Structure {
         items.add(new StorageItem("&dHealth Potions", 29, Product.HEAL_POTION.getItem(), DvzClass.ALCHEMIST, 2));
         items.add(new StorageItem("&bSpeed Potions", 30, Product.SPEED_POTION.getItem(), DvzClass.ALCHEMIST, 2));
     }
+
+
 
     @Override
     public String getRegion() {

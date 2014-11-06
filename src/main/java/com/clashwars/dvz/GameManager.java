@@ -50,9 +50,15 @@ public class GameManager {
         }
 
         //Reset data
+        for (CWPlayer cwp : dvz.getPM().getPlayers().values()) {
+            cwp.undisguise();
+            cwp.reset();
+            cwp.resetData();
+        }
         shrineBlocks.clear();
         dvz.getPM().removePlayers(true);
         dvz.getPM().removeWorkshops(true);
+        gCfg.STORAGE_PRODUCTS.clear();
         setDragonPlayer(null);
         setDragonType(null);
         setSpeed(0);
