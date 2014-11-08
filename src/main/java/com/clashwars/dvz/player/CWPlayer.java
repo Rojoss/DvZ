@@ -42,6 +42,9 @@ public class CWPlayer {
 
     public void reset() {
         Player player = getPlayer();
+        if (player == null || player.getGameMode() == GameMode.CREATIVE) {
+            return;
+        }
         player.setMaxHealth(20);
         player.setHealth(20);
         player.setFoodLevel(20);
@@ -67,7 +70,9 @@ public class CWPlayer {
     }
 
     public void undisguise() {
-        Util.undisguisePlayer(getPlayer().getName());
+        if (getPlayer() != null) {
+            Util.undisguisePlayer(getPlayer().getName());
+        }
     }
 
     public void resetData() {

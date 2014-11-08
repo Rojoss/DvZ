@@ -65,6 +65,18 @@ public class ClassesCfg extends EasyConfig {
                 break;
             case FLETCHER:
                 classData = loadDefault(classData, "workshop-types", "1");
+                classData = loadDefault(classData, "pig-drop-amount", "1");
+                classData = loadDefault(classData, "chicken-bonus-height", "5");
+                classData = loadDefault(classData, "flint-needed", "8");
+                classData = loadDefault(classData, "feathers-needed", "8");
+                classData = loadDefault(classData, "bow-product-chance", "0.33");
+                classData = loadDefault(classData, "min-arrow-amount", "16");
+                classData = loadDefault(classData, "max-arrow-amount", "64");
+                classData = loadDefault(classData, "flint-chance", "0.25");
+                classData = loadDefault(classData, "animal-respawn-time-min", "100");
+                classData = loadDefault(classData, "animal-respawn-time-max", "300");
+                classData = loadDefault(classData, "chicken-amount", "4");
+                classData = loadDefault(classData, "pig-amount", "2");
                 break;
             case TAILOR:
                 classData = loadDefault(classData, "workshop-types", "1");

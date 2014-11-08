@@ -20,6 +20,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
+import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -58,6 +59,13 @@ public class DvZ extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        //Kill all mobs
+        for (Entity entity : getMM().getActiveMap().getWorld().getEntities()) {
+            if (entities.contains(entity.getUniqueId())) {
+                entity.remove();
+            }
+        }
+
         em.dispose();
 
         Bukkit.getScheduler().cancelTasks(this);

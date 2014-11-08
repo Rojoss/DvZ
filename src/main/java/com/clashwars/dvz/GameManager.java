@@ -50,7 +50,8 @@ public class GameManager {
         }
 
         //Reset data
-        for (CWPlayer cwp : dvz.getPM().getPlayers().values()) {
+        for (Player player : dvz.getServer().getOnlinePlayers()) {
+            CWPlayer cwp = dvz.getPM().getPlayer(player);
             cwp.undisguise();
             cwp.reset();
             cwp.resetData();
@@ -120,7 +121,9 @@ public class GameManager {
         //Tp all players to active world.
         for (Player player : dvz.getServer().getOnlinePlayers()) {
             dvz.getPM().getPlayer(player).reset();
-            player.teleport(dvz.getMM().getUsedWorld().getSpawnLocation());
+            if (player.getGameMode() != GameMode.CREATIVE) {
+                player.teleport(dvz.getMM().getUsedWorld().getSpawnLocation());
+            }
         }
     }
 
@@ -132,7 +135,9 @@ public class GameManager {
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Do your tasks and get fully equipped!."));
 
         for (Player player : dvz.getServer().getOnlinePlayers()) {
-            dvz.getPM().getPlayer(player).giveClassItems(ClassType.DWARF, false);
+            if (player.getGameMode() != GameMode.CREATIVE) {
+                dvz.getPM().getPlayer(player).giveClassItems(ClassType.DWARF, false);
+            }
         }
 
         getUsedWorld().setTime(23000);

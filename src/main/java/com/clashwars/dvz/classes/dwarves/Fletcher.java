@@ -1,15 +1,14 @@
 package com.clashwars.dvz.classes.dwarves;
 
+import com.clashwars.cwcore.helpers.CWEntity;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.Product;
-import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.workshop.FletcherWorkshop;
-import com.clashwars.dvz.workshop.MinerWorkshop;
 import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -52,17 +51,30 @@ public class Fletcher extends DwarfClass {
             return;
         }
 
+        final FletcherWorkshop ws = (FletcherWorkshop)dvz.getPM().getWorkshop(entity.getKiller());
+
+        //Check for killing animal that belongs to the killer.
+        boolean isOwnAnimal = false;
+        for (CWEntity animal : ws.getAnimals()) {
+            if (animal.entity().getUniqueId() == entity.getUniqueId()) {
+                isOwnAnimal = true;
+            }
+        }
+        if (!isOwnAnimal) {
+            return;
+        }
+
         //Pork for killing pigs.
         if (event.getEntityType() == EntityType.PIG) {
             CWItem pork = Product.RAW_PORK.getItem();
             pork.setAmount(getIntOption("pig-drop-amount"));
             entity.getWorld().dropItem(entity.getLocation(), pork);
             ParticleEffect.PORTAL.display(entity.getLocation(), 0.5f, 0.5f, 0.5f, 0.0001f, 8);
+            ws.spawnAnimal(EntityType.PIG, false);
             return;
         }
 
         //Feathers for killing chickens.
-        FletcherWorkshop ws = (FletcherWorkshop)dvz.getPM().getWorkshop(entity.getKiller());
         Location loc = entity.getLocation();
         CWItem feathers = Product.FEATHER.getItem();
         feathers.setAmount(1);
@@ -73,6 +85,7 @@ public class Fletcher extends DwarfClass {
             ParticleEffect.PORTAL.display(entity.getLocation(), 0.5f, 0.5f, 0.5f, 0.0001f, 8);
         }
         entity.getWorld().dropItem(entity.getLocation(), feathers);
+        ws.spawnAnimal(EntityType.CHICKEN, true);
     }
 
 
@@ -98,25 +111,34 @@ public class Fletcher extends DwarfClass {
             return;
         }
 
+        event.setCancelled(true);
         Inventory inv = player.getInventory();
         Location dropLoc = event.getClickedBlock().getLocation().add(0.5f, 1f, 0.5f);
         int flint = 0;
         int feathers = 0;
         int flintNeeded = getIntOption("flint-needed");
         int feathersNeeded = getIntOption("feathers-needed");
+        //Find all feathers/flint in inventory.
         for (int i = 0; i < inv.getSize(); i++) {
             ItemStack item = inv.getItem(i);
-            if (item.getType() == Product.FLINT.getItem().getType()) {
-                flint++;
-            } else if (item.getType() == Product.FEATHER.getItem().getType()) {
-                feathers++;
+            if (item == null || item.getType() == Material.AIR) {
+                continue;
             }
+            //Increase flint/feathers amt if the current item is flint/feather.
+            if (item.getType() == Product.FLINT.getItem().getType()) {
+                flint += item.getAmount();
+            } else if (item.getType() == Product.FEATHER.getItem().getType()) {
+                feathers += item.getAmount();
+            }
+            //if enough feathers and flint then craft.
             if (feathers >= feathersNeeded && flint >= flintNeeded) {
                 CWUtil.removeItems(inv, Product.FLINT.getItem(), flintNeeded, true);
                 CWUtil.removeItems(inv, Product.FEATHER.getItem(), feathersNeeded, true);
+                //Random chance to get a bow.
                 if (CWUtil.randomFloat() <= getDoubleOption("bow-product-chance")) {
                     dropLoc.getWorld().dropItem(dropLoc, Product.BOW.getItem());
                 }
+                //Random amount of arrows.
                 CWItem arrows = Product.ARROW.getItem();
                 arrows.setAmount(CWUtil.random(getIntOption("min-arrow-amount"), getIntOption("max-arrow-amount")));
                 dropLoc.getWorld().dropItem(dropLoc, arrows);
@@ -140,6 +162,7 @@ public class Fletcher extends DwarfClass {
             return;
         }
 
+        //Give flint with random chance for breaking gravel.
         if (CWUtil.randomFloat() <= getDoubleOption("flint-chance")) {
             block.getWorld().dropItemNaturally(block.getLocation().add(0.5f, 0.5f, 0.5f), Product.FLINT.getItem());
         }
