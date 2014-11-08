@@ -19,7 +19,7 @@ public class Pickup extends MobAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
-        
+
     }
 
     @EventHandler
