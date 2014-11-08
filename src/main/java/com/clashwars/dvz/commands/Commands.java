@@ -5,6 +5,8 @@ import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.classes.*;
+import com.clashwars.dvz.maps.ShrineBlock;
+import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
@@ -389,8 +391,26 @@ public class Commands {
                 }
             }
 
+            int shrines = 0;
+            for (ShrineBlock shrine : gm.getShrineBlocks()) {
+                if (!shrine.isDestroyed()) {
+                    shrines++;
+                }
+            }
             sender.sendMessage(CWUtil.integrateColor("&8========== &4&lDvZ Game Information &8=========="));
-            sender.sendMessage(CWUtil.integrateColor("&6Not yet available."));
+            sender.sendMessage(CWUtil.integrateColor("&6Game State&8: &5" + gm.getState().getColor() + gm.getState().getName()));
+            sender.sendMessage(CWUtil.integrateColor("&6Current map&8: &5" + dvz.getMM().getActiveMapName()));
+            sender.sendMessage(CWUtil.integrateColor("&6Game speed&8: &5" + gm.getSpeed()));
+            sender.sendMessage(CWUtil.integrateColor("&6Shrines remaining&8: &5" + shrines));
+            sender.sendMessage(CWUtil.integrateColor("&6Players&8: &a&l" + dvz.getPM().getPlayers(ClassType.DWARF, true).size() + " &2Dwarves &6&lVS &c&l"
+                    + dvz.getPM().getPlayers(ClassType.MONSTER, true).size() + " &4Zombies"));
+            if (sender instanceof Player) {
+                Player player = (Player)sender;
+                CWPlayer cwp = dvz.getPM().getPlayer(player);
+                sender.sendMessage(CWUtil.integrateColor("&8============== &4&lPersonal Info &8=============="));
+                sender.sendMessage(CWUtil.integrateColor("&6Class&8: &5" + cwp.getPlayerClass().getClassClass().getDisplayName()));
+                sender.sendMessage(CWUtil.integrateColor("&6Class XP&8: &5" + cwp.getClassExp()));
+            }
             sender.sendMessage(CWUtil.integrateColor("&8======= &4Use &c/dvz help &4for all commands &8======="));
             return true;
         }

@@ -83,7 +83,7 @@ public class ClassManager {
             }
 
             //Get the amount of times each class is picked.
-            List<CWPlayer> dwarves = dvz.getPM().getPlayers(ClassType.DWARF);
+            List<CWPlayer> dwarves = dvz.getPM().getPlayers(ClassType.DWARF, false);
             HashMap<DvzClass, Double> classCounts = new HashMap<DvzClass, Double>();
             for (DvzClass dvzClass : dvz.getCM().getClasses(ClassType.DWARF).keySet()) {
                 classCounts.put(dvzClass, 0.0);

@@ -177,8 +177,8 @@ public class GameManager {
 
     public void releaseMonsters(boolean doExecution) {
         if (doExecution) {
-            List<CWPlayer> dwarves = dvz.getPM().getPlayers(ClassType.DWARF);
-            List<CWPlayer> monsters = dvz.getPM().getPlayers(ClassType.MONSTER);
+            List<CWPlayer> dwarves = dvz.getPM().getPlayers(ClassType.DWARF, false);
+            List<CWPlayer> monsters = dvz.getPM().getPlayers(ClassType.MONSTER, false);
             List<CWPlayer> killed = new ArrayList<CWPlayer>();
 
             int dwarvesToKill = (int)Math.round((monsters.size() + dwarves.size()) * dvz.getCfg().MONSTER_PERCENTAGE_MIN);

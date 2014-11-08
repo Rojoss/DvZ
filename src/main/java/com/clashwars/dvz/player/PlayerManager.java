@@ -3,6 +3,7 @@ package com.clashwars.dvz.player;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.classes.dwarves.DwarfClass;
 import com.clashwars.dvz.config.PlayerCfg;
 import com.clashwars.dvz.config.WorkShopCfg;
 import com.clashwars.dvz.workshop.*;
@@ -120,23 +121,30 @@ public class PlayerManager {
         return players;
     }
 
-    public List<CWPlayer> getPlayers(ClassType classType) {
+    public List<CWPlayer> getPlayers(ClassType classType, boolean onlineOnly) {
         List<CWPlayer> playersByClass = new ArrayList<CWPlayer>();
         for (CWPlayer cwp : players.values()) {
             if (cwp.getPlayerClass() == null) {
                 continue;
             }
+            if (onlineOnly && !cwp.isOnline()) {
+                continue;
+            }
             if (cwp.getPlayerClass().getType() == classType) {
                 playersByClass.add(cwp);
+                continue;
             }
         }
         return playersByClass;
     }
 
-    public List<CWPlayer> getPlayers(DvzClass dvzClass) {
+    public List<CWPlayer> getPlayers(DvzClass dvzClass, boolean onlineOnly) {
         List<CWPlayer> playersByClass = new ArrayList<CWPlayer>();
         for (CWPlayer cwp : players.values()) {
             if (cwp.getPlayerClass() == null) {
+                continue;
+            }
+            if (onlineOnly && !cwp.isOnline()) {
                 continue;
             }
             if (cwp.getPlayerClass() == dvzClass) {
@@ -146,10 +154,13 @@ public class PlayerManager {
         return playersByClass;
     }
 
-    public List<CWPlayer> getPlayingPlayers() {
+    public List<CWPlayer> getPlayingPlayers(boolean onlineOnly) {
         List<CWPlayer> playingPlayers = new ArrayList<CWPlayer>();
         for (CWPlayer cwp : players.values()) {
             if (cwp.getPlayerClass() == null) {
+                continue;
+            }
+            if (onlineOnly && !cwp.isOnline()) {
                 continue;
             }
             if (cwp.getPlayerClass().getType() == ClassType.DWARF || cwp.getPlayerClass().getType() == ClassType.MONSTER) {

@@ -51,6 +51,6 @@ public enum Product {
     }
 
     public CWItem getItem() {
-        return item;
+        return item.clone();
     }
 }
