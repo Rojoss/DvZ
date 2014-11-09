@@ -249,6 +249,46 @@ public class Commands {
                 }
 
 
+
+                //##########################################################################################################################
+                //################################################### /dvz class [class] ###################################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("class")) {
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                        return true;
+                    }
+                    Player player = (Player)sender;
+
+                    if (!player.isOp() && !player.hasPermission("dvz.admin")) {
+                        player.sendMessage(Util.formatMsg("Insufficient permissions."));
+                        return true;
+                    }
+
+                    if (args.length < 2) {
+                        sender.sendMessage(Util.formatMsg("&cInvalid usage. &7/" + label + " " + args[0] + " {type/name}"));
+                        return true;
+                    }
+
+                    if (!gm.isStarted()) {
+                        sender.sendMessage(Util.formatMsg("&cThe game has to be started first."));
+                        return true;
+                    }
+
+                    DvzClass dvzClass = DvzClass.fromString(args[1]);
+                    if (dvzClass == null) {
+                        player.sendMessage(Util.formatMsg("&cInvalid class specified."));
+                        return true;
+                    }
+
+                    CWPlayer cwp = dvz.getPM().getPlayer(player);
+                    cwp.setClass(dvzClass);
+                    player.sendMessage(Util.formatMsg("&6Your class has been set to &5" + args[1]));
+                    return true;
+                }
+
+
+
                 //##########################################################################################################################
                 //################################################ /dvz loc {type} [block] #################################################
                 //##########################################################################################################################
