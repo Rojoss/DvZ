@@ -87,8 +87,11 @@ public class CWPlayer {
     public void setClass(DvzClass dvzClass) {
         BaseClass c = dvzClass.getClassClass();
         Player player = getPlayer();
+
         //Reset
         reset();
+        resetData();
+        undisguise();
 
         setPlayerClass(dvzClass);
 
