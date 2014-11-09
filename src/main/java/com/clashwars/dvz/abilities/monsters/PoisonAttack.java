@@ -40,7 +40,7 @@ public class PoisonAttack extends MobAbility {
         }
     }
 
-    @Override
+    @EventHandler
     public void interact(PlayerInteractEvent event) {
         super.interact(event);
     }
