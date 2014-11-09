@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.util.Vector;
 
 public class Glide extends MobAbility {
 
@@ -18,7 +19,8 @@ public class Glide extends MobAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
-        player.setVelocity(player.getLocation().getDirection().multiply(getDoubleOption("force")).setY(0));
+        Vector d = player.getLocation().getDirection();
+        player.setVelocity(d.multiply(getDoubleOption("force")).setY(getDoubleOption("height-force")));
         //TODO: Add particle and sound effects.
     }
 
