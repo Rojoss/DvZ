@@ -21,10 +21,17 @@ public class Poison extends MobAbility {
     public void castAbility(Player player, Location triggerLoc) {
         int range = getIntOption("range");
         for (Entity ent : player.getNearbyEntities(range, range, range)) {
-            if (ent instanceof Player) {
-                Player p = (Player)ent;
-                p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, getIntOption("duration"), 1));
+            if (!(ent instanceof Player)) {
+                return;
             }
+
+            Player p = (Player) ent;
+
+            if(dvz.getPM().getPlayer(p).isMonster()) {
+                return;
+            }
+
+            p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, getIntOption("duration"), 1));
         }
         //TODO: Add particle and sound effects.
     }
