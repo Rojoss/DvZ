@@ -1,9 +1,9 @@
 package com.clashwars.dvz.workshop;
 
+import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.dependencies.CWWorldGuard;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
-import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
 import com.sk89q.minecraft.util.commands.CommandException;
@@ -28,6 +28,8 @@ public class WorkShop {
     protected WorkShopData data;
     protected UUID owner;
     protected Cuboid cuboid;
+
+    protected Block craftBlock;
 
 
     public WorkShop(UUID owner, WorkShopData wsd) {
@@ -78,6 +80,7 @@ public class WorkShop {
     }
 
     public void onRemove() {
+        craftBlock = null;
         //-- To be overridden
     }
 
@@ -132,4 +135,16 @@ public class WorkShop {
         dvz.getWSCfg().setWorkShop(owner, data);
     }
 
+
+
+    public void setCraftBlock() {
+        if (cuboid != null) {
+            for (Block block : cuboid.getBlocks()) {
+                if (block.getType() == Material.WORKBENCH) {
+                    craftBlock = block;
+                    break;
+                }
+            }
+        }
+    }
 }

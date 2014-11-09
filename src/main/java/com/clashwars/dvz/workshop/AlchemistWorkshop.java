@@ -44,17 +44,6 @@ public class AlchemistWorkshop extends WorkShop {
     public void onLoad() {
         calculateLocations();
 
-        //Initialize boiling effect.
-        boilEffect = new BoilEffect(dvz.getEM());
-        boilEffect.setLocation(getOrigin());
-        boilEffect.amt = 20;
-        boilEffect.particleOffset = new org.bukkit.util.Vector(1, 0.8f, 1);
-        boilEffect.soundVolume = 0.1f;
-        boilEffect.soundPitch = 1.5f;
-        boilEffect.soundDelay = 10;
-        boilEffect.setPaused(true);
-        boilEffect.start();
-
         //Cauldron refilling and rain effect.
         new BukkitRunnable() {
             int iterations = 0;
@@ -63,9 +52,12 @@ public class AlchemistWorkshop extends WorkShop {
             public void run() {
                 iterations++;
 
-                if (cauldrons == null || cauldrons.size() <= 0) {
+                if (cuboid == null || cuboid.getBlocks() == null || cuboid.getBlocks().size() <= 0) {
+                    build(getOrigin());
                     calculateLocations();
-                    if (cauldrons == null || cauldrons.size() <= 0) {
+                    if (cuboid == null || cuboid.getBlocks() == null || cuboid.getBlocks().size() <= 0) {
+                        dvz.log("Failed at loading alchemist workshop from " + getOwner() == null ? getOwner() : getOwner().getName() + ".");
+                        cancel();
                         return;
                     }
                 }
@@ -144,7 +136,7 @@ public class AlchemistWorkshop extends WorkShop {
             potFilled = true;
             getOwner().sendMessage(Util.formatMsg("&6Pot filled with water."));
             getOwner().sendMessage(Util.formatMsg("&7You can now start adding ingredients."));
-            boilEffect.setPaused(false);
+            createBoilEffect();
         }
     }
 
@@ -153,7 +145,8 @@ public class AlchemistWorkshop extends WorkShop {
         getOwner().sendMessage(Util.formatMsg("&cYou have to start over again with brewing."));
 
         //Reset
-        boilEffect.setPaused(true);
+        boilEffect.cancel();
+        boilEffect = null;
         potFilled = false;
         melons = 0;
         sugar = 0;
@@ -195,7 +188,8 @@ public class AlchemistWorkshop extends WorkShop {
         }
 
         //Reset
-        boilEffect.setPaused(true);
+        boilEffect.cancel();
+        boilEffect = null;
         potFilled = false;
         melons = 0;
         sugar = 0;
@@ -206,6 +200,18 @@ public class AlchemistWorkshop extends WorkShop {
             block.setType(Material.AIR);
             ParticleEffect.SMOKE.display(block.getLocation().add(0.5f, 0.5f, 0.5f), 0.3f, 0.3f, 0.3f, 0.0001f, 5);
         }
+    }
+
+
+    private void createBoilEffect() {
+        boilEffect = new BoilEffect(dvz.getEM());
+        boilEffect.setLocation(getOrigin());
+        boilEffect.amt = 20;
+        boilEffect.particleOffset = new org.bukkit.util.Vector(1, 0.8f, 1);
+        boilEffect.soundVolume = 0.1f;
+        boilEffect.soundPitch = 1.5f;
+        boilEffect.soundDelay = 10;
+        boilEffect.start();
     }
 
 

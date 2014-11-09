@@ -1,19 +1,17 @@
 package com.clashwars.dvz.workshop;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.classes.dwarves.Miner;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class MinerWorkshop extends WorkShop {
 
     private List<Block> mineableBlocks = new ArrayList<Block>();
-    private Block craftBlock;
 
     public MinerWorkshop(UUID owner, WorkShopData wsd) {
         super(owner, wsd);
@@ -27,16 +25,16 @@ public class MinerWorkshop extends WorkShop {
 
     @Override
     public void onBuild() {
+        if (cuboid == null || cuboid.getBlocks() == null || cuboid.getBlocks().size() <= 0) {
+            build(getOrigin());
+        }
         for (Block block : cuboid.getBlocks()) {
             if (((Miner)DvzClass.MINER.getClassClass()).getMineableMaterials().contains(block.getType())) {
                 mineableBlocks.add(block);
                 break;
             }
-            if (block.getType() == Material.WORKBENCH) {
-                craftBlock = block;
-                break;
-            }
         }
+        setCraftBlock();
     }
 
     @Override
@@ -49,10 +47,5 @@ public class MinerWorkshop extends WorkShop {
                 onBuild();
             }
         }.runTaskLater(dvz, 20);
-    }
-
-    @Override
-    public void onRemove() {
-
     }
 }

@@ -70,7 +70,7 @@ public class Fletcher extends DwarfClass {
             pork.setAmount(getIntOption("pig-drop-amount"));
             entity.getWorld().dropItem(entity.getLocation(), pork);
             ParticleEffect.PORTAL.display(entity.getLocation(), 0.5f, 0.5f, 0.5f, 0.0001f, 8);
-            ws.spawnAnimal(EntityType.PIG, false);
+            ws.spawnAnimal(EntityType.PIG, 0);
             return;
         }
 
@@ -85,7 +85,7 @@ public class Fletcher extends DwarfClass {
             ParticleEffect.PORTAL.display(entity.getLocation(), 0.5f, 0.5f, 0.5f, 0.0001f, 8);
         }
         entity.getWorld().dropItem(entity.getLocation(), feathers);
-        ws.spawnAnimal(EntityType.CHICKEN, true);
+        ws.spawnAnimal(EntityType.CHICKEN, CWUtil.random(ws.getCuboid().getMaxY() + 10, ws.getCuboid().getMaxY() + 20));
     }
 
 
