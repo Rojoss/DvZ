@@ -29,6 +29,11 @@ public class Infect extends MobAbility {
         if (!canCast(damager)) {
             return;
         }
+
+        if(dvz.getPM().getPlayer(damaged).isMonster()) {
+            return;
+        }
+
         if (CWUtil.randomFloat() <= getFloatOption("chance")) {
             damaged.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, getIntOption("duration"), 1));
             //TODO: Add particle and sound effects.
