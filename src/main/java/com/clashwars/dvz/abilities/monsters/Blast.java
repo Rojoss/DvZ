@@ -1,15 +1,14 @@
 package com.clashwars.dvz.abilities.monsters;
 
 import com.clashwars.cwcore.effect.EffectType;
+import com.clashwars.cwcore.effect.effects.AnimatedCircleEffect;
 import com.clashwars.cwcore.effect.effects.ArcEffect;
+import com.clashwars.cwcore.effect.effects.CircleEffect;
 import com.clashwars.cwcore.packet.ParticleEffect;
-import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,6 +25,12 @@ public class Blast extends MobAbility {
     @Override
     public void castAbility(Player player, Location triggerLoc) {
         int radius = getIntOption("radius");
+            CircleEffect ce = new CircleEffect(dvz.getEM());
+            ce.setLocation(player.getEyeLocation());
+            ce.radius = 4;
+            ce.particle = ParticleEffect.FLAME;
+            ce.start();
+
         for (Entity e : player.getNearbyEntities(radius, radius, radius)) {
             if(e instanceof Player) {
                 final Player p = (Player) e;
@@ -33,6 +38,7 @@ public class Blast extends MobAbility {
                     ArcEffect ae = new ArcEffect(dvz.getEM());
                     ae.setLocation(player.getLocation());
                     ae.particle = ParticleEffect.FLAME;
+                    ae.iterations = 200;
                     ae.setTargetEntity(e);
                     ae.type = EffectType.INSTANT;
                     ae.callback = new Runnable() {
@@ -43,7 +49,7 @@ public class Blast extends MobAbility {
                         }
 
                     };
-                    ae.run();
+                    ae.start();
                 }
             }
         }
