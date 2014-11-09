@@ -13,6 +13,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.util.Vector;
 
 public class Blast extends MobAbility {
 
@@ -26,10 +27,12 @@ public class Blast extends MobAbility {
     public void castAbility(Player player, Location triggerLoc) {
         int radius = getIntOption("radius");
         ExpandingCircleEffect ce = new ExpandingCircleEffect(dvz.getEM());
-        ce.setLocation(player.getLocation());
-        ce.rings = getIntOption("rings");
-        ce.distanceBetweenRings = getFloatOption("radius") / ce.rings;
         ce.particle = ParticleEffect.FLAME;
+        ce.period = getIntOption("period");
+        ce.particleOffset = new Vector(0.1F, 0.2F, 0.1F);
+        ce.iterations = getIntOption("rings");
+        ce.distanceBetweenRings = getFloatOption("radius") / ce.iterations;
+        ce.setLocation(player.getLocation().clone().add(0, 0.5, 0));
         ce.start();
 
         for (Entity e : player.getNearbyEntities(radius, radius, radius)) {
@@ -39,7 +42,8 @@ public class Blast extends MobAbility {
                     ArcEffect ae = new ArcEffect(dvz.getEM());
                     ae.setLocation(player.getLocation());
                     ae.particle = ParticleEffect.FLAME;
-                    ae.iterations = 200;
+                    ae.particles = 50;
+                    ae.iterations = 20;
                     ae.setTargetEntity(e);
                     ae.type = EffectType.INSTANT;
                     ae.callback = new Runnable() {
