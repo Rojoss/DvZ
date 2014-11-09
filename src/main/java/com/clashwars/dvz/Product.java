@@ -29,10 +29,8 @@ public enum Product {
     ARROW(new CWItem(Material.ARROW)),
 
     WOOL(new CWItem(Material.WOOL)),
-    BONE(new CWItem(Material.BONE)),
-    BONEMEAL(new CWItem(Material.INK_SACK)),
-    ROSE(new CWItem(Material.RED_ROSE)),
-    FLOWER(new CWItem(Material.YELLOW_FLOWER)),
+    ROSE_DYE(new CWItem(Material.INK_SACK, 1, (byte)1)),
+    FLOWER_DYE(new CWItem(Material.INK_SACK, 1, (byte)11)),
     HELMET(new CWItem(Material.LEATHER_HELMET)),
     CHESTPLATE(new CWItem(Material.LEATHER_CHESTPLATE)),
     LEGGINGS(new CWItem(Material.LEATHER_LEGGINGS)),
@@ -52,5 +50,11 @@ public enum Product {
 
     public CWItem getItem() {
         return item.clone();
+    }
+
+    public CWItem getItem(int amount) {
+        CWItem i = item.clone();
+        i.setAmount(amount);
+        return i;
     }
 }

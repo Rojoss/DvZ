@@ -257,7 +257,7 @@ public class CWPlayer {
     }
 
     public boolean isOnline() {
-        return getPlayer().isOnline();
+        return getPlayer() == null ? false : getPlayer().isOnline();
     }
 
 

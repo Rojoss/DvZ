@@ -80,6 +80,14 @@ public class ClassesCfg extends EasyConfig {
                 break;
             case TAILOR:
                 classData = loadDefault(classData, "workshop-types", "1");
+                classData = loadDefault(classData, "sheep-amount", "8");
+                classData = loadDefault(classData, "wool-drop-amount", "1");
+                classData = loadDefault(classData, "wool-regrow-min", "100");
+                classData = loadDefault(classData, "wool-regrow-max", "600");
+                classData = loadDefault(classData, "flower-respawn-time", "600");
+                classData = loadDefault(classData, "wool-needed", "8");
+                classData = loadDefault(classData, "reddye-needed", "1");
+                classData = loadDefault(classData, "yellowdye-needed", "1");
                 break;
             case ALCHEMIST:
                 classData = loadDefault(classData, "workshop-types", "1");
