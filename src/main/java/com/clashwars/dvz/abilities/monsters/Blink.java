@@ -6,6 +6,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Blink extends MobAbility {
 
@@ -21,6 +23,11 @@ public class Blink extends MobAbility {
         if(b != null) {
             player.teleport(b.getLocation());
         }
+    }
+
+    @EventHandler
+    public void interact(PlayerInteractEvent event) {
+        super.interact(event);
     }
 
 }

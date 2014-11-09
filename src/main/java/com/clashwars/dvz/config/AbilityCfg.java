@@ -57,7 +57,7 @@ public class AbilityCfg extends EasyConfig {
                 break;
             case RUSH:
                 abilityData = loadDefault(abilityData, "range", "20");
-                abilityData = loadDefault(abilityData, "multiplier", "0.2");
+                abilityData = loadDefault(abilityData, "multiplier", "0.4");
                 break;
             case POISON:
                 abilityData = loadDefault(abilityData, "range", "4");
