@@ -31,7 +31,6 @@ public class MinerWorkshop extends WorkShop {
         for (Block block : cuboid.getBlocks()) {
             if (((Miner)DvzClass.MINER.getClassClass()).getMineableMaterials().contains(block.getType())) {
                 mineableBlocks.add(block);
-                break;
             }
         }
         setCraftBlock();
