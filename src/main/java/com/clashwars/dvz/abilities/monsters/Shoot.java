@@ -21,7 +21,6 @@ public class Shoot extends MobAbility {
     @Override
     public void castAbility(Player player, Location triggerLoc) {
         player.setVelocity(new Vector(0, getDoubleOption("force"), 0));
-        CWUtil.removeItems(player.getInventory(), player.getItemInHand(), 1, true);
         //TODO: Add particle and sound effects.
     }
 

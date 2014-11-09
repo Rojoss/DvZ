@@ -5,6 +5,7 @@ import com.clashwars.dvz.abilities.Ability;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -28,11 +29,20 @@ public class PoisonAttack extends MobAbility {
         if (!canCast(damager)) {
             return;
         }
+
+        if(dvz.getPM().getPlayer(damaged).isMonster()) {
+            return;
+        }
+
         if (CWUtil.randomFloat() <= getFloatOption("chance")) {
             damaged.addPotionEffect(new PotionEffect(PotionEffectType.POISON, getIntOption("duration"), 1));
             //TODO: Add particle and sound effects.
         }
+    }
 
+    @Override
+    public void interact(PlayerInteractEvent event) {
+        super.interact(event);
     }
 
 }
