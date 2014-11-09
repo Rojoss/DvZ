@@ -86,7 +86,8 @@ public class AbilityCfg extends EasyConfig {
                 abilityData = loadDefault(abilityData, "fire-chance", "0.5");
                 break;
             case BLAST:
-                abilityData = loadDefault(abilityData, "radius", "3");
+                abilityData = loadDefault(abilityData, "radius", "20");
+                abilityData = loadDefault(abilityData, "rings", "5");
                 break;
         }
 
