@@ -1,7 +1,6 @@
 package com.clashwars.dvz.abilities.monsters;
 
 import com.clashwars.cwcore.effect.EffectType;
-import com.clashwars.cwcore.effect.effects.AnimatedCircleEffect;
 import com.clashwars.cwcore.effect.effects.ArcEffect;
 import com.clashwars.cwcore.effect.effects.CircleEffect;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -26,8 +25,8 @@ public class Blast extends MobAbility {
     public void castAbility(Player player, Location triggerLoc) {
         int radius = getIntOption("radius");
             CircleEffect ce = new CircleEffect(dvz.getEM());
-            ce.setLocation(player.getEyeLocation());
-            ce.radius = 4;
+            ce.setLocation(player.getLocation());
+            ce.diameter = 2;
             ce.particle = ParticleEffect.FLAME;
             ce.start();
 
