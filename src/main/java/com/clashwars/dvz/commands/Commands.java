@@ -72,6 +72,7 @@ public class Commands {
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " stop [reason] &8- &5Stop the game."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " speed [value] &8- &5Set the game speed (def:0)"));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " dragon [type] &8- &5Set yourself to be the dragon."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " class [type] &8- &5Force set your class."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " loc {name} [block] &8- &5Set a location at ur location."));
                     sender.sendMessage(CWUtil.integrateColor("&7(Or at the block on cursor within 5 blocks if 'block' is specified)"));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " save &8- &5Save everything."));
