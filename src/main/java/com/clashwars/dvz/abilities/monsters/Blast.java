@@ -1,8 +1,8 @@
 package com.clashwars.dvz.abilities.monsters;
 
 import com.clashwars.cwcore.effect.EffectType;
+import com.clashwars.cwcore.effect.Particle;
 import com.clashwars.cwcore.effect.effects.ArcEffect;
-import com.clashwars.cwcore.effect.effects.CircleEffect;
 import com.clashwars.cwcore.effect.effects.ExpandingCircleEffect;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.dvz.abilities.Ability;
@@ -13,7 +13,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.util.Vector;
 
 public class Blast extends MobAbility {
 
@@ -27,11 +26,10 @@ public class Blast extends MobAbility {
     public void castAbility(Player player, Location triggerLoc) {
         int radius = getIntOption("radius");
         ExpandingCircleEffect ce = new ExpandingCircleEffect(dvz.getEM());
-        ce.particle = ParticleEffect.FLAME;
-        ce.period = getIntOption("period");
-        ce.particleOffset = new Vector(0.1F, 0.2F, 0.1F);
-        ce.iterations = getIntOption("rings");
-        ce.distanceBetweenRings = getFloatOption("radius") / ce.iterations;
+        ce.particleList.add(new Particle(ParticleEffect.FLAME, 0.1f, 0.4f, 0.1f, 0.001f, 0));
+        ce.period = 1;
+        ce.iterations = radius * 2;
+        ce.distanceBetweenRings = 0.5f;
         ce.setLocation(player.getLocation().clone().add(0, 0.5, 0));
         ce.start();
 
@@ -41,9 +39,9 @@ public class Blast extends MobAbility {
                 if(dvz.getPM().getPlayer(p).isDwarf()) {
                     ArcEffect ae = new ArcEffect(dvz.getEM());
                     ae.setLocation(player.getLocation());
-                    ae.particle = ParticleEffect.FLAME;
-                    ae.particles = 50;
-                    ae.iterations = 20;
+                    ae.particleList.add(new Particle(ParticleEffect.FLAME));
+                    ae.particles = 30;
+                    ae.iterations = 10;
                     ae.setTargetEntity(e);
                     ae.type = EffectType.INSTANT;
                     ae.callback = new Runnable() {

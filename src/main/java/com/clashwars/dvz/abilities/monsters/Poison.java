@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.monsters;
 
+import com.clashwars.cwcore.effect.Particle;
 import com.clashwars.cwcore.effect.effects.ExpandingCircleEffect;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.dvz.abilities.Ability;
@@ -12,7 +13,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 
 public class Poison extends MobAbility {
 
@@ -24,18 +24,15 @@ public class Poison extends MobAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
-        float range = getFloatOption("range");
-        ExpandingCircleEffect happy = new ExpandingCircleEffect(dvz.getEM());
-        happy.particle = ParticleEffect.HAPPY_VILLAGER;
-        happy.period = getIntOption("period");
-        happy.particleOffset = new Vector(0.1F, 0.2F, 0.1F);
-        happy.iterations = getIntOption("rings");
-        happy.distanceBetweenRings = range / happy.iterations;
-        happy.setLocation(player.getLocation().clone().add(0, 0.5, 0));
-        ExpandingCircleEffect reddust = happy;
-        reddust.particle = ParticleEffect.RED_DUST;
-        reddust.start();
-        happy.start();
+        double range = getDoubleOption("range");
+        ExpandingCircleEffect poisonEffect = new ExpandingCircleEffect(dvz.getEM());
+        poisonEffect.particleList.add(new Particle(ParticleEffect.MOB_SPELL, 0.1f, 0.2f, 0.1f, 0, 0));
+        poisonEffect.particleList.add(new Particle(ParticleEffect.RED_DUST, 0.1f, 0.2f, 0.1f, 0.1f, 0));
+        poisonEffect.period = 1;
+        poisonEffect.iterations = (int)range * 2;
+        poisonEffect.distanceBetweenRings = 0.5f;
+        poisonEffect.setLocation(player.getLocation().add(0, 0.5, 0));
+        poisonEffect.start();
 
         for (Entity ent : player.getNearbyEntities(range, range, range)) {
             if (!(ent instanceof Player)) {

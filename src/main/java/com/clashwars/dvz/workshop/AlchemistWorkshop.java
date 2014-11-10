@@ -1,5 +1,6 @@
 package com.clashwars.dvz.workshop;
 
+import com.clashwars.cwcore.effect.Particle;
 import com.clashwars.cwcore.effect.effects.BoilEffect;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -206,8 +207,8 @@ public class AlchemistWorkshop extends WorkShop {
     private void createBoilEffect() {
         boilEffect = new BoilEffect(dvz.getEM());
         boilEffect.setLocation(getOrigin());
-        boilEffect.amt = 20;
-        boilEffect.particleOffset = new org.bukkit.util.Vector(1, 0.8f, 1);
+        boilEffect.particleList.add(new Particle(ParticleEffect.BUBBLE, 1, 0.8f, 1, 0, 20));
+        boilEffect.particleList.add(new Particle(ParticleEffect.LARGE_SMOKE, 1, 1.5f, 1, 0, 2));
         boilEffect.soundVolume = 0.1f;
         boilEffect.soundPitch = 1.5f;
         boilEffect.soundDelay = 10;
