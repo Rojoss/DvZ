@@ -222,6 +222,19 @@ public class PlayerManager {
     }
 
 
+    public boolean removeWorkshop(Player player) {
+        if (workshops.containsKey(player.getUniqueId())) {
+            WorkShop ws = workshops.get(player.getUniqueId());
+            ws.onRemove();
+            ws.remove();
+            workshops.remove(player.getUniqueId());
+            getPlayer(player).savePlayer();
+            wsCfg.save();
+            return true;
+        }
+        return false;
+    }
+
     public void removeWorkshops(boolean fromConfig) {
         for (WorkShop ws : workshops.values()) {
             ws.onRemove();

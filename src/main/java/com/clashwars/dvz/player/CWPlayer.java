@@ -11,6 +11,7 @@ import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.PlayerCfg;
 import com.clashwars.dvz.util.Util;
+import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -97,6 +98,7 @@ public class CWPlayer {
         undisguise();
 
         setPlayerClass(dvzClass);
+        removeClassOption(dvzClass);
 
         //Disguise
         if (dvzClass.getType() == ClassType.MONSTER || dvzClass.getType() == ClassType.DRAGON) {
@@ -118,6 +120,24 @@ public class CWPlayer {
 
         //Equip class and items etc.
         c.equipItems(player);
+        player.setMaxHealth(c.getHealth());
+        player.setHealth(c.getHealth());
+        player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));
+        player.sendMessage(CWUtil.integrateColor("&8&l❝&7" + c.getDescription().replace("\\|\\|", "") + "&8&l❞"));
+        savePlayer();
+    }
+
+
+    public void switchClass(DvzClass dvzClass) {
+        BaseClass c = dvzClass.getClassClass();
+        Player player = getPlayer();
+
+        dvz.getPM().removeWorkshop(player);
+
+        setPlayerClass(dvzClass);
+        removeClassOption(dvzClass);
+        c.equipItems(player);
+
         player.setMaxHealth(c.getHealth());
         player.setHealth(c.getHealth());
         player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));
@@ -179,6 +199,10 @@ public class CWPlayer {
 
     public void setClassOptions(Set<DvzClass> classOptions) {
         data.setClassOptions(classOptions);
+    }
+
+    public void removeClassOption(DvzClass dvzClass) {
+        data.removeClassOption(dvzClass);
     }
 
     public void clearClassOptions() {

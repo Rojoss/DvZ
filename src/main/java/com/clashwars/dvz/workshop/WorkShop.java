@@ -70,6 +70,24 @@ public class WorkShop {
         return false;
     }
 
+    public boolean remove() {
+        if (cuboid != null && cuboid.getBlocks() != null) {
+            for (Block block : cuboid.getBlocks()) {
+                block.setType(Material.AIR);
+                if (block.getLocation().equals(getOrigin())) {
+                    block.setType(Material.PISTON_BASE);
+                } else if (block.getLocation().getY() == cuboid.getMinY()) {
+                    block.setType(Material.GRASS);
+                }
+            }
+            cuboid = null;
+            data = null;
+            owner = null;
+            return true;
+        }
+        return false;
+    }
+
 
     public void onBuild() {
         //-- To be overridden

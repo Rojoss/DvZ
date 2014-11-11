@@ -1,13 +1,16 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
+import com.clashwars.dvz.Product;
 import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -20,13 +23,15 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class MainEvents implements Listener {
 
-    private DvZ dvz;
+    private final DvZ dvz;
     private GameManager gm;
 
     public MainEvents(DvZ dvz) {
@@ -196,7 +201,7 @@ public class MainEvents implements Listener {
             }
             if (dvzClass.getType() == ClassType.MONSTER && !dvz.getGM().isMonsters()) {
                 player.sendMessage(Util.formatMsg("&cThe monsters haven't been released yet."));
-                //TODO: Say game state and time remaining etc.
+                player.sendMessage(Util.formatMsg("&cSee &4/dvz &cfor more info."));
                 break;
             }
             cwp.setClass(dvzClass);
@@ -242,6 +247,133 @@ public class MainEvents implements Listener {
             }
         }.runTaskLater(dvz, dvz.getCfg().WEB_REMOVAL_TIME);
 
+    }
+
+
+
+    @EventHandler
+    private void invClose(InventoryCloseEvent event) {
+        Player player = (Player)event.getPlayer();
+        Inventory inv = event.getInventory();
+
+        if (!dvz.getCM().switchMenus.containsKey(player.getUniqueId())) {
+            return;
+        }
+
+        ItemMenu menu = dvz.getCM().switchMenus.get(player.getUniqueId());
+        if (!inv.getTitle().equals(menu.getTitle()) || inv.getSize() != menu.getSize() || !inv.getHolder().equals(player)) {
+            return;
+        }
+
+        for (int i = 9; i < menu.getSize(); i++) {
+            if (menu.getItems()[i] != null && menu.getItems()[i].getType() != Material.AIR) {
+                if (player.getInventory().getItem(i - 9) == null || player.getInventory().getItem(i - 9).getType() == Material.AIR) {
+                    player.getInventory().setItem(i - 9, menu.getItems()[i]);
+                } else {
+                    player.getInventory().addItem(menu.getItems()[i]);
+                }
+                menu.setSlot(new CWItem(Material.AIR), i, null);
+            }
+        }
+        player.sendMessage(Util.formatMsg("&6You stopped switching to " + DvzClass.fromString(menu.getData())));
+        player.sendMessage(Util.formatMsg("&7All items placed in the switch menu have been given back."));
+        return;
+    }
+
+
+    @EventHandler
+    private void menuClick(final ItemMenu.ItemMenuClickEvent event) {
+        ItemMenu menu = event.getItemMenu();
+        final Player player = (Player)event.getWhoClicked();
+        ItemStack item = event.getCurrentItem();
+
+        if (menu.getName().equals("switch")) {
+            //Switch menu (check for clicking on classes)
+
+            event.setCancelled(true);
+            if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) {
+                return;
+            }
+            for (final DvzClass dvzClass : dvz.getCM().getClasses(ClassType.DWARF).keySet()) {
+                if (dvzClass.getClassClass().getClassItem().equals(event.getCurrentItem())) {
+                    player.sendMessage(Util.formatMsg("&6In a few seconds a menu GUI will appear."));
+                    player.sendMessage(Util.formatMsg("&6You can then modify which items you want to keep."));
+                    player.sendMessage(Util.formatMsg("&6After you did that click the green button to switch!"));
+
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            dvz.getCM().showSwitchMenu((Player) player, dvzClass);
+                        }
+                    }.runTaskLater(dvz, 100);
+                    return;
+                }
+            }
+
+        } else if (menu.getName().contains("switch-")) {
+            //Switch menu (Modify items to keep after switching)
+
+            event.setCancelled(true);
+
+            CWItem empty = new CWItem(Material.AIR);
+            int rawSlot = event.getRawSlot();
+            if (rawSlot < menu.getSize()) {
+                //Top menu (Items to keep)
+                if (rawSlot == 0) {
+                    for (int i = 9; i < menu.getSize(); i++) {
+                        if (menu.getItems()[i] != null && menu.getItems()[i].getType() != Material.AIR) {
+                            if (player.getInventory().getItem(i - 9) == null || player.getInventory().getItem(i - 9).getType() == Material.AIR) {
+                                player.getInventory().setItem(i - 9, menu.getItems()[i]);
+                            } else {
+                                player.getInventory().addItem(menu.getItems()[i]);
+                            }
+                            menu.setSlot(empty, i, null);
+                        }
+                    }
+                    player.sendMessage(Util.formatMsg("&6You stopped switching to " + DvzClass.fromString(menu.getData())));
+                    player.sendMessage(Util.formatMsg("&7All items placed in the switch menu have been given back."));
+                    return;
+                }
+                if (rawSlot == 8) {
+                    player.sendMessage(Util.formatMsg("&6You will be switched to " + DvzClass.fromString(menu.getData())));
+                    player.closeInventory();
+                    dvz.getPM().getPlayer(player).switchClass(DvzClass.fromString(menu.getData()));
+                    return;
+                }
+
+                //Move item from top inv to player inv.
+                if (rawSlot >= 9 && rawSlot <= 44) {
+                    if (player.getInventory().getItem(rawSlot) == null || player.getInventory().getItem(rawSlot).getType() == Material.AIR) {
+                        player.getInventory().setItem(rawSlot, item);
+                    } else {
+                        player.getInventory().addItem(item);
+                    }
+                    menu.setSlot(empty, rawSlot, null);
+                }
+            } else {
+                //Bottom menu (Player inventory)
+                if (!Product.canKeep(item.getType())) {
+                    player.sendMessage(Util.formatMsg("&cThis item can't be kept."));
+                    return;
+                }
+
+                //First try put item in same spot in menu as it is in inventory else just add it to first available slot.
+                if (menu.getItems().length >= event.getSlot() + 9 && (menu.getItems()[event.getSlot() + 9] == null || menu.getItems()[event.getSlot() + 9].getType() == Material.AIR)) {
+                    menu.setSlot(new CWItem(item), event.getSlot() + 9, null);
+                    player.getInventory().setItem(event.getSlot(), empty);
+                    return;
+                } else {
+                    for (int i = 9; i < menu.getSize() - 9; i++) {
+                        if (menu.getItems()[i] == null || menu.getItems()[i].getType() == Material.AIR) {
+                            menu.setSlot(new CWItem(item), i, null);
+                            player.getInventory().setItem(event.getSlot(), empty);
+                            return;
+                        }
+                    }
+                }
+                player.sendMessage(Util.formatMsg("&cCan't store more items."));
+            }
+        }
     }
 
 }

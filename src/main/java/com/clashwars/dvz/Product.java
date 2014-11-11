@@ -2,54 +2,76 @@ package com.clashwars.dvz;
 
 import com.clashwars.cwcore.helpers.CWItem;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 public enum Product {
 
     //TODO: Set amounts, data, names, lore etc..
 
-    CRACKED_STONE(new CWItem(Material.SMOOTH_BRICK)),
+    CRACKED_STONE(new CWItem(Material.SMOOTH_BRICK), false),
 
-    DIAMOND_ORE(new CWItem(Material.DIAMOND_ORE)),
-    GOLD_ORE(new CWItem(Material.GOLD_ORE)),
-    IRON_ORE(new CWItem(Material.IRON_ORE)),
-    DIAMOND(new CWItem(Material.DIAMOND)),
-    GOLD_INGOT(new CWItem(Material.GOLD_INGOT)),
-    IRON_INGOT(new CWItem(Material.IRON_INGOT)),
-    DIAMOND_SWORD(new CWItem(Material.DIAMOND_SWORD)),
-    IRON_SWORD(new CWItem(Material.IRON_SWORD)),
-    GOLD_SWORD(new CWItem(Material.GOLD_SWORD)),
-    STONE(new CWItem(Material.STONE)),
-    STONE_BRICK(new CWItem(Material.SMOOTH_BRICK)),
+    DIAMOND_ORE(new CWItem(Material.DIAMOND_ORE), false),
+    GOLD_ORE(new CWItem(Material.GOLD_ORE), false),
+    IRON_ORE(new CWItem(Material.IRON_ORE), false),
+    DIAMOND(new CWItem(Material.DIAMOND), false),
+    GOLD_INGOT(new CWItem(Material.GOLD_INGOT), false),
+    IRON_INGOT(new CWItem(Material.IRON_INGOT), false),
+    DIAMOND_SWORD(new CWItem(Material.DIAMOND_SWORD), true),
+    IRON_SWORD(new CWItem(Material.IRON_SWORD), true),
+    GOLD_SWORD(new CWItem(Material.GOLD_SWORD), true),
+    STONE(new CWItem(Material.STONE), false),
+    STONE_BRICK(new CWItem(Material.SMOOTH_BRICK), false),
 
-    FLINT(new CWItem(Material.FLINT)),
-    FEATHER(new CWItem(Material.FEATHER)),
-    RAW_PORK(new CWItem(Material.PORK)),
-    COOKED_PORK(new CWItem(Material.GRILLED_PORK)),
-    BOW(new CWItem(Material.BOW)),
-    ARROW(new CWItem(Material.ARROW)),
+    FLINT(new CWItem(Material.FLINT), false),
+    FEATHER(new CWItem(Material.FEATHER), false),
+    RAW_PORK(new CWItem(Material.PORK), true),
+    COOKED_PORK(new CWItem(Material.GRILLED_PORK), true),
+    BOW(new CWItem(Material.BOW), true),
+    ARROW(new CWItem(Material.ARROW), true),
 
-    WOOL(new CWItem(Material.WOOL)),
-    ROSE_DYE(new CWItem(Material.INK_SACK, 1, (byte)1)),
-    FLOWER_DYE(new CWItem(Material.INK_SACK, 1, (byte)11)),
-    HELMET(new CWItem(Material.LEATHER_HELMET)),
-    CHESTPLATE(new CWItem(Material.LEATHER_CHESTPLATE)),
-    LEGGINGS(new CWItem(Material.LEATHER_LEGGINGS)),
-    BOOTS(new CWItem(Material.LEATHER_BOOTS)),
+    WOOL(new CWItem(Material.WOOL), false),
+    ROSE_DYE(new CWItem(Material.INK_SACK, 1, (byte)1), false),
+    FLOWER_DYE(new CWItem(Material.INK_SACK, 1, (byte)11), false),
+    HELMET(new CWItem(Material.LEATHER_HELMET), true),
+    CHESTPLATE(new CWItem(Material.LEATHER_CHESTPLATE), true),
+    LEGGINGS(new CWItem(Material.LEATHER_LEGGINGS), true),
+    BOOTS(new CWItem(Material.LEATHER_BOOTS), true),
 
-    MELON(new CWItem(Material.MELON)),
-    SUGAR(new CWItem(Material.SUGAR)),
-    HEAL_POTION(new CWItem(Material.POTION)),
-    SPEED_POTION(new CWItem(Material.POTION));
+    MELON(new CWItem(Material.MELON), false),
+    SUGAR(new CWItem(Material.SUGAR), false),
+    HEAL_POTION(new CWItem(Material.POTION), true),
+    SPEED_POTION(new CWItem(Material.POTION), true);
 
 
     private CWItem item;
+    private boolean canKeep;
 
-    Product(CWItem item) {
+    Product(CWItem item, boolean canKeep) {
         this.item = item;
+        this.canKeep = canKeep;
     }
 
     public CWItem getItem() {
         return item.clone();
+    }
+
+    public boolean canKeep() {
+        return canKeep;
+    }
+
+    public static boolean canKeep(Material mat) {
+        ItemStack productItem;
+        for (Product product : values()) {
+            productItem = product.getItem();
+            if (productItem.getType() == mat) {
+                if (product.canKeep()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 
     public CWItem getItem(int amount) {

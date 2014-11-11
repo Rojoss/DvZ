@@ -1,20 +1,29 @@
 package com.clashwars.dvz.classes;
 
+import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
+import com.clashwars.dvz.Product;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.util.ItemMenu;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class ClassManager {
 
     private DvZ dvz;
+    private ItemMenu switchOptionsMenu;
+    public HashMap<UUID, ItemMenu> switchMenus = new HashMap<UUID, ItemMenu>();
 
     public ClassManager(DvZ dvz) {
         this.dvz = dvz;
+        switchOptionsMenu = new ItemMenu("switch", 9, CWUtil.integrateColor("&6&lSwitch Class"));
     }
 
     //Get a Class by class type or name.
@@ -83,7 +92,7 @@ public class ClassManager {
             }
 
             //Get the amount of times each class is picked.
-            List<CWPlayer> dwarves = dvz.getPM().getPlayers(ClassType.DWARF, false);
+            List<CWPlayer> dwarves = dvz.getPM().getPlayers(ClassType.DWARF, true);
             HashMap<DvzClass, Double> classCounts = new HashMap<DvzClass, Double>();
             for (DvzClass dvzClass : dvz.getCM().getClasses(ClassType.DWARF).keySet()) {
                 classCounts.put(dvzClass, 0.0);
@@ -152,5 +161,56 @@ public class ClassManager {
             }
         }
         return randomclasses;
+    }
+
+
+    public void showSwitchOptionsMenu(Player player) {
+        CWPlayer cwp = dvz.getPM().getPlayer(player);
+        switchOptionsMenu.clear(player);
+        switchOptionsMenu.setSlot(new CWItem(Material.BOOK).setName("&5&lSWITCH INFO").addLore("&7Click on any of these classes to switch to it.")
+                .addLore("&7You will be able to keep some of your items.").addLore("&7But you should only switch if it's really needed."), 0, player);
+        int slot = 3;
+        for (DvzClass dvzClass : cwp.getClassOptions()) {
+            switchOptionsMenu.setSlot(dvzClass.getClassClass().getClassItem(), slot, player);
+            slot++;
+        }
+        switchOptionsMenu.show(player);
+    }
+
+    public void showSwitchMenu(Player player, DvzClass dvzClass) {
+        CWPlayer cwp = dvz.getPM().getPlayer(player);
+        if (!switchMenus.containsKey(player.getUniqueId())) {
+            switchMenus.put(player.getUniqueId(), new ItemMenu("switch-" + player.getUniqueId(), 56, "XXX"));
+        }
+        ItemMenu menu = switchMenus.get(player.getUniqueId());
+        menu.setData(dvzClass.toString());
+        menu.setTitle(CWUtil.integrateColor("&6&lSwitch to &5&l" + dvzClass.getClassClass().getDisplayName()));
+        menu.clear(null);
+
+        menu.setSlot(new CWItem(Material.STAINED_GLASS_PANE, 1, (byte)14).setName("&4&lCANCEL").addLore("&7All items in the menu will be given back.").addLore("&7and you keep the same class."), 0, null);
+        menu.setSlot(new CWItem(Material.BOOK).setName("&5&lSWITCH INFO").addLore("&7All items in this menu will be kept after switching.").addLore("&7Not all items can be kept though.")
+                .addLore("&7Just click on the items in your inventory to add them.").addLore("&7And click on the items in the menu to not keep them.").addLore("&7Armor is kept by default."), 4, null);
+        menu.setSlot(new CWItem(Material.STAINED_GLASS_PANE, 1, (byte)5).setName("&a&lSWITCH").addLore("&7You will switch classes.").addLore("&7All items in your inventory will be destroyed!")
+                .addLore("&cYour workshop will be deleted as well!").addLore("&4Make sure you want to do this!"), 8, null);
+
+        menu.show(player);
+
+        ItemStack empty = new ItemStack(Material.AIR);
+        for (int i = 0; i < player.getInventory().getSize(); i++) {
+            if (!Product.canKeep(player.getInventory().getItem(i).getType())) {
+                continue;
+            }
+            menu.setSlot(new CWItem(player.getInventory().getItem(i)), i + 9, null);
+            player.getInventory().setItem(i, empty);
+        }
+
+        player.getInventory().setHelmet(empty);
+        menu.setSlot(new CWItem(player.getInventory().getHelmet()), 45, null);
+        player.getInventory().setChestplate(empty);
+        menu.setSlot(new CWItem(player.getInventory().getChestplate()), 46, null);
+        player.getInventory().setLeggings(empty);
+        menu.setSlot(new CWItem(player.getInventory().getLeggings()), 47, null);
+        player.getInventory().setBoots(empty);
+        menu.setSlot(new CWItem(player.getInventory().getBoots()), 48, null);
     }
 }

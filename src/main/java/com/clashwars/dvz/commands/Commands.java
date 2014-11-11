@@ -1,5 +1,6 @@
 package com.clashwars.dvz.commands;
 
+import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
@@ -8,6 +9,7 @@ import com.clashwars.dvz.classes.*;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.player.PlayerManager;
+import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -83,6 +85,34 @@ public class Commands {
 
 
                 //TODO: Spawn cmd
+
+
+                //##########################################################################################################################
+                //####################################################### /dvz switch ######################################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("switch")) {
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                        return true;
+                    }
+                    Player player = (Player)sender;
+                    CWPlayer cwp = pm.getPlayer(player);
+
+                    if (!cwp.isDwarf()) {
+                        sender.sendMessage(Util.formatMsg("&cYou have to be a dwarf to use this command."));
+                        return true;
+                    }
+
+                    if (cwp.getClassOptions().size() <= 0) {
+                        sender.sendMessage(Util.formatMsg("&cyou have no more class options available."));
+                        return true;
+                    }
+
+                    dvz.getCM().showSwitchOptionsMenu(player);
+                    sender.sendMessage(Util.formatMsg("&6Choose a class to switch to."));
+                    return true;
+                }
+
 
                 //TODO: class cmd
 

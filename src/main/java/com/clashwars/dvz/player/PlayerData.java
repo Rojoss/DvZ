@@ -50,6 +50,10 @@ public class PlayerData {
         return classOptions;
     }
 
+    public void removeClassOption(DvzClass dvzClass) {
+        classOptions.remove(dvzClass);
+    }
+
     public void setClassOptions(Set<DvzClass> classOptions) {
         this.classOptions = classOptions;
     }
