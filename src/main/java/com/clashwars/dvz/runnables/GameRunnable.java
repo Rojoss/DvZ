@@ -31,7 +31,7 @@ public class GameRunnable extends BukkitRunnable {
             if (gm.getState() == GameState.DAY_ONE) {
                 gm.setState(GameState.NIGHT_ONE);
                 Bukkit.broadcastMessage(Util.formatMsg("&6The first day has passed by..."));
-                Bukkit.broadcastMessage(Util.formatMsg("&6One full day remaining to prepare!"));
+                Bukkit.broadcastMessage(Util.formatMsg("&6If you die now you'll become a monster!"));
             }
             if (gm.getState() == GameState.DAY_TWO) {
                 gm.setState(GameState.DRAGON);

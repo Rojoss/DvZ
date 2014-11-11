@@ -22,6 +22,8 @@ public class PlayerManager {
     public Map<DvzClass, Integer> fakePlayers = new HashMap<DvzClass, Integer>();
     private Map<UUID, WorkShop> workshops = new HashMap<UUID, WorkShop>();
 
+    public List<UUID> suicidePlayers = new ArrayList<UUID>();
+
     public PlayerManager(DvZ dvz) {
         this.dvz = dvz;
         this.pcfg = dvz.getPlayerCfg();

@@ -23,7 +23,7 @@ public class Suicide extends MobAbility {
     public void castAbility(Player player, Location triggerLoc) {
         player.setHealth(0);
         player.sendMessage(Util.formatMsg("&cSuicided!"));
-        player.sendMessage(Util.formatMsg("&cYou will receive the same monster classes as before."));
+        dvz.getPM().suicidePlayers.add(player.getUniqueId());
     }
 
 

@@ -92,16 +92,14 @@ public class MainEvents implements Listener {
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         Player killer = player.getKiller();
 
-        //No drops
         event.setDroppedExp(0);
-        event.getDrops().clear();
 
         //Death message
         if (killer != null) {
             if (dvz.getGM().getState() == GameState.DRAGON && dvz.getGM().getDragonPlayer().getName().equalsIgnoreCase(killer.getName())) {
-                event.setDeathMessage(CWUtil.integrateColor((cwp.getPlayerClass() != null ? cwp.getPlayerClass().getClassClass().getColor() : "&8") + " &7was killed by the dragon!"));
+                event.setDeathMessage(CWUtil.integrateColor((cwp.getPlayerClass() != null ? cwp.getPlayerClass().getClassClass().getColor() : "&8") + player.getName() + " &7was killed by the dragon!"));
             } else {
-                event.setDeathMessage(CWUtil.integrateColor((cwp.getPlayerClass() != null ? cwp.getPlayerClass().getClassClass().getColor() : "&8") + " &7was killed by " + killer.getName() + "!"));
+                event.setDeathMessage(CWUtil.integrateColor((cwp.getPlayerClass() != null ? cwp.getPlayerClass().getClassClass().getColor() : "&8") + player.getName() + " &7was killed by " + killer.getName() + "!"));
             }
         } else {
             event.setDeathMessage(CWUtil.integrateColor((cwp.getPlayerClass() != null ? cwp.getPlayerClass().getClassClass().getColor() : "&8") + player.getName() + " &7died!"));
@@ -112,7 +110,7 @@ public class MainEvents implements Listener {
 
             Bukkit.broadcastMessage(CWUtil.integrateColor("&7======= &a&lThe dragon has been killed! &7======="));
             if (killer != null) {
-                Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &3" + player.getName() + " &7is the &bDragonSlayer&7!"));
+                Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &3" + killer.getName() + " &7is the &bDragonSlayer&7!"));
                 //TODO: Set DragonSlayer.
             } else {
                 Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Couldn't find the killer so there is no DragonSlayer."));
@@ -134,6 +132,13 @@ public class MainEvents implements Listener {
         }
         final CWPlayer cwp = dvz.getPM().getPlayer(player);
 
+        //Death during first day.
+        if (cwp.isDwarf() && dvz.getGM().getState() == GameState.DAY_ONE) {
+            player.sendMessage(Util.formatMsg("&6You're alive again as Dwarf because it hasn't been night yet."));
+            event.setRespawnLocation(dvz.getMM().getActiveMap().getLocation("dwarf"));
+            return;
+        }
+
         //Spawn at monster lobby.
         if (dvz.getMM().getActiveMap() != null && dvz.getMM().getActiveMap().getLocation("monsterlobby") != null) {
             spawnLoc = dvz.getMM().getActiveMap().getLocation("monsterlobby");
@@ -147,10 +152,15 @@ public class MainEvents implements Listener {
                         player.sendMessage(Util.formatMsg("&4&lYou have turned in to a monster!!!"));
                     }
 
+                    boolean suicide = false;
+                    if (dvz.getPM().suicidePlayers.contains(player.getUniqueId())) {
+                        suicide = true;
+                        dvz.getPM().suicidePlayers.remove(player.getUniqueId());
+                    }
+
                     cwp.reset();
                     cwp.setPlayerClass(DvzClass.MONSTER);
-                    //TODO: Suicide check for last arg
-                    cwp.giveClassItems(ClassType.MONSTER, false);
+                    cwp.giveClassItems(ClassType.MONSTER, suicide);
                 }
             }
         }.runTaskLater(dvz, 5);
@@ -197,7 +207,7 @@ public class MainEvents implements Listener {
 
 
     @EventHandler
-    public void onBlockPlace(BlockPlaceEvent event) {
+    private void blockPlace(BlockPlaceEvent event) {
         final Block block = event.getBlock();
         if (block.getType() != Material.WEB) {
             return;
@@ -214,7 +224,7 @@ public class MainEvents implements Listener {
     }
 
     @EventHandler
-    public void onBlockFormedByEntity(EntityChangeBlockEvent event) {
+    private void fallingBlockLand(EntityChangeBlockEvent event) {
         if (!(event.getEntity() instanceof FallingBlock)) {
             return;
         }
