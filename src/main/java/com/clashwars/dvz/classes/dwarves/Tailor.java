@@ -202,7 +202,7 @@ public class Tailor extends DwarfClass {
                 CWUtil.removeItems(inv, Product.FLOWER_DYE.getItem(), yellowDyeNeeded, true, true);
 
                 Product[] leatherArmor  = new Product[] {Product.HELMET, Product.CHESTPLATE, Product.LEGGINGS, Product.BOOTS};
-                dropLoc.getWorld().dropItem(dropLoc, CWUtil.random(leatherArmor).getItem());
+                dropLoc.getWorld().dropItem(dropLoc, CWUtil.random(leatherArmor).getItem().setLeatherColor(CWUtil.getRandomColor()));
 
                 ParticleEffect.WITCH_MAGIC.display(event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f), 0.2f, 0.2f, 0.2f, 0.0001f, 20);
                 return;

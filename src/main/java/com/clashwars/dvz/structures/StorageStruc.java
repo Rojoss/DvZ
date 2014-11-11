@@ -138,10 +138,19 @@ public class StorageStruc extends Structure {
             //Give item(s) to player
             CWItem itemToGive = storageItem.getItem().clone();
             itemToGive.setAmount(amtToChange);
+            if (itemToGive.getType() == Material.LEATHER_HELMET || itemToGive.getType() == Material.LEATHER_CHESTPLATE
+                    || itemToGive.getType() == Material.LEATHER_LEGGINGS || itemToGive.getType() == Material.LEATHER_BOOTS) {
+                itemToGive.setLeatherColor(cwp.getColor());
+            }
             itemToGive.giveToPlayer(player);
             player.playSound(player.getLocation(), Sound.ORB_PICKUP, 0.8f, 1.6f);
 
         } else {
+            if (item.getEnchantments().size() > 0) {
+                player.sendMessage(Util.formatMsg("&cCan't store enchanted items."));
+                return;
+            }
+
             //Make sure a storage item is clicked.
             StorageItem storageItem = null;
             for (StorageItem si : items) {

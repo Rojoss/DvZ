@@ -30,6 +30,7 @@ public class CWPlayer {
 
     private CooldownManager cdm = new CooldownManager();
     public HashMap<String, Integer> productsTaken = new HashMap<String, Integer>();
+    private Color color;
 
 
     public CWPlayer(UUID uuid, PlayerData data) {
@@ -37,6 +38,7 @@ public class CWPlayer {
         this.data = data;
         this.dvz = DvZ.inst();
         this.pcfg = dvz.getPlayerCfg();
+        color = CWUtil.getRandomColor();
     }
 
 
@@ -81,6 +83,7 @@ public class CWPlayer {
         data.setPlayerClass(DvzClass.DWARF);
         data.setClassExp(0);
         data.setParkourCompleted(false);
+        color = CWUtil.getRandomColor();
     }
 
 
@@ -218,6 +221,11 @@ public class CWPlayer {
 
     public void takeClassExp(int exp) {
         data.setClassExp(getClassExp() - exp);
+    }
+
+
+    public Color getColor() {
+        return color;
     }
 
 
