@@ -98,7 +98,9 @@ public class CWPlayer {
         reset();
 
         setPlayerClass(dvzClass);
-        removeClassOption(dvzClass);
+        if (dvzClass.getType() == ClassType.DWARF) {
+            removeClassOption(dvzClass);
+        }
 
         //Disguise
         if (dvzClass.getType() == ClassType.MONSTER || dvzClass.getType() == ClassType.DRAGON) {
