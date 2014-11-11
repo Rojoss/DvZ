@@ -2,10 +2,7 @@ package com.clashwars.dvz.events;
 
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
-import com.clashwars.dvz.DvZ;
-import com.clashwars.dvz.GameManager;
-import com.clashwars.dvz.GameState;
-import com.clashwars.dvz.Product;
+import com.clashwars.dvz.*;
 import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
@@ -275,8 +272,11 @@ public class MainEvents implements Listener {
                 menu.setSlot(new CWItem(Material.AIR), i, null);
             }
         }
+        player.updateInventory();
+
         player.sendMessage(Util.formatMsg("&6You stopped switching to " + DvzClass.fromString(menu.getData())));
         player.sendMessage(Util.formatMsg("&7All items placed in the switch menu have been given back."));
+        player.sendMessage(Util.formatMsg("&a&lTIP&8: &7Click in your inv to fix invisible items."));
         return;
     }
 
@@ -296,6 +296,7 @@ public class MainEvents implements Listener {
             }
             for (final DvzClass dvzClass : dvz.getCM().getClasses(ClassType.DWARF).keySet()) {
                 if (dvzClass.getClassClass().getClassItem().equals(event.getCurrentItem())) {
+                    player.closeInventory();
                     player.sendMessage(Util.formatMsg("&6In a few seconds a menu GUI will appear."));
                     player.sendMessage(Util.formatMsg("&6You can then modify which items you want to keep."));
                     player.sendMessage(Util.formatMsg("&6After you did that click the green button to switch!"));
@@ -330,6 +331,7 @@ public class MainEvents implements Listener {
                             menu.setSlot(empty, i, null);
                         }
                     }
+                    player.closeInventory();
                     player.sendMessage(Util.formatMsg("&6You stopped switching to " + DvzClass.fromString(menu.getData())));
                     player.sendMessage(Util.formatMsg("&7All items placed in the switch menu have been given back."));
                     return;
@@ -337,14 +339,14 @@ public class MainEvents implements Listener {
                 if (rawSlot == 8) {
                     player.sendMessage(Util.formatMsg("&6You will be switched to " + DvzClass.fromString(menu.getData())));
                     player.closeInventory();
-                    dvz.getPM().getPlayer(player).switchClass(DvzClass.fromString(menu.getData()));
+                    dvz.getPM().getPlayer(player).switchClass(DvzClass.fromString(menu.getData()), menu);
                     return;
                 }
 
                 //Move item from top inv to player inv.
                 if (rawSlot >= 9 && rawSlot <= 44) {
-                    if (player.getInventory().getItem(rawSlot) == null || player.getInventory().getItem(rawSlot).getType() == Material.AIR) {
-                        player.getInventory().setItem(rawSlot, item);
+                    if (player.getInventory().getItem(rawSlot-9) == null || player.getInventory().getItem(rawSlot-9).getType() == Material.AIR) {
+                        player.getInventory().setItem(rawSlot-9, item);
                     } else {
                         player.getInventory().addItem(item);
                     }
@@ -352,6 +354,9 @@ public class MainEvents implements Listener {
                 }
             } else {
                 //Bottom menu (Player inventory)
+                if (item == null || item.getType() == Material.AIR) {
+                    return;
+                }
                 if (!Product.canKeep(item.getType())) {
                     player.sendMessage(Util.formatMsg("&cThis item can't be kept."));
                     return;

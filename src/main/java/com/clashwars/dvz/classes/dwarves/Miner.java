@@ -5,8 +5,6 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.DvzItem;
-import com.clashwars.dvz.util.Util;
-import com.clashwars.dvz.workshop.AlchemistWorkshop;
 import com.clashwars.dvz.workshop.MinerWorkshop;
 import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.Location;
@@ -138,6 +136,9 @@ public class Miner extends DwarfClass {
 
     //Try craft a item with the given itemstack.
     private boolean tryCraft(ItemStack item, Location dropLoc) {
+        if (item == null) {
+            return false;
+        }
         if (item.getAmount() < 2) {
             return false;
         }

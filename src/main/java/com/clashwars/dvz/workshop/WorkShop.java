@@ -72,9 +72,10 @@ public class WorkShop {
 
     public boolean remove() {
         if (cuboid != null && cuboid.getBlocks() != null) {
+            Location pistonLoc = getOrigin().add(0,-1,0);
             for (Block block : cuboid.getBlocks()) {
                 block.setType(Material.AIR);
-                if (block.getLocation().equals(getOrigin())) {
+                if (block.getLocation().equals(pistonLoc)) {
                     block.setType(Material.PISTON_BASE);
                 } else if (block.getLocation().getY() == cuboid.getMinY()) {
                     block.setType(Material.GRASS);

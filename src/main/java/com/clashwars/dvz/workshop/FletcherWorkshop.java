@@ -27,6 +27,10 @@ public class FletcherWorkshop extends WorkShop {
         new BukkitRunnable() {
             @Override
             public void run() {
+                if (getOrigin() == null) {
+                    cancel();
+                    return;
+                }
                 int y = getOrigin().getBlockY() + yOffset;
 
                 Cuboid inside = cuboid.clone();
@@ -54,6 +58,9 @@ public class FletcherWorkshop extends WorkShop {
     @Override
     public void onLoad() {
         if (cuboid == null || cuboid.getBlocks() == null || cuboid.getBlocks().size() <= 0) {
+            if (getOrigin() == null) {
+                return;
+            }
             build(getOrigin());
         }
         //Spawn chickens

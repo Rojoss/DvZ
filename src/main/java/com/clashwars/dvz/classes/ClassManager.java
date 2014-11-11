@@ -10,10 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class ClassManager {
 
@@ -23,7 +20,7 @@ public class ClassManager {
 
     public ClassManager(DvZ dvz) {
         this.dvz = dvz;
-        switchOptionsMenu = new ItemMenu("switch", 9, CWUtil.integrateColor("&6&lSwitch Class"));
+        switchOptionsMenu = new ItemMenu("switch", 9, CWUtil.integrateColor("&4&lSwitch Class"));
     }
 
     //Get a Class by class type or name.
@@ -166,25 +163,26 @@ public class ClassManager {
 
     public void showSwitchOptionsMenu(Player player) {
         CWPlayer cwp = dvz.getPM().getPlayer(player);
+        switchOptionsMenu.show(player);
         switchOptionsMenu.clear(player);
         switchOptionsMenu.setSlot(new CWItem(Material.BOOK).setName("&5&lSWITCH INFO").addLore("&7Click on any of these classes to switch to it.")
-                .addLore("&7You will be able to keep some of your items.").addLore("&7But you should only switch if it's really needed."), 0, player);
-        int slot = 3;
+                .addLore("&7You will be able to keep some of your items.").addLore("&7But you should only switch if it's really needed."), 0, null);
+        int slot = 2;
+        switchOptionsMenu.show(player);
         for (DvzClass dvzClass : cwp.getClassOptions()) {
             switchOptionsMenu.setSlot(dvzClass.getClassClass().getClassItem(), slot, player);
             slot++;
         }
-        switchOptionsMenu.show(player);
     }
 
     public void showSwitchMenu(Player player, DvzClass dvzClass) {
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         if (!switchMenus.containsKey(player.getUniqueId())) {
-            switchMenus.put(player.getUniqueId(), new ItemMenu("switch-" + player.getUniqueId(), 56, "XXX"));
+            switchMenus.put(player.getUniqueId(), new ItemMenu("switch-" + player.getUniqueId(), 54, "XXX"));
         }
         ItemMenu menu = switchMenus.get(player.getUniqueId());
         menu.setData(dvzClass.toString());
-        menu.setTitle(CWUtil.integrateColor("&6&lSwitch to &5&l" + dvzClass.getClassClass().getDisplayName()));
+        menu.setTitle(CWUtil.integrateColor("&4&lSwitch to &5&l" + dvzClass.getClassClass().getDisplayName()));
         menu.clear(null);
 
         menu.setSlot(new CWItem(Material.STAINED_GLASS_PANE, 1, (byte)14).setName("&4&lCANCEL").addLore("&7All items in the menu will be given back.").addLore("&7and you keep the same class."), 0, null);
@@ -197,20 +195,29 @@ public class ClassManager {
 
         ItemStack empty = new ItemStack(Material.AIR);
         for (int i = 0; i < player.getInventory().getSize(); i++) {
-            if (!Product.canKeep(player.getInventory().getItem(i).getType())) {
+            ItemStack item = player.getInventory().getItem(i);
+            if (item == null || item.getType() == Material.AIR || !Product.canKeep(item.getType())) {
                 continue;
             }
-            menu.setSlot(new CWItem(player.getInventory().getItem(i)), i + 9, null);
+            menu.setSlot(new CWItem(item), i + 9, null);
             player.getInventory().setItem(i, empty);
         }
 
-        player.getInventory().setHelmet(empty);
-        menu.setSlot(new CWItem(player.getInventory().getHelmet()), 45, null);
-        player.getInventory().setChestplate(empty);
-        menu.setSlot(new CWItem(player.getInventory().getChestplate()), 46, null);
-        player.getInventory().setLeggings(empty);
-        menu.setSlot(new CWItem(player.getInventory().getLeggings()), 47, null);
-        player.getInventory().setBoots(empty);
-        menu.setSlot(new CWItem(player.getInventory().getBoots()), 48, null);
+        if (player.getInventory().getHelmet() != null) {
+            menu.setSlot(new CWItem(player.getInventory().getHelmet()), 45, null);
+            player.getInventory().setHelmet(empty);
+        }
+        if (player.getInventory().getChestplate() != null) {
+            menu.setSlot(new CWItem(player.getInventory().getChestplate()), 46, null);
+            player.getInventory().setChestplate(empty);
+        }
+        if (player.getInventory().getLeggings() != null) {
+            menu.setSlot(new CWItem(player.getInventory().getLeggings()), 47, null);
+            player.getInventory().setLeggings(empty);
+        }
+        if (player.getInventory().getBoots() != null) {
+            menu.setSlot(new CWItem(player.getInventory().getBoots()), 48, null);
+            player.getInventory().setBoots(empty);
+        }
     }
 }

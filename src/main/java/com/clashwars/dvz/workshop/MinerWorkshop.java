@@ -26,6 +26,9 @@ public class MinerWorkshop extends WorkShop {
     @Override
     public void onBuild() {
         if (cuboid == null || cuboid.getBlocks() == null || cuboid.getBlocks().size() <= 0) {
+            if (getOrigin() == null) {
+                return;
+            }
             build(getOrigin());
         }
         for (Block block : cuboid.getBlocks()) {
@@ -38,6 +41,9 @@ public class MinerWorkshop extends WorkShop {
 
     @Override
     public void onLoad() {
+        if (getOrigin() == null) {
+            return;
+        }
         build(getOrigin());
 
         new BukkitRunnable() {

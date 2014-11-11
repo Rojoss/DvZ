@@ -1,6 +1,7 @@
 package com.clashwars.dvz.player;
 
 import com.clashwars.cwcore.CooldownManager;
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.ExpUtil;
@@ -10,8 +11,8 @@ import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.PlayerCfg;
+import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
-import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -79,6 +80,7 @@ public class CWPlayer {
     }
 
     public void resetData() {
+        Debug.bc("Resetting data!");
         productsTaken.clear();
         data.setClassOptions(new HashSet<DvzClass>());
         data.setPlayerClass(DvzClass.DWARF);
@@ -94,8 +96,6 @@ public class CWPlayer {
 
         //Reset
         reset();
-        resetData();
-        undisguise();
 
         setPlayerClass(dvzClass);
         removeClassOption(dvzClass);
@@ -128,7 +128,7 @@ public class CWPlayer {
     }
 
 
-    public void switchClass(DvzClass dvzClass) {
+    public void switchClass(DvzClass dvzClass, ItemMenu menu) {
         BaseClass c = dvzClass.getClassClass();
         Player player = getPlayer();
 
@@ -137,6 +137,16 @@ public class CWPlayer {
         setPlayerClass(dvzClass);
         removeClassOption(dvzClass);
         c.equipItems(player);
+
+        for (int i = 9; i < menu.getSize(); i++) {
+            if (menu.getItems()[i] != null && menu.getItems()[i].getType() != Material.AIR) {
+                if (player.getInventory().getItem(i - 9) == null || player.getInventory().getItem(i - 9).getType() == Material.AIR) {
+                    player.getInventory().setItem(i - 9, menu.getItems()[i]);
+                } else {
+                    player.getInventory().addItem(menu.getItems()[i]);
+                }
+            }
+        }
 
         player.setMaxHealth(c.getHealth());
         player.setHealth(c.getHealth());

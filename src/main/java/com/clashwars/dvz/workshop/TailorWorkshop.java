@@ -35,6 +35,9 @@ public class TailorWorkshop extends WorkShop {
     @Override
     public void onLoad() {
         if (cuboid == null || cuboid.getBlocks() == null || cuboid.getBlocks().size() <= 0) {
+            if (getOrigin() == null) {
+                return;
+            }
             build(getOrigin());
         }
         //Spawn sheep

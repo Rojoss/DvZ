@@ -3,7 +3,6 @@ package com.clashwars.dvz.player;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
-import com.clashwars.dvz.classes.dwarves.DwarfClass;
 import com.clashwars.dvz.config.PlayerCfg;
 import com.clashwars.dvz.config.WorkShopCfg;
 import com.clashwars.dvz.workshop.*;
@@ -227,9 +226,8 @@ public class PlayerManager {
             WorkShop ws = workshops.get(player.getUniqueId());
             ws.onRemove();
             ws.remove();
+            wsCfg.removeWorkShop(player.getUniqueId());
             workshops.remove(player.getUniqueId());
-            getPlayer(player).savePlayer();
-            wsCfg.save();
             return true;
         }
         return false;

@@ -1,11 +1,11 @@
 package com.clashwars.dvz.workshop;
 
+import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.effect.Particle;
 import com.clashwars.cwcore.effect.effects.BoilEffect;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
-import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.Util;
@@ -54,6 +54,10 @@ public class AlchemistWorkshop extends WorkShop {
                 iterations++;
 
                 if (cuboid == null || cuboid.getBlocks() == null || cuboid.getBlocks().size() <= 0) {
+                    if (getOrigin() == null) {
+                        cancel();
+                        return;
+                    }
                     build(getOrigin());
                     calculateLocations();
                     if (cuboid == null || cuboid.getBlocks() == null || cuboid.getBlocks().size() <= 0) {

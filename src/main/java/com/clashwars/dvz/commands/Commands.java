@@ -1,6 +1,5 @@
 package com.clashwars.dvz.commands;
 
-import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
@@ -9,7 +8,6 @@ import com.clashwars.dvz.classes.*;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.player.PlayerManager;
-import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -102,7 +100,7 @@ public class Commands {
                         sender.sendMessage(Util.formatMsg("&cYou have to be a dwarf to use this command."));
                         return true;
                     }
-
+                    
                     if (cwp.getClassOptions().size() <= 0) {
                         sender.sendMessage(Util.formatMsg("&cyou have no more class options available."));
                         return true;
@@ -313,6 +311,10 @@ public class Commands {
                     }
 
                     CWPlayer cwp = dvz.getPM().getPlayer(player);
+
+                    cwp.resetData();
+                    cwp.undisguise();
+                    dvz.getPM().removeWorkshop(player);
                     cwp.setClass(dvzClass);
                     player.sendMessage(Util.formatMsg("&6Your class has been set to &5" + args[1]));
                     return true;
