@@ -185,7 +185,6 @@ public class BaseAbility implements Listener {
         }
 
         //CAST! (we need to get the actual ability class when casting and not this BaseAbility cast method)
-        event.setCancelled(true);
         Location loc = event.getPlayer().getLocation();
         if (event.getClickedBlock() != null) {
             loc = event.getClickedBlock().getLocation();

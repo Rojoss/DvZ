@@ -12,13 +12,9 @@ import com.clashwars.dvz.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.*;
@@ -36,11 +32,13 @@ public class MainEvents implements Listener {
         gm = dvz.getGM();
     }
 
+
     @EventHandler
     private void levelUp(CWPlayer.ClassLevelupEvent event) {
         CWPlayer cwp = event.getCWPlayer();
-        //TODO: Complete event tasks
+        //TODO: Give dwarf ability to player.
     }
+
 
     @EventHandler
     private void playerJoin(PlayerJoinEvent event) {
@@ -120,6 +118,7 @@ public class MainEvents implements Listener {
             dvz.getGM().releaseMonsters(false);
         }
     }
+
 
     @EventHandler
     private void respawn(PlayerRespawnEvent event) {
@@ -203,49 +202,8 @@ public class MainEvents implements Listener {
             }
             cwp.setClass(dvzClass);
             dvzClass.getClassClass().onEquipClass(player);
-            event.setCancelled(true);
         }
     }
-
-
-    @EventHandler
-    private void blockPlace(BlockPlaceEvent event) {
-        final Block block = event.getBlock();
-        if (block.getType() != Material.WEB) {
-            return;
-        }
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (block.getType() == Material.WEB) {
-                    block.setType(Material.AIR);
-                }
-            }
-        }.runTaskLater(dvz, dvz.getCfg().WEB_REMOVAL_TIME);
-    }
-
-    @EventHandler
-    private void fallingBlockLand(EntityChangeBlockEvent event) {
-        if (!(event.getEntity() instanceof FallingBlock)) {
-            return;
-        }
-        if (event.getTo() != Material.WEB) {
-            return;
-        }
-
-        final Block block = event.getBlock();
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (block.getType() == Material.WEB) {
-                    block.setType(Material.AIR);
-                }
-            }
-        }.runTaskLater(dvz, dvz.getCfg().WEB_REMOVAL_TIME);
-
-    }
-
 
 
     @EventHandler

@@ -70,7 +70,6 @@ public class Hammer extends MobAbility {
             effectAmt = 8;
         }
 
-        event.setCancelled(true);
         if (event.getBlockFace() == BlockFace.DOWN || event.getBlockFace() == BlockFace.UP) {
             effect.display(CWUtil.getBlockCenterByBlockface(event.getClickedBlock().getLocation(), event.getBlockFace()), 0.3f, 0.0f, 0.3f, 0.00001f, effectAmt);
         }

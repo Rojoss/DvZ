@@ -13,6 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -36,7 +37,7 @@ public class Miner extends DwarfClass {
         equipment.add(new DvzItem(Material.WORKBENCH, 1, (byte)0, "&8&lWorkshop", new String[] {"&7Place this down on any of the pistons.", "&7Your workshop will be build then."}, 500, -1));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     private void blockBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
         if (!mineableMaterials.contains(block.getType())) {
@@ -68,6 +69,7 @@ public class Miner extends DwarfClass {
             ParticleEffect.CRIT.display(block.getLocation().add(0.5f,0.5f,0.5f), 0.5f, 0.5f, 0.5f, 0.0001f, 10);
         }
 
+        event.setCancelled(false);
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -88,7 +90,7 @@ public class Miner extends DwarfClass {
         }.runTaskLater(dvz, CWUtil.random(200, 800));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     private void interact(PlayerInteractEvent event) {
         if (event.getAction() != Action.LEFT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;

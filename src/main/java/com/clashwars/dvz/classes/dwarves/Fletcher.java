@@ -17,6 +17,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -89,7 +90,7 @@ public class Fletcher extends DwarfClass {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     private void interact(PlayerInteractEvent event) {
         if (event.getAction() != Action.LEFT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
@@ -111,7 +112,6 @@ public class Fletcher extends DwarfClass {
             return;
         }
 
-        event.setCancelled(true);
         Inventory inv = player.getInventory();
         Location dropLoc = event.getClickedBlock().getLocation().add(0.5f, 1f, 0.5f);
         int flint = 0;
@@ -150,7 +150,7 @@ public class Fletcher extends DwarfClass {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     private void blockBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
         if (block.getType() != Material.GRAVEL) {
@@ -163,6 +163,7 @@ public class Fletcher extends DwarfClass {
         }
 
         //Give flint with random chance for breaking gravel.
+        event.setCancelled(false);
         if (CWUtil.randomFloat() <= getDoubleOption("flint-chance")) {
             block.getWorld().dropItemNaturally(block.getLocation().add(0.5f, 0.5f, 0.5f), Product.FLINT.getItem());
         }

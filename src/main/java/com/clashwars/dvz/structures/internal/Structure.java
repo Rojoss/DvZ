@@ -52,7 +52,6 @@ public class Structure implements Listener {
             Structure struc = strucType.getStrucClass();
             ProtectedRegion region = CWWorldGuard.getRegion(loc.getWorld(), struc.getRegion());
             if (region != null && region.contains(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
-                event.setCancelled(true);
                 struc.onUse(player);
                 return;
             }
@@ -76,7 +75,6 @@ public class Structure implements Listener {
             Structure struc = strucType.getStrucClass();
             ProtectedRegion region = CWWorldGuard.getRegion(loc.getWorld(), struc.getRegion());
             if (region != null && region.contains(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
-                event.setCancelled(true);
                 struc.onUse(player);
                 return;
             }

@@ -120,6 +120,9 @@ public class WorkShop {
 
     public Location getOrigin() {
         if (cuboid == null) {
+            if (data == null) {
+                return null;
+            }
             cuboid = data.getCuboid();
         }
         Location center = cuboid.getCenterLoc();

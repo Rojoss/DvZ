@@ -18,6 +18,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -38,7 +39,7 @@ public class Tailor extends DwarfClass {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     private void entityDamage(EntityDamageByEntityEvent event) {
         if (event.getEntityType() != EntityType.SHEEP) {
             return;
@@ -67,15 +68,13 @@ public class Tailor extends DwarfClass {
             return;
         }
 
-        event.setCancelled(true);
         damager.sendMessage(Util.formatMsg("&cShear your sheep instead of killing them!"));
         return;
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     private void shear(PlayerShearEntityEvent event) {
-        event.setCancelled(true);
         final Entity entity = event.getEntity();
         Player player = event.getPlayer();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
@@ -111,13 +110,12 @@ public class Tailor extends DwarfClass {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     private void blockBreak(BlockBreakEvent event) {
         final Block block = event.getBlock();
         if (block.getType() != Material.RED_ROSE && block.getType() != Material.YELLOW_FLOWER) {
             return;
         }
-        event.setCancelled(true);
 
         if (block.getData() != 0) {
             return;
@@ -129,6 +127,7 @@ public class Tailor extends DwarfClass {
             return;
         }
 
+        event.setCancelled(false);
         if (block.getType() == Material.RED_ROSE) {
             block.getWorld().dropItem(block.getLocation(), Product.ROSE_DYE.getItem());
         } else {
@@ -149,7 +148,7 @@ public class Tailor extends DwarfClass {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     private void interact(PlayerInteractEvent event) {
         if (event.getAction() != Action.LEFT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
@@ -171,7 +170,6 @@ public class Tailor extends DwarfClass {
             return;
         }
 
-        event.setCancelled(true);
         Inventory inv = player.getInventory();
         Location dropLoc = event.getClickedBlock().getLocation().add(0.5f, 1f, 0.5f);
         int wool = 0;

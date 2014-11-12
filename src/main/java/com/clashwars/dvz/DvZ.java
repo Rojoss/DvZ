@@ -8,6 +8,7 @@ import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.commands.Commands;
 import com.clashwars.dvz.config.*;
 import com.clashwars.dvz.events.MainEvents;
+import com.clashwars.dvz.events.ProtectEvents;
 import com.clashwars.dvz.events.WorkShopEvents;
 import com.clashwars.dvz.maps.MapManager;
 import com.clashwars.dvz.player.PlayerManager;
@@ -147,6 +148,7 @@ public class DvZ extends JavaPlugin {
             pm.registerEvents(s.getStrucClass(), this);
         }
         pm.registerEvents(new ItemMenu.Events(), this);
+        pm.registerEvents(new ProtectEvents(this), this);
     }
 
     private void startRunnables() {
