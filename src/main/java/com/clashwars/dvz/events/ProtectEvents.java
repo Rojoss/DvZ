@@ -5,6 +5,7 @@ import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -75,6 +76,9 @@ public class ProtectEvents implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     private void blockPlace(BlockPlaceEvent event) {
+        if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
+            return;
+        }
         CWPlayer cwp = dvz.getPM().getPlayer(event.getPlayer());
 
         //Don't allow it if game hasn't started.
@@ -99,6 +103,9 @@ public class ProtectEvents implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
     private void blockBreak(BlockBreakEvent event) {
+        if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
+            return;
+        }
         CWPlayer cwp = dvz.getPM().getPlayer(event.getPlayer());
 
         //Don't allow it if game hasn't started.
@@ -181,6 +188,9 @@ public class ProtectEvents implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
     private void interact(PlayerInteractEvent event) {
+        if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
+            return;
+        }
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             //Don't allow opening invs/gui's and using stuff like buttons.
             Material type = event.getClickedBlock().getType();
@@ -254,6 +264,9 @@ public class ProtectEvents implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
     private void bucketEmpty(PlayerBucketEmptyEvent event) {
+        if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
+            return;
+        }
         event.setCancelled(true);
     }
 
