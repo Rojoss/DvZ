@@ -27,7 +27,7 @@ public class WorkShopEvents implements Listener {
 
     @EventHandler
     private void blockPlace(BlockPlaceEvent event) {
-        Debug.bc("WorkshopEvents: Block placed.");
+        //Debug.bc("WorkshopEvents: Block placed.");
         if (!dvz.getGM().isStarted()) {
             return;
         }

@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.dwarves;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
@@ -7,6 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class HealPotion extends DwarfAbility {
 
@@ -19,6 +22,8 @@ public class HealPotion extends DwarfAbility {
     @Override
     public void castAbility(Player player, Location triggerLoc) {
         //TODO: Implement
+        Debug.bc("Healing potion used");
+        player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, 1, 1));
     }
 
     @EventHandler
