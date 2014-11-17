@@ -153,6 +153,7 @@ public class DvZ extends JavaPlugin {
 
     private void startRunnables() {
         new GameRunnable(this).runTaskTimer(this, 0, 2);
+        new GameRunnable(this).runTaskTimer(this, 40, getCfg().CAMP_DELAY_TICKS);
     }
 
     @Override
