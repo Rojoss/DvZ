@@ -15,6 +15,7 @@ public enum Ability {
     SPEED_POTION(DvzClass.DWARF, new SpeedPotion(), new String[]{}),
     SUICIDE(DvzClass.MONSTER, new Suicide(), new String[]{}),
     HAMMER(DvzClass.MONSTER, new Hammer(), new String[]{}),
+    TELEPORT_PORTAL(DvzClass.MONSTER, new TeleportPortal(), new String[]{}),
     INFECT(DvzClass.ZOMBIE, new Infect(), new String[]{}),
     RUSH(DvzClass.ZOMBIE, new Rush(), new String[]{}),
     RAPIDFIRE(DvzClass.SKELETON, new Rapidfire(), new String[]{}),
@@ -27,7 +28,8 @@ public enum Ability {
     BLAST(DvzClass.BLAZE, new Blast(), new String[]{}),
     FIREBALL(DvzClass.BLAZE, new Fireball(), new String[]{}),
     PICKUP(DvzClass.ENDERMAN, new Pickup(), new String[]{}),
-    BLINK(DvzClass.ENDERMAN, new Blink(), new String[]{});
+    BLINK(DvzClass.ENDERMAN, new Blink(), new String[]{}),
+    PORTAL(DvzClass.ENDERMAN, new Portal(), new String[]{});
 
     private DvzClass dvzClass;
     private BaseAbility abilityClass;
