@@ -6,7 +6,6 @@ import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.runnables.PickupRunnable;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -16,7 +15,9 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class Pickup extends MobAbility {
 
@@ -47,7 +48,7 @@ public class Pickup extends MobAbility {
 
         Player player = event.getPlayer();
         Player target = (Player) event.getRightClicked();
-        if(!canCast(player)) {
+        if(!canCast(player) || !isCastItem(player.getItemInHand())) {
             return;
         }
 
@@ -60,6 +61,7 @@ public class Pickup extends MobAbility {
             return;
         }
 
+        target.hidePlayer(player);
         pickupPlayers.put(player.getUniqueId(), target.getUniqueId());
         //TODO: Proper offset
         new PickupRunnable(dvz, player, target, new Vector(0,0,0)).runTaskTimer(dvz, 1, 1);
@@ -73,7 +75,10 @@ public class Pickup extends MobAbility {
 
         Player player = event.getPlayer();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
-        if (cwp.getPlayerClass() != ability.getDvzClass()) {
+        if (cwp.getPlayerClass() != DvzClass.ENDERMAN) {
+            return;
+        }
+        if (!isCastItem(player.getItemInHand())) {
             return;
         }
 
@@ -81,7 +86,7 @@ public class Pickup extends MobAbility {
 
         //Place block
         if (cwp.getEndermanBlock() != Material.AIR) {
-            if (block.getRelative(event.getBlockFace()).getType() != Material.AIR) {
+            if (block.getRelative(event.getBlockFace()).getType() == Material.AIR) {
                 block.getRelative(event.getBlockFace()).setType(cwp.getEndermanBlock());
                 cwp.setEndermanBlock(Material.AIR);
                 Util.disguisePlayer(player.getName(), DvzClass.ENDERMAN.getClassClass().getDisguise());

@@ -31,7 +31,7 @@ public class PickupRunnable extends BukkitRunnable {
         this.target = target;
         cwt = dvz.getPM().getPlayer(target);
         this.offset = offset;
-        maxTime = DvzClass.ENDERMAN.getClassClass().getIntOption("maxPickupTime");
+        maxTime = 300;
     }
 
 
@@ -59,6 +59,7 @@ public class PickupRunnable extends BukkitRunnable {
         }
 
         target.teleport(player.getLocation().add(offset));
+        target.setVelocity(player.getVelocity());
         timer++;
     }
 

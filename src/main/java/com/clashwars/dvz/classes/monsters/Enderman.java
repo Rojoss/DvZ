@@ -14,6 +14,7 @@ public class Enderman extends MobClass {
 
         abilities.add(Ability.BLINK);
         abilities.add(Ability.PICKUP);
+        abilities.add(Ability.PORTAL);
     }
 
 }
