@@ -15,8 +15,7 @@ import com.sk89q.worldedit.data.DataException;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Skull;
+import org.bukkit.block.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -65,7 +64,6 @@ public class PotionBomb extends MobAbility {
             player.sendMessage(Util.formatMsg("&cThere are no players nearby!"));
             return;
         }
-        triggerLoc.add(0, 1, 0);
 
         try {
             CuboidClipboard cc = CWWorldGuard.pasteSchematic(triggerLoc.getWorld(), CWWorldGuard.getSchematicFile("PotionBomb"), triggerLoc, true, 0, true);
@@ -109,20 +107,36 @@ public class PotionBomb extends MobAbility {
                 }
             }
         }.runTaskLater(dvz, getIntOption("fuse-time"));
-
+        triggerLoc.add(0, 1, 0);
         dvz.getServer().broadcastMessage(Util.formatMsg("&6A bomb has been placed at&8: &c" + triggerLoc.getBlockX() + "&7, &a" + triggerLoc.getBlockY() + "&7, &9" + triggerLoc.getBlockZ()));
         bombs.put(triggerLoc, bt);
     }
 
     @EventHandler
     public void blockDestroy(BlockBreakEvent event) {
-        //TODO: Check for dwarf
-        //TODO: Check for block underneath
-        //TODO: Effect/sound/bc etc...
-        if(bombs.containsKey(event.getBlock().getLocation())) {
-            bombs.get(event.getBlock().getLocation()).cancel();
-            bombs.remove(event.getBlock().getLocation());
+        if(!dvz.getPM().getPlayer(event.getPlayer()).isDwarf()) {
+            event.setCancelled(false);
+            return;
         }
+
+        Block b;
+
+        if(bombs.containsKey(event.getBlock().getLocation())) {
+            b = event.getBlock();
+        } else if (bombs.containsKey(event.getBlock().getRelative(0, 1, 0).getLocation())) {
+            b = event.getBlock().getRelative(0, 1, 0);
+        } else {
+            event.setCancelled(true);
+            return;
+        }
+
+        b.getRelative(0, -1, 0).setType(b.getRelative(1, -1, 0).getType());
+        b.setType(Material.AIR);
+        b.getRelative(0, -21, 0).setType(Material.STONE);
+
+        bombs.get(event.getBlock().getLocation()).cancel();
+        dvz.getServer().broadcastMessage(Util.formatMsg("&6The bomb (&c" + event.getBlock().getX() + "&7, &a" + event.getBlock().getY() + "&7, &9" + event.getBlock().getZ() + "&6) has been destroyed!"));
+        bombs.remove(event.getBlock().getLocation());
     }
 
     @EventHandler
