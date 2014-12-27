@@ -1,6 +1,5 @@
 package com.clashwars.dvz.events;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.Util;
@@ -20,14 +19,12 @@ public class WorkShopEvents implements Listener {
     private DvZ dvz;
 
     public WorkShopEvents(DvZ dvz) {
-        Debug.bc("WorkShopEvents created");
         this.dvz = dvz;
     }
 
 
     @EventHandler
     private void blockPlace(BlockPlaceEvent event) {
-        Debug.bc("WorkshopEvents: Block placed.");
         if (!dvz.getGM().isStarted()) {
             return;
         }
@@ -56,8 +53,7 @@ public class WorkShopEvents implements Listener {
             player.sendMessage(Util.formatMsg("&cYou have to place it on one of the pistons."));
             return;
         }
-
-        Debug.bc("WorkshopEvents: Setting cancelled false.");
+        
         event.setCancelled(false);
         WorkShop ws = dvz.getPM().getWorkshop(player);
         DvzClass playerClass = dvz.getPM().getPlayer(player).getPlayerClass();

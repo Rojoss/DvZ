@@ -15,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.*;
@@ -169,12 +170,35 @@ public class MainEvents implements Listener {
 
 
     @EventHandler
+    private void damage(EntityDamageEvent event) {
+        //No durability loss
+        if (event.getEntity() instanceof Player) {
+            for (ItemStack armor : ((Player)event.getEntity()).getInventory().getArmorContents()) {
+                armor.setDurability((short)0);
+            }
+        }
+
+        //No fall damage during dwarf time.
+        if (dvz.getGM().isDwarves()) {
+            if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+
+    @EventHandler
     private void interact(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         ItemStack item = event.getItem();
         if (item == null) {
             return;
+        }
+
+        //No durability loss
+        if (item.getType().getMaxDurability() > 0) {
+            item.setDurability((short)0);
         }
 
         //Check for class item usage.
