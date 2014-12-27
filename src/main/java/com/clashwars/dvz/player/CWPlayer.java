@@ -34,6 +34,8 @@ public class CWPlayer {
     public HashMap<String, Integer> productsTaken = new HashMap<String, Integer>();
     private Color color;
 
+    private Material endermanBlock = Material.AIR;
+
 
     public CWPlayer(UUID uuid, PlayerData data) {
         this.uuid = uuid;
@@ -262,6 +264,15 @@ public class CWPlayer {
 
     public Color getColor() {
         return color;
+    }
+
+
+    public Material getEndermanBlock() {
+        return endermanBlock;
+    }
+
+    public void setEndermanBlock(Material endermanBlock) {
+        this.endermanBlock = endermanBlock;
     }
 
 

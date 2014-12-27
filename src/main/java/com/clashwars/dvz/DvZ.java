@@ -18,6 +18,7 @@ import com.clashwars.dvz.util.ItemMenu;
 import com.gmail.filoghost.holograms.api.Hologram;
 import com.gmail.filoghost.holograms.api.HolographicDisplaysAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
@@ -26,9 +27,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class DvZ extends JavaPlugin {
@@ -57,6 +56,8 @@ public class DvZ extends JavaPlugin {
     private final Logger log = Logger.getLogger("Minecraft");
 
     public Set<UUID> entities = new HashSet<UUID>();
+    private List<Material> destroyableBlocks = Arrays.asList(new Material[] {Material.SMOOTH_BRICK, Material.STONE, Material.GRASS, Material.COBBLESTONE,
+        Material.QUARTZ_BLOCK, Material.WOOD, Material.LOG, Material.LOG_2, Material.BRICK, Material.DIRT});
 
     @Override
     public void onDisable() {
@@ -175,6 +176,10 @@ public class DvZ extends JavaPlugin {
     /* Getters & Setters */
     public Gson getGson() {
         return gson;
+    }
+
+    public List<Material> getDestroyableBlocks() {
+        return destroyableBlocks;
     }
 
 

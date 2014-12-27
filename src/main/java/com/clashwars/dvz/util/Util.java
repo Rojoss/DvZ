@@ -3,6 +3,7 @@ package com.clashwars.dvz.util;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class Util {
@@ -26,6 +27,10 @@ public class Util {
                 player.sendMessage(msg);
             }
         }
+    }
+
+    public static boolean isDestroyable(Material mat) {
+        return DvZ.inst().getDestroyableBlocks().contains(mat);
     }
 
 }
