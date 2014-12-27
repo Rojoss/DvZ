@@ -2,33 +2,34 @@ package com.clashwars.dvz.abilities.monsters;
 
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
+import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class Blink extends MobAbility {
+public class TeleportPortal extends MobAbility {
 
-    public Blink() {
+    public TeleportPortal() {
         super();
-        this.ability = Ability.BLINK;
-        castItem = new DvzItem(Material.RED_ROSE, 1, (short)0, 196, -1);
+        ability = Ability.TELEPORT_PORTAL;
+        castItem = new DvzItem(Material.PORTAL, 1, (short)0, displayName, 999, 7);
     }
+
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
-        Block b = player.getTargetBlock(null, 50);
-        if(b != null) {
-            player.teleport(b.getLocation().getBlock().getRelative(BlockFace.UP).getLocation());
+        if (Portal.activePortal == null) {
+            player.sendMessage(Util.formatMsg("&cThere is no active portal right now."));
+            return;
         }
+        //TODO: Maybe a teleport delay so you don't tp instantly (might get abused)
+        player.teleport(Portal.activePortal.getLocation());
     }
 
     @EventHandler
     public void interact(PlayerInteractEvent event) {
         super.interact(event);
     }
-
 }
