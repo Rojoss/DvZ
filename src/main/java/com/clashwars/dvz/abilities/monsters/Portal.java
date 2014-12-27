@@ -2,13 +2,9 @@ package com.clashwars.dvz.abilities.monsters;
 
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.dependencies.CWWorldGuard;
-import com.clashwars.cwcore.effect.Particle;
-import com.clashwars.cwcore.effect.effects.ExpandingCircleEffect;
-import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.extra.PortalData;
-import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
@@ -22,8 +18,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -32,10 +26,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BlockIterator;
-import org.bukkit.util.Vector;
 
 import java.io.IOException;
 
@@ -63,8 +54,8 @@ public class Portal extends MobAbility {
 
         //Make sure portal wont hit anything
         for (int x = portalLoc.getBlockX() - 5; x < portalLoc.getBlockX() + 5; x++) {
-            for (int y = portalLoc.getBlockX() - 5; y < portalLoc.getBlockX() + 5; y++) {
-                for (int z = portalLoc.getBlockX() - 5; z < portalLoc.getBlockX() + 5; z++) {
+            for (int y = portalLoc.getBlockY() - 5; y < portalLoc.getBlockY() + 5; y++) {
+                for (int z = portalLoc.getBlockZ() - 5; z < portalLoc.getBlockZ() + 5; z++) {
                     if (portalLoc.getWorld().getBlockAt(x,y,z).getType() != Material.AIR) {
                         player.sendMessage(Util.formatMsg("&cPortal can't be created here!"));
                         player.sendMessage(Util.formatMsg("&cThere has to be enough empty space above you."));
@@ -87,7 +78,7 @@ public class Portal extends MobAbility {
             dvz.getServer().broadcastMessage(Util.formatMsg("&dPortal created by &5" + player.getName() + "&d!"));
             dvz.getServer().broadcastMessage(Util.formatMsg("&7Monsters can &dtp &7to it by using the &dportal block&7."));
             dvz.getServer().broadcastMessage(Util.formatMsg("&7Dwarves can destroy it by &dbreaking the egg &7or &dkilling the enderman&7!"));
-            player.sendMessage("&6Portal created! &7Click the egg if you want to deactivate the portal.");
+            player.sendMessage(Util.formatMsg("&6Portal created! &7Click the egg if you want to deactivate the portal."));
             return;
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
