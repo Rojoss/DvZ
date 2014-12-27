@@ -58,7 +58,7 @@ public class Pickup extends MobAbility {
         }
 
         if (pickupPlayers.containsKey(player.getUniqueId())) {
-            player.sendMessage(Util.formatMsg("&cFirst drop the player you're holding. &8(&7Sneak&8)"));
+            player.sendMessage(Util.formatMsg("&cDrop the player you're holding first. &8(&7Sneak&8)"));
             return;
         }
 
