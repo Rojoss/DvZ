@@ -21,8 +21,6 @@ public class SpeedPotion extends DwarfAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
-        //TODO: Implement
-        Debug.bc("Speed potion used");
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 6000, 1));
     }
 

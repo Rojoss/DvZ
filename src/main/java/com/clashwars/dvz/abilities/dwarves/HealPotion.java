@@ -21,8 +21,6 @@ public class HealPotion extends DwarfAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
-        //TODO: Implement
-        Debug.bc("Healing potion used");
         player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, 1, 1));
     }
 
