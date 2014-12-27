@@ -37,7 +37,8 @@ public class Pickup extends MobAbility {
         Player target = dvz.getServer().getPlayer(pickupPlayers.get(uuid));
         pickupPlayers.remove(uuid);
 
-        target.setVelocity(target.getVelocity().setY(1.0f));
+        target.setVelocity(target.getVelocity().setY(0.5f));
+        target.showPlayer(player);
     }
 
     @EventHandler
