@@ -36,7 +36,7 @@ public class BuildingBrick extends DwarfAbility {
         }
         dvz.getServer().broadcastMessage("2.2");
 
-        //player.getEyeLocation().getBlock().getRelative()
+
 
         Block newBlockReplaced = b.getRelative(b.getFace(player.getEyeLocation().getBlock()));
         dvz.getServer().broadcastMessage("2.4");
