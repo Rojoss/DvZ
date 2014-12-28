@@ -1,7 +1,10 @@
 package com.clashwars.dvz.abilities;
 
+import com.clashwars.cwcore.CooldownManager;
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
@@ -132,14 +135,30 @@ public class BaseAbility implements Listener {
     }
 
     public boolean canCast(Player player) {
-        //TODO: Compare class with player class to make sure he can cast it.
+        boolean testing = false;
+        if (testing) {
+            return true;
+        }
 
-        if (hasCooldown()) {
-            //TODO: Check cooldown.
-            player.sendMessage("On cooldown message...");
+        CWPlayer cwp = dvz.getPM().getPlayer(player);
+        if (getDvzClass() != cwp.getPlayerClass()) {
             return false;
         }
 
+        if (hasCooldown()) {
+            String tag = ability.getDvzClass().toString().toLowerCase() +  "-" + ability.toString().toLowerCase();
+            CooldownManager.Cooldown cd = cwp.getCDM().getCooldown(tag);
+            if (cd == null) {
+                cwp.getCDM().createCooldown(tag, getCooldown());
+                return true;
+            }
+            if (!cd.onCooldown()) {
+                cd.setTime(getCooldown());
+                return true;
+            }
+            player.sendMessage(Util.formatMsg(getDisplayName() + "&8> &7" + CWUtil.formatTime(cd.getTimeLeft(), "&7%S&8.&7%%%&8s")));
+            return false;
+        }
         return true;
     }
 
