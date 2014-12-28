@@ -41,32 +41,32 @@ public class PotionBomb extends MobAbility {
     }
 
     @Override
-    public void castAbility(Player player, Location triggerLoc) {
+    public void castAbility(Player player, final Location triggerLoc) {
+        final Location bomb = triggerLoc.clone().add(0, 1, 0);
         if (triggerLoc.getBlock().getType() == Material.BEDROCK) {
             player.sendMessage(Util.formatMsg("&cYou can't place that here!"));
             return;
         }
 
-        if(triggerLoc.getWorld().getHighestBlockYAt(triggerLoc) > triggerLoc.getY() + 1) {
+        if(bomb.getWorld().getHighestBlockYAt(bomb) > bomb.getY()) {
             player.sendMessage(Util.formatMsg("&cThere mustn't be a block above the bomb!"));
             return;
         }
 
-        Location newLoc = triggerLoc.clone();
         for (int y = 0; y < 20; y++) {
-            if (newLoc.subtract(0, 1, 0).getBlock().getType() == Material.BEDROCK) {
+            if (triggerLoc.clone().subtract(0, y, 0).getBlock().getType() == Material.BEDROCK) {
                 player.sendMessage(Util.formatMsg("&cYou can't place that here!"));
                 return;
             }
         }
 
-        if (CWUtil.getNearbyEntities(triggerLoc, getFloatOption("radius"), Arrays.asList(new EntityType[]{EntityType.PLAYER})).isEmpty()) {
+        /*if (CWUtil.getNearbyEntities(triggerLoc, getFloatOption("radius"), Arrays.asList(new EntityType[]{EntityType.PLAYER})).size() - 1 == 0) {
             player.sendMessage(Util.formatMsg("&cThere are no players nearby!"));
             return;
-        }
+        }*/
 
         try {
-            CuboidClipboard cc = CWWorldGuard.pasteSchematic(triggerLoc.getWorld(), CWWorldGuard.getSchematicFile("PotionBomb"), triggerLoc, true, 0, true);
+            CuboidClipboard cc = CWWorldGuard.pasteSchematic(bomb.getWorld(), CWWorldGuard.getSchematicFile("PotionBomb"), bomb, true, 0, true);
         } catch (MaxChangedBlocksException e) {
             e.printStackTrace();
         } catch (DataException e) {
@@ -79,9 +79,9 @@ public class PotionBomb extends MobAbility {
             e.printStackTrace();
         }
 
-        triggerLoc.getBlock().setType(Material.SKULL);
-        triggerLoc.getBlock().setData((byte)1);
-        BlockState state  = triggerLoc.getBlock().getState();
+        bomb.getBlock().setType(Material.SKULL);
+        bomb.getBlock().setData((byte)1);
+        BlockState state  = bomb.getBlock().getState();
         if (state instanceof Skull) {
             ((Skull)state).setSkullType(SkullType.PLAYER);
             ((Skull)state).setOwner("Scott11B");
@@ -92,6 +92,9 @@ public class PotionBomb extends MobAbility {
             @Override
             public void run() {
                 //TODO: Add bomb explosion particles
+                bombs.remove(bomb);
+                fixGround(bomb.getBlock());
+
                 for(CWPlayer cwp : dvz.getPM().getPlayers(ClassType.DWARF, true)) {
                     for (PotionEffect pe : cwp.getPlayer().getActivePotionEffects()) {
                         if(pe.getType().equals(PotionEffectType.BLINDNESS)) {
@@ -107,36 +110,40 @@ public class PotionBomb extends MobAbility {
                 }
             }
         }.runTaskLater(dvz, getIntOption("fuse-time"));
-        triggerLoc.add(0, 1, 0);
-        dvz.getServer().broadcastMessage(Util.formatMsg("&6A bomb has been placed at&8: &c" + triggerLoc.getBlockX() + "&7, &a" + triggerLoc.getBlockY() + "&7, &9" + triggerLoc.getBlockZ()));
-        bombs.put(triggerLoc, bt);
+        dvz.getServer().broadcastMessage(Util.formatMsg("&6A bomb has been placed at&8: &c" + bomb.getBlockX() + "&7, &a" + bomb.getBlockY() + "&7, &9" + bomb.getBlockZ()));
+        bombs.put(bomb, bt);
     }
 
     @EventHandler
     public void blockDestroy(BlockBreakEvent event) {
-        if(!dvz.getPM().getPlayer(event.getPlayer()).isDwarf()) {
-            event.setCancelled(false);
-            return;
-        }
-
-        Block b;
+        Block bomb;
 
         if(bombs.containsKey(event.getBlock().getLocation())) {
-            b = event.getBlock();
+            bomb = event.getBlock();
         } else if (bombs.containsKey(event.getBlock().getRelative(0, 1, 0).getLocation())) {
-            b = event.getBlock().getRelative(0, 1, 0);
+            bomb = event.getBlock().getRelative(0, 1, 0);
         } else {
-            event.setCancelled(true);
             return;
         }
 
-        b.getRelative(0, -1, 0).setType(b.getRelative(1, -1, 0).getType());
-        b.setType(Material.AIR);
-        b.getRelative(0, -21, 0).setType(Material.STONE);
+        event.setCancelled(true);
 
-        bombs.get(event.getBlock().getLocation()).cancel();
-        dvz.getServer().broadcastMessage(Util.formatMsg("&6The bomb (&c" + event.getBlock().getX() + "&7, &a" + event.getBlock().getY() + "&7, &9" + event.getBlock().getZ() + "&6) has been destroyed!"));
-        bombs.remove(event.getBlock().getLocation());
+        if(!dvz.getPM().getPlayer(event.getPlayer()).isDwarf()) {
+            return;
+        }
+
+        fixGround(bomb);
+
+
+        bombs.get(bomb.getLocation()).cancel();
+        dvz.getServer().broadcastMessage(Util.formatMsg("&6The bomb (&c" + bomb.getX() + "&7, &a" + bomb.getY() + "&7, &9" + bomb.getZ() + "&6) has been destroyed!"));
+        bombs.remove(bomb.getLocation());
+    }
+
+    public void fixGround(Block bomb) {
+        bomb.getRelative(0, -1, 0).setType(bomb.getRelative(1, -1, 0).getType());
+        bomb.setType(Material.AIR);
+        bomb.getRelative(0, -19, 0).setType(Material.STONE);
     }
 
     @EventHandler
