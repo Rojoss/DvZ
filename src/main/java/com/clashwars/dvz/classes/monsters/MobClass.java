@@ -12,6 +12,7 @@ public class MobClass extends BaseClass {
 
         abilities.add(Ability.SUICIDE);
         abilities.add(Ability.HAMMER);
+        abilities.add(Ability.TELEPORT_PORTAL);
     }
 
 }
