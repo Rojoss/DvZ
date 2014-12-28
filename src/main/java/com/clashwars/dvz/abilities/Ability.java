@@ -1,6 +1,7 @@
 package com.clashwars.dvz.abilities;
 
 import com.clashwars.dvz.abilities.dragons.Geyser;
+import com.clashwars.dvz.abilities.dragons.Tornado;
 import com.clashwars.dvz.abilities.dwarves.*;
 import com.clashwars.dvz.abilities.monsters.*;
 import com.clashwars.dvz.classes.DvzClass;
@@ -33,6 +34,7 @@ public enum Ability {
     PICKUP(DvzClass.ENDERMAN, new Pickup(), new String[]{}),
     BLINK(DvzClass.ENDERMAN, new Blink(), new String[]{}),
     PORTAL(DvzClass.ENDERMAN, new Portal(), new String[]{}),
+    TORNADO(DvzClass.AIRDRAGON, new Tornado(), new String[]{}),
     GEYSER(DvzClass.WATERDRAGON, new Geyser(), new String[]{});
 
     private DvzClass dvzClass;
