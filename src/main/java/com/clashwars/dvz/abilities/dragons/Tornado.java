@@ -24,12 +24,12 @@ public class Tornado extends DragonAbility {
     public Tornado() {
         super();
         ability = Ability.TORNADO;
-        castItem = new DvzItem(Material.BRICK, 1, (short)0, displayName, -1, -1);
+        castItem = new DvzItem(Material.IRON_HOE, 1, (short)0, displayName, -1, -1);
     }
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
-        Tornado.spawnTornado(dvz, triggerLoc, Material.SMOOTH_BRICK, (byte) 0, new Vector(1, 1, 1), 0.3D, 100, 1000, true, false);
+        Tornado.spawnTornado(dvz, triggerLoc, Material.SMOOTH_BRICK, (byte) 0, new Vector(1, 1, 1), 0.3D, 500, 1000, true, false);
     }
 
     @EventHandler
