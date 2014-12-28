@@ -1,19 +1,20 @@
 package com.clashwars.dvz.abilities.dragons;
 
-import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class Geyser extends DragonAbility {
 
@@ -24,36 +25,54 @@ public class Geyser extends DragonAbility {
     }
 
     @Override
-    public void castAbility(Player player, Location triggerLoc) {
-        List<Player> nearby = new ArrayList<Player>();
+    public void castAbility(final Player player, Location triggerLoc) {
+        final Map<UUID, Vector> players = new HashMap<UUID, Vector>();
         for (Entity e : player.getNearbyEntities(getFloatOption("range"), getFloatOption("range"), getFloatOption("range"))) {
-            if(e instanceof Player) {
+            if (e instanceof Player) {
+                players.put(((Player)e).getUniqueId(), ((Player)e).getLocation().toVector());
                 e.setVelocity(new Vector(0, getFloatOption("force"), 0));
-                Player p = (Player) e;
-                onTick(0, getIntOption("geyser-height"), nearby, p.getLocation());
             }
         }
+
+        new BukkitRunnable() {
+            private int tick = 0;
+
+            @Override
+            public void run() {
+                if (onTick(tick, getIntOption("geyser-height"), players, player)) {
+                    cancel();
+                }
+                tick++;
+            }
+        }.runTaskTimer(dvz, 8, 1);
     }
 
-    protected void onTick(int tick, int geyserHeight, List<Player> nearby, Location start) {
+    protected boolean onTick(int tick, int geyserHeight, Map<UUID, Vector> players, Player caster) {
+        //Completed animation
         if (tick > geyserHeight*2) {
-            return;
-        } else if (tick < geyserHeight) {
-            Block block = start.clone().add(0,tick,0).getBlock();
-            if(block.getType() == Material.AIR) {
-                for (Player p : nearby) {
-                        p.sendBlockChange(block.getLocation(), Material.WATER, (byte)0);
+            return true;
+        }
+
+        for (UUID uuid : players.keySet()) {
+            Player player = dvz.getServer().getPlayer(uuid);
+            Location loc = players.get(uuid).toLocation(player.getWorld());
+
+            if (!player.getName().equals(caster.getName())) {
+                if (tick < geyserHeight) { // Animation Up
+                    Block block = loc.add(0,tick,0).getBlock();
+                    if(block.getType() == Material.AIR) {
+                        block.setTypeId(9, false);
+                    }
+                } else { // Animation Down
+                    int n = geyserHeight-(tick-geyserHeight)-1;
+                    Block block = loc.add(0,n,0).getBlock();
+                    if(block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER) {
+                        block.setTypeId(0, false);
+                    }
                 }
             }
-            onTick(tick+5, geyserHeight, nearby, start);
-        } else {
-            int n = geyserHeight-(tick-geyserHeight)-1; // top to bottom
-            Block block = start.clone().add(0, n, 0).getBlock();
-            for (Player p : nearby) {
-                p.sendBlockChange(block.getLocation(), block.getType(), block.getData());
-            }
-            return;
         }
+        return false;
     }
 
     @EventHandler
