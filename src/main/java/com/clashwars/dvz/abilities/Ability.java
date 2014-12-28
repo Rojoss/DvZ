@@ -1,7 +1,6 @@
 package com.clashwars.dvz.abilities;
 
-import com.clashwars.dvz.abilities.dwarves.HealPotion;
-import com.clashwars.dvz.abilities.dwarves.SpeedPotion;
+import com.clashwars.dvz.abilities.dwarves.*;
 import com.clashwars.dvz.abilities.monsters.*;
 import com.clashwars.dvz.classes.DvzClass;
 
@@ -13,21 +12,23 @@ public enum Ability {
     BASE(DvzClass.DWARF, new BaseAbility(), new String[]{}),
     HEAL_POTION(DvzClass.DWARF, new HealPotion(), new String[]{}),
     SPEED_POTION(DvzClass.DWARF, new SpeedPotion(), new String[]{}),
+    BUILDING_BRICK(DvzClass.BUILDER, new BuildingBrick(), new String[]{}),
+    BUILDING_BLOCK(DvzClass.BUILDER, new BuildingBlock(), new String[]{}),
     SUICIDE(DvzClass.MONSTER, new Suicide(), new String[]{}),
     HAMMER(DvzClass.MONSTER, new Hammer(), new String[]{}),
     TELEPORT_PORTAL(DvzClass.MONSTER, new TeleportPortal(), new String[]{}),
     INFECT(DvzClass.ZOMBIE, new Infect(), new String[]{}),
     RUSH(DvzClass.ZOMBIE, new Rush(), new String[]{}),
     RAPIDFIRE(DvzClass.SKELETON, new Rapidfire(), new String[]{}),
-    POISONATTACK(DvzClass.SPIDER, new PoisonAttack(), new String[]{}),
+    POISON_ATTACK(DvzClass.SPIDER, new PoisonAttack(), new String[]{}),
     POISON(DvzClass.SPIDER, new Poison(), new String[]{}),
     WEB(DvzClass.SPIDER, new Web(), new String[]{}),
     EXPLODE(DvzClass.CREEPER, new Explode(), new String[]{}),
     SHOOT(DvzClass.BLAZE, new Shoot(), new String[]{}),
     GLIDE(DvzClass.BLAZE, new Glide(), new String[]{}),
     BLAST(DvzClass.BLAZE, new Blast(), new String[]{}),
-    POTIONBOMB(DvzClass.VILLAGER, new PotionBomb(), new String[]{}),
     FIREBALL(DvzClass.BLAZE, new Fireball(), new String[]{}),
+    POTION_BOMB(DvzClass.VILLAGER, new PotionBomb(), new String[]{}),
     PICKUP(DvzClass.ENDERMAN, new Pickup(), new String[]{}),
     BLINK(DvzClass.ENDERMAN, new Blink(), new String[]{}),
     PORTAL(DvzClass.ENDERMAN, new Portal(), new String[]{});

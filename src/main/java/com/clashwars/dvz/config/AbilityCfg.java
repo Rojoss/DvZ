@@ -52,7 +52,7 @@ public class AbilityCfg extends EasyConfig {
                 abilityData = loadDefault(abilityData, "tickdelay", "1");
                 abilityData = loadDefault(abilityData, "randomoffset", "0.2");
                 break;
-            case POISONATTACK:
+            case POISON_ATTACK:
                 abilityData = loadDefault(abilityData, "duration", "6000");
                 abilityData = loadDefault(abilityData, "chance", "0.4");
                 break;
@@ -89,11 +89,15 @@ public class AbilityCfg extends EasyConfig {
                 abilityData = loadDefault(abilityData, "radius", "20");
                 abilityData = loadDefault(abilityData, "rings", "5");
                 break;
-            case POTIONBOMB:
+            case POTION_BOMB:
                 abilityData = loadDefault(abilityData, "radius", "30");
                 abilityData = loadDefault(abilityData, "fuse-time", "30");
                 abilityData = loadDefault(abilityData, "blindness-duration", "200");
                 abilityData = loadDefault(abilityData, "poison-duration", "400");
+                break;
+            case BLINK:
+                abilityData = loadDefault(abilityData, "range", "20");
+                break;
         }
 
         return abilityData;

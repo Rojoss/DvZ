@@ -17,7 +17,7 @@ public class Spider extends MobClass {
 
         abilities.add(Ability.POISON);
         abilities.add(Ability.WEB);
-        abilities.add(Ability.POISONATTACK);
+        abilities.add(Ability.POISON_ATTACK);
     }
 
     @Override

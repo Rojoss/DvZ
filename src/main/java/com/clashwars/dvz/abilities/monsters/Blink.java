@@ -20,7 +20,7 @@ public class Blink extends MobAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
-        Block b = player.getTargetBlock(null, 50);
+        Block b = player.getTargetBlock(null, getIntOption("range"));
         Location l = player.getLocation();
         if(b != null) {
             player.teleport(b.getLocation().getBlock().getRelative(BlockFace.UP).getLocation());

@@ -36,7 +36,7 @@ public class PotionBomb extends MobAbility {
 
     public PotionBomb() {
         super();
-        ability = Ability.POTIONBOMB;
+        ability = Ability.POTION_BOMB;
         castItem = new DvzItem(Material.STICK, 1, (short)0, displayName, 3, -1);
     }
 

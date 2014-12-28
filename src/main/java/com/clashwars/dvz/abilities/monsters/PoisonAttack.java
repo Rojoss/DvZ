@@ -13,7 +13,7 @@ public class PoisonAttack extends MobAbility {
 
     public PoisonAttack() {
         super();
-        ability = Ability.POISONATTACK;
+        ability = Ability.POISON_ATTACK;
     }
 
     @EventHandler
