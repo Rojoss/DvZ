@@ -88,40 +88,46 @@ public class ClassManager {
                 classCount = classes.size();
             }
 
-            //Get the amount of times each class is picked.
+            //Randomize the first set of classes.
+            //The problem is at game start everyone gets classes but nobody has picked it yet so then the system will give the same classes to everyone.
+            //So at game start everyone will get random classes but when new players join it will fill up all gaps and make it all equal based on weights
+            //It will skip all methods below and move on to the check if all classes are given which is false because none are given yet because we skip it.
             List<CWPlayer> dwarves = dvz.getPM().getPlayers(ClassType.DWARF, true);
-            HashMap<DvzClass, Double> classCounts = new HashMap<DvzClass, Double>();
-            for (DvzClass dvzClass : dvz.getCM().getClasses(ClassType.DWARF).keySet()) {
-                classCounts.put(dvzClass, 0.0);
-            }
-            for (CWPlayer dwarf : dwarves) {
-                DvzClass dwarfClass = dwarf.getPlayerClass();
-                if (dwarfClass != null) {
-                    classCounts.put(dwarfClass, classCounts.get(dwarfClass) + 1.0);
+            if (dwarves.size() > classes.size()) {
+                //Get the amount of times each class is picked.
+                HashMap<DvzClass, Double> classCounts = new HashMap<DvzClass, Double>();
+                for (DvzClass dvzClass : dvz.getCM().getClasses(ClassType.DWARF).keySet()) {
+                    classCounts.put(dvzClass, 0.0);
                 }
-            }
-
-            //Add in fake players purely for testing purposes.
-            for (DvzClass dwarfClass : dvz.getPM().fakePlayers.keySet()) {
-                if (dwarfClass != null) {
-                    classCounts.put(dwarfClass, dvz.getPM().fakePlayers.get(dwarfClass).doubleValue());
+                for (CWPlayer dwarf : dwarves) {
+                    DvzClass dwarfClass = dwarf.getPlayerClass();
+                    if (dwarfClass != null) {
+                        classCounts.put(dwarfClass, classCounts.get(dwarfClass) + 1.0);
+                    }
                 }
-            }
 
-            //Multiply classes by weight.
-            for (DvzClass dwarfClass : classCounts.keySet()) {
-                // Picks * (weight * 100) [the *100 is just to make it a little more accurate]
-                classCounts.put(dwarfClass, classCounts.get(dwarfClass) / (dwarfClass.getClassClass().getWeight() * 100));
-            }
+                //Add in fake players purely for testing purposes.
+                for (DvzClass dwarfClass : dvz.getPM().fakePlayers.keySet()) {
+                    if (dwarfClass != null) {
+                        classCounts.put(dwarfClass, dvz.getPM().fakePlayers.get(dwarfClass).doubleValue());
+                    }
+                }
 
-            //Get the 'random' classes with the least players based on weights.
-            //So builder might have 10 players while miner has 8 but it would still pick builder if builder has a higher weight.
-            Map<DvzClass, Double> sortedClassCounts = CWUtil.sortByValue(classCounts, false);
-            for (Map.Entry<DvzClass, Double> entry : sortedClassCounts.entrySet()) {
-                randomclasses.put(entry.getKey(), entry.getKey().getClassClass());
-                classCount--;
-                if (classCount <= 0) {
-                    break;
+                //Multiply classes by weight.
+                for (DvzClass dwarfClass : classCounts.keySet()) {
+                    // Picks * (weight * 100) [the *100 is just to make it a little more accurate]
+                    classCounts.put(dwarfClass, classCounts.get(dwarfClass) / (dwarfClass.getClassClass().getWeight() * 100));
+                }
+
+                //Get the 'random' classes with the least players based on weights.
+                //So builder might have 10 players while miner has 8 but it would still pick builder if builder has a higher weight.
+                Map<DvzClass, Double> sortedClassCounts = CWUtil.sortByValue(classCounts, false);
+                for (Map.Entry<DvzClass, Double> entry : sortedClassCounts.entrySet()) {
+                    randomclasses.put(entry.getKey(), entry.getKey().getClassClass());
+                    classCount--;
+                    if (classCount <= 0) {
+                        break;
+                    }
                 }
             }
 
