@@ -34,6 +34,8 @@ public class WorkShopEvents implements Listener {
             return;
         }
 
+        event.setCancelled(true);
+
         Player player = event.getPlayer();
         Location loc = event.getBlockPlaced().getLocation();
         if (!dvz.getMM().getActiveMap().isLocWithin(loc, "innerwall", new Vector(-5, 2, -5))) {

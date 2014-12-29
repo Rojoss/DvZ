@@ -124,6 +124,7 @@ public class CWPlayer {
 
         //Equip class and items etc.
         c.equipItems(player);
+        dvzClass.getClassClass().onEquipClass(player);
         player.setMaxHealth(c.getHealth());
         player.setHealth(c.getHealth());
         player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));

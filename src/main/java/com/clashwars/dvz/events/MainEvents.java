@@ -151,7 +151,7 @@ public class MainEvents implements Listener {
             public void run() {
                 if (dvz.getGM().isStarted()) {
                     if (cwp.isDwarf()) {
-                        player.sendMessage(Util.formatMsg("&4&lYou have turned in to a monster!!!"));
+                        player.sendMessage(Util.formatMsg("&4&lYou have turned into a monster!!!"));
                     }
 
                     boolean suicide = false;
@@ -225,7 +225,6 @@ public class MainEvents implements Listener {
                 break;
             }
             cwp.setClass(dvzClass);
-            dvzClass.getClassClass().onEquipClass(player);
         }
     }
 
