@@ -1,6 +1,5 @@
 package com.clashwars.dvz.abilities.monsters;
 
-import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;

@@ -1,7 +1,6 @@
 package com.clashwars.dvz.abilities.monsters;
 
 import com.clashwars.cwcore.dependencies.CWWorldGuard;
-import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.player.CWPlayer;
@@ -27,7 +26,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class PotionBomb extends MobAbility {

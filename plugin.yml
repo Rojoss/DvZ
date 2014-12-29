@@ -1,7 +1,7 @@
 main : com.clashwars.dvz.DvZ
-name: ${project.artifactId}
-version: ${project.version}
-description: ${project.description}
+name: DvZ
+version: 0.1
+description: Dwarves VS Zombies plugin.
 depend: [CWCore]
 commands:
   dvz:

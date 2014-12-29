@@ -1,6 +1,5 @@
 package com.clashwars.dvz.abilities.dwarves;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
