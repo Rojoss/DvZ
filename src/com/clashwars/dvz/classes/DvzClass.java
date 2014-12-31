@@ -50,6 +50,13 @@ public enum DvzClass {
         return classClass;
     }
 
+    public boolean isBaseClass() {
+        if (this == DvzClass.DWARF || this == DvzClass.MONSTER || this == DvzClass.DRAGON || this == DvzClass.BASE) {
+            return true;
+        }
+        return false;
+    }
+
     public List<String> getAliases() {
         return aliases;
     }

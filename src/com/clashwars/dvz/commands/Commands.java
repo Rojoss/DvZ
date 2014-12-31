@@ -16,6 +16,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Commands {
@@ -48,10 +49,11 @@ public class Commands {
                     }
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " switch &8- &5Switch to another class."));
                     sender.sendMessage(CWUtil.integrateColor("&7(You will get the same class options again!)"));
-                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " spawn &8- &5Teleport to dwarf/monster spawn."));
-                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " class {name} &8- &5Detailed class info."));
-                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " abilities &8- &5List all abilities you can use."));
-                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " ability {name} &8- &5Detailed ability info."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " {keep|wall|shrine|ws} &8- &5TP to these locations."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " classes [dwarf|monster] &8- &5List all classes."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " class [name] &8- &5Detailed class info."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " abilities [class] &8- &5List all abilities."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " ability [name] &8- &5Detailed ability info."));
                     return true;
                 }
 
@@ -72,7 +74,7 @@ public class Commands {
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " stop [reason] &8- &5Stop the game."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " speed [value] &8- &5Set the game speed (def:0)"));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " dragon [type] &8- &5Set yourself to be the dragon."));
-                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " class [type] &8- &5Force set your class."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " setclass [type] &8- &5Force set your class."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " loc {name} [block] &8- &5Set a location at ur location."));
                     sender.sendMessage(CWUtil.integrateColor("&7(Or at the block on cursor within 5 blocks if 'block' is specified)"));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " save &8- &5Save everything."));
@@ -111,6 +113,45 @@ public class Commands {
                     return true;
                 }
 
+
+                //##########################################################################################################################
+                //############################################## /dvz classes [dwarf|monster] ##############################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("classes") || args[0].equalsIgnoreCase("classlist") || args[0].equalsIgnoreCase("cl")) {
+                    Map<DvzClass, BaseClass> classes = null;
+                    Map<ClassType, String> classStrings = new HashMap<ClassType, String>();
+                    if (args.length > 1) {
+                        ClassType type = ClassType.fromString(args[1]);
+                        if (type != null) {
+                            classes = cm.getClasses(type);
+                            classStrings.put(type, type.getColor() + CWUtil.capitalize(type.toString().toLowerCase()) + "s&8: &7");
+                        }
+                    }
+                    if (classes == null || classes.size() < 1) {
+                        classes = cm.getClasses(null);
+                        for (ClassType type : ClassType.values()) {
+                            if (type == ClassType.BASE) {
+                                continue;
+                            }
+                            classStrings.put(type, type.getColor() + CWUtil.capitalize(type.toString().toLowerCase()) + "s&8: &7");
+                        }
+                    }
+
+                    for (DvzClass dvzClass : classes.keySet()) {
+                        if (dvzClass.isBaseClass()) {
+                            continue;
+                        }
+                        String classString = classStrings.get(dvzClass.getType());
+                        classString += dvzClass.getClassClass().getColor() + dvzClass.getClassClass().getDisplayName() + "&8, ";
+                        classStrings.put(dvzClass.getType(), classString);
+                    }
+
+                    sender.sendMessage(CWUtil.integrateColor("&8========== &4&ALL DVZ CLASSES &8=========="));
+                    for (String str : classStrings.values()) {
+                        sender.sendMessage(CWUtil.integrateColor(str.substring(0, str.length() - 2)));
+                    }
+                    return true;
+                }
 
                 //TODO: class cmd
 
@@ -280,9 +321,9 @@ public class Commands {
 
 
                 //##########################################################################################################################
-                //################################################### /dvz class [class] ###################################################
+                //################################################# /dvz setclass [class] ##################################################
                 //##########################################################################################################################
-                if (args[0].equalsIgnoreCase("class")) {
+                if (args[0].equalsIgnoreCase("setclass")) {
                     if (!(sender instanceof Player)) {
                         sender.sendMessage(Util.formatMsg("&cPlayer command only."));
                         return true;

@@ -36,7 +36,7 @@ public class ClassManager {
     public Map<DvzClass, BaseClass> getClasses(ClassType type) {
         Map<DvzClass, BaseClass> classes = new HashMap<DvzClass, BaseClass>();
         for (DvzClass c : DvzClass.values()) {
-            if (c.getType() == type) {
+            if (type == null || c.getType() == type) {
                 classes.put(c, c.getClassClass());
             }
         }
