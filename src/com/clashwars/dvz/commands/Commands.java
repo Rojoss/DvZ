@@ -4,6 +4,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
+import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.*;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.player.CWPlayer;
@@ -16,8 +17,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Commands {
 
@@ -146,7 +146,7 @@ public class Commands {
                         classStrings.put(dvzClass.getType(), classString);
                     }
 
-                    sender.sendMessage(CWUtil.integrateColor("&8========== &4&ALL DVZ CLASSES &8=========="));
+                    sender.sendMessage(CWUtil.integrateColor("&8========== &4&lALL DVZ CLASSES &8=========="));
                     for (String str : classStrings.values()) {
                         sender.sendMessage(CWUtil.integrateColor(str.substring(0, str.length() - 2)));
                     }
@@ -155,7 +155,59 @@ public class Commands {
 
                 //TODO: class cmd
 
-                //TODO: Abilities cmd
+                //##########################################################################################################################
+                //################################################# /dvz abilities [class] #################################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("abilities") || args[0].equalsIgnoreCase("abilitylist") || args[0].equalsIgnoreCase("al")) {
+                    Set<Ability> abilities = new HashSet<Ability>();
+                    Map<DvzClass, String> abilityStrings = new HashMap<DvzClass, String>();
+
+                    if (args.length > 1) {
+                        DvzClass dvzClass = DvzClass.fromString(args[1]);
+                        if (dvzClass != null) {
+                            abilities = dvzClass.getClassClass().getAbilities();
+                        }
+                    }
+
+                    if (abilities == null || abilities.size() < 1) {
+                        for (Ability ability : Ability.values()) {
+                            if (ability == Ability.BASE) {
+                                continue;
+                            }
+                            abilities.add(ability);
+                        }
+                    }
+
+                    for (Ability ability : abilities) {
+                        String abilityString = abilityStrings.get(ability.getDvzClass());
+                        if (abilityString == null) {
+                            abilityString = "";
+                        }
+                        abilityString += "&7" + CWUtil.stripAllColor(ability.getAbilityClass().getDisplayName()) + "&8, ";
+                        abilityStrings.put(ability.getDvzClass(), abilityString);
+                    }
+
+                    sender.sendMessage(CWUtil.integrateColor("&8========== &4&lALL DVZ ABILITIES &8=========="));
+                    for (DvzClass dvzClass : abilityStrings.keySet()) {
+                        String str = abilityStrings.get(dvzClass);
+                        String name = dvzClass.getType().getColor() + CWUtil.stripAllColor(dvzClass.getClassClass().getDisplayName());
+                        if (dvzClass == DvzClass.BASE) {
+                            name = "&8All classes";
+                        }
+                        if (dvzClass == DvzClass.DWARF) {
+                            name = "&8Dwarf classes";
+                        }
+                        if (dvzClass == DvzClass.MONSTER) {
+                            name = "&8Monster classes";
+                        }
+                        if (dvzClass == DvzClass.DRAGON) {
+                            name = "&8Dragon classes";
+                        }
+
+                        sender.sendMessage(CWUtil.integrateColor(name + "&8: &7" + str.substring(0, str.length() - 2)));
+                    }
+                    return true;
+                }
 
                 //TODO: Ability cmd
 
