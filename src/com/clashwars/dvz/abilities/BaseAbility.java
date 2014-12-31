@@ -1,8 +1,10 @@
 package com.clashwars.dvz.abilities;
 
 import com.clashwars.cwcore.CooldownManager;
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
+import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
@@ -135,15 +137,12 @@ public class BaseAbility implements Listener {
     }
 
     public boolean canCast(Player player) {
-        boolean testing = false;
+        boolean testing = true;
         if (testing) {
             return true;
         }
 
         CWPlayer cwp = dvz.getPM().getPlayer(player);
-        if (getDvzClass() != cwp.getPlayerClass()) {
-            return false;
-        }
 
         if (hasCooldown()) {
             String tag = ability.getDvzClass().toString().toLowerCase() +  "-" + ability.toString().toLowerCase();

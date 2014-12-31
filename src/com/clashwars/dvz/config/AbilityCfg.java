@@ -98,6 +98,12 @@ public class AbilityCfg extends EasyConfig {
             case BLINK:
                 abilityData = loadDefault(abilityData, "range", "20");
                 break;
+            case BUILDING_BRICK:
+                abilityData = loadDefault(abilityData, "range", "50");
+                break;
+            case BUILDING_BLOCK:
+                abilityData = loadDefault(abilityData, "range", "50");
+                break;
         }
 
         return abilityData;

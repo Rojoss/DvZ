@@ -12,8 +12,8 @@ public class Builder extends DwarfClass {
         dvzClass = DvzClass.BUILDER;
         classItem = new DvzItem(Material.CLAY_BRICK, 1, (byte)0, "&e&lBuilder", 10, -1);
 
-        abilities.add(Ability.BUILDING_BLOCK);
         abilities.add(Ability.BUILDING_BRICK);
+        abilities.add(Ability.BUILDING_BLOCK);
     }
 
 }

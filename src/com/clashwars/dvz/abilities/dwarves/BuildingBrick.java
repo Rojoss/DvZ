@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.dwarves;
 
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
@@ -17,55 +18,45 @@ public class BuildingBrick extends DwarfAbility {
     public BuildingBrick() {
         super();
         ability = Ability.BUILDING_BRICK;
-        castItem = new DvzItem(Material.BRICK, 1, (short)0, displayName, -1, -1);
+        castItem = new DvzItem(Material.CLAY_BRICK, 1, (short)0, displayName, -1, -1);
     }
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
-        dvz.getServer().broadcastMessage("0");
-        Block b = player.getTargetBlock(null, 80);
-        dvz.getServer().broadcastMessage("0.5");
-        if(b == null) {
-            dvz.getServer().broadcastMessage("1");
-            return;
-        }
-        dvz.getServer().broadcastMessage("1.5");
-        if(b.getType() != Material.SMOOTH_BRICK) {
-            dvz.getServer().broadcastMessage("2");
-            return;
-        }
-        dvz.getServer().broadcastMessage("2.2");
-
-
-
-        Block newBlockReplaced = b.getRelative(b.getFace(player.getEyeLocation().getBlock()));
-        dvz.getServer().broadcastMessage("2.4");
-        Block newBlock = newBlockReplaced;
-        dvz.getServer().broadcastMessage("2.6");
         ItemStack is = getStoneItemStack(player);
-        dvz.getServer().broadcastMessage("2.8");
+        Block b = player.getLastTwoTargetBlocks(null, 100).get(0);
 
         if(is == null) {
-            dvz.getServer().broadcastMessage("3");
             return;
         }
-        dvz.getServer().broadcastMessage("4");
-        newBlock.setType(is.getType());
-        dvz.getServer().broadcastMessage("5");
-        newBlock.setData(is.getData().getData());
-        dvz.getServer().broadcastMessage("6");
-        BlockPlaceEvent bpe = new BlockPlaceEvent(newBlock, newBlockReplaced.getState(), b, is, player, true);
-        dvz.getServer().broadcastMessage("7");
+
+        if (b == null) {
+            return;
+        }
+
+        if(player.getLastTwoTargetBlocks(null, 100).get(1).getType() != Material.SMOOTH_BRICK) {
+            return;
+        }
+
+        if (b.getLocation().distance(player.getLocation()) > getIntOption("range") && b.getLocation().distance(player.getLocation()) > 1) {
+            return;
+        }
+
+        b.setType(is.getType());
+        b.setData(is.getData().getData());
+        CWUtil.removeItems(player.getInventory(), is, 1);
     }
 
     public ItemStack getStoneItemStack(Player player) {
-        dvz.getServer().broadcastMessage("100");
         for(ItemStack is : player.getInventory().getContents()) {
+            if(is == null) {
+                continue;
+            }
+
             if(is.getType() == Material.SMOOTH_BRICK) {
                 return is;
             }
         }
-
         return null;
     }
 
