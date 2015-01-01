@@ -153,7 +153,57 @@ public class Commands {
                     return true;
                 }
 
-                //TODO: class cmd
+
+
+                //##########################################################################################################################
+                //################################################### /dvz class [class] ###################################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("class") || args[0].equalsIgnoreCase("c")) {
+                    //Try get player class if none specified.
+                    DvzClass dvzClass = null;
+                    if (args.length < 2) {
+                        if (sender instanceof Player) {
+                            Player player = (Player)sender;
+                            CWPlayer cwp = pm.getPlayer(player);
+                            dvzClass = cwp.getPlayerClass();
+                        }
+                        if (dvzClass == null || dvzClass.isBaseClass()) {
+                            sender.sendMessage(Util.formatMsg("&cYou have no class. To check a specific class add a class name as last arg."));
+                            return true;
+                        }
+                    }
+
+                    //Get class name from cmd arg.
+                    if (args.length >= 2) {
+                        dvzClass = DvzClass.fromString(args[1]);
+                        if (dvzClass == null || dvzClass.isBaseClass()) {
+                            sender.sendMessage(Util.formatMsg("&cInvalid class specified. See &4/dvz classes &cfor a list."));
+                            return true;
+                        }
+                    }
+
+                    BaseClass baseClass = dvzClass.getClassClass();
+                    sender.sendMessage(CWUtil.integrateColor("&8========== &4&lCLASS DETAILS &8=========="));
+                    sender.sendMessage(CWUtil.integrateColor("&8&l❝&7" + baseClass.getDescription() + "&8&l❞"));
+                    sender.sendMessage(CWUtil.integrateColor("&6Class&8: &5" + baseClass.getDisplayName()));
+                    sender.sendMessage(CWUtil.integrateColor("&6Type&8: &5" + CWUtil.capitalize(dvzClass.getType().toString().toLowerCase())));
+                    sender.sendMessage(CWUtil.integrateColor("&6Rarity&8: &5" + baseClass.getWeight()));
+                    sender.sendMessage(CWUtil.integrateColor("&6Health&8: &5" + baseClass.getHealth()));
+                    sender.sendMessage(CWUtil.integrateColor("&6Speed&8: &5" + baseClass.getSpeed() + "&7(&80.2 = default&7)"));
+                    if (dvzClass.getType() == ClassType.DWARF) {
+                        sender.sendMessage(CWUtil.integrateColor("&6Task&8: &5" + baseClass.getTask()));
+                        sender.sendMessage(CWUtil.integrateColor("&6Production&8: &5" + baseClass.getProduce()));
+                    }
+
+                    List<String> abilities = new ArrayList<String>();
+                    for (Ability ability : baseClass.getAbilities()) {
+                        abilities.add(CWUtil.capitalize(ability.toString().toLowerCase()));
+                    }
+                    sender.sendMessage(CWUtil.integrateColor("&6Abilities&8: &7" + CWUtil.implode(abilities, "&8, &7")));
+                    return true;
+                }
+
+
 
                 //##########################################################################################################################
                 //################################################# /dvz abilities [class] #################################################

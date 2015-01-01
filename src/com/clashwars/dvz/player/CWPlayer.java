@@ -127,6 +127,7 @@ public class CWPlayer {
         dvzClass.getClassClass().onEquipClass(player);
         player.setMaxHealth(c.getHealth());
         player.setHealth(c.getHealth());
+        player.setWalkSpeed(c.getSpeed());
         player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));
         player.sendMessage(CWUtil.integrateColor("&8&l❝&7" + c.getDescription().replace("\\|\\|", "") + "&8&l❞"));
         savePlayer();

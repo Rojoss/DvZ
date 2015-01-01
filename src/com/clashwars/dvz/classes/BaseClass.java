@@ -28,6 +28,7 @@ public class BaseClass implements Listener {
 
     protected double weight = 0.0d;
     protected int health = 20;
+    protected float speed = 0.2f;
     protected ChatColor color = ChatColor.WHITE;
 
     public BaseClass() {
@@ -79,6 +80,14 @@ public class BaseClass implements Listener {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
     }
 
     public String getDisguise() {

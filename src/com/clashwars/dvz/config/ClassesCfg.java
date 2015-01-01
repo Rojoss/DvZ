@@ -36,6 +36,8 @@ public class ClassesCfg extends EasyConfig {
         c.getClassClass().setClass(DvzClass.fromString(classData.get("class")));
         classData = loadDefault(classData, "weight", "0.2");
         c.getClassClass().setWeight(CWUtil.getDouble(classData.get("weight")));
+        classData = loadDefault(classData, "speed", "0.2");
+        c.getClassClass().setSpeed(CWUtil.getFloat(classData.get("speed")));
         classData = loadDefault(classData, "color", "WHITE");
         c.getClassClass().setColor(ChatColor.valueOf(classData.get("color")));
         classData = loadDefault(classData, "displayname", "");
