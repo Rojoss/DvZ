@@ -1,10 +1,13 @@
 package com.clashwars.dvz.commands;
 
+import com.clashwars.cwcore.CWCore;
+import com.clashwars.cwcore.CooldownManager;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.abilities.Ability;
+import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.classes.*;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.player.CWPlayer;
@@ -259,7 +262,80 @@ public class Commands {
                     return true;
                 }
 
-                //TODO: Ability cmd
+
+
+                //##########################################################################################################################
+                //################################################# /dvz ability [ability] #################################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("ability") || args[0].equalsIgnoreCase("a")) {
+                    //Try get player ability if none specified.
+                    Ability ability = null;
+                    if (args.length < 2 && sender instanceof Player) {
+                        Player player = (Player)sender;
+                        CWPlayer cwp = pm.getPlayer(player);
+                        DvzClass dvzClass = cwp.getPlayerClass();
+
+                        if (dvzClass == null || dvzClass.isBaseClass()) {
+                            sender.sendMessage(Util.formatMsg("&cYou have no class. To check a specific ability add an ability name as last arg."));
+                            return true;
+                        }
+
+                        //Check castitem with holding item.
+                        for (Ability a : dvzClass.getClassClass().getAbilities()) {
+                            if (CWUtil.compareItems(player.getItemInHand(), a.getAbilityClass().getCastItem(),true, false)) {
+                                ability = a;
+                                break;
+                            }
+                        }
+
+                        if (ability == null || ability == Ability.BASE) {
+                            sender.sendMessage(Util.formatMsg("&cYou're not holding an ability cast item. To check a specific ability add an ability name as last arg."));
+                            return true;
+                        }
+                    }
+
+                    //Get ability from cmd arg.
+                    if (args.length >= 2) {
+                        ability = Ability.fromString(args[1]);
+                        if (ability == null || ability == Ability.BASE) {
+                            sender.sendMessage(Util.formatMsg("&cInvalid ability specified. See &4/dvz abilities &cfor a list."));
+                            return true;
+                        }
+                    }
+
+                    BaseAbility baseAbility = ability.getAbilityClass();
+                    sender.sendMessage(CWUtil.integrateColor("&8========== &4&lABILITY DETAILS &8=========="));
+                    sender.sendMessage(CWUtil.integrateColor("&8&l❝&7" + baseAbility.getDesc() + "&8&l❞"));
+                    sender.sendMessage(CWUtil.integrateColor("&6Ability&8: &5" + baseAbility.getDisplayName()));
+                    List<String> dvzClasses = new ArrayList<String>();
+                    for (DvzClass dvzClass : DvzClass.values()) {
+                        if (!dvzClass.isBaseClass() && dvzClass.getClassClass().getAbilities().contains(ability)) {
+                            dvzClasses.add(CWUtil.capitalize(dvzClass.toString().toLowerCase()));
+                        }
+                    }
+                    sender.sendMessage(CWUtil.integrateColor("&6Classes&8: &5" + CWUtil.implode(dvzClasses, "&8, &5")));
+                    sender.sendMessage(CWUtil.integrateColor("&6Cast item&8: &5" + CWCore.inst().getMaterials().getDisplayName(baseAbility.getCastItem().getType(), baseAbility.getCastItem().getDurability())));
+                    sender.sendMessage(CWUtil.integrateColor("&6Usage&8: &5" + baseAbility.getUsage().replace("this item", CWCore.inst().getMaterials().getDisplayName(baseAbility.getCastItem().getType(), baseAbility.getCastItem().getDurability()))));
+
+                    if (baseAbility.getCooldown() <= 0) {
+                        sender.sendMessage(CWUtil.integrateColor("&6Cooldown&8: &cNo cooldown"));
+                    } else {
+                        String cdPlayer = "";
+                        long timeLeft = 0;
+                        if (sender instanceof Player) {
+                            CWPlayer cwp = pm.getPlayer((Player)sender);
+                            String tag = ability.getDvzClass().toString().toLowerCase() + "-" + ability.toString().toLowerCase();
+                            CooldownManager.Cooldown cd = cwp.getCDM().getCooldown(tag);
+                            if (cd != null) {
+                                timeLeft = cd.getTimeLeft();
+                            }
+                        }
+                        cdPlayer = CWUtil.formatTime(timeLeft, "&5%S&8.&5%%%&ds");
+                        sender.sendMessage(CWUtil.integrateColor("&6Cooldown&8: &5" + cdPlayer + "&8/" + CWUtil.formatTime((long)baseAbility.getCooldown(), "&5%S&ds")));
+                    }
+                    return true;
+                }
+
 
 
                 //##########################################################################################################################
