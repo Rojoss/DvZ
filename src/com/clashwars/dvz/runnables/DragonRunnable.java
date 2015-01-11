@@ -8,10 +8,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class DragonRunnable extends BukkitRunnable {
 
-    private DvZ dvz = DvZ.inst();
+    private DvZ dvz;
     private Player dragon;
 
-    public DragonRunnable() {
+    public DragonRunnable(DvZ dvz) {
         dragon = dvz.getGM().getDragonPlayer();
     }
 

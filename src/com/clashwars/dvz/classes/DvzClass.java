@@ -25,7 +25,8 @@ public enum DvzClass {
     ENDERMAN(ClassType.MONSTER, new Enderman(), new String[]{"endermans"}),
     BLAZE(ClassType.MONSTER, new Blaze(), new String[]{"blazes"}),
     PIG(ClassType.MONSTER, new Pig(), new String[]{"pigs", "babypig", "babypigs", "pigman", "pigmans", "hungrypig", "hungrypigs"}),
-    VILLAGER(ClassType.MONSTER, new Villager(), new String[]{"villagers", "witch", "witches"}),
+    VILLAGER(ClassType.MONSTER, new Villager(), new String[]{"villagers", "villager"}),
+    WITCH(ClassType.MONSTER, new Witch(), new String[]{"witches", "witch"}),
 
     DRAGON(ClassType.BASE, new DragonClass(), new String[]{"dragons"}),
     FIREDRAGON(ClassType.DRAGON, new FireDragon(), new String[]{"firedragons", "firedragon", "fire"}),

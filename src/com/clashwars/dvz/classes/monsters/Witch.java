@@ -1,8 +1,12 @@
 package com.clashwars.dvz.classes.monsters;
 
-/**
- * Created by Ivofe_000 on 11/1/2015.
- */
-public class Witch {
+import com.clashwars.dvz.classes.DvzClass;
+
+public class Witch extends MobClass {
+
+    public Witch() {
+        super();
+        dvzClass = DvzClass.VILLAGER;
+    }
 
 }
