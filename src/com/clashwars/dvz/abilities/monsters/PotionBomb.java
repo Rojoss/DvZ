@@ -8,14 +8,14 @@ import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.worldedit.CuboidClipboard;
-import com.sk89q.worldedit.FilenameException;
 import com.sk89q.worldedit.MaxChangedBlocksException;
-import com.sk89q.worldedit.data.DataException;
+import com.sk89q.worldedit.util.io.file.FilenameException;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
-import org.bukkit.block.*;
-import org.bukkit.entity.EntityType;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -65,15 +65,15 @@ public class PotionBomb extends MobAbility {
 
         try {
             CuboidClipboard cc = CWWorldGuard.pasteSchematic(bomb.getWorld(), CWWorldGuard.getSchematicFile("PotionBomb"), bomb, true, 0, true);
-        } catch (MaxChangedBlocksException e) {
-            e.printStackTrace();
-        } catch (DataException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (CommandException e) {
             e.printStackTrace();
         } catch (FilenameException e) {
             e.printStackTrace();
-        } catch (CommandException e) {
+        } catch (com.sk89q.worldedit.world.DataException e) {
+            e.printStackTrace();
+        } catch (MaxChangedBlocksException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

@@ -60,13 +60,13 @@ public class Miner extends DwarfClass {
         //Particle effect for breaking blocks.
         final Material mat = block.getType();
         if (mat == Material.STONE) {
-            ParticleEffect.SMOKE.display(block.getLocation().add(0.5f,0.5f,0.5f), 0.5f, 0.5f, 0.5f, 0.0001f, 10);
+            ParticleEffect.SMOKE_NORMAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, block.getLocation().add(0.5f,0.5f,0.5f));
         } else if (mat == Material.DIAMOND_ORE) {
-            ParticleEffect.MAGIC_CRIT.display(block.getLocation().add(0.5f,0.5f,0.5f), 0.5f, 0.5f, 0.5f, 0.0001f, 20);
+            ParticleEffect.CRIT_MAGIC.display(0.5f, 0.5f, 0.5f, 0.0001f, 20, block.getLocation().add(0.5f,0.5f,0.5f));
         } else if (mat == Material.GOLD_ORE) {
-            ParticleEffect.FLAME.display(block.getLocation().add(0.5f,0.5f,0.5f), 0.5f, 0.5f, 0.5f, 0.0001f, 15);
+            ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 15, block.getLocation().add(0.5f,0.5f,0.5f));
         } else if (mat == Material.IRON_ORE) {
-            ParticleEffect.CRIT.display(block.getLocation().add(0.5f,0.5f,0.5f), 0.5f, 0.5f, 0.5f, 0.0001f, 10);
+            ParticleEffect.CRIT.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, block.getLocation().add(0.5f,0.5f,0.5f));
         }
 
         event.setCancelled(false);
@@ -120,7 +120,7 @@ public class Miner extends DwarfClass {
         if (hand.getAmount() > 2) {
             if (tryCraft(hand, dropLoc)) {
                 CWUtil.removeItemsFromHand(player, 2);
-                ParticleEffect.WITCH_MAGIC.display(event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f), 0.2f, 0.2f, 0.2f, 0.0001f, 20);
+                ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
                 return;
             }
         }
@@ -129,7 +129,7 @@ public class Miner extends DwarfClass {
         for (int i = 0; i < inv.getSize(); i++) {
             if (tryCraft(inv.getItem(i), dropLoc)) {
                 CWUtil.removeItemsFromSlot(inv, i, 2);
-                ParticleEffect.WITCH_MAGIC.display(event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f), 0.2f, 0.2f, 0.2f, 0.0001f, 20);
+                ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
                 return;
             }
         }

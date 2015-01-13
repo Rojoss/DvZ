@@ -70,7 +70,7 @@ public class Fletcher extends DwarfClass {
             CWItem pork = Product.RAW_PORK.getItem();
             pork.setAmount(getIntOption("pig-drop-amount"));
             entity.getWorld().dropItem(entity.getLocation(), pork);
-            ParticleEffect.PORTAL.display(entity.getLocation(), 0.5f, 0.5f, 0.5f, 0.0001f, 8);
+            ParticleEffect.PORTAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 8, entity.getLocation());
             ws.spawnAnimal(EntityType.PIG, 0);
             return;
         }
@@ -81,9 +81,9 @@ public class Fletcher extends DwarfClass {
         feathers.setAmount(1);
         if (loc.getBlockY() > ws.getCuboid().getMinY() + getIntOption("chicken-bonus-height")) {
             feathers.setAmount(2);
-            ParticleEffect.HAPPY_VILLAGER.display(entity.getLocation(), 0.5f, 0.5f, 0.5f, 0.0001f, 8);
+            ParticleEffect.VILLAGER_HAPPY.display(0.5f, 0.5f, 0.5f, 0.0001f, 8, entity.getLocation());
         } else {
-            ParticleEffect.PORTAL.display(entity.getLocation(), 0.5f, 0.5f, 0.5f, 0.0001f, 8);
+            ParticleEffect.PORTAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 8, entity.getLocation());
         }
         entity.getWorld().dropItem(entity.getLocation(), feathers);
         ws.spawnAnimal(EntityType.CHICKEN, CWUtil.random(ws.getCuboid().getMaxY() + 10, ws.getCuboid().getMaxY() + 20));
@@ -142,7 +142,7 @@ public class Fletcher extends DwarfClass {
                 CWItem arrows = Product.ARROW.getItem();
                 arrows.setAmount(CWUtil.random(getIntOption("min-arrow-amount"), getIntOption("max-arrow-amount")));
                 dropLoc.getWorld().dropItem(dropLoc, arrows);
-                ParticleEffect.WITCH_MAGIC.display(event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f), 0.2f, 0.2f, 0.2f, 0.0001f, 20);
+                ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
                 return;
             }
         }

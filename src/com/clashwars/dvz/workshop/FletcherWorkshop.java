@@ -39,7 +39,7 @@ public class FletcherWorkshop extends WorkShop {
                         y, CWUtil.random(inside.getMinZ(), inside.getMaxZ()+1)));
                 animals.add(entity);
                 dvz.entities.add(entity.entity().getUniqueId());
-                ParticleEffect.FLAME.display(entity.entity().getLocation(), 0.5f, 0.5f, 0.5f, 0.0001f, 10);
+                ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, entity.entity().getLocation());
                 cuboid.getWorld().playSound(entity.entity().getLocation(), Sound.CHICKEN_EGG_POP, 0.5f, 2.0f);
             }
         }.runTaskLater(dvz, CWUtil.random(DvzClass.FLETCHER.getClassClass().getIntOption("animal-respawn-time-min"), DvzClass.FLETCHER.getClassClass().getIntOption("animal-respawn-time-max")));

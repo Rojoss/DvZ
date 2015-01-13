@@ -103,7 +103,7 @@ public class Tailor extends DwarfClass {
             @Override
             public void run() {
                 sheep.setSheared(false);
-                ParticleEffect.SNOWBALL_POOF.display(entity.getLocation().add(0, 0.5f, 0), 0.6f, 0.6f, 0.6f, 0.0001f, 30);
+                ParticleEffect.SNOWBALL.display(0.6f, 0.6f, 0.6f, 0.0001f, 30, entity.getLocation().add(0, 0.5f, 0));
                 entity.getWorld().playSound(entity.getLocation(), Sound.DIG_WOOL, 1.0f, 0.0f);
             }
         }.runTaskLater(dvz, CWUtil.random(getIntOption("wool-regrow-min"), getIntOption("wool-regrow-max")));
@@ -140,7 +140,7 @@ public class Tailor extends DwarfClass {
             public void run() {
                 if (block.getType() == Material.AIR) {
                     block.setType(originalType);
-                    ParticleEffect.HAPPY_VILLAGER.display(block.getLocation().add(0.5f, 0.5f, 0.5f), 0.2f, 0.3f, 0.2f, 0.0001f, 5);
+                    ParticleEffect.VILLAGER_HAPPY.display(0.2f, 0.3f, 0.2f, 0.0001f, 5, block.getLocation().add(0.5f, 0.5f, 0.5f));
                     block.getWorld().playSound(block.getLocation(), Sound.DIG_GRASS, 1.0f, 1.3f);
                 }
             }
@@ -202,7 +202,7 @@ public class Tailor extends DwarfClass {
                 Product[] leatherArmor  = new Product[] {Product.HELMET, Product.CHESTPLATE, Product.LEGGINGS, Product.BOOTS};
                 dropLoc.getWorld().dropItem(dropLoc, CWUtil.random(leatherArmor).getItem().setLeatherColor(CWUtil.getRandomColor()));
 
-                ParticleEffect.WITCH_MAGIC.display(event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f), 0.2f, 0.2f, 0.2f, 0.0001f, 20);
+                ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
                 return;
             }
         }

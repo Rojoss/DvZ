@@ -53,7 +53,7 @@ public class TailorWorkshop extends WorkShop {
             sheeps.add(entity);
             dvz.entities.add(entity.entity().getUniqueId());
 
-            ParticleEffect.FLAME.display(entity.entity().getLocation(), 0.5f, 0.5f, 0.5f, 0.0001f, 10);
+            ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, entity.entity().getLocation());
             cuboid.getWorld().playSound(entity.entity().getLocation(), Sound.CHICKEN_EGG_POP, 0.5f, 2.0f);
         }
     }

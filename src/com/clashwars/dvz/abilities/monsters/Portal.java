@@ -11,9 +11,8 @@ import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.worldedit.CuboidClipboard;
-import com.sk89q.worldedit.FilenameException;
 import com.sk89q.worldedit.MaxChangedBlocksException;
-import com.sk89q.worldedit.data.DataException;
+import com.sk89q.worldedit.util.io.file.FilenameException;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -80,15 +79,15 @@ public class Portal extends MobAbility {
             dvz.getServer().broadcastMessage(Util.formatMsg("&7Dwarves can destroy it by &dbreaking the egg &7or &dkilling the enderman&7!"));
             player.sendMessage(Util.formatMsg("&6Portal created! &7Click the egg if you want to deactivate the portal."));
             return;
-        } catch (MaxChangedBlocksException e) {
-            e.printStackTrace();
-        } catch (DataException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (CommandException e) {
             e.printStackTrace();
         } catch (FilenameException e) {
             e.printStackTrace();
-        } catch (CommandException e) {
+        } catch (com.sk89q.worldedit.world.DataException e) {
+            e.printStackTrace();
+        } catch (MaxChangedBlocksException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         player.sendMessage(Util.formatMsg("&cError while creating portal."));

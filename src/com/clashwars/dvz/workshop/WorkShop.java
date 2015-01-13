@@ -8,9 +8,8 @@ import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.worldedit.CuboidClipboard;
-import com.sk89q.worldedit.FilenameException;
 import com.sk89q.worldedit.MaxChangedBlocksException;
-import com.sk89q.worldedit.data.DataException;
+import com.sk89q.worldedit.util.io.file.FilenameException;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -57,15 +56,16 @@ public class WorkShop {
             List<Block> blocks = cuboid.getBlocks();
             for (Block block : blocks) {
                 if (block.getType() != Material.AIR) {
-                    ParticleEffect.displayBlockCrack(block.getLocation(), block.getTypeId(), (byte)block.getData(), 0.5f, 0.5f, 0.5f, 10);
+                    ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(block.getType(), (byte)block.getData()), 0.5f, 0.5f, 0.5f, 0.1f, 10, block.getLocation());
                 }
             }
             return true;
-        } catch (FilenameException e) {
         } catch (CommandException e) {
-        } catch (DataException e) {
+        } catch (FilenameException e) {
+        } catch (com.sk89q.worldedit.world.DataException e) {
         } catch (MaxChangedBlocksException e) {
         } catch (IOException e) {
+            e.printStackTrace();
         }
         return false;
     }

@@ -26,8 +26,8 @@ public class Poison extends MobAbility {
     public void castAbility(Player player, Location triggerLoc) {
         double range = getDoubleOption("range");
         ExpandingCircleEffect poisonEffect = new ExpandingCircleEffect(dvz.getEM());
-        poisonEffect.particleList.add(new Particle(ParticleEffect.MOB_SPELL, 0.1f, 0.2f, 0.1f, 0, 0));
-        poisonEffect.particleList.add(new Particle(ParticleEffect.RED_DUST, 0.1f, 0.2f, 0.1f, 0.1f, 0));
+        poisonEffect.particleList.add(new Particle(ParticleEffect.SPELL_MOB, 0.1f, 0.2f, 0.1f, 0, 0));
+        poisonEffect.particleList.add(new Particle(ParticleEffect.REDSTONE, 0.1f, 0.2f, 0.1f, 0.1f, 0));
         poisonEffect.period = 1;
         poisonEffect.iterations = (int)range * 2;
         poisonEffect.distanceBetweenRings = 0.5f;
@@ -43,7 +43,7 @@ public class Poison extends MobAbility {
 
             if(dvz.getPM().getPlayer(p).isDwarf()) {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, getIntOption("duration"), 1));
-                ParticleEffect.CRIT.display(p.getLocation(), 1);
+                ParticleEffect.CRIT.display(1, 0.5f, 1, 0.01f, 10, p.getLocation());
             }
         }
     }

@@ -69,7 +69,7 @@ public class AlchemistWorkshop extends WorkShop {
 
                 //Rain
                 for (Block cauldron : cauldrons) {
-                    ParticleEffect.DRIP_WATER.display(cauldron.getLocation().add(0.5f, 10, 0.5f), 0.3f, 4, 0.3f, 0.001f, 1);
+                    ParticleEffect.DRIP_WATER.display(0.3f, 4, 0.3f, 0.001f, 1, cauldron.getLocation().add(0.5f, 10, 0.5f));
                 }
 
                 //Check if waited long enough as we don't wanna refill cauldrons every update.
@@ -93,7 +93,7 @@ public class AlchemistWorkshop extends WorkShop {
                         cauldron.setData((byte)(cauldron.getData() + 1));
                     }
                     //Effect/Sound
-                    ParticleEffect.SPLASH.display(cauldron.getLocation().add(0.5f,0.7f,0.5f), 0.3f, 0.4f, 0.3f, 0.001f, 40);
+                    ParticleEffect.WATER_SPLASH.display(0.3f, 0.4f, 0.3f, 0.001f, 40, cauldron.getLocation().add(0.5f,0.7f,0.5f));
                     if (cauldron.getData() == 3) {
                         cauldron.getWorld().playSound(cauldron.getLocation(), Sound.SPLASH, 0.15f, 2.0f);
                     } else {
@@ -163,7 +163,7 @@ public class AlchemistWorkshop extends WorkShop {
         List<Block> waterBlocks = potTop.getBlocks(new Material[]{Material.STATIONARY_WATER});
         for (Block block : waterBlocks) {
             block.setType(Material.AIR);
-            ParticleEffect.SMOKE.display(block.getLocation().add(0.5f, 0.5f, 0.5f), 0.3f, 0.3f, 0.3f, 0.0001f, 5);
+            ParticleEffect.SMOKE_NORMAL.display(0.3f, 0.3f, 0.3f, 0.0001f, 5, block.getLocation().add(0.5f, 0.5f, 0.5f));
         }
     }
 
@@ -189,7 +189,7 @@ public class AlchemistWorkshop extends WorkShop {
             if (!added) {
                 chestLoc.getWorld().dropItem(chestLoc.add(0,1,0), item);
             }
-            ParticleEffect.WITCH_MAGIC.display(chestLoc.add(0.5f, 0.5f, 0.5f), 0.2f, 0.2f, 0.2f, 0.0001f, 30);
+            ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 30, chestLoc.add(0.5f, 0.5f, 0.5f));
         }
 
         //Reset
@@ -203,7 +203,7 @@ public class AlchemistWorkshop extends WorkShop {
         List<Block> waterBlocks = pot.getBlocks(new Material[]{Material.STATIONARY_WATER});
         for (Block block : waterBlocks) {
             block.setType(Material.AIR);
-            ParticleEffect.SMOKE.display(block.getLocation().add(0.5f, 0.5f, 0.5f), 0.3f, 0.3f, 0.3f, 0.0001f, 5);
+            ParticleEffect.SMOKE_NORMAL.display(0.3f, 0.3f, 0.3f, 0.0001f, 5, block.getLocation().add(0.5f, 0.5f, 0.5f));
         }
     }
 
@@ -211,8 +211,8 @@ public class AlchemistWorkshop extends WorkShop {
     private void createBoilEffect() {
         boilEffect = new BoilEffect(dvz.getEM());
         boilEffect.setLocation(getOrigin());
-        boilEffect.particleList.add(new Particle(ParticleEffect.BUBBLE, 1, 0.8f, 1, 0, 20));
-        boilEffect.particleList.add(new Particle(ParticleEffect.LARGE_SMOKE, 1, 1.5f, 1, 0, 2));
+        boilEffect.particleList.add(new Particle(ParticleEffect.WATER_BUBBLE, 1, 0.8f, 1, 0, 20));
+        boilEffect.particleList.add(new Particle(ParticleEffect.SMOKE_LARGE, 1, 1.5f, 1, 0, 2));
         boilEffect.soundVolume = 0.1f;
         boilEffect.soundPitch = 1.5f;
         boilEffect.soundDelay = 10;

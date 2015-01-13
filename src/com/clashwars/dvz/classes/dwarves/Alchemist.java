@@ -146,26 +146,26 @@ public class Alchemist extends DwarfClass {
                             if (itemStack.getType() == Material.MELON) {
                                 if (aws.getSugar() > 0) {
                                     aws.wrongIngredientAdded();
-                                    ParticleEffect.ANGRY_VILLAGER.display(item.getLocation(), 0.2f, 0.4f, 0.2f, 0.0001f, 5);
+                                    ParticleEffect.VILLAGER_ANGRY.display(0.2f, 0.4f, 0.2f, 0.0001f, 5, item.getLocation());
                                 } else {
                                     item.remove();
                                     aws.addMelon(itemStack.getAmount());
                                     player.playSound(item.getLocation(), Sound.SPLASH2, 0.8f, 1.0f);
-                                    ParticleEffect.WITCH_MAGIC.display(item.getLocation(), 0.2f, 0.4f, 0.2f, 0.0001f, 10);
+                                    ParticleEffect.SPELL_WITCH.display(0.2f, 0.4f, 0.2f, 0.0001f, 10, item.getLocation());
                                 }
                             } else if (itemStack.getType() == Material.SUGAR) {
                                 if (aws.getMelons() > 0) {
                                     aws.wrongIngredientAdded();
-                                    ParticleEffect.ANGRY_VILLAGER.display(item.getLocation(), 0.2f, 0.4f, 0.2f, 0.0001f, 5);
+                                    ParticleEffect.VILLAGER_ANGRY.display(0.2f, 0.4f, 0.2f, 0.0001f, 5, item.getLocation());
                                 } else {
                                     item.remove();
                                     aws.addSugar(itemStack.getAmount());
                                     player.playSound(item.getLocation(), Sound.SPLASH2, 0.8f, 1.0f);
-                                    ParticleEffect.WITCH_MAGIC.display(item.getLocation(), 0.2f, 0.4f, 0.2f, 0.0001f, 10);
+                                    ParticleEffect.SPELL_WITCH.display(0.2f, 0.4f, 0.2f, 0.0001f, 10, item.getLocation());
                                 }
                             } else {
                                 aws.wrongIngredientAdded();
-                                ParticleEffect.ANGRY_VILLAGER.display(item.getLocation(), 0.2f, 0.4f, 0.2f, 0.0001f, 5);
+                                ParticleEffect.VILLAGER_ANGRY.display(0.2f, 0.4f, 0.2f, 0.0001f, 5, item.getLocation());
                             }
                         }
                     }

@@ -114,7 +114,7 @@ public class EnchantStruc extends Structure {
             xpu.changeExp(-enchant.getXpNeeded());
             player.sendMessage(Util.formatMsg("&6Enchanted your item with &5" + enchant.getName() + "&6!"));
             player.getWorld().playSound(player.getLocation(), Sound.LEVEL_UP, 0.8f, 1.5f);
-            ParticleEffect.ENCHANTMENT_TABLE.display(player.getLocation().add(0, 1.0f, 0), 0.5f, 1f, 0.5f, 0.1f, 50);
+            ParticleEffect.ENCHANTMENT_TABLE.display(0.5f, 1f, 0.5f, 0.1f, 50, player.getLocation().add(0, 1.0f, 0));
             player.closeInventory();
         } else {
             player.sendMessage(Util.formatMsg("&cYou don't have enough experience for this enchant."));

@@ -87,8 +87,8 @@ public class FurnaceStruc extends Structure {
             if (furnaceItem.getResult().getType() == item.getType()) {
                 //Take item out of furnace.
                 player.getWorld().playSound(player.getLocation(), Sound.FIZZ, 0.5f, 1.3f);
-                ParticleEffect.SMOKE.display(player.getLocation(), 0.5f, 0.5f, 0.5f, 0.0001f, 15);
-                ParticleEffect.FLAME.display(player.getLocation(), 0.5f, 0.5f, 0.5f, 0.0001f, 5);
+                ParticleEffect.SMOKE_NORMAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 15, player.getLocation());
+                ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 5, player.getLocation());
                 menu.setSlot(new CWItem(Material.AIR), event.getSlot(), null);
                 furnaceItem.getResult().giveToPlayer(player);
             } else {
@@ -108,7 +108,7 @@ public class FurnaceStruc extends Structure {
                 //if there is a empty slot add item in furnace else not.
                 if (availableSlot >= 0) {
                     player.getWorld().playSound(player.getLocation(), Sound.FIZZ, 0.3f, 2.0f);
-                    ParticleEffect.FLAME.display(player.getLocation(), 0.5f, 0.5f, 0.5f, 0.0001f, 5);
+                    ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 5, player.getLocation());
                     menu.setSlot(new CWItem(furnaceItem.getOriginal()), availableSlot, null);
                     CWUtil.removeItemsFromSlot(player.getInventory(), event.getSlot(), 1);
 

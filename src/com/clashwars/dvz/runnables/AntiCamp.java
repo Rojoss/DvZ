@@ -5,6 +5,7 @@ import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -66,7 +67,7 @@ public class AntiCamp extends BukkitRunnable {
                     centerLoc.setY(player.getLocation().getY());
                     if (player.getLocation().distance(centerLoc) <= range) {
                         player.damage(2);
-                        ParticleEffect.displayBlockCrack(player.getLocation(), 52, (byte) 0, 0.4f, 1.0f, 0.4f, 20);
+                        ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(Material.REDSTONE_BLOCK, (byte) 0), 0.4f, 1.0f, 0.4f, 0.01f, 20, player.getLocation());
                     } else {
                         player.sendMessage(Util.formatMsg("&4&lDon't camp the monsters!"));
                     }

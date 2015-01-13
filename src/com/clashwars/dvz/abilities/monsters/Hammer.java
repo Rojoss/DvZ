@@ -52,7 +52,7 @@ public class Hammer extends MobAbility {
 
 
         //Shrine destroying stuff
-        ParticleEffect effect = ParticleEffect.SMOKE;
+        ParticleEffect effect = ParticleEffect.SMOKE_NORMAL;
         int effectAmt = 3;
         if (block.getType() == Material.ENDER_PORTAL_FRAME) {
             ShrineBlock shrineBlock = dvz.getGM().getShrineBlock(block.getLocation());
@@ -66,25 +66,25 @@ public class Hammer extends MobAbility {
                 }
             }
             shrineBlock.damage();
-            effect = ParticleEffect.WITCH_MAGIC;
+            effect = ParticleEffect.SPELL_WITCH;
             effectAmt = 8;
         }
 
         if (event.getBlockFace() == BlockFace.DOWN || event.getBlockFace() == BlockFace.UP) {
-            effect.display(CWUtil.getBlockCenterByBlockface(event.getClickedBlock().getLocation(), event.getBlockFace()), 0.3f, 0.0f, 0.3f, 0.00001f, effectAmt);
+            effect.display(0.3f, 0.0f, 0.3f, 0.00001f, effectAmt, CWUtil.getBlockCenterByBlockface(event.getClickedBlock().getLocation(), event.getBlockFace()));
         }
         if (event.getBlockFace() == BlockFace.NORTH || event.getBlockFace() == BlockFace.SOUTH) {
-            effect.display(CWUtil.getBlockCenterByBlockface(event.getClickedBlock().getLocation(), event.getBlockFace()), 0.3f, 0.3f, 0.0f, 0.00001f, effectAmt);
+            effect.display(0.3f, 0.3f, 0.0f, 0.00001f, effectAmt, CWUtil.getBlockCenterByBlockface(event.getClickedBlock().getLocation(), event.getBlockFace()));
         }
         if (event.getBlockFace() == BlockFace.EAST || event.getBlockFace() == BlockFace.WEST) {
-            effect.display(CWUtil.getBlockCenterByBlockface(event.getClickedBlock().getLocation(), event.getBlockFace()), 0.0f, 0.3f, 0.3f, 0.00001f, effectAmt);
+            effect.display(0.0f, 0.3f, 0.3f, 0.00001f, effectAmt, CWUtil.getBlockCenterByBlockface(event.getClickedBlock().getLocation(), event.getBlockFace()));
         }
         player.getWorld().playSound(event.getClickedBlock().getLocation(), Sound.ZOMBIE_WOOD, 0.1f, 2.2f - CWUtil.randomFloat());
-        if (effect == ParticleEffect.SMOKE) {
+        if (effect == ParticleEffect.SMOKE_NORMAL) {
             if (CWUtil.randomFloat() < getFloatOption("chance")) {
                 event.getClickedBlock().setType(Material.AIR);
-                ParticleEffect.LARGE_SMOKE.display(event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f), 0.3f, 0.3f, 0.3f, 0.00001f, 15);
-                ParticleEffect.CRIT.display(event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f), 0.6f, 0.6f, 0.6f, 0.1f, 10);
+                ParticleEffect.SMOKE_LARGE.display(0.3f, 0.3f, 0.3f, 0.00001f, 15, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
+                ParticleEffect.CRIT.display(0.6f, 0.6f, 0.6f, 0.1f, 10, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
                 player.getWorld().playSound(event.getClickedBlock().getLocation(), Sound.ZOMBIE_WOODBREAK, 0.5f, 0.8f);
             }
         }
