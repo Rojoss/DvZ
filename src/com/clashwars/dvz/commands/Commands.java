@@ -87,7 +87,66 @@ public class Commands {
                 }
 
 
-                //TODO: Spawn cmd
+                //keep|wall|shrine|ws
+                //##########################################################################################################################
+                //######################################################## /dvz keep #######################################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("keep")) {
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                        return true;
+                    }
+                    Player player = (Player)sender;
+                    CWPlayer cwp = pm.getPlayer(player);
+
+                    if (!cwp.isDwarf()) {
+                        sender.sendMessage(Util.formatMsg("&cYou have to be a dwarf to use this command."));
+                        return true;
+                    }
+
+                    cwp.timedTeleport(dvz.getMM().getActiveMap().getLocation("dwarf"), 4, "the keep");
+                    return true;
+                }
+
+                //##########################################################################################################################
+                //####################################################### /dvz shrine ######################################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("shrine")) {
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                        return true;
+                    }
+                    Player player = (Player)sender;
+                    CWPlayer cwp = pm.getPlayer(player);
+
+                    if (!cwp.isDwarf()) {
+                        sender.sendMessage(Util.formatMsg("&cYou have to be a dwarf to use this command."));
+                        return true;
+                    }
+
+                    cwp.timedTeleport(dvz.getMM().getActiveMap().getLocation("shrine1"), 4, "the shrine");
+                    return true;
+                }
+
+                //##########################################################################################################################
+                //######################################################## /dvz wall #######################################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("wall")) {
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                        return true;
+                    }
+                    Player player = (Player)sender;
+                    CWPlayer cwp = pm.getPlayer(player);
+
+                    if (!cwp.isDwarf()) {
+                        sender.sendMessage(Util.formatMsg("&cYou have to be a dwarf to use this command."));
+                        return true;
+                    }
+
+                    cwp.timedTeleport(dvz.getMM().getActiveMap().getLocation("wall"), 4, "the wall");
+                    return true;
+                }
 
 
                 //##########################################################################################################################
