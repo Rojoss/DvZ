@@ -11,6 +11,7 @@ import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.PlayerCfg;
+import com.clashwars.dvz.runnables.TeleportRunnable;
 import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.*;
@@ -18,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
@@ -31,6 +33,7 @@ public class CWPlayer {
     private long lastSave = System.currentTimeMillis();
 
     private CooldownManager cdm = new CooldownManager();
+    private BukkitRunnable teleport;
     public HashMap<String, Integer> productsTaken = new HashMap<String, Integer>();
     private Color color;
 
@@ -73,6 +76,10 @@ public class CWPlayer {
             player.removePotionEffect(pe.getType());
         }
         player.updateInventory();
+        if (teleport != null) {
+            teleport.cancel();
+            teleport = null;
+        }
     }
 
     public void undisguise() {
@@ -234,6 +241,26 @@ public class CWPlayer {
         data.setParkourCompleted(completed);
     }
 
+
+    public boolean timedTeleport(Location loc, int seconds, String locationMsg) {
+        if (teleport != null) {
+            return false;
+        }
+        if (seconds <= 0) {
+            if (locationMsg != null && !locationMsg.isEmpty()) {
+                sendMessage(Util.formatMsg("&6Teleported to &5" + locationMsg));
+            }
+            getPlayer().teleport(loc);
+            return true;
+        }
+        teleport = new TeleportRunnable(this, seconds, loc, locationMsg);
+        getPlayer().sendMessage(Util.formatMsg("&6Teleporting to &5" + locationMsg + "&8(&7Don't move!&8)"));
+        return true;
+    }
+
+    public void resetTeleport() {
+        teleport = null;
+    }
 
     public int getClassExp() {
         return data.getClassExp();
