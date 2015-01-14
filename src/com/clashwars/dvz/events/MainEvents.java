@@ -1,6 +1,9 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.effect.Particle;
+import com.clashwars.cwcore.effect.effects.AnimatedCircleEffect;
 import com.clashwars.cwcore.helpers.CWItem;
+import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.*;
 import com.clashwars.dvz.classes.BaseClass;
@@ -12,9 +15,13 @@ import com.clashwars.dvz.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -192,6 +199,35 @@ public class MainEvents implements Listener {
         Player player = event.getPlayer();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         ItemStack item = event.getItem();
+
+        //Parkour sign
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            Block block = event.getClickedBlock();
+            if ((block.getType() == Material.SIGN || block.getType() == Material.WALL_SIGN) && block.getState() instanceof Sign) {
+                Sign sign = (Sign)block.getState();
+                for (String str : sign.getLines()) {
+                    if (CWUtil.removeColour(str).equalsIgnoreCase("&9[PARKOUR]")) {
+                        if (cwp.hasCompletedParkour()) {
+                            player.sendMessage(Util.formatMsg("&cYou already completed the parkour this game!"));
+                        } else {
+                            dvz.getServer().broadcastMessage(Util.formatMsg("&5&l" + player.getName() + " &6completed the parkour!"));
+                            cwp.setParkourCompleted(true);
+
+                            block.getWorld().playSound(block.getLocation(), Sound.ENDERDRAGON_HIT, 1.0f, 2.0f);
+
+                            AnimatedCircleEffect effect = new AnimatedCircleEffect(dvz.getEM());
+                            effect.setLocation(player.getLocation());
+                            effect.particleList.add(new Particle(ParticleEffect.VILLAGER_HAPPY, 0.1f, 0.1f, 0.1f, 0, 1));
+                            effect.iterations = 200;
+                            effect.start();
+                        }
+                        event.setCancelled(true);
+                        return;
+                    }
+                }
+            }
+        }
+
         if (item == null) {
             return;
         }
