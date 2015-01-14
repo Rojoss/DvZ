@@ -60,7 +60,7 @@ public class StorageStruc extends Structure {
                     dvz.getGameCfg().STORAGE_PRODUCTS.put(storageItem.getName(), storageItem.getAmt());
                 }
             }
-        }.runTaskTimer(dvz, 30, 30);
+        }.runTaskTimer(dvz, 600, 600);
     }
 
 

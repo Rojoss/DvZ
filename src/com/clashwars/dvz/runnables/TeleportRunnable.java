@@ -25,7 +25,7 @@ public class TeleportRunnable extends BukkitRunnable {
 
         Location loc = player.getLocation();
         startLocation = new Vector(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-        this.runTaskTimer(DvZ.inst(), 0, 1);
+        this.runTaskTimer(DvZ.inst(), 20, 20);
     }
 
 

@@ -95,7 +95,7 @@ public class PlayerManager {
             return workshops.get(uuid);
         } else {
             DvzClass type = getPlayer(p).getPlayerClass();
-            WorkShop ws;
+            WorkShop ws = null;
             switch(type) {
                 case MINER:
                     ws = new MinerWorkshop(uuid, new WorkShopData());
@@ -110,13 +110,21 @@ public class PlayerManager {
                     ws = new AlchemistWorkshop(uuid, new WorkShopData());
                     break;
                 default:
-                    ws = new WorkShop(uuid, new WorkShopData());
+                    break;
             }
-            workshops.put(uuid, ws);
+            if (ws != null) {
+                workshops.put(uuid, ws);
+            }
             return ws;
         }
     }
 
+    public boolean hasWorkshop(Player p) {
+        if (workshops.containsKey(p.getUniqueId())) {
+            return true;
+        }
+        return false;
+    }
 
     public Map<UUID, CWPlayer> getPlayers() {
         return players;

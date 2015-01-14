@@ -104,6 +104,11 @@ public class Commands {
                         return true;
                     }
 
+                    if (!gm.isStarted()) {
+                        sender.sendMessage(Util.formatMsg("&cThe game isn't started or has already ended!"));
+                        return true;
+                    }
+
                     cwp.timedTeleport(dvz.getMM().getActiveMap().getLocation("dwarf"), 4, "the keep");
                     return true;
                 }
@@ -121,6 +126,11 @@ public class Commands {
 
                     if (!cwp.isDwarf()) {
                         sender.sendMessage(Util.formatMsg("&cYou have to be a dwarf to use this command."));
+                        return true;
+                    }
+
+                    if (!gm.isStarted()) {
+                        sender.sendMessage(Util.formatMsg("&cThe game isn't started or has already ended!"));
                         return true;
                     }
 
@@ -144,7 +154,43 @@ public class Commands {
                         return true;
                     }
 
+                    if (!gm.isStarted()) {
+                        sender.sendMessage(Util.formatMsg("&cThe game isn't started or has already ended!"));
+                        return true;
+                    }
+
+                    if (!gm.isDwarves() && gm.getState() != GameState.MONSTERS && gm.getState() != GameState.DRAGON) {
+                        sender.sendMessage(Util.formatMsg("&cThe monsters captured the wall!"));
+                        return true;
+                    }
+
                     cwp.timedTeleport(dvz.getMM().getActiveMap().getLocation("wall"), 4, "the wall");
+                    return true;
+                }
+
+                //##########################################################################################################################
+                //######################################################### /dvz ws ########################################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("ws")) {
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                        return true;
+                    }
+                    Player player = (Player)sender;
+                    CWPlayer cwp = pm.getPlayer(player);
+
+                    if (!cwp.isDwarf()) {
+                        sender.sendMessage(Util.formatMsg("&cYou have to be a dwarf to use this command."));
+                        return true;
+                    }
+
+                    if (!pm.hasWorkshop(player) || pm.getWorkshop(player).getCuboid() == null) {
+                        sender.sendMessage(Util.formatMsg("&cYou have no workshop."));
+                        return true;
+                    }
+
+                    Location loc = pm.getWorkshop(player).getCuboid().getMinLoc().add(2, 1, -1);
+                    cwp.timedTeleport(loc, 4, "your workshop");
                     return true;
                 }
 

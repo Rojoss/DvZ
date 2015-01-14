@@ -12,6 +12,7 @@ import com.clashwars.dvz.events.ProtectEvents;
 import com.clashwars.dvz.events.WorkShopEvents;
 import com.clashwars.dvz.maps.MapManager;
 import com.clashwars.dvz.player.PlayerManager;
+import com.clashwars.dvz.runnables.AntiCamp;
 import com.clashwars.dvz.runnables.GameRunnable;
 import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.util.ItemMenu;
@@ -154,7 +155,7 @@ public class DvZ extends JavaPlugin {
 
     private void startRunnables() {
         new GameRunnable(this).runTaskTimer(this, 0, 2);
-        new GameRunnable(this).runTaskTimer(this, 40, getCfg().CAMP_DELAY_TICKS);
+        new AntiCamp(this).runTaskTimer(this, 40, getCfg().CAMP_DELAY_TICKS);
     }
 
     @Override
