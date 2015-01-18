@@ -4,7 +4,6 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -22,14 +21,12 @@ public class BaseClass implements Listener {
 
     protected String disguise = "";
     protected String displayName = "&7Unknown";
-    protected String description = "";
     protected String produce = "";
     protected String task = "";
 
     protected double weight = 0.0d;
     protected int health = 20;
     protected float speed = 0.2f;
-    protected ChatColor color = ChatColor.WHITE;
 
     public BaseClass() {
         //--
@@ -58,13 +55,6 @@ public class BaseClass implements Listener {
 
 
 
-    public ChatColor getColor() {
-        return color;
-    }
-
-    public void setColor(ChatColor color) {
-        this.color = color;
-    }
 
     public Double getWeight() {
         return weight;
@@ -106,18 +96,6 @@ public class BaseClass implements Listener {
         this.displayName = displayName;
     }
 
-    public String getDescription() {
-        if (description == null || description.isEmpty()) {
-            return "&cNo description available.";
-        } else {
-            return description;
-        }
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getProduce() {
         if (produce == null || produce.isEmpty()) {
             return "&cNo info available.";
@@ -144,9 +122,9 @@ public class BaseClass implements Listener {
 
     public DvzItem getClassItem() {
         if (classItem != null) {
-            classItem.setLore(new String[]{}).addLore("&7Click to become a &8" + getDisplayName()).addLore("&aDesc&8: &7" + getDescription());
+            classItem.setLore(new String[]{}).addLore("&7Click to become a &8" + getDisplayName());
             if (dvzClass != null && dvzClass.getType() == ClassType.DWARF) {
-                classItem.addLore("&aTask&8: &7" + getTask()).addLore("&aProduce&8: &7" + getProduce());
+                classItem.addLore("&aTask&8: &7" + getTask().replace(". ", ".|").replace("! ", "!|")).addLore("&aProduce&8: &7" + getProduce().replace(". ", "|").replace("! ", "|"));
             }
             classItem.setName(getDisplayName());
             classItem.replaceLoreNewLines();
@@ -179,6 +157,9 @@ public class BaseClass implements Listener {
         Map<DvzItem, Integer> itemSlotMap = new HashMap<DvzItem, Integer>();
         //Class items
         for (DvzItem item : equipment) {
+            if (!item.doGive()) {
+                continue;
+            }
             if (item.getType() == Material.LEATHER_HELMET || item.getType() == Material.CHAINMAIL_HELMET || item.getType() == Material.GOLD_HELMET
                     || item.getType() == Material.IRON_HELMET || item.getType() == Material.DIAMOND_HELMET) {
                 player.getInventory().setHelmet(item);
@@ -201,7 +182,7 @@ public class BaseClass implements Listener {
         DvzItem castItem;
         for (Ability ability : getAbilities()) {
             castItem = ability.getAbilityClass().getCastItem();
-            if (castItem != null) {
+            if (castItem != null && castItem.doGive()) {
                 if (castItem.hasSlot()) {
                     itemSlotMap.put(castItem, castItem.getPriority());
                 } else {

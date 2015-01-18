@@ -1,6 +1,5 @@
 package com.clashwars.dvz.events;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.classes.DvzClass;
@@ -28,7 +27,6 @@ public class ProtectEvents implements Listener {
     private GameManager gm;
 
     public ProtectEvents(DvZ dvz) {
-        Debug.bc("ProtectEvents created");
         this.dvz = dvz;
         gm = dvz.getGM();
     }

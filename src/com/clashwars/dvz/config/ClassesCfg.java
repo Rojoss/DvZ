@@ -4,7 +4,6 @@ import com.clashwars.cwcore.config.internal.EasyConfig;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
-import org.bukkit.ChatColor;
 
 import java.util.HashMap;
 
@@ -38,12 +37,8 @@ public class ClassesCfg extends EasyConfig {
         c.getClassClass().setWeight(CWUtil.getDouble(classData.get("weight")));
         classData = loadDefault(classData, "speed", "0.2");
         c.getClassClass().setSpeed(CWUtil.getFloat(classData.get("speed")));
-        classData = loadDefault(classData, "color", "WHITE");
-        c.getClassClass().setColor(ChatColor.valueOf(classData.get("color")));
         classData = loadDefault(classData, "displayname", "");
         c.getClassClass().setDisplayName(classData.get("displayname"));
-        classData = loadDefault(classData, "desc", "");
-        c.getClassClass().setDescription(classData.get("desc"));
         classData = loadDefault(classData, "health", "20");
         c.getClassClass().setHealth(CWUtil.getInt(classData.get("health")));
 
@@ -96,13 +91,6 @@ public class ClassesCfg extends EasyConfig {
                 classData = loadDefault(classData, "cauldron-refill-delay", "4");
                 classData = loadDefault(classData, "melons-needed", "5");
                 classData = loadDefault(classData, "sugar-needed", "5");
-                break;
-            case PIG:
-                classData = loadDefault(classData, "disguise-grown", "pig");
-                classData = loadDefault(classData, "disguise-pigman", "pigman");
-                break;
-            case VILLAGER:
-                classData = loadDefault(classData, "disguise-witch", "witch");
                 break;
         }
 

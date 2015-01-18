@@ -22,7 +22,6 @@ public class Spider extends MobClass {
 
     @Override
     public void onEquipClass(Player player) {
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
         player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 1));
     }
 

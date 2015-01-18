@@ -41,7 +41,8 @@ public class AbilityCfg extends EasyConfig {
         switch (a) {
             case INFECT:
                 abilityData = loadDefault(abilityData, "chance", "0.1");
-                abilityData = loadDefault(abilityData, "duration", "12000");
+                abilityData = loadDefault(abilityData, "duration", "40");
+                abilityData = loadDefault(abilityData, "amplifier", "15");
                 break;
             case HAMMER:
                 abilityData = loadDefault(abilityData, "chance", "0.03");
@@ -53,16 +54,19 @@ public class AbilityCfg extends EasyConfig {
                 abilityData = loadDefault(abilityData, "randomoffset", "0.2");
                 break;
             case POISON_ATTACK:
-                abilityData = loadDefault(abilityData, "duration", "6000");
+                abilityData = loadDefault(abilityData, "duration", "40");
+                abilityData = loadDefault(abilityData, "amplifier", "1");
                 abilityData = loadDefault(abilityData, "chance", "0.4");
                 break;
             case RUSH:
-                abilityData = loadDefault(abilityData, "range", "20");
-                abilityData = loadDefault(abilityData, "multiplier", "0.4");
+                abilityData = loadDefault(abilityData, "range", "15");
+                abilityData = loadDefault(abilityData, "bonusspeed", "0.3");
+                abilityData = loadDefault(abilityData, "duration", "40");
                 break;
             case POISON:
                 abilityData = loadDefault(abilityData, "range", "4");
-                abilityData = loadDefault(abilityData, "duration", "6000");
+                abilityData = loadDefault(abilityData, "amplifier", "0");
+                abilityData = loadDefault(abilityData, "duration", "160");
                 break;
             case WEB:
                 abilityData = loadDefault(abilityData, "force", "0.8");
@@ -102,7 +106,15 @@ public class AbilityCfg extends EasyConfig {
                 abilityData = loadDefault(abilityData, "range", "50");
                 break;
             case BUILDING_BLOCK:
-                abilityData = loadDefault(abilityData, "range", "50");
+                abilityData = loadDefault(abilityData, "blocks", "5");
+                break;
+            case HEAL_POTION:
+                abilityData = loadDefault(abilityData, "duration", "100");
+                abilityData = loadDefault(abilityData, "amplifier", "0");
+                break;
+            case SPEED_POTION:
+                abilityData = loadDefault(abilityData, "duration", "200");
+                abilityData = loadDefault(abilityData, "amplifier", "0");
                 break;
         }
 

@@ -15,12 +15,12 @@ public class SpeedPotion extends DwarfAbility {
     public SpeedPotion() {
         super();
         ability = Ability.SPEED_POTION;
-        castItem = new DvzItem(Material.POTION, 1, (short)8194, displayName, -1, -1);
+        castItem = new DvzItem(Material.POTION, 1, (short)8194, displayName, -1, -1, false);
     }
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 6000, 1));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, getIntOption("duration"), getIntOption("amplifier")));
     }
 
     @EventHandler

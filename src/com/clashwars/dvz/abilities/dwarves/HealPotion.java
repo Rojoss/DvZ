@@ -15,12 +15,12 @@ public class HealPotion extends DwarfAbility {
     public HealPotion() {
         super();
         ability = Ability.HEAL_POTION;
-        castItem = new DvzItem(Material.POTION, 1, (short)8197, displayName, -1, -1);
+        castItem = new DvzItem(Material.POTION, 1, (short)8197, displayName, -1, -1, false);
     }
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
-        player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, 1, 1));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, getIntOption("duration"), getIntOption("amplifier")));
     }
 
     @EventHandler

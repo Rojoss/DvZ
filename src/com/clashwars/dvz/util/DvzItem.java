@@ -7,37 +7,65 @@ public class DvzItem extends CWItem {
 
     private int priority = 0;
     private int slot = -1;
+    private boolean give = true;
 
     public DvzItem(Material mat, int priority, int slot) {
         super(mat);
-        self(priority, slot);
+        init(priority, slot, true);
+    }
+
+    public DvzItem(Material mat, int priority, int slot, boolean give) {
+        super(mat);
+        init(priority, slot, give);
     }
 
     public DvzItem(Material mat, int amt, int priority, int slot) {
         super(mat, amt);
-        self(priority, slot);
+        init(priority, slot, true);
+    }
+
+    public DvzItem(Material mat, int amt, int priority, int slot, boolean give) {
+        super(mat, amt);
+        init(priority, slot, give);
     }
 
     public DvzItem(Material mat, int amt, short durability, int priority, int slot) {
         super(mat, amt, durability);
-        self(priority, slot);
+        init(priority, slot, true);
+    }
+
+    public DvzItem(Material mat, int amt, short durability, int priority, int slot, boolean give) {
+        super(mat, amt, durability);
+        init(priority, slot, give);
     }
 
     public DvzItem(Material mat, int amt, short durability, String name, int priority, int slot) {
         super(mat, amt, durability, name);
-        self(priority, slot);
+        init(priority, slot, true);
+    }
+
+    public DvzItem(Material mat, int amt, short durability, String name, int priority, int slot, boolean give) {
+        super(mat, amt, durability, name);
+        init(priority, slot, give);
     }
 
     public DvzItem(Material mat, int amt, short durability, String name, String[] lore, int priority, int slot) {
         super(mat, amt, durability, name, lore);
-        self(priority, slot);
+        init(priority, slot, true);
     }
 
-    private void self(int priority, int slot) {
+    public DvzItem(Material mat, int amt, short durability, String name, String[] lore, int priority, int slot, boolean give) {
+        super(mat, amt, durability, name, lore);
+        init(priority, slot, give);
+
+    }
+
+    private void init(int priority, int slot, boolean give) {
         this.priority = priority;
         if (slot >= 0) {
             this.slot = slot;
         }
+        this.give = give;
     }
 
 
@@ -64,5 +92,12 @@ public class DvzItem extends CWItem {
         return this;
     }
 
+    public boolean doGive() {
+        return give;
+    }
+
+    public void setGive(boolean give) {
+        this.give = give;
+    }
 
 }

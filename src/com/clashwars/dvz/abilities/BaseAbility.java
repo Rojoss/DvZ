@@ -72,7 +72,7 @@ public class BaseAbility implements Listener {
 
     public DvzItem getCastItem() {
         if (castItem != null) {
-            castItem.setLore(new String[]{}).addLore("&aDesc&8: &7" + getDesc()).addLore("&aUsage&8: &7" + getUsage());
+            castItem.setLore(new String[]{}).addLore("&aDesc&8: &7" + getDesc().replace(". ", ".|").replace("! ", "!|")).addLore("&aUsage&8: &7" + getUsage().replace(". ", ".|").replace("! ", "!|"));
             castItem.setName(getDisplayName());
             castItem.replaceLoreNewLines();
         }

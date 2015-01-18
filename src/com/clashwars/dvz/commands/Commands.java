@@ -250,7 +250,7 @@ public class Commands {
                             continue;
                         }
                         String classString = classStrings.get(dvzClass.getType());
-                        classString += dvzClass.getClassClass().getColor() + dvzClass.getClassClass().getDisplayName() + "&8, ";
+                        classString += dvzClass.getClassClass().getDisplayName() + "&8, ";
                         classStrings.put(dvzClass.getType(), classString);
                     }
 
@@ -292,7 +292,6 @@ public class Commands {
 
                     BaseClass baseClass = dvzClass.getClassClass();
                     sender.sendMessage(CWUtil.integrateColor("&8========== &4&lCLASS DETAILS &8=========="));
-                    sender.sendMessage(CWUtil.integrateColor("&8&l❝&7" + baseClass.getDescription() + "&8&l❞"));
                     sender.sendMessage(CWUtil.integrateColor("&6Class&8: &5" + baseClass.getDisplayName()));
                     sender.sendMessage(CWUtil.integrateColor("&6Type&8: &5" + CWUtil.capitalize(dvzClass.getType().toString().toLowerCase())));
                     sender.sendMessage(CWUtil.integrateColor("&6Rarity&8: &5" + baseClass.getWeight()));
@@ -419,8 +418,12 @@ public class Commands {
                         }
                     }
                     sender.sendMessage(CWUtil.integrateColor("&6Classes&8: &5" + CWUtil.implode(dvzClasses, "&8, &5")));
-                    sender.sendMessage(CWUtil.integrateColor("&6Cast item&8: &5" + CWCore.inst().getMaterials().getDisplayName(baseAbility.getCastItem().getType(), baseAbility.getCastItem().getDurability())));
-                    sender.sendMessage(CWUtil.integrateColor("&6Usage&8: &5" + baseAbility.getUsage().replace("this item", CWCore.inst().getMaterials().getDisplayName(baseAbility.getCastItem().getType(), baseAbility.getCastItem().getDurability()))));
+                    if (baseAbility.getCastItem() != null) {
+                        sender.sendMessage(CWUtil.integrateColor("&6Cast item&8: &5" + CWCore.inst().getMaterials().getDisplayName(baseAbility.getCastItem().getType(), baseAbility.getCastItem().getDurability())));
+                        sender.sendMessage(CWUtil.integrateColor("&6Usage&8: &5" + baseAbility.getUsage().replace("this item", CWCore.inst().getMaterials().getDisplayName(baseAbility.getCastItem().getType(), baseAbility.getCastItem().getDurability()))));
+                    } else {
+                        sender.sendMessage(CWUtil.integrateColor("&6Usage&8: &5" + baseAbility.getUsage()));
+                    }
 
                     if (baseAbility.getCooldown() <= 0) {
                         sender.sendMessage(CWUtil.integrateColor("&6Cooldown&8: &cNo cooldown"));
@@ -435,7 +438,11 @@ public class Commands {
                                 timeLeft = cd.getTimeLeft();
                             }
                         }
-                        cdPlayer = CWUtil.formatTime(timeLeft, "&5%S&8.&5%%%&ds");
+                        if (timeLeft <= 0) {
+                            cdPlayer = "&20s";
+                        } else {
+                            cdPlayer = CWUtil.formatTime(timeLeft, "&4%S&8.&4%%%&cs");
+                        }
                         sender.sendMessage(CWUtil.integrateColor("&6Cooldown&8: &5" + cdPlayer + "&8/" + CWUtil.formatTime((long)baseAbility.getCooldown(), "&5%S&ds")));
                     }
                     return true;

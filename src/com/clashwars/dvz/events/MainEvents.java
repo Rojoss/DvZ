@@ -113,14 +113,22 @@ public class MainEvents implements Listener {
         event.setDroppedExp(0);
 
         //Death message
+        String prefix = "&8";
+        if (cwp.getPlayerClass() != null) {
+            if (cwp.getPlayerClass().getType() == ClassType.DWARF) {
+                prefix = "&6";
+            } else {
+                prefix = "&c";
+            }
+        }
         if (killer != null) {
             if (dvz.getGM().getState() == GameState.DRAGON && dvz.getGM().getDragonPlayer().getName().equalsIgnoreCase(killer.getName())) {
-                event.setDeathMessage(CWUtil.integrateColor((cwp.getPlayerClass() != null ? cwp.getPlayerClass().getClassClass().getColor() : "&8") + player.getName() + " &7was killed by the dragon!"));
+                event.setDeathMessage(CWUtil.integrateColor(prefix + player.getName() + " &7was killed by the dragon!"));
             } else {
-                event.setDeathMessage(CWUtil.integrateColor((cwp.getPlayerClass() != null ? cwp.getPlayerClass().getClassClass().getColor() : "&8") + player.getName() + " &7was killed by " + killer.getName() + "!"));
+                event.setDeathMessage(CWUtil.integrateColor(prefix + player.getName() + " &7was killed by " + killer.getName() + "!"));
             }
         } else {
-            event.setDeathMessage(CWUtil.integrateColor((cwp.getPlayerClass() != null ? cwp.getPlayerClass().getClassClass().getColor() : "&8") + player.getName() + " &7died!"));
+            event.setDeathMessage(CWUtil.integrateColor(prefix + player.getName() + " &7died!"));
         }
 
         //Dragon died.
@@ -139,7 +147,7 @@ public class MainEvents implements Listener {
         //DragonSlayer died.
         if (dvz.getGM().getDragonSlayer() != null && dvz.getGM().getDragonSlayer().getName().equalsIgnoreCase(player.getName())) {
             dvz.getGM().resetDragonSlayer();
-            dvz.getServer().broadcastMessage(Util.formatMsg("&5&lThe DragonSlayer died!"));
+            dvz.getServer().broadcastMessage(Util.formatMsg("&d&lThe DragonSlayer died!"));
         }
     }
 

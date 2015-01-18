@@ -24,7 +24,6 @@ public enum DvzClass {
     CREEPER(ClassType.MONSTER, "monster", new Creeper(), new String[]{"creepers"}),
     ENDERMAN(ClassType.MONSTER, "monster", new Enderman(), new String[]{"endermans"}),
     BLAZE(ClassType.MONSTER, "monster", new Blaze(), new String[]{"blazes"}),
-    PIG(ClassType.MONSTER, "monster", new Pig(), new String[]{"pigs", "babypig", "babypigs", "pigman", "pigmans", "hungrypig", "hungrypigs"}),
     VILLAGER(ClassType.MONSTER, "monster", new Villager(), new String[]{"villagers", "villager"}),
     WITCH(ClassType.MONSTER, "monster", new Witch(), new String[]{"witches", "witch"}),
 

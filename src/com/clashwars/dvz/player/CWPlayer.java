@@ -147,7 +147,9 @@ public class CWPlayer {
         player.setHealth(c.getHealth());
         player.setWalkSpeed(c.getSpeed());
         player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));
-        player.sendMessage(CWUtil.integrateColor("&8&l❝&7" + c.getDescription().replace("\\|\\|", "") + "&8&l❞"));
+        if (c.getType() == ClassType.DWARF) {
+            player.sendMessage(CWUtil.integrateColor("&8&l❝&7" + c.getTask() + "&8&l❞"));
+        }
         savePlayer();
     }
 
@@ -185,7 +187,9 @@ public class CWPlayer {
         player.setMaxHealth(c.getHealth());
         player.setHealth(c.getHealth());
         player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));
-        player.sendMessage(CWUtil.integrateColor("&8&l❝&7" + c.getDescription().replace("\\|\\|", "") + "&8&l❞"));
+        if (c.getType() == ClassType.DWARF) {
+            player.sendMessage(CWUtil.integrateColor("&8&l❝&7" + c.getTask() + "&8&l❞"));
+        }
         savePlayer();
     }
 
