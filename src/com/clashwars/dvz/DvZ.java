@@ -18,6 +18,7 @@ import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.util.ItemMenu;
 import com.gmail.filoghost.holograms.api.Hologram;
 import com.gmail.filoghost.holograms.api.HolographicDisplaysAPI;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -35,6 +36,7 @@ public class DvZ extends JavaPlugin {
 
     private static DvZ instance;
     private CWCore cwcore;
+    private Permission permission;
     private Gson gson = new Gson();
 
     private PluginCfg cfg;
@@ -96,6 +98,11 @@ public class DvZ extends JavaPlugin {
             return;
         }
         cwcore = (CWCore)plugin;
+
+        permission = cwcore.getDM().getPermissions();
+        if (permission == null) {
+            log("Vault permissions couldn't be loaded. It will still work but certain featured might not work properly.");
+        }
 
         em = new EffectManager(cwcore);
 
@@ -177,6 +184,10 @@ public class DvZ extends JavaPlugin {
     /* Getters & Setters */
     public Gson getGson() {
         return gson;
+    }
+
+    public Permission getPerms() {
+        return permission;
     }
 
     public List<Material> getDestroyableBlocks() {

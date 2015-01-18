@@ -255,8 +255,6 @@ public class GameManager {
         return foundBlocks;
     }
 
-
-
     public World getUsedWorld() {
         return dvz.getMM().getUsedWorld();
     }
@@ -332,6 +330,42 @@ public class GameManager {
             gCfg.GAME__DRAGON_PLAYER = uuid.toString();
         }
         gCfg.save();
+    }
+
+    public void setDragonSlayer(Player player) {
+        gCfg.GAME__DRAGON_SLAYER = player.getUniqueId().toString();
+
+        if (dvz.getPerms() != null) {
+            dvz.getPerms().playerAdd(player, "prefix.dragonslayer");
+        }
+
+        player.setMaxHealth(40);
+        player.setHealth(player.getHealth() + 20);
+    }
+
+    public void resetDragonSlayer() {
+        if (gCfg.GAME__DRAGON_SLAYER == null || gCfg.GAME__DRAGON_SLAYER.isEmpty() || UUID.fromString(gCfg.GAME__DRAGON_SLAYER) == null) {
+            return;
+        }
+        Player player = dvz.getServer().getPlayer(UUID.fromString(gCfg.GAME__DRAGON_SLAYER));
+
+        if (dvz.getPerms() != null) {
+            dvz.getPerms().playerRemove(player, "prefix.dragonslayer");
+        }
+
+        player.setMaxHealth(20);
+        player.setHealth(20);
+
+
+
+        gCfg.GAME__DRAGON_SLAYER = "";
+    }
+
+    public Player getDragonSlayer() {
+        if (gCfg.GAME__DRAGON_SLAYER == null || gCfg.GAME__DRAGON_SLAYER.isEmpty() || UUID.fromString(gCfg.GAME__DRAGON_SLAYER) == null) {
+            return null;
+        }
+        return dvz.getServer().getPlayer(UUID.fromString(gCfg.GAME__DRAGON_SLAYER));
     }
 
     public int getDragonPower() {
