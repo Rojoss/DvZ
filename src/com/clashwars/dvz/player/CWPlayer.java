@@ -1,7 +1,6 @@
 package com.clashwars.dvz.player;
 
 import com.clashwars.cwcore.CooldownManager;
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.ExpUtil;
@@ -95,7 +94,6 @@ public class CWPlayer {
     }
 
     public void resetData() {
-        Debug.bc("Resetting data!");
         productsTaken.clear();
         data.setClassOptions(new HashSet<DvzClass>());
         data.setPlayerClass(DvzClass.DWARF);
