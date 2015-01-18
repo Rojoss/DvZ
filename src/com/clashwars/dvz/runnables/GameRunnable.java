@@ -1,5 +1,6 @@
 package com.clashwars.dvz.runnables;
 
+import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
@@ -20,7 +21,14 @@ public class GameRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (!gm.isStarted() || gm.isMonsters()) {
+        if (!gm.isStarted()) {
+            return;
+        }
+        if (gm.getDragonSlayer() != null) {
+            ParticleEffect.SPELL_WITCH.display(0.2f, 0.4f, 0.2f, 0.01f, 5, gm.getDragonPlayer().getLocation());
+        }
+
+        if (gm.isMonsters()) {
             return;
         }
         Long time = gm.getUsedWorld().getTime();

@@ -125,6 +125,12 @@ public class MainEvents implements Listener {
             }
             dvz.getGM().releaseMonsters(false);
         }
+
+        //DragonSlayer died.
+        if (dvz.getGM().getDragonSlayer() != null && dvz.getGM().getDragonSlayer().getName().equalsIgnoreCase(player.getName())) {
+            dvz.getGM().resetDragonSlayer();
+            dvz.getServer().broadcastMessage(Util.formatMsg("&5&lThe DragonSlayer died!"));
+        }
     }
 
 
