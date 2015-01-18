@@ -1,7 +1,5 @@
 package com.clashwars.dvz.events;
 
-import com.clashwars.cwcore.effect.Particle;
-import com.clashwars.cwcore.effect.effects.AnimatedCircleEffect;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
@@ -12,10 +10,7 @@ import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -213,13 +208,20 @@ public class MainEvents implements Listener {
                             dvz.getServer().broadcastMessage(Util.formatMsg("&5&l" + player.getName() + " &6completed the parkour!"));
                             cwp.setParkourCompleted(true);
 
-                            block.getWorld().playSound(block.getLocation(), Sound.ENDERDRAGON_HIT, 1.0f, 2.0f);
+                            block.getWorld().playSound(block.getLocation(), Sound.ORB_PICKUP, 100.0f, 0.5f);
 
-                            AnimatedCircleEffect effect = new AnimatedCircleEffect(dvz.getEM());
-                            effect.setLocation(player.getLocation());
-                            effect.particleList.add(new Particle(ParticleEffect.VILLAGER_HAPPY, 0.1f, 0.1f, 0.1f, 0, 1));
-                            effect.iterations = 200;
-                            effect.start();
+                            new BukkitRunnable() {
+                                int ticks = 0;
+
+                                @Override
+                                public void run() {
+                                    ticks++;
+                                    if (ticks > 300) {
+                                        cancel();
+                                    }
+                                    ParticleEffect.SPELL_WITCH.display(0.2f, 1.0f, 0.2f, 0.05f, 10, player.getLocation(), 50);
+                                }
+                            }.runTaskTimer(dvz, 1, 2);
                         }
                         event.setCancelled(true);
                         return;

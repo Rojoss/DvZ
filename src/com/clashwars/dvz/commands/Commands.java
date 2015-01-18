@@ -38,7 +38,7 @@ public class Commands {
 
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (label.equalsIgnoreCase("dvz")) {
+        if (label.equalsIgnoreCase("dvz") || label.equalsIgnoreCase("dvz:dvz") || label.equalsIgnoreCase("d") || label.equalsIgnoreCase("dz") || label.equalsIgnoreCase("dvsz")) {
             if (args.length >= 1) {
                 //##########################################################################################################################
                 //######################################################## /dvz help #######################################################

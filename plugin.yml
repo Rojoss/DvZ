@@ -7,3 +7,4 @@ commands:
   dvz:
     description: Main dvz command
     usage: /<command>
+    aliases: [d, dz, dvsz]
