@@ -2,6 +2,7 @@ package com.clashwars.dvz;
 
 import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.effect.EffectManager;
+import com.clashwars.cwcore.scoreboard.CWBoard;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.ClassManager;
 import com.clashwars.dvz.classes.DvzClass;
@@ -28,6 +29,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.*;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -38,6 +40,7 @@ public class DvZ extends JavaPlugin {
     private CWCore cwcore;
     private Permission permission;
     private Gson gson = new Gson();
+    private CWBoard cwb;
 
     private PluginCfg cfg;
     private GameCfg gameCfg;
@@ -139,6 +142,7 @@ public class DvZ extends JavaPlugin {
         cmds = new Commands(this);
 
         startRunnables();
+        setupBoard();
 
         log("loaded successfully");
     }
@@ -165,6 +169,19 @@ public class DvZ extends JavaPlugin {
         new AntiCamp(this).runTaskTimer(this, 40, getCfg().CAMP_DELAY_TICKS);
     }
 
+    private void setupBoard() {
+        cwb = CWBoard.get("dvz");
+        cwb.init(true);
+        cwb.addTeam("builder", "&e", "", "&eBuilder", true, true, NameTagVisibility.ALWAYS);
+        cwb.addTeam("miner", "&8", "", "&8Minrt", true, true, NameTagVisibility.ALWAYS);
+        cwb.addTeam("tailor", "&3", "", "&3Tailor", true, true, NameTagVisibility.ALWAYS);
+        cwb.addTeam("fletcher", "&2", "", "&2Fletcher", true, true, NameTagVisibility.ALWAYS);
+        cwb.addTeam("alchemist", "&5", "", "&5Alchemist", true, true, NameTagVisibility.ALWAYS);
+        cwb.addTeam("monster", "&c", "", "&cMonster", false, true, NameTagVisibility.ALWAYS);
+        cwb.addTeam("dragonslayer", "&d", "", "&dDragon-Slayer", true, true, NameTagVisibility.ALWAYS);
+        cwb.show();
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         return cmds.onCommand(sender, cmd, label, args);
@@ -184,6 +201,10 @@ public class DvZ extends JavaPlugin {
     /* Getters & Setters */
     public Gson getGson() {
         return gson;
+    }
+
+    public CWBoard getBoard() {
+        return cwb;
     }
 
     public Permission getPerms() {

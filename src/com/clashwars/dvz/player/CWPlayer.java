@@ -20,6 +20,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.Team;
 
 import java.util.*;
 
@@ -80,6 +81,11 @@ public class CWPlayer {
             teleport.cancel();
             teleport = null;
         }
+        for (Team team : dvz.getBoard().getTeamList()) {
+            if (team.hasPlayer(player)) {
+                team.removePlayer(player);
+            }
+        }
     }
 
     public void undisguise() {
@@ -116,6 +122,11 @@ public class CWPlayer {
             Util.disguisePlayer(player.getName(), c.getDisguise());
         }
 
+        //Team
+        if (dvz.getBoard().hasTeam(dvzClass.getTeam())) {
+            dvz.getBoard().getTeam(dvzClass.getTeam()).addPlayer(player);
+        }
+
         //Teleport
         if (dvzClass.getType() == ClassType.DWARF) {
             player.teleport(dvz.getMM().getActiveMap().getLocation("dwarf"));
@@ -150,6 +161,16 @@ public class CWPlayer {
         setPlayerClass(dvzClass);
         removeClassOption(dvzClass);
         c.equipItems(player);
+
+        if (dvz.getBoard().hasTeam(dvzClass.getTeam())) {
+            for (Team team : dvz.getBoard().getTeamList()) {
+                if (team.hasPlayer(player)) {
+                    team.removePlayer(player);
+                }
+            }
+            dvz.getBoard().getTeam(dvzClass.getTeam()).addPlayer(player);
+            //TODO: Maybe update the board? (not sure if it's neeeded)
+        }
 
         for (int i = 9; i < menu.getSize(); i++) {
             if (menu.getItems()[i] != null && menu.getItems()[i].getType() != Material.AIR) {

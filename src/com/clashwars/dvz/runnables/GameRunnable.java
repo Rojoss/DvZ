@@ -25,7 +25,7 @@ public class GameRunnable extends BukkitRunnable {
             return;
         }
         if (gm.getDragonSlayer() != null) {
-            ParticleEffect.SPELL_WITCH.display(0.2f, 0.4f, 0.2f, 0.01f, 5, gm.getDragonPlayer().getLocation());
+            ParticleEffect.SPELL_WITCH.display(0.2f, 0.4f, 0.2f, 0.01f, 5, gm.getDragonSlayer().getLocation());
         }
 
         if (gm.isMonsters()) {

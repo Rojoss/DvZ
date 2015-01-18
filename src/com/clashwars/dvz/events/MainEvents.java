@@ -2,6 +2,7 @@ package com.clashwars.dvz.events;
 
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.*;
 import com.clashwars.dvz.classes.BaseClass;
@@ -48,31 +49,45 @@ public class MainEvents implements Listener {
         Player player = event.getPlayer();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         Location spawnLoc = dvz.getGM().getUsedWorld().getSpawnLocation();
+
+        String titleStr = "&6Welcome to &6&lDvZ&6!";
+        String subtitleStr = "";
         if (cwp.getClassOptions() != null && !cwp.getClassOptions().isEmpty()) {
+            titleStr = "&6Welcome back to &6&lDvZ&6!";
+            subtitleStr = "&9You have joined dvz as a " + cwp.getPlayerClass().getClassClass().getDisplayName() + "&9!";
             player.sendMessage(Util.formatMsg("&6Welcome back!"));
-            return;
+        } else {
+            if (gm.isDwarves()) {
+                player.sendMessage(Util.formatMsg("&6You have joined DvZ as a &8Dwarf&6!"));
+                cwp.setPlayerClass(DvzClass.DWARF);
+                cwp.giveClassItems(ClassType.DWARF, false);
+                if (dvz.getMM().getActiveMap() != null && dvz.getMM().getActiveMap().getLocation("lobby") != null) {
+                    spawnLoc = dvz.getMM().getActiveMap().getLocation("lobby");
+                }
+                subtitleStr = "&9You have joined DvZ as a &8Dwarf&9!";
+            } else if (gm.isMonsters()) {
+                player.sendMessage(Util.formatMsg("&6You have joined DvZ as a &4Monster&6!"));
+                player.sendMessage(Util.formatMsg("&6This is because the dragon has been killed already."));
+                cwp.setPlayerClass(DvzClass.MONSTER);
+                cwp.giveClassItems(ClassType.MONSTER, false);
+                if (dvz.getMM().getActiveMap() != null && dvz.getMM().getActiveMap().getLocation("monsterlobby") != null) {
+                    spawnLoc = dvz.getMM().getActiveMap().getLocation("monsterlobby");
+                }
+                subtitleStr = "&9You have joined DvZ as a &4Monster&9!";
+            } else if (gm.getState() == GameState.OPENED || gm.getState() == GameState.SETUP) {
+                player.sendMessage(Util.formatMsg("&6The game hasn't started yet but it will start soon."));
+                subtitleStr = "&9The game hasn't started yet but it will start soon.";
+            } else if (gm.getState() == GameState.CLOSED) {
+                player.sendMessage(Util.formatMsg("&cThere is no &4DvZ &cright now!"));
+                subtitleStr = "&c&lThere is &4&lno DvZ &c&lright now.";
+            }
         }
 
-        if (gm.isDwarves()) {
-            player.sendMessage(Util.formatMsg("&6You have joined DvZ as a &8Dwarf&6!"));
-            cwp.setPlayerClass(DvzClass.DWARF);
-            cwp.giveClassItems(ClassType.DWARF, false);
-            if (dvz.getMM().getActiveMap() != null && dvz.getMM().getActiveMap().getLocation("lobby") != null) {
-                spawnLoc = dvz.getMM().getActiveMap().getLocation("lobby");
-            }
-        } else if (gm.isMonsters()) {
-            player.sendMessage(Util.formatMsg("&6You have joined DvZ as a &4Monster&6!"));
-            player.sendMessage(Util.formatMsg("&6This is because the dragon has been killed already."));
-            cwp.setPlayerClass(DvzClass.MONSTER);
-            cwp.giveClassItems(ClassType.MONSTER, false);
-            if (dvz.getMM().getActiveMap() != null && dvz.getMM().getActiveMap().getLocation("monsterlobby") != null) {
-                spawnLoc = dvz.getMM().getActiveMap().getLocation("monsterlobby");
-            }
-        } else if (gm.getState() == GameState.OPENED || gm.getState() == GameState.SETUP) {
-            player.sendMessage(Util.formatMsg("&6The game hasn't started yet but it will start soon."));
-        } else if (gm.getState() == GameState.CLOSED) {
-            player.sendMessage(Util.formatMsg("&cThere is no &4DvZ &cright now!"));
-        }
+        Title title = new Title(titleStr, subtitleStr, 10, 100, 30);
+        title.setTimingsToTicks();
+        title.send(player);
+
+        CWUtil.setTab(player, " &8======== &6&lDwarves &2VS &c&lZombies &8========", " &6INFO &8>>> &9&larchaicrealms.com/dvz &8<<< &6INFO");
 
         player.teleport(spawnLoc);
     }
@@ -114,7 +129,7 @@ public class MainEvents implements Listener {
             Bukkit.broadcastMessage(CWUtil.integrateColor("&7======= &a&lThe dragon has been killed! &7======="));
             if (killer != null) {
                 Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &3" + killer.getName() + " &7is the &bDragonSlayer&7!"));
-                //TODO: Set DragonSlayer.
+                gm.setDragonSlayer(killer);
             } else {
                 Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Couldn't find the killer so there is no DragonSlayer."));
             }
