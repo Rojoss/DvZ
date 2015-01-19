@@ -220,7 +220,7 @@ public class MainEvents implements Listener {
 
     @EventHandler
     private void interact(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         ItemStack item = event.getItem();
 
