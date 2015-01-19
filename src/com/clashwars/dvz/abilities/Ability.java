@@ -16,6 +16,8 @@ public enum Ability {
     SPEED_POTION("DWARF", new SpeedPotion(), new String[]{}),
     BUILDING_BRICK("BUILDER", new BuildingBrick(), new String[]{}),
     BUILDING_BLOCK("BUILDER", new BuildingBlock(), new String[]{}),
+    REINFORCE("BUILDER", new Reinforce(), new String[]{}),
+    SUMMON_STONE("BUILDER", new SummonStone(), new String[]{}),
     SUICIDE("MONSTER", new Suicide(), new String[]{}),
     HAMMER("MONSTER", new Hammer(), new String[]{}),
     TELEPORT_PORTAL("MONSTER", new TeleportPortal(), new String[]{}),

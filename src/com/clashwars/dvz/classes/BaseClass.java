@@ -202,6 +202,7 @@ public class BaseClass implements Listener {
         for (DvzItem item : itemMap.keySet()) {
             item.giveToPlayer(player);
         }
+        player.updateInventory();
     }
 
     //Called when player gets the class equiped.

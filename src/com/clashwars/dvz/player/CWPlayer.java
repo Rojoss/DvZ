@@ -85,6 +85,7 @@ public class CWPlayer {
                 team.removePlayer(player);
             }
         }
+        player.updateInventory();
     }
 
     public void undisguise() {

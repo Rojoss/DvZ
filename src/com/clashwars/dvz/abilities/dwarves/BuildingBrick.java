@@ -1,17 +1,21 @@
 package com.clashwars.dvz.abilities.dwarves;
 
+import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class BuildingBrick extends DwarfAbility {
 
@@ -23,41 +27,43 @@ public class BuildingBrick extends DwarfAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
-        ItemStack is = getStoneItemStack(player);
-        Block b = player.getLastTwoTargetBlocks(null, 100).get(0);
+        List<Block> blocks = player.getLastTwoTargetBlocks(null, getIntOption("range"));
+        Block block = blocks.get(0);
 
-        if(is == null) {
+        if (block == null || block.getType() != Material.AIR) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou can't build there! &4&l<<"));
             return;
         }
 
-        if (b == null) {
+        if (blocks.get(1).getType() != Material.SMOOTH_BRICK) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan only build against stone bricks! &4&l<<"));
             return;
         }
 
-        if(player.getLastTwoTargetBlocks(null, 100).get(1).getType() != Material.SMOOTH_BRICK) {
+        if (dvz.getMM().getActiveMap().isLocWithin(blocks.get(0).getLocation(), "innerwall")) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild tools have to be used outside the keep! &4&l<<"));
             return;
         }
 
-        if (b.getLocation().distance(player.getLocation()) > getIntOption("range") && b.getLocation().distance(player.getLocation()) > 1) {
+        if (CWUtil.getNearbyEntities(block.getLocation(), 1.5f, Arrays.asList(new EntityType[] {EntityType.PLAYER})).size() > 0) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't build where people stand! &4&l<<"));
             return;
         }
 
-        b.setType(is.getType());
-        b.setData(is.getData().getData());
-        CWUtil.removeItems(player.getInventory(), is, 1);
-    }
+        for (int i = 0; i < 9; i++) {
+            ItemStack item = player.getInventory().getItem(i);
+            if (item != null && item.getType() == Material.SMOOTH_BRICK) {
+                block.setType(item.getType());
+                block.setData(item.getData().getData());
 
-    public ItemStack getStoneItemStack(Player player) {
-        for(ItemStack is : player.getInventory().getContents()) {
-            if(is == null) {
-                continue;
+                CWUtil.removeItemsFromSlot(player.getInventory(), i, 1);
+                ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(item.getType(), item.getData().getData()), 0.5f, 0.5f, 0.5f, 0.1f, 5, block.getLocation().add(0.5f, 0.5f, 0.5f));
+                block.getWorld().playSound(block.getLocation(), Sound.DIG_STONE, 0.8f, 1f);
+                player.updateInventory();
+                return;
             }
-
-            if(is.getType() == Material.SMOOTH_BRICK) {
-                return is;
-            }
         }
-        return null;
+        CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cNo more stone in your hotbar! &4&l<<"));
     }
 
     @EventHandler

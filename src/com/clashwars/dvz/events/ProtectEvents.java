@@ -32,7 +32,7 @@ public class ProtectEvents implements Listener {
     }
 
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void damageEntity(EntityDamageByEntityEvent event) {
         //Don't allow it if game hasn't started.
         if (!gm.isStarted()) {
@@ -72,7 +72,7 @@ public class ProtectEvents implements Listener {
     }
 
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void blockPlace(BlockPlaceEvent event) {
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
             return;
@@ -91,15 +91,16 @@ public class ProtectEvents implements Listener {
             return;
         }
 
-        //Don't allow dwarves during dwarf time.
+        //Don't allow dwarves during dwarf time within the inner walls.
         if (gm.isDwarves() && cwp.isDwarf()) {
-            event.setCancelled(true);
-            return;
+            if (dvz.getMM().getActiveMap() == null || dvz.getMM().getActiveMap().isLocWithin(event.getBlock().getLocation(), "innerwall")) {
+                event.setCancelled(true);
+            }
         }
     }
 
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void blockBreak(BlockBreakEvent event) {
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
             return;
@@ -118,15 +119,16 @@ public class ProtectEvents implements Listener {
             return;
         }
 
-        //Don't allow dwarves during dwarf time.
+        //Don't allow dwarves during dwarf time within the inner walls
         if (gm.isDwarves() && cwp.isDwarf()) {
-            event.setCancelled(true);
-            return;
+            if (dvz.getMM().getActiveMap() == null || dvz.getMM().getActiveMap().isLocWithin(event.getBlock().getLocation(), "innerwall")) {
+                event.setCancelled(true);
+            }
         }
     }
 
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void itemDrop(PlayerDropItemEvent event) {
         CWPlayer cwp = dvz.getPM().getPlayer(event.getPlayer());
 
@@ -150,7 +152,7 @@ public class ProtectEvents implements Listener {
     }
 
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void itemPickup(PlayerPickupItemEvent event) {
         CWPlayer cwp = dvz.getPM().getPlayer(event.getPlayer());
 
@@ -174,7 +176,7 @@ public class ProtectEvents implements Listener {
     }
 
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void explosion(ExplosionPrimeEvent event) {
         //Don't allow it if game hasn't started or if it's dwarves.
         if (!gm.isStarted() || gm.isDwarves()) {
@@ -184,7 +186,7 @@ public class ProtectEvents implements Listener {
     }
 
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void interact(PlayerInteractEvent event) {
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
             return;
@@ -195,7 +197,10 @@ public class ProtectEvents implements Listener {
             if (type == Material.LEVER || type == Material.STONE_BUTTON  || type == Material.WOOD_BUTTON || type == Material.NOTE_BLOCK  || type == Material.JUKEBOX  || type == Material.CAKE
                     || type == Material.WOODEN_DOOR || type == Material.TRAP_DOOR || type == Material.FENCE_GATE || type == Material.DISPENSER || type == Material.FURNACE
                     || type == Material.BURNING_FURNACE || type == Material.WORKBENCH || type == Material.BREWING_STAND || type == Material.ENCHANTMENT_TABLE || type == Material.CAULDRON
-                    || type == Material.ENDER_CHEST || type == Material.CHEST || type == Material.BEACON || type == Material.ANVIL || type == Material.HOPPER || type == Material.DROPPER) {
+                    || type == Material.ENDER_CHEST || type == Material.CHEST || type == Material.BEACON || type == Material.ANVIL || type == Material.HOPPER || type == Material.DROPPER
+                    || type == Material.DRAGON_EGG || type == Material.FIRE ||type == Material.ACACIA_FENCE_GATE || type == Material.BIRCH_FENCE_GATE || type == Material.DARK_OAK_FENCE_GATE
+                    || type == Material.JUNGLE_FENCE_GATE || type == Material.SPRUCE_FENCE_GATE || type == Material.ACACIA_DOOR || type == Material.BIRCH_DOOR || type == Material.JUNGLE_DOOR
+                    || type == Material.DARK_OAK_DOOR || type == Material.SPRUCE_DOOR || type == Material.ARMOR_STAND) {
                 event.setCancelled(true);
             }
             //Allow using buckets (Handled by bucket empty/fill event)
@@ -210,7 +215,7 @@ public class ProtectEvents implements Listener {
     }
 
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void interactEntity(PlayerInteractEntityEvent event) {
         //Allow shearing mobs (Handled by shear event)
         if (event.getPlayer().getItemInHand().getType() == Material.SHEARS) {
@@ -224,43 +229,43 @@ public class ProtectEvents implements Listener {
     }
 
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void shearEntity(PlayerShearEntityEvent event) {
         event.setCancelled(true);
     }
 
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void leashEntity(PlayerLeashEntityEvent event) {
         event.setCancelled(true);
     }
 
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void bedEnter(PlayerBedEnterEvent event) {
         event.setCancelled(true);
     }
 
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void vehicleEnter(VehicleEnterEvent event) {
         event.setCancelled(true);
     }
 
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void vehicleDamage(VehicleDamageEvent event) {
         event.setCancelled(true);
     }
 
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void bucketFill(PlayerBucketFillEvent event) {
         event.setCancelled(true);
     }
 
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void bucketEmpty(PlayerBucketEmptyEvent event) {
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
             return;
@@ -269,7 +274,7 @@ public class ProtectEvents implements Listener {
     }
 
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void portalUse(PlayerPortalEvent event) {
         event.setCancelled(true);
     }
