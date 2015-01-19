@@ -3,6 +3,7 @@ package com.clashwars.dvz.abilities;
 import com.clashwars.cwcore.CooldownManager;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
+import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
@@ -135,12 +136,16 @@ public class BaseAbility implements Listener {
     }
 
     public boolean canCast(Player player) {
-        boolean testing = true;
-        if (testing) {
-            return true;
-        }
-
         CWPlayer cwp = dvz.getPM().getPlayer(player);
+
+        //Check if player class is same as ability class. (If it's base then allow using it with any class)
+        if (getDvzClass() != DvzClass.BASE && cwp.getPlayerClass() != getDvzClass()) {
+            // All classes with ClassType.DWARF can use abilities from DvZClass.DWARF etc.
+            // Stupid way to fix this but the class structure would has to be remade completely to fix it otherwise.
+            if (!cwp.getPlayerClass().getType().toString().equalsIgnoreCase(getDvzClass().toString())) {
+                return false;
+            }
+        }
 
         if (hasCooldown()) {
             String tag = ability.getDvzClass().toString().toLowerCase() +  "-" + ability.toString().toLowerCase();
@@ -153,7 +158,7 @@ public class BaseAbility implements Listener {
                 cd.setTime(getCooldown());
                 return true;
             }
-            player.sendMessage(Util.formatMsg(getDisplayName() + "&8> &7" + CWUtil.formatTime(cd.getTimeLeft(), "&7%S&8.&7%%%&8s")));
+            CWUtil.sendActionBar(player, Util.formatMsg(getDisplayName() + "&8> &7" + CWUtil.formatTime(cd.getTimeLeft(), "&7%S&8.&7%%%&8s")));
             return false;
         }
         return true;
