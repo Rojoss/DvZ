@@ -1,5 +1,7 @@
 package com.clashwars.dvz.maps;
 
+import com.clashwars.cwcore.CWCore;
+import com.clashwars.cwcore.cuboid.SelectionStatus;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameState;
@@ -172,13 +174,22 @@ public class MapManager {
             }
         }
 
+        for (String cubType : getCuboidNames()) {
+            if (map.getCuboid(cubType) == null) {
+                missingData.add("&4cuboid&7:&c" + cubType);
+            }
+        }
+
         return missingData;
     }
 
 
     public String[] getLocationNames() {
-        return new String[]{"lobby", "dwarf", "monster", "monsterlobby", "wall", "dragon",
-                "shrine1", "shrine2", "shrinewall1", "shrinewall2", "fortress1", "fortress2", "innerwall1", "innerwall2"};
+        return new String[]{"lobby", "dwarf", "monster", "monsterlobby", "wall", "dragon"};
+    }
+
+    public String[] getCuboidNames() {
+        return new String[]{"shrinewall", "shrinekeep", "keep", "innerwall"};
     }
 
     public World getUsedWorld() {

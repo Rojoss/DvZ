@@ -1,5 +1,6 @@
 package com.clashwars.dvz;
 
+import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.classes.ClassType;
@@ -110,13 +111,14 @@ public class GameManager {
         if (!setupOptions.isEmpty()) {
             Util.broadcastAdmins(CWUtil.integrateColor("&cCould not open the game because the map is not set up properly."));
             Util.broadcastAdmins(CWUtil.integrateColor("&4Missing&8: &c" + CWUtil.implode(setupOptions.toArray(new String[dvz.getMM().getMaps().size()]), "&8, &c")));
-            //return;
+            return;
         }
 
         if (!populateShrines()) {
             Util.broadcastAdmins(CWUtil.integrateColor("&cCould not open the game because the map is not set up properly."));
             Util.broadcastAdmins(CWUtil.integrateColor("&cMissing end portal frames between shrine locations."));
             Util.broadcastAdmins(CWUtil.integrateColor("&cThere has to be at least 1 shrine block for the wall and one for the keep."));
+            return;
         }
 
         setState(GameState.OPENED);
@@ -262,21 +264,24 @@ public class GameManager {
 
 
     public boolean populateShrines() {
-        boolean keepShrine = populateShrines("shrine1", "shrine2", ShrineType.KEEP);
-        boolean wallShrine = populateShrines("shrinewall1", "shrinewall2", ShrineType.WALL);
+        boolean keepShrine = populateShrines("shrinekeep", ShrineType.KEEP);
+        boolean wallShrine = populateShrines("shrinewall", ShrineType.WALL);
         if (keepShrine && wallShrine) {
             return true;
         }
         return false;
     }
 
-    private boolean populateShrines(String loc1, String loc2, ShrineType type) {
+    private boolean populateShrines(String cuboidStr, ShrineType type) {
         boolean foundBlocks = false;
         DvzMap map = dvz.getMM().getActiveMap();
-        Set<Block> shrineKeepBlocks = CWUtil.findBlocksInArea(map.getLocation(loc1), map.getLocation(loc2), new Material[]{Material.ENDER_PORTAL_FRAME});
-        for (Block shrineBlock : shrineKeepBlocks) {
-            shrineBlocks.add(new ShrineBlock(shrineBlock.getLocation(), type));
-            foundBlocks = true;
+        Cuboid cuboid = map.getCuboid(cuboidStr);
+        if (cuboid != null) {
+            List<Block> portalBlocks = cuboid.getBlocks(new Material[] {Material.ENDER_PORTAL_FRAME});
+            for (Block shrineBlock : portalBlocks) {
+                shrineBlocks.add(new ShrineBlock(shrineBlock.getLocation(), type));
+                foundBlocks = true;
+            }
         }
         return foundBlocks;
     }

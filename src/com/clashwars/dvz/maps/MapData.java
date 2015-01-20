@@ -1,5 +1,6 @@
 package com.clashwars.dvz.maps;
 
+import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.utils.CWUtil;
 import org.bukkit.Location;
 
@@ -12,15 +13,10 @@ public class MapData {
     public String locWall;
     public String locDragon;
 
-    public String locShrineWall1;
-    public String locShrineWall2;
-    public String locShrine1;
-    public String locShrine2;
-
-    public String locFortress1;
-    public String locFortress2;
-    public String locInnerWall1;
-    public String locInnerWall2;
+    public String cubShrineWall;
+    public String cubShrineKeep;
+    public String cubKeep;
+    public String cubInnerWall;
 
 
     public Location getLocLobby() {
@@ -31,6 +27,7 @@ public class MapData {
         this.locLobby = CWUtil.locToString(locLobby);
     }
 
+
     public Location getLocDwarf() {
         return CWUtil.locFromString(locDwarf);
     }
@@ -38,6 +35,7 @@ public class MapData {
     public void setLocDwarf(Location locDwarf) {
         this.locDwarf = CWUtil.locToString(locDwarf);
     }
+
 
     public Location getLocMonster() {
         return CWUtil.locFromString(locMonster);
@@ -47,6 +45,7 @@ public class MapData {
         this.locMonster = CWUtil.locToString(locMonster);
     }
 
+
     public Location getLocMonsterLobby() {
         return CWUtil.locFromString(locMonsterLobby);
     }
@@ -54,6 +53,7 @@ public class MapData {
     public void setLocMonsterLobby(Location locMonsterLobby) {
         this.locMonsterLobby = CWUtil.locToString(locMonsterLobby);
     }
+
 
     public Location getLocWall() {
         return CWUtil.locFromString(locWall);
@@ -63,6 +63,7 @@ public class MapData {
         this.locWall = CWUtil.locToString(locWall);
     }
 
+
     public Location getLocDragon() {
         return CWUtil.locFromString(locDragon);
     }
@@ -71,68 +72,39 @@ public class MapData {
         this.locDragon = CWUtil.locToString(locDragon);
     }
 
-    public Location getLocShrineWall1() {
-        return CWUtil.locFromString(locShrineWall1);
+
+    public Cuboid getShrineWall() {
+        return Cuboid.deserialize(cubShrineWall);
     }
 
-    public void setLocShrineWall1(Location locShrineWall1) {
-        this.locShrineWall1 = CWUtil.locToString(locShrineWall1);
+    public void setShrineWall(Cuboid cuboid) {
+        this.cubShrineWall = cuboid.toString();
     }
 
-    public Location getLocShrineWall2() {
-        return CWUtil.locFromString(locShrineWall2);
+
+    public Cuboid getShrineKeep() {
+        return Cuboid.deserialize(cubShrineKeep);
     }
 
-    public void setLocShrineWall2(Location locShrineWall2) {
-        this.locShrineWall2 = CWUtil.locToString(locShrineWall2);
+    public void setShrineKeep(Cuboid cuboid) {
+        this.cubShrineKeep = cuboid.toString();
     }
 
-    public Location getLocShrine1() {
-        return CWUtil.locFromString(locShrine1);
+
+    public Cuboid getKeep() {
+        return Cuboid.deserialize(cubKeep);
     }
 
-    public void setLocShrine1(Location locShrine1) {
-        this.locShrine1 = CWUtil.locToString(locShrine1);
+    public void setKeep(Cuboid cuboid) {
+        this.cubKeep = cuboid.toString();
     }
 
-    public Location getLocShrine2() {
-        return CWUtil.locFromString(locShrine2);
+
+    public Cuboid getInnerWall() {
+        return Cuboid.deserialize(cubInnerWall);
     }
 
-    public void setLocShrine2(Location locShrine2) {
-        this.locShrine2 = CWUtil.locToString(locShrine2);
+    public void setInnerWall(Cuboid cuboid) {
+        this.cubInnerWall = cuboid.toString();
     }
-
-    public Location getLocFortress1() {
-        return CWUtil.locFromString(locFortress1);
-    }
-
-    public void setLocFortress1(Location locFortress1) {
-        this.locFortress1 = CWUtil.locToString(locFortress1);
-    }
-
-    public Location getLocFortress2() {
-        return CWUtil.locFromString(locFortress2);
-    }
-
-    public void setLocFortress2(Location locFortress2) {
-        this.locFortress2 = CWUtil.locToString(locFortress2);
-    }
-
-    public Location getLocInnerWall1() {
-        return CWUtil.locFromString(locInnerWall1);
-    }
-
-    public void setLocInnerWall1(Location locInnerWall1) {
-        this.locInnerWall1 = CWUtil.locToString(locInnerWall1);
-    }
-
-    public Location getLocInnerWall2() {
-        return CWUtil.locFromString(locInnerWall2);
-    }
-
-    public void setLocInnerWall2(Location locInnerWall2) {
-        this.locInnerWall2 = CWUtil.locToString(locInnerWall2);
-    }
-
 }

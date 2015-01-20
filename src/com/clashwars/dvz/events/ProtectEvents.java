@@ -93,7 +93,7 @@ public class ProtectEvents implements Listener {
 
         //Don't allow dwarves during dwarf time within the inner walls.
         if (gm.isDwarves() && cwp.isDwarf()) {
-            if (dvz.getMM().getActiveMap() == null || dvz.getMM().getActiveMap().isLocWithin(event.getBlock().getLocation(), "innerwall")) {
+            if (dvz.getMM().getActiveMap() == null || dvz.getMM().getActiveMap().getCuboid("innerwall").contains(event.getBlock())) {
                 event.setCancelled(true);
             }
         }
@@ -121,7 +121,7 @@ public class ProtectEvents implements Listener {
 
         //Don't allow dwarves during dwarf time within the inner walls
         if (gm.isDwarves() && cwp.isDwarf()) {
-            if (dvz.getMM().getActiveMap() == null || dvz.getMM().getActiveMap().isLocWithin(event.getBlock().getLocation(), "innerwall")) {
+            if (dvz.getMM().getActiveMap() == null || dvz.getMM().getActiveMap().getCuboid("innerwall").contains(event.getBlock())) {
                 event.setCancelled(true);
             }
         }

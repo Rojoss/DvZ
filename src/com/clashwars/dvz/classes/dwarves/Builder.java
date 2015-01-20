@@ -41,7 +41,7 @@ public class Builder extends DwarfClass {
         if (dvz.getPM().locGetWorkShop(block.getLocation()) != null) {
             return;
         }
-        if ((block.getWorld().getHighestBlockAt(block.getLocation()).getLocation().getBlockY() -1) <= block.getLocation().getBlockY() && dvz.getMM().getActiveMap().isLocWithin(event.getBlock().getLocation(), "keep")) {
+        if ((block.getWorld().getHighestBlockAt(block.getLocation()).getLocation().getBlockY() -1) <= block.getLocation().getBlockY() && dvz.getMM().getActiveMap().getCuboid("keep").contains(event.getBlock())) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't build in the keep right now! &4&l<<"));
             return;
         }
@@ -65,7 +65,7 @@ public class Builder extends DwarfClass {
         if (dvz.getPM().locGetWorkShop(block.getLocation()) != null) {
             return;
         }
-        if ((block.getWorld().getHighestBlockAt(block.getLocation()).getLocation().getBlockY() -1) <= block.getLocation().getBlockY() && dvz.getMM().getActiveMap().isLocWithin(event.getBlock().getLocation(), "keep")) {
+        if ((block.getWorld().getHighestBlockAt(block.getLocation()).getLocation().getBlockY() -1) <= block.getLocation().getBlockY() && dvz.getMM().getActiveMap().getCuboid("keep").contains(event.getBlock())) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't break blocks in the keep right now! &4&l<<"));
             return;
         }

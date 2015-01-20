@@ -1,5 +1,6 @@
 package com.clashwars.dvz.maps;
 
+import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import org.bukkit.Location;
@@ -74,22 +75,32 @@ public class DvzMap {
     }
 
 
-    public boolean isLocWithin(Location loc, String name) {
-        return isLocWithin(loc, name, new Vector(0,0,0));
+    public Cuboid getCuboid(String name) {
+        String s = name.toLowerCase();
+        if (s.equals("shrinewall") || s.equals("wallshrine")) {
+            return data.getShrineWall();
+        } else if (s.equals("shrinekeep") || s.equals("keepshrine")) {
+            return data.getShrineKeep();
+        } else if (s.equals("keep")) {
+            return data.getKeep();
+        } else if (s.equals("innerwall") || s.equals("keepwall")) {
+            return data.getInnerWall();
+        }
+        return null;
     }
 
-    public boolean isLocWithin(Location loc, String name, Vector offset) {
+    public void setCuboid(String name, Cuboid cuboid) {
         String s = name.toLowerCase();
-        if (s.equals("shrinewall")) {
-            return CWUtil.isLocWithin(loc, data.getLocShrineWall1(), data.getLocShrineWall2(), offset);
-        } else if (s.equals("shrine")) {
-            return CWUtil.isLocWithin(loc, data.getLocShrine1(), data.getLocShrine2(), offset);
-        } else if (s.equals("fortress") || s.equals("keep")) {
-            return CWUtil.isLocWithin(loc, data.getLocFortress1(), data.getLocFortress2(), offset);
-        } else if (s.equals("innerwall")) {
-            return CWUtil.isLocWithin(loc, data.getLocInnerWall1(), data.getLocInnerWall2(), offset);
+        if (s.equals("shrinewall") || s.equals("wallshrine")) {
+            data.setShrineWall(cuboid);
+        } else if (s.equals("shrinekeep") || s.equals("keepshrine")) {
+            data.setShrineKeep(cuboid);
+        } else if (s.equals("keep")) {
+            data.setKeep(cuboid);
+        } else if (s.equals("innerwall") || s.equals("keepwall")) {
+            data.setInnerWall(cuboid);
         }
-        return false;
+        dvz.getMapCfg().setMap(mapName, data);
     }
 
     public Location getLocation(String name) {
@@ -106,27 +117,11 @@ public class DvzMap {
             return data.getLocWall();
         } else if (s.equals("dragon") || s.equals("dragons")) {
             return data.getLocDragon();
-        } else if (s.equals("shrinewall1")) {
-            return data.getLocShrineWall1();
-        } else if (s.equals("shrinewall2")) {
-            return data.getLocShrineWall2();
-        } else if (s.equals("shrine1")) {
-            return data.getLocShrine1();
-        } else if (s.equals("shrine2")) {
-            return data.getLocShrine2();
-        } else if (s.equals("fortress1") || s.equals("keep1")) {
-            return data.getLocFortress1();
-        } else if (s.equals("fortress2") || s.equals("keep2")) {
-            return data.getLocFortress2();
-        } else if (s.equals("innerwall1")) {
-            return data.getLocInnerWall1();
-        } else if (s.equals("innerwall2")) {
-            return data.getLocInnerWall2();
         }
         return null;
     }
 
-    public Location setLocation(String name, Location loc) {
+    public void setLocation(String name, Location loc) {
         String s = name.toLowerCase();
         if (s.equals("lobby") || s.equals("spawn")) {
             data.setLocLobby(loc);
@@ -140,24 +135,7 @@ public class DvzMap {
             data.setLocWall(loc);
         } else if (s.equals("dragon") || s.equals("dragons")) {
             data.setLocDragon(loc);
-        } else if (s.equals("shrinewall1")) {
-            data.setLocShrineWall1(loc);
-        } else if (s.equals("shrinewall2")) {
-            data.setLocShrineWall2(loc);
-        } else if (s.equals("shrine1")) {
-            data.setLocShrine1(loc);
-        } else if (s.equals("shrine2")) {
-            data.setLocShrine2(loc);
-        } else if (s.equals("fortress1") || s.equals("tower1")) {
-            data.setLocFortress1(loc);
-        } else if (s.equals("fortress2") || s.equals("tower2")) {
-            data.setLocFortress2(loc);
-        } else if (s.equals("innerwall1")) {
-            data.setLocInnerWall1(loc);
-        } else if (s.equals("innerwall2")) {
-            data.setLocInnerWall2(loc);
         }
         dvz.getMapCfg().setMap(mapName, data);
-        return null;
     }
 }

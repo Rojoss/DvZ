@@ -37,19 +37,6 @@ public class WorkShopEvents implements Listener {
         event.setCancelled(true);
 
         Player player = event.getPlayer();
-        Location loc = event.getBlockPlaced().getLocation();
-        if (!dvz.getMM().getActiveMap().isLocWithin(loc, "innerwall", new Vector(-5, 2, -5))) {
-            player.sendMessage(Util.formatMsg("&cCan't create your workshop here."));
-            player.sendMessage(Util.formatMsg("&cIt has to be created within the inner walls."));
-            return;
-        }
-
-        if (dvz.getMM().getActiveMap().isLocWithin(loc, "keep", new Vector(5, 50, 5))) {
-            player.sendMessage(Util.formatMsg("&cCan't create your workshop here."));
-            player.sendMessage(Util.formatMsg("&cIt has to be created outside the keep."));
-            return;
-        }
-
         if (event.getBlockAgainst().getType() != Material.PISTON_BASE) {
             player.sendMessage(Util.formatMsg("&cCan't create your workshop here."));
             player.sendMessage(Util.formatMsg("&cYou have to place it on one of the pistons."));

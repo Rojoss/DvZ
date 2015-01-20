@@ -2,6 +2,9 @@ package com.clashwars.dvz.commands;
 
 import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.CooldownManager;
+import com.clashwars.cwcore.cuboid.Cuboid;
+import com.clashwars.cwcore.cuboid.SelectionStatus;
+import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
@@ -19,6 +22,9 @@ import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.*;
+import org.bukkit.util.Vector;
 
 import java.util.*;
 
@@ -80,6 +86,7 @@ public class Commands {
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " setclass [type] &8- &5Force set your class."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " loc {name} [block] &8- &5Set a location at ur location."));
                     sender.sendMessage(CWUtil.integrateColor("&7(Or at the block on cursor within 5 blocks if 'block' is specified)"));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " cub {name} &8- &5Save a cuboid selection. (wand = /arw)"));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " save &8- &5Save everything."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " reload [force] &8- &5Reload configs."));
                     sender.sendMessage(CWUtil.integrateColor("&7(If you use force it wont first save the configs. &4Careful&7!)"));
@@ -704,6 +711,91 @@ public class Commands {
 
                     dvz.getMM().getActiveMap().setLocation(args[1], loc);
                     player.sendMessage(Util.formatMsg("&6Set location &8'&5" + args[1] + "&8' &6at: &8(&5" + loc.getBlockX() + "&8, &5" + loc.getBlockY() + "&8, &5" + loc.getBlockZ() + "&8)"));
+                    return true;
+                }
+
+
+
+                //##########################################################################################################################
+                //#################################################### /dvz cub {type} #####################################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("cub") || args[0].equalsIgnoreCase("cuboid")) {
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                        return true;
+                    }
+                    final Player player = (Player)sender;
+
+                    if (!player.isOp() && !player.hasPermission("dvz.admin")) {
+                        player.sendMessage(Util.formatMsg("Insufficient permissions."));
+                        return true;
+                    }
+
+                    if (args.length < 2) {
+                        sender.sendMessage(Util.formatMsg("&cInvalid usage. &7/" + label + " " + args[0] + " {type/name}"));
+                        sender.sendMessage(Util.formatMsg("&4Names&8: &c" + CWUtil.implode(dvz.getMM().getCuboidNames(), "&8, &c")));
+                        return true;
+                    }
+
+                    if (dvz.getMM().getActiveMap() == null) {
+                        sender.sendMessage(Util.formatMsg("&cThere is no map active right now."));
+                        return true;
+                    }
+
+                    boolean cubMatch = false;
+                    for (String cubName : dvz.getMM().getCuboidNames()) {
+                        if (cubName.equalsIgnoreCase(args[1])) {
+                            cubMatch = true;
+                            break;
+                        }
+                    }
+                    if (!cubMatch) {
+                        sender.sendMessage(Util.formatMsg("&cInvalid cuboid name specified!"));
+                        sender.sendMessage(Util.formatMsg("&4Names&8: &c" + CWUtil.implode(dvz.getMM().getCuboidNames(), "&8, &c")));
+                        return true;
+                    }
+
+                    if (CWCore.inst().getSel().getStatus(player) == SelectionStatus.NONE) {
+                        sender.sendMessage(Util.formatMsg("&cYou haven't selected a cuboid."));
+                        sender.sendMessage(Util.formatMsg("&cUse &4/arw &cto get the wand and select two points."));
+                        return true;
+                    }
+
+                    if (CWCore.inst().getSel().getStatus(player) == SelectionStatus.POS2) {
+                        sender.sendMessage(Util.formatMsg("&cYou haven't selected position1."));
+                        return true;
+                    }
+
+                    if (CWCore.inst().getSel().getStatus(player) == SelectionStatus.POS1) {
+                        sender.sendMessage(Util.formatMsg("&cYou haven't selected position2."));
+                        return true;
+                    }
+
+                    final Cuboid cuboid = CWCore.inst().getSel().getSelection(player);
+                    if (cuboid == null) {
+                        sender.sendMessage(Util.formatMsg("&cFailed at loading your selected cuboid. Did you select it?"));
+                        return true;
+                    }
+
+                    dvz.getMM().getActiveMap().setCuboid(args[1], cuboid);
+                    player.sendMessage(Util.formatMsg("&6Set cuboid &8'&5" + args[1] + "&8'!"));
+                    player.sendMessage(Util.formatMsg("&7Look at the particles to make sure the cuboid is set properly."));
+
+                    new BukkitRunnable() {
+                        int particles = 0;
+                        Vector halfBlock = new Vector(0.5f, 0.5f, 0.5f);
+
+                        @Override
+                        public void run() {
+                            particles++;
+                            for (org.bukkit.util.Vector vector : cuboid.getEdgeVectors()) {
+                                ParticleEffect.FIREWORKS_SPARK.display(0.5f, 0.5f, 0.5f, 0f, 5, vector.add(halfBlock).toLocation(player.getWorld()), 300);
+                            }
+                            if (particles > 10) {
+                                cancel();
+                            }
+                        }
+                    }.runTaskTimer(dvz, 0, 20);
                     return true;
                 }
 
