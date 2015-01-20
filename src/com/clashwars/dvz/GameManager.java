@@ -10,6 +10,7 @@ import com.clashwars.dvz.maps.DvzMap;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.runnables.DragonRunnable;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -196,6 +197,10 @@ public class GameManager {
         player.setAllowFlight(true);
         player.setFlying(true);
         setState(GameState.DRAGON);
+
+        player.setMaxHealth(10 + dvz.getPM().getPlayers(ClassType.DWARF, true).size());
+        player.setHealth(player.getMaxHealth());
+        new DragonRunnable(dvz).runTaskTimer(dvz, 100, 100);
     }
 
 
