@@ -3,7 +3,6 @@ package com.clashwars.dvz.abilities;
 import com.clashwars.cwcore.CooldownManager;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
-import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
@@ -158,7 +157,7 @@ public class BaseAbility implements Listener {
                 cd.setTime(getCooldown());
                 return true;
             }
-            CWUtil.sendActionBar(player, Util.formatMsg(getDisplayName() + "&8> &7" + CWUtil.formatTime(cd.getTimeLeft(), "&7%S&8.&7%%%&8s")));
+            CWUtil.sendActionBar(player, CWUtil.integrateColor(getDisplayName() + " &4&l> &7" + CWUtil.formatTime(cd.getTimeLeft(), "&c%S&4.&c%%%&4s")));
             return false;
         }
         return true;

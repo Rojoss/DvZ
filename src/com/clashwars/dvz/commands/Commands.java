@@ -23,7 +23,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.*;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -789,7 +788,7 @@ public class Commands {
                         public void run() {
                             particles++;
                             for (org.bukkit.util.Vector vector : cuboid.getEdgeVectors()) {
-                                ParticleEffect.FIREWORKS_SPARK.display(0.5f, 0.5f, 0.5f, 0f, 5, vector.add(halfBlock).toLocation(player.getWorld()), 300);
+                                ParticleEffect.CLOUD.display(0.3f, 0.3f, 0.3f, 0f, 5, vector.add(halfBlock).toLocation(player.getWorld()), 300);
                             }
                             if (particles > 10) {
                                 cancel();

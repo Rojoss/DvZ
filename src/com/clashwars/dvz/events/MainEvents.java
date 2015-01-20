@@ -303,8 +303,13 @@ public class MainEvents implements Listener {
                 continue;
             }
             if (item.hasItemMeta()) {
-                if (!CWUtil.integrateColor(c.getDisplayName()).equalsIgnoreCase(CWUtil.integrateColor(item.getItemMeta().getDisplayName()))) {
+                if ((c.getClassItem().getItemMeta().hasDisplayName() && !item.getItemMeta().hasDisplayName()) || (!c.getClassItem().getItemMeta().hasDisplayName() && item.getItemMeta().hasDisplayName())) {
                     continue;
+                }
+                if (item.getItemMeta().hasDisplayName()) {
+                    if (!CWUtil.integrateColor(c.getDisplayName()).equalsIgnoreCase(CWUtil.integrateColor(item.getItemMeta().getDisplayName()))) {
+                        continue;
+                    }
                 }
             }
             if (!dvz.getGM().isStarted()) {

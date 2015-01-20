@@ -1,5 +1,6 @@
 package com.clashwars.dvz.classes.dwarves;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.Product;
@@ -66,16 +67,16 @@ public class Miner extends DwarfClass {
         //Particle effect for breaking blocks and drop ores/stone.
         final Material mat = block.getType();
         if (mat == Material.STONE) {
-            block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(mat, getIntOption("stonedrops")));
+            block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(mat, getIntOption("stone-drops")));
             ParticleEffect.SMOKE_NORMAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, block.getLocation().add(0.5f,0.5f,0.5f));
         } else if (mat == Material.DIAMOND_ORE) {
-            block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(mat, getIntOption("oredrops")));
+            block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(mat, getIntOption("ore-drops")));
             ParticleEffect.CRIT_MAGIC.display(0.5f, 0.5f, 0.5f, 0.0001f, 20, block.getLocation().add(0.5f,0.5f,0.5f));
         } else if (mat == Material.GOLD_ORE) {
-            block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(mat, getIntOption("oredrops")));
+            block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(mat, getIntOption("ore-drops")));
             ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 15, block.getLocation().add(0.5f,0.5f,0.5f));
         } else if (mat == Material.IRON_ORE) {
-            block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(mat, getIntOption("oredrops")));
+            block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(mat, getIntOption("ore-drops")));
             ParticleEffect.CRIT.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, block.getLocation().add(0.5f,0.5f,0.5f));
         }
 
