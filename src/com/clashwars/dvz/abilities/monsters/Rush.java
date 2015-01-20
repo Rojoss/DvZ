@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.monsters;
 
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
@@ -7,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class Rush extends MobAbility {
 
@@ -17,17 +19,18 @@ public class Rush extends MobAbility {
     }
 
     @Override
-    public void castAbility(Player player, Location triggerloc) {
-        //TODO: Implement this different (see trello)
-        player.sendMessage("Invalid implementation.");
+    public void castAbility(final Player player, Location triggerloc) {
+        if (CWUtil.getTargetedPlayer(player, getIntOption("range")) == null) {
+            return;
+        }
 
-//        if (CWUtil.getTargetedPlayer(player, getIntOption("range")) == null) {
-//            return;
-//        }
-//
-//        Vector dir = player.getLocation().getDirection();
-//        player.setVelocity(new Vector(dir.getX() * getDoubleOption("multiplier"), 0.2, dir.getZ() * getDoubleOption("multiplier")));
-//        //TODO: Add particle and sound effects
+        player.setWalkSpeed(getDvzClass().getClassClass().getSpeed() + getFloatOption("bonusspeed"));
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                player.setWalkSpeed(getDvzClass().getClassClass().getSpeed());
+            }
+        }.runTaskLater(dvz, getIntOption("duration"));
 
     }
 
