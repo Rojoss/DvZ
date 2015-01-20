@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -35,6 +36,9 @@ public class Miner extends DwarfClass {
         classItem = new DvzItem(Material.DIAMOND_PICKAXE, 1, (byte)0, "&8&lMiner", 20, -1);
 
         equipment.add(new DvzItem(Material.WORKBENCH, 1, (byte)0, "&8&lWorkshop", new String[] {"&7Place this down on any of the pistons.", "&7Your workshop will be build then."}, 500, -1));
+        DvzItem pickaxe = new DvzItem(Material.DIAMOND_PICKAXE, 1, -1, -1);
+        pickaxe.addEnchantment(Enchantment.DIG_SPEED, 1);
+        equipment.add(pickaxe);
     }
 
     @EventHandler(priority = EventPriority.HIGH)

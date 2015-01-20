@@ -36,40 +36,7 @@ public class Tailor extends DwarfClass {
         classItem = new DvzItem(Material.SHEARS, 1, (byte)0, "&3&lTailor", 40, -1);
 
         equipment.add(new DvzItem(Material.WORKBENCH, 1, (byte)0, "&3&lWorkshop", new String[] {"&7Place this down on any of the pistons.", "&7Your workshop will be build then."}, 500, -1));
-    }
-
-
-    @EventHandler(priority = EventPriority.HIGH)
-    private void entityDamage(EntityDamageByEntityEvent event) {
-        if (event.getEntityType() != EntityType.SHEEP) {
-            return;
-        }
-        Entity entity = event.getEntity();
-
-        if (!(event.getDamager() instanceof Player)) {
-            return;
-        }
-        Player damager = (Player)event.getDamager();
-        CWPlayer cwp = dvz.getPM().getPlayer(damager);
-
-        if (cwp.getPlayerClass() != DvzClass.TAILOR) {
-            return;
-        }
-        final TailorWorkshop ws = (TailorWorkshop)dvz.getPM().getWorkshop(damager);
-
-        //Check for killing animal that belongs to the killer.
-        boolean isOwnAnimal = false;
-        for (CWEntity sheep : ws.getSheeps()) {
-            if (sheep.entity().getUniqueId() == entity.getUniqueId()) {
-                isOwnAnimal = true;
-            }
-        }
-        if (!isOwnAnimal) {
-            return;
-        }
-
-        damager.sendMessage(Util.formatMsg("&cShear your sheep instead of killing them!"));
-        return;
+        equipment.add(new DvzItem(Material.SHEARS, 1, -1, -1));
     }
 
 

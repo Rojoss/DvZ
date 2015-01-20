@@ -13,13 +13,12 @@ import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -33,6 +32,35 @@ public class Fletcher extends DwarfClass {
         classItem = new DvzItem(Material.WOOD_SWORD, 1, (byte)0, "&2&lFletcher", 30, -1);
 
         equipment.add(new DvzItem(Material.WORKBENCH, 1, (byte)0, "&2&lWorkshop", new String[] {"&7Place this down on any of the pistons.", "&7Your workshop will be build then."}, 500, -1));
+        equipment.add(new DvzItem(Material.STONE_SWORD, 1, -1, -1));
+        equipment.add(new DvzItem(Material.STONE_SPADE, 1, -1, -1));
+    }
+
+    @EventHandler
+    private void mobDamage(EntityDamageByEntityEvent event) {
+        if (!(event.getDamager() instanceof Player)) {
+            return;
+        }
+        if (!(event.getEntity() instanceof Pig) && !(event.getEntity() instanceof Chicken)) {
+            return;
+        }
+        Player player = (Player)event.getDamager();
+        if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.FLETCHER) {
+            return;
+        }
+
+        final FletcherWorkshop ws = (FletcherWorkshop)dvz.getPM().getWorkshop(player);
+        boolean isOwnAnimal = false;
+        for (CWEntity animal : ws.getAnimals()) {
+            if (animal.entity().getUniqueId() == event.getEntity().getUniqueId()) {
+                isOwnAnimal = true;
+            }
+        }
+        if (!isOwnAnimal) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your " + event.getEntity().getType().name() + "! &4&l<<"));
+            return;
+        }
+        event.setCancelled(false);
     }
 
 
@@ -144,8 +172,8 @@ public class Fletcher extends DwarfClass {
                 dropLoc.getWorld().dropItem(dropLoc, arrows);
                 ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
                 return;
-            }
-        }
+    }
+}
         if (feathers < feathersNeeded) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (feathersNeeded - feathers) + " more FEATHERS to craftl! &4&l<<"));
         } else if (flint < flintNeeded) {

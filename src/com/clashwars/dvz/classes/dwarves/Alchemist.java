@@ -28,6 +28,7 @@ public class Alchemist extends DwarfClass {
         classItem = new DvzItem(Material.POTION, 1, (byte)0, "&5&lAlchemist", 60, -1);
 
         equipment.add(new DvzItem(Material.WORKBENCH, 1, (byte)0, "&5&lWorkshop", new String[] {"&7Place this down on any of the pistons.", "&7Your workshop will be build then."}, 500, -1));
+        equipment.add(new DvzItem(Material.BUCKET, 1, -1, -1));
     }
 
 
