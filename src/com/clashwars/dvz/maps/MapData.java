@@ -16,6 +16,7 @@ public class MapData {
     public String cubShrineWall;
     public String cubShrineKeep;
     public String cubKeep;
+    public String cubWall;
     public String cubInnerWall;
 
 
@@ -97,6 +98,15 @@ public class MapData {
 
     public void setKeep(Cuboid cuboid) {
         this.cubKeep = cuboid.toString();
+    }
+
+
+    public Cuboid getWall() {
+        return Cuboid.deserialize(cubWall);
+    }
+
+    public void setWall(Cuboid cuboid) {
+        this.cubWall = cuboid.toString();
     }
 
 

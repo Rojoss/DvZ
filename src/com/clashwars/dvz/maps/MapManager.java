@@ -189,7 +189,7 @@ public class MapManager {
     }
 
     public String[] getCuboidNames() {
-        return new String[]{"shrinewall", "shrinekeep", "keep", "innerwall"};
+        return new String[]{"shrinewall", "shrinekeep", "keep", "wall", "innerwall"};
     }
 
     public World getUsedWorld() {

@@ -243,7 +243,28 @@ public class GameManager {
         title.setTimingsToTicks();
         title.broadcast();
         setState(GameState.MONSTERS_WALL);
-        //TODO: Replace blocks in wall to nether style.
+
+        Cuboid wall = dvz.getMM().getActiveMap().getCuboid("wall");
+        List<Block> blocks = wall.getBlocks();
+        for (Block block : blocks) {
+            if (block.getType() == Material.SMOOTH_BRICK) {
+                block.setType(Material.NETHER_BRICK);
+            }
+            if (block.getType() == Material.SMOOTH_STAIRS) {
+                block.setType(Material.NETHER_BRICK_STAIRS);
+            }
+            if (block.getType() == Material.STONE_SLAB2) {
+                if (block.getData() <= 7) {
+                    block.setData((byte)6);
+                }
+                if (block.getData() > 7) {
+                    block.setData((byte)14);
+                }
+            }
+            if (block.getType() == Material.FENCE) {
+                block.setType(Material.NETHER_FENCE);
+            }
+        }
     }
 
 

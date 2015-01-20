@@ -83,6 +83,8 @@ public class DvzMap {
             return data.getShrineKeep();
         } else if (s.equals("keep")) {
             return data.getKeep();
+        } else if (s.equals("wall") || s.equals("bigwall")) {
+            return data.getWall();
         } else if (s.equals("innerwall") || s.equals("keepwall")) {
             return data.getInnerWall();
         }
@@ -97,6 +99,8 @@ public class DvzMap {
             data.setShrineKeep(cuboid);
         } else if (s.equals("keep")) {
             data.setKeep(cuboid);
+        } else if (s.equals("wall") || s.equals("bigwall")) {
+            data.setWall(cuboid);
         } else if (s.equals("innerwall") || s.equals("keepwall")) {
             data.setInnerWall(cuboid);
         }
