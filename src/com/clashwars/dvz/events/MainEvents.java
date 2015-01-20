@@ -14,10 +14,12 @@ import com.clashwars.dvz.util.Util;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -215,6 +217,29 @@ public class MainEvents implements Listener {
                 event.setCancelled(true);
             }
         }
+    }
+
+
+    @EventHandler
+    private void onDamageByEntity(EntityDamageByEntityEvent event) {
+        //Custom block enchantment.
+        //Per level block 0.5 hearth extra while blocking and 1.0 per level if also sneaking.
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+        Player damaged = (Player)event.getEntity();
+
+        if (!damaged.isBlocking()) {
+            return;
+        }
+
+        if (!damaged.getItemInHand().getEnchantments().containsKey(Enchantment.DURABILITY)) {
+            return;
+        }
+
+        int enchantLvl = damaged.getItemInHand().getEnchantmentLevel(Enchantment.DURABILITY);
+        boolean sneaking = damaged.isSneaking();
+        event.setDamage(event.getDamage() - enchantLvl * (sneaking ? 2 : 1));
     }
 
 
