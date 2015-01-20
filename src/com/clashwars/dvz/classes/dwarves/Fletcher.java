@@ -146,7 +146,11 @@ public class Fletcher extends DwarfClass {
                 return;
             }
         }
-        player.sendMessage(CWUtil.formatCWMsg("&cNothing to craft."));
+        if (feathers < feathersNeeded) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (feathersNeeded - feathers) + " more FEATHERS to craftl! &4&l<<"));
+        } else if (flint < flintNeeded) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (flintNeeded - flint) + " more FLINT to craftl! &4&l<<"));
+        }
     }
 
 

@@ -203,10 +203,17 @@ public class Tailor extends DwarfClass {
                 dropLoc.getWorld().dropItem(dropLoc, CWUtil.random(leatherArmor).getItem().setLeatherColor(CWUtil.getRandomColor()));
 
                 ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
+                player.updateInventory();
                 return;
             }
         }
-        player.sendMessage(CWUtil.formatCWMsg("&cNothing to craft."));
+        if (wool < woolNeeded) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (woolNeeded - wool) + " more WOOL to craftl! &4&l<<"));
+        } else if (redDye < redDyeNeeded) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (redDyeNeeded - redDye) + " more RED DYE to craftl! &4&l<<"));
+        } else if(yellowDye < yellowDyeNeeded) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (yellowDyeNeeded - yellowDye) + " more YELLOW DYE to craftl! &4&l<<"));
+        }
     }
 
 }

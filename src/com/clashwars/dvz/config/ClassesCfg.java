@@ -59,6 +59,10 @@ public class ClassesCfg extends EasyConfig {
         switch (c) {
             case MINER:
                 classData = loadDefault(classData, "workshop-types", "1");
+                classData = loadDefault(classData, "stone-drops", "2");
+                classData = loadDefault(classData, "ore-drops", "1");
+                classData = loadDefault(classData, "min-respawn-time", "200");
+                classData = loadDefault(classData, "max-respawn-time", "800");
                 break;
             case FLETCHER:
                 classData = loadDefault(classData, "workshop-types", "1");

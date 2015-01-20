@@ -197,6 +197,11 @@ public class CWPlayer {
         Player player = getPlayer();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         if (forcePrevious) {
+            if (type == ClassType.MONSTER) {
+                if (!cwp.getClassOptions().contains(DvzClass.ZOMBIE)) {
+                    cwp.getClassOptions().add(DvzClass.ZOMBIE);
+                }
+            }
             for (DvzClass c : cwp.getClassOptions()) {
                 dvz.getCM().getClass(c).getClassItem().giveToPlayer(player);
             }
@@ -205,6 +210,11 @@ public class CWPlayer {
         Map<DvzClass, BaseClass> classOptions = dvz.getCM().getRandomClasses(player, type);
         cwp.clearClassOptions();
         cwp.setClassOptions(classOptions.keySet());
+        if (type == ClassType.MONSTER) {
+            if (!classOptions.containsKey(DvzClass.ZOMBIE)) {
+                classOptions.put(DvzClass.ZOMBIE, DvzClass.ZOMBIE.getClassClass());
+            }
+        }
         for (DvzClass c : classOptions.keySet()) {
             classOptions.get(c).getClassItem().giveToPlayer(player);
         }

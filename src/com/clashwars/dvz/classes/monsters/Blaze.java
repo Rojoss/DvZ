@@ -4,6 +4,9 @@ import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 public class Blaze extends MobClass {
 
@@ -16,6 +19,23 @@ public class Blaze extends MobClass {
         abilities.add(Ability.GLIDE);
         abilities.add(Ability.FIREBALL);
         abilities.add(Ability.BLAST);
+    }
+
+    @EventHandler
+    private void noFallDmg(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+        if (event.getCause() != EntityDamageEvent.DamageCause.FALL) {
+            return;
+        }
+
+        Player player = (Player)event.getEntity();
+        if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.BLAZE) {
+            return;
+        }
+
+        event.setCancelled(true);
     }
 
 }

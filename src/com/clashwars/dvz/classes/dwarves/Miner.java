@@ -57,37 +57,66 @@ public class Miner extends DwarfClass {
             return;
         }
 
-        //Particle effect for breaking blocks.
+        event.setCancelled(false);
+
+        //Particle effect for breaking blocks and drop ores/stone.
         final Material mat = block.getType();
         if (mat == Material.STONE) {
+            block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(mat, getIntOption("stonedrops")));
             ParticleEffect.SMOKE_NORMAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, block.getLocation().add(0.5f,0.5f,0.5f));
         } else if (mat == Material.DIAMOND_ORE) {
+            block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(mat, getIntOption("oredrops")));
             ParticleEffect.CRIT_MAGIC.display(0.5f, 0.5f, 0.5f, 0.0001f, 20, block.getLocation().add(0.5f,0.5f,0.5f));
         } else if (mat == Material.GOLD_ORE) {
+            block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(mat, getIntOption("oredrops")));
             ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 15, block.getLocation().add(0.5f,0.5f,0.5f));
         } else if (mat == Material.IRON_ORE) {
+            block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(mat, getIntOption("oredrops")));
             ParticleEffect.CRIT.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, block.getLocation().add(0.5f,0.5f,0.5f));
         }
 
-        event.setCancelled(false);
         new BukkitRunnable() {
             @Override
             public void run() {
                 //Get a list of all blocks that are currently air.
                 List<Block> airBlocks = new ArrayList<Block>();
+                List<Block> stoneblocks = new ArrayList<Block>();
                 for (Block block : mws.getMineableBlocks()) {
                     if (block.getType() == Material.AIR) {
                         airBlocks.add(block);
+                    } else if (block.getType() == Material.STONE) {
+                        stoneblocks.add(block);
                     }
                 }
-                Block block = CWUtil.random(airBlocks);
+
+                //If there are only 5 blocks mined swap the block with a stone block randomly.
+                //Else miners can just not mine stone at all and the ores will always respawn at same places.
+                Block block = null;
+                if (airBlocks.size() > 10) {
+                    block = CWUtil.random(airBlocks);
+                } else {
+                    block = CWUtil.random(stoneblocks);
+                }
+
                 //Always try place it on the lowest block possible as long as it's in the workshop. (this stops randomly scattered stone)
                 while (block.getRelative(BlockFace.DOWN).getType() == Material.AIR && block.getLocation().getBlockY() > mws.getCuboid().getMinY()) {
                     block = block.getRelative(BlockFace.DOWN);
                 }
+
+                //Set new block but save the type if we need to swap.
+                Material originalBlock = block.getType();
                 block.setType(mat);
+
+                //Swap blocks functionality
+                if (originalBlock != Material.AIR) {
+                    Block swapBlock = CWUtil.random(airBlocks);
+                    while (swapBlock.getRelative(BlockFace.DOWN).getType() == Material.AIR && swapBlock.getLocation().getBlockY() > mws.getCuboid().getMinY()) {
+                        swapBlock = block.getRelative(BlockFace.DOWN);
+                    }
+                    swapBlock.setType(originalBlock);
+                }
             }
-        }.runTaskLater(dvz, CWUtil.random(200, 800));
+        }.runTaskLater(dvz, CWUtil.random(CWUtil.getInt("min-respawn-time"), getIntOption("max-respawn-time")));
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -121,6 +150,7 @@ public class Miner extends DwarfClass {
             if (tryCraft(hand, dropLoc)) {
                 CWUtil.removeItemsFromHand(player, 2);
                 ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
+                player.updateInventory();
                 return;
             }
         }
@@ -130,10 +160,11 @@ public class Miner extends DwarfClass {
             if (tryCraft(inv.getItem(i), dropLoc)) {
                 CWUtil.removeItemsFromSlot(inv, i, 2);
                 ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
+                player.updateInventory();
                 return;
             }
         }
-        player.sendMessage(CWUtil.formatCWMsg("&cNothing to craft."));
+        CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need at least 2 iron, gold or diamond to craft! &4&l<<"));
     }
 
     //Try craft a item with the given itemstack.
