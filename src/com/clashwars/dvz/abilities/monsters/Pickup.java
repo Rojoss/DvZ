@@ -39,6 +39,7 @@ public class Pickup extends MobAbility {
 
         target.setVelocity(target.getVelocity().setY(0.5f));
         target.showPlayer(player);
+        Util.disguisePlayer(player.getName(), (DvzClass.ENDERMAN.getClassClass().getDisguise()));
     }
 
     @EventHandler
@@ -62,10 +63,15 @@ public class Pickup extends MobAbility {
             return;
         }
 
+        if (dvz.getPM().getPlayer(player).getEndermanBlock() != Material.AIR) {
+            player.sendMessage(Util.formatMsg("&cPlace the block you're holding first."));
+            return;
+        }
+
         target.hidePlayer(player);
         pickupPlayers.put(player.getUniqueId(), target.getUniqueId());
-        //TODO: Proper offset
         new PickupRunnable(dvz, player, target, new Vector(0,0,0)).runTaskTimer(dvz, 1, 1);
+        Util.disguisePlayer(player.getName(), (DvzClass.ENDERMAN.getClassClass().getDisguise() + " setAggressive true"));
     }
 
     @EventHandler
@@ -80,6 +86,11 @@ public class Pickup extends MobAbility {
             return;
         }
         if (!isCastItem(player.getItemInHand())) {
+            return;
+        }
+
+        if (pickupPlayers.containsKey(player.getUniqueId())) {
+            player.sendMessage(Util.formatMsg("&cDrop the player you're holding first. &8(&7Sneak&8)"));
             return;
         }
 
@@ -107,7 +118,7 @@ public class Pickup extends MobAbility {
         }
 
         cwp.setEndermanBlock(block.getType());
+        Util.disguisePlayer(player.getName(), (DvzClass.ENDERMAN.getClassClass().getDisguise() + " setItemInHand " + block.getType() + ":" + block.getData()));
         block.setType(Material.AIR);
-        //TODO: Disguise enderman with block.
     }
 }

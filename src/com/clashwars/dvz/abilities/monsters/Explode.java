@@ -1,6 +1,8 @@
 package com.clashwars.dvz.abilities.monsters;
 
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
+import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
@@ -26,6 +28,7 @@ public class Explode extends MobAbility {
     @EventHandler
     private void sneak(PlayerToggleSneakEvent event) {
         final Player player = event.getPlayer();
+        final CWPlayer cwp = dvz.getPM().getPlayer(player);
 
         if (player.isSneaking()) {
             return;
@@ -39,7 +42,7 @@ public class Explode extends MobAbility {
             return;
         }
 
-        //TODO: Set player as powered creeper.
+        Util.disguisePlayer(player.getName(), (cwp.getPlayerClass().getClassClass().getDisguise() + " setPowered true"));
 
         new BukkitRunnable() {
             int ticks = 0;
@@ -53,13 +56,14 @@ public class Explode extends MobAbility {
                 if (ticks % 20 == 0) {
                     //Check if player has moved
                     if (playerLoc.getBlockX() != player.getLocation().getBlockX() || playerLoc.getBlockY() != player.getLocation().getBlockY() || playerLoc.getBlockZ() != player.getLocation().getBlockZ()) {
-                        player.sendMessage(Util.formatMsg("&cExplosion charge cancelled because you moved!)"));
-                        //TODO: Set player as normal creeper again.
+                        CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cExplosion cancelled because you moved! &4&l<<"));
+                        Util.disguisePlayer(player.getName(), cwp.getPlayerClass().getClassClass().getDisguise());
                         this.cancel();
                         return;
                     }
                     //Increase the power by powerpersec value and clamp it between min/max value.
                     power = Math.min(Math.max((ticks / 20) * getDoubleOption("powerpersec"), getDoubleOption("minpower")), getDoubleOption("maxpower"));
+                    CWUtil.sendActionBar(player, CWUtil.integrateColor("&9&l>> &3Charge power&8: &6&l" + power + " &9&l<<"));
                     //TODO: Add sound effects and particles.
                 }
 
