@@ -116,6 +116,9 @@ public class AbilityCfg extends EasyConfig {
                 abilityData = loadDefault(abilityData, "duration", "200");
                 abilityData = loadDefault(abilityData, "amplifier", "0");
                 break;
+            case BURN:
+                abilityData = loadDefault(abilityData, "distance", "50");
+                break;
         }
 
         return abilityData;

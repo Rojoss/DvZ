@@ -2,6 +2,7 @@ package com.clashwars.dvz.classes.dwarves;
 
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.cuboid.Cuboid;
+import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
