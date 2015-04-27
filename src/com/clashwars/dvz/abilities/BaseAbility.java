@@ -145,22 +145,27 @@ public class BaseAbility implements Listener {
                 return false;
             }
         }
+        return true;
+    }
+
+    public boolean onCooldown(Player player) {
+        CWPlayer cwp = dvz.getPM().getPlayer(player);
 
         if (hasCooldown()) {
             String tag = ability.getDvzClass().toString().toLowerCase() +  "-" + ability.toString().toLowerCase();
             CooldownManager.Cooldown cd = cwp.getCDM().getCooldown(tag);
             if (cd == null) {
                 cwp.getCDM().createCooldown(tag, getCooldown());
-                return true;
+                return false;
             }
             if (!cd.onCooldown()) {
                 cd.setTime(getCooldown());
-                return true;
+                return false;
             }
             CWUtil.sendActionBar(player, CWUtil.integrateColor(getDisplayName() + " &4&l> &7" + CWUtil.formatTime(cd.getTimeLeft(), "&c%S&4.&c%%%&4s")));
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     public boolean isCastItem(ItemStack item) {
@@ -199,7 +204,7 @@ public class BaseAbility implements Listener {
             return;
         }
 
-        //Make sure we can cast it. (same class, no cooldown etc)
+        //Make sure we can cast it. (same class)
         if (!canCast(event.getPlayer())) {
             return;
         }

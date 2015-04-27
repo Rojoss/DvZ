@@ -50,19 +50,22 @@ public class BuildingBlock extends DwarfAbility {
             for (int i = 0; i < 9; i++) {
                 ItemStack item = player.getInventory().getItem(i);
                 if (item != null && item.getType() == Material.SMOOTH_BRICK) {
-                    if (x == 0) {
-                        event.getBlockReplacedState().setType(item.getType());
-                        event.getBlockReplacedState().setRawData(item.getData().getData());
-                    } else {
-                        b.setType(item.getType());
-                        b.setData(item.getData().getData());
-                    }
-                    placed = true;
 
-                    CWUtil.removeItemsFromSlot(player.getInventory(), i, 1);
-                    ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(item.getType(), item.getData().getData()), 0.5f, 0.5f, 0.5f, 0.1f, 5, b.getLocation().add(0.5f, 0.5f, 0.5f));
-                    block.getWorld().playSound(b.getLocation(), Sound.DIG_STONE, 0.8f, 1f);
-                    player.updateInventory();
+                    if (!onCooldown(player)) {
+                        if (x == 0) {
+                            event.getBlockReplacedState().setType(item.getType());
+                            event.getBlockReplacedState().setRawData(item.getData().getData());
+                        } else {
+                            b.setType(item.getType());
+                            b.setData(item.getData().getData());
+                        }
+                        placed = true;
+
+                        CWUtil.removeItemsFromSlot(player.getInventory(), i, 1);
+                        ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(item.getType(), item.getData().getData()), 0.5f, 0.5f, 0.5f, 0.1f, 5, b.getLocation().add(0.5f, 0.5f, 0.5f));
+                        block.getWorld().playSound(b.getLocation(), Sound.DIG_STONE, 0.8f, 1f);
+                        player.updateInventory();
+                    }
                     break;
                 }
             }

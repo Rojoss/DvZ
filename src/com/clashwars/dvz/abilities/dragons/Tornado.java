@@ -28,6 +28,10 @@ public class Tornado extends DragonAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
+        if (onCooldown(player)) {
+            return;
+        }
+
         Tornado.spawnTornado(dvz, triggerLoc, Material.SMOOTH_BRICK, (byte) 0, new Vector(1, 1, 1), 0.3D, 500, 1000, true, false);
     }
 

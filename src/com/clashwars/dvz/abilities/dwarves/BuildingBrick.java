@@ -54,6 +54,9 @@ public class BuildingBrick extends DwarfAbility {
         for (int i = 0; i < 9; i++) {
             ItemStack item = player.getInventory().getItem(i);
             if (item != null && item.getType() == Material.SMOOTH_BRICK) {
+                if (onCooldown(player)) {
+                    return;
+                }
                 block.setType(item.getType());
                 block.setData(item.getData().getData());
 

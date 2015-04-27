@@ -25,6 +25,9 @@ public class TeleportPortal extends MobAbility {
             return;
         }
         //TODO: Maybe a teleport delay so you don't tp instantly (might get abused)
+        if (onCooldown(player)) {
+            return;
+        }
         player.teleport(Portal.activePortal.getLocation());
     }
 

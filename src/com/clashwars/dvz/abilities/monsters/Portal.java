@@ -67,6 +67,9 @@ public class Portal extends MobAbility {
         //Try create the portal
         int typeID = CWUtil.random(0, dvz.getCfg().PORTAL_TYPES - 1);
         try {
+            if (onCooldown(player)) {
+                return;
+            }
             CuboidClipboard cc = CWWorldGuard.pasteSchematic(portalLoc.getWorld(), CWWorldGuard.getSchematicFile("portal-" + typeID), portalLoc, true, 0, true);
 
             Location min = new Location(portalLoc.getWorld(), portalLoc.getBlockX() + cc.getOffset().getBlockX(), portalLoc.getBlockY() + cc.getOffset().getBlockY(), portalLoc.getBlockZ() + cc.getOffset().getBlockZ());

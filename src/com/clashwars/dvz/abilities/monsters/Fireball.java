@@ -24,6 +24,9 @@ public class Fireball extends MobAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
+        if (onCooldown(player)) {
+            return;
+        }
         SmallFireball smallFireball = player.launchProjectile(SmallFireball.class);
         smallFireball.setVelocity(player.getVelocity());
     }

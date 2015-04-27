@@ -35,6 +35,10 @@ public class Infect extends MobAbility {
         }
 
         if (CWUtil.randomFloat() <= getFloatOption("chance")) {
+            if (onCooldown(damager)) {
+                return;
+            }
+
             damaged.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, getIntOption("duration"), getIntOption("amplifier")));
             //TODO: Add particle and sound effects.
         }

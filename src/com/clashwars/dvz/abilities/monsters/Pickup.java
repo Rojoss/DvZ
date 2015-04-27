@@ -68,6 +68,10 @@ public class Pickup extends MobAbility {
             return;
         }
 
+        if (onCooldown(player)) {
+            return;
+        }
+
         target.hidePlayer(player);
         pickupPlayers.put(player.getUniqueId(), target.getUniqueId());
         new PickupRunnable(dvz, player, target, new Vector(0,0,0)).runTaskTimer(dvz, 1, 1);
@@ -117,6 +121,9 @@ public class Pickup extends MobAbility {
             return;
         }
 
+        if (onCooldown(player)) {
+            return;
+        }
         cwp.setEndermanBlock(block.getType());
         Util.disguisePlayer(player.getName(), (DvzClass.ENDERMAN.getClassClass().getDisguise() + " setItemInHand " + block.getType() + ":" + block.getData()));
         block.setType(Material.AIR);

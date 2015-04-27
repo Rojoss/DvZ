@@ -200,7 +200,7 @@ public class ProtectEvents implements Listener {
                     || type == Material.ENDER_CHEST || type == Material.CHEST || type == Material.BEACON || type == Material.ANVIL || type == Material.HOPPER || type == Material.DROPPER
                     || type == Material.DRAGON_EGG || type == Material.FIRE ||type == Material.ACACIA_FENCE_GATE || type == Material.BIRCH_FENCE_GATE || type == Material.DARK_OAK_FENCE_GATE
                     || type == Material.JUNGLE_FENCE_GATE || type == Material.SPRUCE_FENCE_GATE || type == Material.ACACIA_DOOR || type == Material.BIRCH_DOOR || type == Material.JUNGLE_DOOR
-                    || type == Material.DARK_OAK_DOOR || type == Material.SPRUCE_DOOR || type == Material.ARMOR_STAND) {
+                    || type == Material.DARK_OAK_DOOR || type == Material.SPRUCE_DOOR || type == Material.ARMOR_STAND || type == Material.BURNING_FURNACE || type == Material.TRAPPED_CHEST) {
                 event.setCancelled(true);
             }
             //Allow using buckets (Handled by bucket empty/fill event)

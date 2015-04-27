@@ -89,7 +89,7 @@ public class Alchemist extends DwarfClass {
 
             player.playSound(block.getLocation(), Sound.SPLASH2, 1.0f, 2.0f);
             player.getItemInHand().setType(Material.WATER_BUCKET);
-            block.setData((byte)4);
+            block.setData((byte)0);
         }
     }
 

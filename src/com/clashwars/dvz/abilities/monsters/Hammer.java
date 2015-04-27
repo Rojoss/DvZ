@@ -65,9 +65,14 @@ public class Hammer extends MobAbility {
                     return;
                 }
             }
+
             shrineBlock.damage();
             effect = ParticleEffect.SPELL_WITCH;
             effectAmt = 8;
+        }
+
+        if (onCooldown(player)) {
+            return;
         }
 
         if (event.getBlockFace() == BlockFace.DOWN || event.getBlockFace() == BlockFace.UP) {

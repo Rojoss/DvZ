@@ -24,6 +24,10 @@ public class Poison extends MobAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
+        if (onCooldown(player)) {
+            return;
+        }
+
         double range = getDoubleOption("range");
         ExpandingCircleEffect poisonEffect = new ExpandingCircleEffect(dvz.getEM());
         poisonEffect.particleList.add(new Particle(ParticleEffect.SPELL_MOB, 0.1f, 0.2f, 0.1f, 0, 0, new ParticleEffect.OrdinaryColor(109, 138, 47)));
