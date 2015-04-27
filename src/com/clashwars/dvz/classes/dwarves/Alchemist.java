@@ -2,6 +2,7 @@ package com.clashwars.dvz.classes.dwarves;
 
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.cuboid.Cuboid;
+import com.clashwars.dvz.Product;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.DvzItem;
@@ -17,9 +18,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.awt.*;
 
 public class Alchemist extends DwarfClass {
 
@@ -122,6 +126,39 @@ public class Alchemist extends DwarfClass {
             }
         }
     }
+
+    @EventHandler (priority = EventPriority.HIGH)
+    private void blockBreak(BlockBreakEvent event) {
+        final Block block = event.getBlock();
+        if (block.getType() != Material.MELON_BLOCK) {
+            return;
+        }
+        if (block.getData() != 0) {
+            return;
+        }
+        final Material originalType = block.getType();
+
+        Player player = event.getPlayer();
+        if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.ALCHEMIST) {
+            return;
+        }
+        event.setCancelled(false);
+        if (block.getType() == Material.MELON_BLOCK) {
+            block.getWorld().dropItem(block.getLocation(), Product.MELON.getItem());
+        }
+        new BukkitRunnable() {
+            @Override
+            public void run()   {
+                if (block.getType() == Material.AIR) {
+                    block.setType(originalType);
+                    ParticleEffect.VILLAGER_HAPPY.display(0.7f, 0.7f, 0.7f, 0.0001f, 5, block.getLocation().add(0.5f, 0.5f, 0.5f));
+                    block.getWorld().playSound(block.getLocation(),Sound.DIG_GRASS, 1.0f, 1.3f);
+                }
+            }
+
+        }.runTaskLater(dvz, getIntOption("melon-respawn-time"));
+    }
+
 
     //Check for dropping ingredients in the pot.
     @EventHandler(priority = EventPriority.HIGH)
