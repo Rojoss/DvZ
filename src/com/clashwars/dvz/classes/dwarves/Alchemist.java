@@ -1,5 +1,7 @@
 package com.clashwars.dvz.classes.dwarves;
 
+import com.clashwars.cwcore.Debug;
+import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.dvz.Product;
@@ -9,10 +11,12 @@ import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.AlchemistWorkshop;
 import com.clashwars.dvz.workshop.WorkShop;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,7 +27,9 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 public class Alchemist extends DwarfClass {
 
@@ -130,9 +136,10 @@ public class Alchemist extends DwarfClass {
     @EventHandler (priority = EventPriority.HIGH)
     private void blockBreak(BlockBreakEvent event) {
         final Block block = event.getBlock();
-        if (block.getType() != Material.MELON_BLOCK) {
+        if (block.getType() != Material.MELON_BLOCK && block.getType() != Material.SUGAR_CANE_BLOCK) {
             return;
         }
+
         if (block.getData() != 0) {
             return;
         }
@@ -142,21 +149,67 @@ public class Alchemist extends DwarfClass {
         if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.ALCHEMIST) {
             return;
         }
-        event.setCancelled(false);
+
         if (block.getType() == Material.MELON_BLOCK) {
+            event.setCancelled(false);
             block.getWorld().dropItem(block.getLocation(), Product.MELON.getItem());
-        }
-        new BukkitRunnable() {
-            @Override
-            public void run()   {
-                if (block.getType() == Material.AIR) {
-                    block.setType(originalType);
-                    ParticleEffect.VILLAGER_HAPPY.display(0.7f, 0.7f, 0.7f, 0.0001f, 5, block.getLocation().add(0.5f, 0.5f, 0.5f));
-                    block.getWorld().playSound(block.getLocation(),Sound.DIG_GRASS, 1.0f, 1.3f);
+
+            new BukkitRunnable() {
+                @Override
+                public void run()   {
+                    if (block.getType() == Material.AIR) {
+                        block.setType(originalType);
+                        ParticleEffect.VILLAGER_HAPPY.display(0.7f, 0.7f, 0.7f, 0.0001f, 5, block.getLocation().add(0.5f, 0.5f, 0.5f));
+                        block.getWorld().playSound(block.getLocation(),Sound.DIG_GRASS, 1.0f, 1.3f);
+                    }
                 }
+
+            }.runTaskLater(dvz, getIntOption("melon-respawn-time"));
+        } else if (block.getType() == Material.SUGAR_CANE_BLOCK) {
+            event.setCancelled(true);
+            Block currentBlock = block;
+            List<Block> sugarcane = new ArrayList<Block>();
+            sugarcane.add(currentBlock);
+
+            while (currentBlock.getRelative(BlockFace.UP).getType() == Material.SUGAR_CANE_BLOCK) {
+                currentBlock = currentBlock.getRelative(BlockFace.UP);
+                sugarcane.add(currentBlock);
             }
 
-        }.runTaskLater(dvz, getIntOption("melon-respawn-time"));
+            CWItem sugar = Product.SUGAR.getItem();
+            sugar.setAmount(sugarcane.size());
+            block.getWorld().dropItem(block.getLocation(), sugar);
+
+            for (Block sugarcaneBlock : sugarcane) {
+                sugarcaneBlock.setType(Material.AIR);
+                sugarcaneBlock.getWorld().playEffect(sugarcaneBlock.getLocation(), Effect.STEP_SOUND, 83);
+                //ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(sugarcaneBlock.getType(), sugarcaneBlock.getData()), 0.5f, 0.5f, 0.5f, 0.2f, 20, sugarcaneBlock.getLocation().add(0.5f, 0f, 0.5f));
+                //sugarcaneBlock.getWorld().playSound(sugarcaneBlock.getLocation(), Sound.DIG_GRASS, 1.0f, 1.3f);
+            }
+
+            final Block floorBlock;
+            currentBlock = block;
+            while (currentBlock.getRelative(BlockFace.DOWN).getType() != Material.SAND && currentBlock.getRelative(BlockFace.DOWN).getType() != Material.GRASS)   {
+                currentBlock = currentBlock.getRelative(BlockFace.DOWN);
+            }
+            floorBlock = currentBlock.getRelative(BlockFace.DOWN);
+
+            new BukkitRunnable() {
+                @Override
+                public void run()   {
+                    for (int i = 0; i < 3; i++) {
+                        Block sugarcaneBlock = floorBlock.getRelative(0,i+1,0);
+                        if (sugarcaneBlock.getType() == Material.AIR) {
+                            sugarcaneBlock.setType(originalType);
+                            ParticleEffect.VILLAGER_HAPPY.display(0.7f, 0.7f, 0.7f, 0.0001f, 5, sugarcaneBlock.getLocation().add(0.5f, 0.5f, 0.5f));
+                            sugarcaneBlock.getWorld().playSound(sugarcaneBlock.getLocation(), Sound.DIG_GRASS, 1.0f, 1.3f);
+                            return;
+                        }
+                    }
+                    cancel();
+                }
+            }.runTaskTimer(dvz, getIntOption("sugarcane-respawn-time"), getIntOption("sugarcane-respawn-time"));
+        }
     }
 
 

@@ -96,6 +96,7 @@ public class ClassesCfg extends EasyConfig {
                 classData = loadDefault(classData, "melons-needed", "5");
                 classData = loadDefault(classData, "sugar-needed", "5");
                 classData = loadDefault(classData, "melon-respawn-time", "600");
+                classData = loadDefault(classData, "sugarcane-respawn-time", "200");
                 break;
         }
 
