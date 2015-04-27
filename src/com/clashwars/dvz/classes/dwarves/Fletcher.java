@@ -1,5 +1,6 @@
 package com.clashwars.dvz.classes.dwarves;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWEntity;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -43,8 +44,8 @@ public class Fletcher extends DwarfClass {
         }
 
         Player player;
-        if (!(event.getEntity() instanceof Player)) {
-            if (!(event.getEntity() instanceof  Projectile)) {
+        if (!(event.getDamager() instanceof Player)) {
+            if (!(event.getDamager() instanceof  Projectile)) {
                 return;
             }
             Projectile proj = (Projectile)event.getDamager();
