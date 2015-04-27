@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import java.util.Set;
+
 public class Blink extends MobAbility {
 
     public Blink() {
@@ -20,7 +22,7 @@ public class Blink extends MobAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
-        Block b = player.getTargetBlock(null, getIntOption("range"));
+        Block b = player.getTargetBlock((Set<Material>)null, getIntOption("range"));
         Location l = player.getLocation().clone();
         Location l2 = b.getRelative(BlockFace.UP).getLocation().clone();
         l2.setPitch(l.getPitch());

@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public class BuildingBrick extends DwarfAbility {
 
@@ -27,7 +28,7 @@ public class BuildingBrick extends DwarfAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
-        List<Block> blocks = player.getLastTwoTargetBlocks(null, getIntOption("range"));
+        List<Block> blocks = player.getLastTwoTargetBlocks((Set<Material>)null, getIntOption("range"));
         Block block = blocks.get(0);
 
         if (block == null || block.getType() != Material.AIR) {

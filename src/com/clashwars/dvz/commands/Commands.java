@@ -701,7 +701,7 @@ public class Commands {
                     Location loc = player.getLocation();
                     if (args.length > 2) {
                         if (args[2].equalsIgnoreCase("block") || args[2].equalsIgnoreCase("target")) {
-                            Block block = player.getTargetBlock(null, 5);
+                            Block block = player.getTargetBlock((Set<Material>)null, 5);
                             if (block.getType() != Material.AIR) {
                                 loc = block.getLocation();
                             }
