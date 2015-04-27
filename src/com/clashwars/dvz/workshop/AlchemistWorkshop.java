@@ -144,6 +144,9 @@ public class AlchemistWorkshop extends WorkShop {
     public void checkPotFilled() {
         List<Block> waterBlocks = pot.getBlocks(new Material[]{Material.STATIONARY_WATER});
         if (waterBlocks.size() >= 18) {
+            for (Block block : pot.getBlocks()) {
+                block.setType(Material.STATIONARY_WATER);
+            }
             potFilled = true;
             getOwner().sendMessage(Util.formatMsg("&6Pot filled with water."));
             getOwner().sendMessage(Util.formatMsg("&7You can now start adding ingredients."));

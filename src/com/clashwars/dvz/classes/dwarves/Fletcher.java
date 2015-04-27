@@ -38,13 +38,27 @@ public class Fletcher extends DwarfClass {
 
     @EventHandler
     private void mobDamage(EntityDamageByEntityEvent event) {
-        if (!(event.getDamager() instanceof Player)) {
-            return;
-        }
         if (!(event.getEntity() instanceof Pig) && !(event.getEntity() instanceof Chicken)) {
             return;
         }
-        Player player = (Player)event.getDamager();
+
+        Player player;
+        if (!(event.getEntity() instanceof Player)) {
+            if (!(event.getEntity() instanceof  Projectile)) {
+                return;
+            }
+            Projectile proj = (Projectile)event.getDamager();
+            if (proj.getShooter() == null || !(proj.getShooter() instanceof Player)) {
+                return;
+            }
+            player = (Player)proj.getShooter();
+        } else {
+            player = (Player)event.getDamager();
+        }
+        if (player == null) {
+            return;
+        }
+
         if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.FLETCHER) {
             return;
         }
