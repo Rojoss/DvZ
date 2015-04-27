@@ -31,6 +31,7 @@ public class AlchemistWorkshop extends WorkShop {
     private boolean potFilled = false;
     private int sugar = 0;
     private int melons = 0;
+    private boolean removed = false;
 
     public AlchemistWorkshop(UUID owner, WorkShopData wsd) {
         super(owner, wsd);
@@ -51,6 +52,10 @@ public class AlchemistWorkshop extends WorkShop {
 
             @Override
             public void run() {
+                if (removed) {
+                    cancel();
+                    return;
+                }
                 iterations++;
 
                 if (cuboid == null || cuboid.getBlocks() == null || cuboid.getBlocks().size() <= 0) {
@@ -110,6 +115,7 @@ public class AlchemistWorkshop extends WorkShop {
         cauldrons.clear();
         chest = null;
         pot = null;
+        removed = true;
     }
 
     private boolean calculateLocations() {
