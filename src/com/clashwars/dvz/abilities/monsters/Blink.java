@@ -22,6 +22,10 @@ public class Blink extends MobAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
+        if (onCooldown(player)) {
+            return;
+        }
+
         Block b = player.getTargetBlock((Set<Material>)null, getIntOption("range"));
         Location l = player.getLocation().clone();
         Location l2 = b.getRelative(BlockFace.UP).getLocation().clone();

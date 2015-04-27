@@ -21,6 +21,9 @@ public class Suicide extends MobAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
+        if (onCooldown(player)) {
+            return;
+        }
         player.setHealth(0);
         player.sendMessage(Util.formatMsg("&cSuicided!"));
         dvz.getPM().suicidePlayers.add(player.getUniqueId());

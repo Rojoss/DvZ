@@ -20,6 +20,9 @@ public class SpeedPotion extends DwarfAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
+        if (onCooldown(player)) {
+            return;
+        }
         player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, getIntOption("duration"), getIntOption("amplifier")));
     }
 

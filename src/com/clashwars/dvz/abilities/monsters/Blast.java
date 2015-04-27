@@ -24,6 +24,10 @@ public class Blast extends MobAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
+        if (onCooldown(player)) {
+            return;
+        }
+
         int radius = getIntOption("radius");
         ExpandingCircleEffect ce = new ExpandingCircleEffect(dvz.getEM());
         ce.particleList.add(new Particle(ParticleEffect.FLAME, 0.1f, 0.4f, 0.1f, 0.001f, 0));

@@ -23,6 +23,9 @@ public class Burn extends DragonAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
+        if (onCooldown(player)) {
+            return;
+        }
         for (Entity entity : CWUtil.getNearbyEntities(triggerLoc, getFloatOption("distance"), Arrays.asList(new EntityType[]{EntityType.PLAYER}))) {
             ((Player)entity).setFireTicks(40);
         }

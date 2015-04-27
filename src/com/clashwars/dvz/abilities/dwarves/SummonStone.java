@@ -31,6 +31,9 @@ public class SummonStone extends DwarfAbility {
 
     @Override
     public void castAbility(final Player player, final Location triggerLoc) {
+        if (onCooldown(player)) {
+            return;
+        }
         new BukkitRunnable() {
             int itterations = 0;
             @Override

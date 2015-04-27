@@ -24,6 +24,10 @@ public class Rush extends MobAbility {
             return;
         }
 
+        if (onCooldown(player)) {
+            return;
+        }
+
         player.setWalkSpeed(getDvzClass().getClassClass().getSpeed() + getFloatOption("bonusspeed"));
         new BukkitRunnable() {
             @Override

@@ -42,6 +42,10 @@ public class Explode extends MobAbility {
             return;
         }
 
+        if (onCooldown(player)) {
+            return;
+        }
+
         Util.disguisePlayer(player.getName(), (cwp.getPlayerClass().getClassClass().getDisguise() + " setPowered true"));
 
         new BukkitRunnable() {

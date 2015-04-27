@@ -32,6 +32,9 @@ public class Reinforce extends DwarfAbility {
             return;
         }
 
+        if (onCooldown(player)) {
+            return;
+        }
         triggerLoc.getBlock().setData((byte)0);
         ParticleEffect.SMOKE_NORMAL.display(0.6f, 0.6f, 0.6f, 0.01f, 20, triggerLoc.add(0.5f, 0.5f, 0.5f));
         triggerLoc.getWorld().playSound(triggerLoc, Sound.DIG_STONE, 0.8f, 1f);

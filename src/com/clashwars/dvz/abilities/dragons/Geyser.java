@@ -26,6 +26,10 @@ public class Geyser extends DragonAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
+        if (onCooldown(player)) {
+            return;
+        }
+
         final Map<UUID, Vector> players = new HashMap<UUID, Vector>();
         for (Entity e : player.getNearbyEntities(getFloatOption("range"), getFloatOption("range"), getFloatOption("range"))) {
             if (e instanceof Player) {

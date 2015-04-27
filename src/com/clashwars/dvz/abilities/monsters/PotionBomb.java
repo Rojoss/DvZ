@@ -1,6 +1,7 @@
 package com.clashwars.dvz.abilities.monsters;
 
 import com.clashwars.cwcore.dependencies.CWWorldGuard;
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.player.CWPlayer;
@@ -16,6 +17,7 @@ import org.bukkit.SkullType;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -26,6 +28,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class PotionBomb extends MobAbility {
@@ -58,10 +61,14 @@ public class PotionBomb extends MobAbility {
             }
         }
 
-        /*if (CWUtil.getNearbyEntities(triggerLoc, getFloatOption("radius"), Arrays.asList(new EntityType[]{EntityType.PLAYER})).size() - 1 == 0) {
+        if (CWUtil.getNearbyEntities(triggerLoc, getFloatOption("radius"), Arrays.asList(new EntityType[]{EntityType.PLAYER})).size() - 1 == 0) {
             player.sendMessage(Util.formatMsg("&cThere are no players nearby!"));
             return;
-        }*/
+        }
+
+        if (onCooldown(player)) {
+            return;
+        }
 
         try {
             CuboidClipboard cc = CWWorldGuard.pasteSchematic(bomb.getWorld(), CWWorldGuard.getSchematicFile("PotionBomb"), bomb, true, 0, true);

@@ -34,6 +34,10 @@ public class Web extends MobAbility {
             return;
         }
 
+        if (onCooldown(player)) {
+            return;
+        }
+
         CWUtil.removeItemsFromHand(player, 1);
         final FallingBlock web = player.getLocation().getWorld().spawnFallingBlock(player.getLocation(), Material.WEB, (byte)0);
         web.setDropItem(false);

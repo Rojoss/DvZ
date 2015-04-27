@@ -29,6 +29,10 @@ public class Rapidfire extends MobAbility {
     public void castAbility(final Player player, Location triggerLoc) {
         //TODO: Add particle and sound effects.
 
+        if (onCooldown(player)) {
+            return;
+        }
+
         new BukkitRunnable() {
             int arrows = getIntOption("arrows");
             Double m = getDoubleOption("randomoffset");
