@@ -1,8 +1,6 @@
 package com.clashwars.dvz.abilities;
 
-import com.clashwars.dvz.abilities.dragons.Burn;
-import com.clashwars.dvz.abilities.dragons.Geyser;
-import com.clashwars.dvz.abilities.dragons.Tornado;
+import com.clashwars.dvz.abilities.dragons.*;
 import com.clashwars.dvz.abilities.dwarves.*;
 import com.clashwars.dvz.abilities.monsters.*;
 import com.clashwars.dvz.classes.DvzClass;
@@ -39,7 +37,7 @@ public enum Ability {
     PORTAL("ENDERMAN", new Portal(), new String[]{}),
     TORNADO("AIRDRAGON", new Tornado(), new String[]{}),
     GEYSER("WATERDRAGON", new Geyser(), new String[]{}),
-    BURN("BURN", new Burn(), new String[]{});
+    BURN("FIREDRAGON", new Burn(), new String[]{});
 
     private String className;
     private BaseAbility abilityClass;
