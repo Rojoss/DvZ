@@ -7,6 +7,7 @@ import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -51,6 +52,7 @@ public class WorkShopEvents implements Listener {
         if (ws.build(event.getBlockPlaced().getLocation())) {
             player.sendMessage(Util.formatMsg("&6Workshop created!"));
             player.playSound(player.getLocation(), Sound.LEVEL_UP, 1.0f, 0.8f);
+            player.teleport(player.getWorld().getHighestBlockAt(player.getLocation()).getLocation());
             ws.onBuild();
         } else {
             event.setCancelled(true);
