@@ -80,7 +80,7 @@ public class Tailor extends DwarfClass {
     @EventHandler(priority = EventPriority.HIGH)
     private void blockBreak(BlockBreakEvent event) {
         final Block block = event.getBlock();
-        if (block.getType() != Material.RED_ROSE && block.getType() != Material.YELLOW_FLOWER) {
+        if (block.getType() != Material.YELLOW_FLOWER) {
             return;
         }
 
@@ -95,10 +95,10 @@ public class Tailor extends DwarfClass {
         }
 
         event.setCancelled(false);
-        if (block.getType() == Material.RED_ROSE) {
-            block.getWorld().dropItem(block.getLocation(), Product.ROSE_DYE.getItem());
-        } else {
-            block.getWorld().dropItem(block.getLocation(), Product.FLOWER_DYE.getItem());
+        if (block.getData() == 8) {
+            block.getWorld().dropItem(block.getLocation(), Product.DYE_1.getItem());
+        } else if (block.getData() == 1) {
+            block.getWorld().dropItem(block.getLocation(), Product.DYE_2.getItem());
         }
         block.setType(Material.AIR);
 
@@ -143,8 +143,8 @@ public class Tailor extends DwarfClass {
         int redDye = 0;
         int yellowDye = 0;
         int woolNeeded = getIntOption("wool-needed");
-        int redDyeNeeded = getIntOption("reddye-needed");
-        int yellowDyeNeeded = getIntOption("yellowdye-needed");
+        int dye1Needed = getIntOption("reddye-needed");
+        int dye2Needed = getIntOption("yellowdye-needed");
         //Find all wool/dyes in inventory.
         for (int i = 0; i < inv.getSize(); i++) {
             ItemStack item = inv.getItem(i);
@@ -154,17 +154,17 @@ public class Tailor extends DwarfClass {
             //Increase wool/dyes amt if the current item is wool/dye.
             if (item.getType() == Product.WOOL.getItem().getType()) {
                 wool += item.getAmount();
-            } else if (item.getType() == Product.ROSE_DYE.getItem().getType() && item.getData().getData() == Product.ROSE_DYE.getItem().getData().getData()) {
+            } else if (item.getType() == Product.DYE_1.getItem().getType() && item.getData().getData() == Product.DYE_1.getItem().getData().getData()) {
                 redDye += item.getAmount();
-            } else if (item.getType() == Product.FLOWER_DYE.getItem().getType() && item.getData().getData() == Product.FLOWER_DYE.getItem().getData().getData()) {
+            } else if (item.getType() == Product.DYE_2.getItem().getType() && item.getData().getData() == Product.DYE_2.getItem().getData().getData()) {
                 yellowDye += item.getAmount();
             }
 
             //if enough wool/dyes then craft.
-            if (wool >= woolNeeded && redDye >= redDyeNeeded && yellowDye >= yellowDyeNeeded) {
+            if (wool >= woolNeeded && redDye >= dye1Needed && yellowDye >= dye2Needed) {
                 CWUtil.removeItems(inv, Product.WOOL.getItem(), woolNeeded, true);
-                CWUtil.removeItems(inv, Product.ROSE_DYE.getItem(), redDyeNeeded, true, true);
-                CWUtil.removeItems(inv, Product.FLOWER_DYE.getItem(), yellowDyeNeeded, true, true);
+                CWUtil.removeItems(inv, Product.DYE_1.getItem(), dye1Needed, true, true);
+                CWUtil.removeItems(inv, Product.DYE_2.getItem(), dye2Needed, true, true);
 
                 Product[] leatherArmor  = new Product[] {Product.HELMET, Product.CHESTPLATE, Product.LEGGINGS, Product.BOOTS};
                 dropLoc.getWorld().dropItem(dropLoc, CWUtil.random(leatherArmor).getItem().setLeatherColor(CWUtil.getRandomColor()));
@@ -176,10 +176,10 @@ public class Tailor extends DwarfClass {
         }
         if (wool < woolNeeded) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (woolNeeded - wool) + " more WOOL to craftl! &4&l<<"));
-        } else if (redDye < redDyeNeeded) {
-            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (redDyeNeeded - redDye) + " more RED DYE to craftl! &4&l<<"));
-        } else if(yellowDye < yellowDyeNeeded) {
-            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (yellowDyeNeeded - yellowDye) + " more YELLOW DYE to craftl! &4&l<<"));
+        } else if (redDye < dye1Needed) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (dye1Needed - redDye) + " more WHITE DYE to craftl! &4&l<<"));
+        } else if(yellowDye < dye2Needed) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (dye2Needed - yellowDye) + " more BLUE DYE to craftl! &4&l<<"));
         }
     }
 

@@ -30,8 +30,8 @@ public enum Product {
     ARROW(new CWItem(Material.ARROW), true),
 
     WOOL(new CWItem(Material.WOOL), false),
-    ROSE_DYE(new CWItem(Material.INK_SACK, 1, (byte)1), false),
-    FLOWER_DYE(new CWItem(Material.INK_SACK, 1, (byte)11), false),
+    DYE_1(new CWItem(Material.INK_SACK, 1, (byte)7), false),
+    DYE_2(new CWItem(Material.INK_SACK, 1, (byte)12), false),
     HELMET(new CWItem(Material.LEATHER_HELMET), true),
     CHESTPLATE(new CWItem(Material.LEATHER_CHESTPLATE), true),
     LEGGINGS(new CWItem(Material.LEATHER_LEGGINGS), true),

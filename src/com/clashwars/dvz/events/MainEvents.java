@@ -89,7 +89,7 @@ public class MainEvents implements Listener {
         title.setTimingsToTicks();
         title.send(player);
 
-        CWUtil.setTab(player, " &8======== &6&lDwarves &2VS &c&lZombies &8========", " &6INFO &8>>> &9&larchaicrealms.com/dvz &8<<< &6INFO");
+        CWUtil.setTab(player, " &8======== &6&lDwarves &2VS &c&lZombies &8========", " &6INFO &8>>> &9&lclashwars.com/dvz &8<<< &6INFO");
 
         player.teleport(spawnLoc);
     }
