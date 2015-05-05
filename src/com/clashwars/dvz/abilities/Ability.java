@@ -38,7 +38,8 @@ public enum Ability {
     TORNADO("AIRDRAGON", new Tornado(), new String[]{}),
     GEYSER("WATERDRAGON", new Geyser(), new String[]{}),
     BURN("FIREDRAGON", new Burn(), new String[]{}),
-    WIND("AIRDRAGON", new Wind(), new String[]{});
+    WIND("AIRDRAGON", new Wind(), new String[]{}),
+    WINDSTORM("AIRDRAGON", new WindStorm(), new String[]{});
 
     private String className;
     private BaseAbility abilityClass;

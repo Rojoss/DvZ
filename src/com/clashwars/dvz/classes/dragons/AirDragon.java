@@ -10,6 +10,7 @@ public class AirDragon extends DragonClass {
         dvzClass = DvzClass.AIRDRAGON;
 
         abilities.add(Ability.WIND);
+        abilities.add(Ability.WINDSTORM);
     }
 
 }
