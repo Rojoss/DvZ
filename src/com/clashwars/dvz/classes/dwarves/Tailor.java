@@ -80,7 +80,7 @@ public class Tailor extends DwarfClass {
     @EventHandler(priority = EventPriority.HIGH)
     private void blockBreak(BlockBreakEvent event) {
         final Block block = event.getBlock();
-        if (block.getType() != Material.YELLOW_FLOWER) {
+        if (block.getType() != Material.RED_ROSE) {
             return;
         }
 
