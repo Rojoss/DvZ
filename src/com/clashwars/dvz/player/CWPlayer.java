@@ -132,6 +132,8 @@ public class CWPlayer {
         } else if (dvzClass.getType() == ClassType.MONSTER) {
             if (dvz.getGM().getState() == GameState.MONSTERS_WALL) {
                 player.teleport(dvz.getMM().getActiveMap().getLocation("wall"));
+            } else if (dvz.getGM().getState() == GameState.MONSTERS_KEEP) {
+                player.teleport(dvz.getMM().getActiveMap().getLocation("dwarf"));
             } else {
                 player.teleport(dvz.getMM().getActiveMap().getLocation("monster"));
             }

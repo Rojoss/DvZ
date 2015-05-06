@@ -79,8 +79,10 @@ public class DvzMap {
         String s = name.toLowerCase();
         if (s.equals("shrinewall") || s.equals("wallshrine")) {
             return data.getShrineWall();
-        } else if (s.equals("shrinekeep") || s.equals("keepshrine")) {
-            return data.getShrineKeep();
+        } else if (s.equals("shrine1keep") || s.equals("shrinekeep1") || s.equals("keep1shrine") || s.equals("keepshrine1")) {
+            return data.getShrine1Keep();
+        } else if (s.equals("shrine2keep") || s.equals("shrinekeep2") || s.equals("keep2shrine") || s.equals("keepshrine2")) {
+            return data.getShrine2Keep();
         } else if (s.equals("keep")) {
             return data.getKeep();
         } else if (s.equals("wall") || s.equals("bigwall")) {
@@ -95,8 +97,10 @@ public class DvzMap {
         String s = name.toLowerCase();
         if (s.equals("shrinewall") || s.equals("wallshrine")) {
             data.setShrineWall(cuboid);
-        } else if (s.equals("shrinekeep") || s.equals("keepshrine")) {
-            data.setShrineKeep(cuboid);
+        } else if (s.equals("shrine1keep") || s.equals("shrinekeep1") || s.equals("keep1shrine") || s.equals("keepshrine1")) {
+            data.setShrine1Keep(cuboid);
+        } else if (s.equals("shrine2keep") || s.equals("shrinekeep2") || s.equals("keep2shrine") || s.equals("keepshrine2")) {
+            data.setShrine2Keep(cuboid);
         } else if (s.equals("keep")) {
             data.setKeep(cuboid);
         } else if (s.equals("wall") || s.equals("bigwall")) {

@@ -60,8 +60,13 @@ public class Hammer extends MobAbility {
                 return;
             }
             if (dvz.getGM().getState() == GameState.MONSTERS) {
-                if (shrineBlock.getType() == ShrineType.KEEP) {
+                if (shrineBlock.getType() == ShrineType.KEEP_1 || shrineBlock.getType() == ShrineType.KEEP_2) {
                     player.sendMessage(CWUtil.formatCWMsg("&cYou have to destroy the shrine at the wall first!"));
+                    return;
+                }
+            } else if (dvz.getGM().getState() == GameState.MONSTERS_WALL) {
+                if (shrineBlock.getType() == ShrineType.KEEP_2) {
+                    player.sendMessage(CWUtil.formatCWMsg("&cYou have to destroy the shrine at the bottom of the keep first!"));
                     return;
                 }
             }

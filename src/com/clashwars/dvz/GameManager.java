@@ -261,7 +261,7 @@ public class GameManager {
         Bukkit.broadcastMessage(CWUtil.integrateColor("&7===== &a&lThe wall has been captured! &7====="));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Get back to the keep to defend the main shrine!"));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Monsters will now spawn at the wall."));
-        Title title = new Title("&c&lWall captured!", "&7Get back to the keep to defend the main shrine!", 10, 50, 30);
+        Title title = new Title("&c&lWall captured!", "&7Get back to the keep to defend the keep shrine!", 10, 50, 30);
         title.setTimingsToTicks();
         title.broadcast();
         setState(GameState.MONSTERS_WALL);
@@ -286,7 +286,21 @@ public class GameManager {
             if (block.getType() == Material.FENCE) {
                 block.setType(Material.NETHER_FENCE);
             }
+
+            if (block.getType() == Material.COBBLE_WALL) {
+                block.setType(Material.NETHER_FENCE);
+            }
         }
+    }
+
+    public void captureFirstKeepShrine() {
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&7===== &a&lThe bottom of the keep has been captured! &7====="));
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Defend the shrine at the top!"));
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Monsters will now spawn in the keep!"));
+        Title title = new Title("&c&lKeep captured!", "&7Get to the top of the keep to defend the final shrine!", 10, 50, 30);
+        title.setTimingsToTicks();
+        title.broadcast();
+        setState(GameState.MONSTERS_KEEP);
     }
 
 
@@ -312,9 +326,10 @@ public class GameManager {
 
 
     public boolean populateShrines() {
-        boolean keepShrine = populateShrines("shrinekeep", ShrineType.KEEP);
+        boolean keep1Shrine = populateShrines("shrinekeep1", ShrineType.KEEP_1);
+        boolean keep2Shrine = populateShrines("shrinekeep2", ShrineType.KEEP_2);
         boolean wallShrine = populateShrines("shrinewall", ShrineType.WALL);
-        if (keepShrine && wallShrine) {
+        if (keep1Shrine && keep2Shrine && wallShrine) {
             return true;
         }
         return false;
@@ -356,7 +371,7 @@ public class GameManager {
     }
 
     public boolean isMonsters() {
-        return (getState() == GameState.MONSTERS || getState() == GameState.MONSTERS_WALL);
+        return (getState() == GameState.MONSTERS || getState() == GameState.MONSTERS_WALL|| getState() == GameState.MONSTERS_KEEP);
     }
 
 
