@@ -104,54 +104,59 @@ public class CWPlayer {
     }
 
 
-    public void setClass(DvzClass dvzClass) {
-        BaseClass c = dvzClass.getClassClass();
-        Player player = getPlayer();
+    public void setClass(final DvzClass dvzClass) {
+        final BaseClass c = dvzClass.getClassClass();
+        final Player player = getPlayer();
 
         //Reset
         reset();
 
-        setPlayerClass(dvzClass);
-        if (dvzClass.getType() == ClassType.DWARF) {
-            removeClassOption(dvzClass);
-        }
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                setPlayerClass(dvzClass);
+                if (dvzClass.getType() == ClassType.DWARF) {
+                    removeClassOption(dvzClass);
+                }
 
-        //Disguise
-        if (dvzClass.getType() == ClassType.MONSTER || dvzClass.getType() == ClassType.DRAGON) {
-            Util.disguisePlayer(player.getName(), c.getDisguise());
-        }
+                //Disguise
+                if (dvzClass.getType() == ClassType.MONSTER || dvzClass.getType() == ClassType.DRAGON) {
+                    Util.disguisePlayer(player.getName(), c.getDisguise());
+                }
 
-        //Team
-        if (dvz.getBoard().hasTeam(dvzClass.getTeam())) {
-            dvz.getBoard().getTeam(dvzClass.getTeam()).addPlayer(player);
-        }
+                //Team
+                if (dvz.getBoard().hasTeam(dvzClass.getTeam())) {
+                    dvz.getBoard().getTeam(dvzClass.getTeam()).addPlayer(player);
+                }
 
-        //Teleport
-        if (dvzClass.getType() == ClassType.DWARF) {
-            player.teleport(dvz.getMM().getActiveMap().getLocation("dwarf"));
-        } else if (dvzClass.getType() == ClassType.MONSTER) {
-            if (dvz.getGM().getState() == GameState.MONSTERS_WALL) {
-                player.teleport(dvz.getMM().getActiveMap().getLocation("wall"));
-            } else if (dvz.getGM().getState() == GameState.MONSTERS_KEEP) {
-                player.teleport(dvz.getMM().getActiveMap().getLocation("dwarf"));
-            } else {
-                player.teleport(dvz.getMM().getActiveMap().getLocation("monster"));
+                //Teleport
+                if (dvzClass.getType() == ClassType.DWARF) {
+                    player.teleport(dvz.getMM().getActiveMap().getLocation("dwarf"));
+                } else if (dvzClass.getType() == ClassType.MONSTER) {
+                    if (dvz.getGM().getState() == GameState.MONSTERS_WALL) {
+                        player.teleport(dvz.getMM().getActiveMap().getLocation("wall"));
+                    } else if (dvz.getGM().getState() == GameState.MONSTERS_KEEP) {
+                        player.teleport(dvz.getMM().getActiveMap().getLocation("dwarf"));
+                    } else {
+                        player.teleport(dvz.getMM().getActiveMap().getLocation("monster"));
+                    }
+                } else if (dvzClass.getType() == ClassType.DRAGON) {
+                    player.teleport(dvz.getMM().getActiveMap().getLocation("dragon"));
+                }
+
+                //Equip class and items etc.
+                c.equipItems(player);
+                dvzClass.getClassClass().onEquipClass(player);
+                player.setMaxHealth(c.getHealth());
+                player.setHealth(c.getHealth());
+                player.setWalkSpeed(c.getSpeed());
+                player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));
+                if (c.getType() == ClassType.DWARF) {
+                    player.sendMessage(CWUtil.integrateColor("&8&l❝&7" + c.getTask() + "&8&l❞"));
+                }
+                savePlayer();
             }
-        } else if (dvzClass.getType() == ClassType.DRAGON) {
-            player.teleport(dvz.getMM().getActiveMap().getLocation("dragon"));
-        }
-
-        //Equip class and items etc.
-        c.equipItems(player);
-        dvzClass.getClassClass().onEquipClass(player);
-        player.setMaxHealth(c.getHealth());
-        player.setHealth(c.getHealth());
-        player.setWalkSpeed(c.getSpeed());
-        player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));
-        if (c.getType() == ClassType.DWARF) {
-            player.sendMessage(CWUtil.integrateColor("&8&l❝&7" + c.getTask() + "&8&l❞"));
-        }
-        savePlayer();
+        }.runTaskLater(dvz, 5);
     }
 
 
@@ -195,31 +200,36 @@ public class CWPlayer {
     }
 
 
-    public void giveClassItems(ClassType type, boolean forcePrevious) {
-        Player player = getPlayer();
-        CWPlayer cwp = dvz.getPM().getPlayer(player);
-        if (forcePrevious) {
-            if (type == ClassType.MONSTER) {
-                if (!cwp.getClassOptions().contains(DvzClass.ZOMBIE)) {
-                    cwp.getClassOptions().add(DvzClass.ZOMBIE);
+    public void giveClassItems(final ClassType type, final boolean forcePrevious) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                Player player = getPlayer();
+                CWPlayer cwp = dvz.getPM().getPlayer(player);
+                if (forcePrevious) {
+                    if (type == ClassType.MONSTER) {
+                        if (!cwp.getClassOptions().contains(DvzClass.ZOMBIE)) {
+                            cwp.getClassOptions().add(DvzClass.ZOMBIE);
+                        }
+                    }
+                    for (DvzClass c : cwp.getClassOptions()) {
+                        dvz.getCM().getClass(c).getClassItem().giveToPlayer(player);
+                    }
+                    return;
+                }
+                Map<DvzClass, BaseClass> classOptions = dvz.getCM().getRandomClasses(player, type);
+                cwp.clearClassOptions();
+                cwp.setClassOptions(classOptions.keySet());
+                if (type == ClassType.MONSTER) {
+                    if (!classOptions.containsKey(DvzClass.ZOMBIE)) {
+                        classOptions.put(DvzClass.ZOMBIE, DvzClass.ZOMBIE.getClassClass());
+                    }
+                }
+                for (DvzClass c : classOptions.keySet()) {
+                    classOptions.get(c).getClassItem().giveToPlayer(player);
                 }
             }
-            for (DvzClass c : cwp.getClassOptions()) {
-                dvz.getCM().getClass(c).getClassItem().giveToPlayer(player);
-            }
-            return;
-        }
-        Map<DvzClass, BaseClass> classOptions = dvz.getCM().getRandomClasses(player, type);
-        cwp.clearClassOptions();
-        cwp.setClassOptions(classOptions.keySet());
-        if (type == ClassType.MONSTER) {
-            if (!classOptions.containsKey(DvzClass.ZOMBIE)) {
-                classOptions.put(DvzClass.ZOMBIE, DvzClass.ZOMBIE.getClassClass());
-            }
-        }
-        for (DvzClass c : classOptions.keySet()) {
-            classOptions.get(c).getClassItem().giveToPlayer(player);
-        }
+        }.runTaskLater(dvz, 5);
     }
 
 
