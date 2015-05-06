@@ -58,6 +58,12 @@ public class ShrineBlock {
         }
     }
 
+    public void remove() {
+        this.hp = dvz.getCfg().SHRINE__BLOCK_HP;
+        hologram.delete();
+        hologram = null;
+    }
+
     public void damage() {
         this.hp -= dvz.getCfg().SHRINE__DAMAGE_PER_HIT;
         if (this.hp <= 0) {

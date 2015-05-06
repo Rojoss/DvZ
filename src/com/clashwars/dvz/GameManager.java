@@ -11,6 +11,9 @@ import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.runnables.DragonRunnable;
+import com.clashwars.dvz.structures.StorageStruc;
+import com.clashwars.dvz.structures.extra.StorageItem;
+import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -42,8 +45,8 @@ public class GameManager {
             Bukkit.broadcastMessage(CWUtil.integrateColor("&7========== &c&lDvZ has ended! &7=========="));
             Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &7Come back again later for more DvZ!"));
             Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &7Make sure to follow us on Twitch to know when DvZ starts!"));
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &9&lhttp://twitch.tv/archaicrealms"));
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &7Use &6&l/hub &7to go to the hub!"));
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &9&lhttp://twitch.tv/clashwars"));
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &9&lhttp://clashwars.com"));
             setState(GameState.CLOSED);
             Title title = new Title("&c&lDvZ has ended!", "&7Come back again later for more DvZ!", 10, 500, 30);
             title.setTimingsToTicks();
@@ -65,15 +68,22 @@ public class GameManager {
             cwp.reset();
             cwp.resetData();
         }
-        shrineBlocks.clear();
         dvz.getPM().removePlayers(true);
+
+        for (ShrineBlock shrineBlock : shrineBlocks) {
+            shrineBlock.remove();
+        }
+        shrineBlocks.clear();
+
         dvz.getPM().removeWorkshops(true);
+        ((StorageStruc)StructureType.STORAGE.getStrucClass()).reset();
         gCfg.STORAGE_PRODUCTS.clear();
+
         setDragonPlayer(null);
         setDragonType(null);
         resetDragonSlayer();
         setSpeed(0);
-        //TODO: Reset all other data
+
         Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &5All data has been removed/reset"));
 
         if (dvz.getMM().getActiveMap() != null) {
@@ -86,7 +96,12 @@ public class GameManager {
             if (dvz.getMM().removeActiveMap()) {
                 Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &5Previous map has been removed"));
             } else {
-                Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &4Failed at removing previous map"));
+                Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &4Failed at removing previous map. Trying again..."));
+                if (dvz.getMM().removeActiveMap()) {
+                    Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &5Previous map has been removed"));
+                } else {
+                    Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &4&lFailed at removing previous map!"));
+                }
             }
         }
 
@@ -94,7 +109,12 @@ public class GameManager {
         if (dvz.getMM().loadMap(mapName)) {
             Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &5New map loaded."));
         } else {
-            Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &4Failed at loading new map"));
+            Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &4Failed at loading new map. Trying again..."));
+            if (dvz.getMM().loadMap(mapName)) {
+                Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &5New map loaded."));
+            } else {
+                Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &4&lFailed at loading new map!"));
+            }
         }
     }
 
@@ -131,6 +151,8 @@ public class GameManager {
         Title title = new Title("&a&lDvZ has opened!", "&7The game will be starting soon so please wait.", 10, 100, 30);
         title.setTimingsToTicks();
         title.broadcast();
+
+        populateShrines();
 
         //Tp all players to active world.
         for (Player player : dvz.getServer().getOnlinePlayers()) {
