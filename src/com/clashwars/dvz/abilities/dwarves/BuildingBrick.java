@@ -68,6 +68,8 @@ public class BuildingBrick extends DwarfAbility {
                 ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(item.getType(), item.getData().getData()), 0.5f, 0.5f, 0.5f, 0.1f, 5, block.getLocation().add(0.5f, 0.5f, 0.5f));
                 block.getWorld().playSound(block.getLocation(), Sound.DIG_STONE, 0.8f, 1f);
                 player.updateInventory();
+
+                dvz.getPM().getPlayer(player).addClassExp(1);
                 return;
             }
         }

@@ -166,6 +166,8 @@ public class Miner extends DwarfClass {
                 CWUtil.removeItemsFromSlot(inv, i, 2);
                 ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
                 player.updateInventory();
+
+                dvz.getPM().getPlayer(player).addClassExp(50);
                 return;
             }
         }

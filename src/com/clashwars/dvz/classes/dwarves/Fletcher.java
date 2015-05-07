@@ -186,6 +186,8 @@ public class Fletcher extends DwarfClass {
                 arrows.setAmount(CWUtil.random(getIntOption("min-arrow-amount"), getIntOption("max-arrow-amount")));
                 dropLoc.getWorld().dropItem(dropLoc, arrows);
                 ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
+
+                dvz.getPM().getPlayer(player).addClassExp(50);
                 return;
     }
 }

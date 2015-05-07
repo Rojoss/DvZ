@@ -208,6 +208,8 @@ public class AlchemistWorkshop extends WorkShop {
         melons = 0;
         sugar = 0;
 
+        dvz.getPM().getPlayer(getOwner()).addClassExp(50);
+
         //Clear water/Effect
         List<Block> waterBlocks = pot.getBlocks(new Material[]{Material.STATIONARY_WATER});
         for (Block block : waterBlocks) {
