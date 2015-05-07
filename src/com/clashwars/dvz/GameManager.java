@@ -152,8 +152,6 @@ public class GameManager {
         title.setTimingsToTicks();
         title.broadcast();
 
-        populateShrines();
-
         //Tp all players to active world.
         for (Player player : dvz.getServer().getOnlinePlayers()) {
             dvz.getPM().getPlayer(player).reset();

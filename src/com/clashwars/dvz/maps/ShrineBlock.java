@@ -49,6 +49,7 @@ public class ShrineBlock {
                 blockCount++;
             }
         }
+
         if (blockCount <= 0) {
             if (type == ShrineType.WALL) {
                 dvz.getGM().captureWall();
@@ -62,8 +63,10 @@ public class ShrineBlock {
 
     public void remove() {
         this.hp = dvz.getCfg().SHRINE__BLOCK_HP;
-        hologram.delete();
-        hologram = null;
+        if (hologram != null) {
+            hologram.delete();
+            hologram = null;
+        }
     }
 
     public void damage() {
