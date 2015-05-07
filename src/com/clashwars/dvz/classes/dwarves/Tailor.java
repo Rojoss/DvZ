@@ -84,7 +84,7 @@ public class Tailor extends DwarfClass {
             return;
         }
 
-        if (block.getData() != 0) {
+        if (block.getData() != 3 && block.getData() != 1) {
             return;
         }
         final Material originalType = block.getType();
@@ -95,7 +95,7 @@ public class Tailor extends DwarfClass {
         }
 
         event.setCancelled(false);
-        if (block.getData() == 8) {
+        if (block.getData() == 3) {
             block.getWorld().dropItem(block.getLocation(), Product.DYE_1.getItem());
         } else if (block.getData() == 1) {
             block.getWorld().dropItem(block.getLocation(), Product.DYE_2.getItem());
