@@ -38,12 +38,12 @@ public class PotionBomb extends MobAbility {
     public PotionBomb() {
         super();
         ability = Ability.POTION_BOMB;
-        castItem = new DvzItem(Material.STICK, 1, (short)0, displayName, 3, -1);
+        castItem = new DvzItem(Material.STAINED_GLASS, 1, (short)5, displayName, 3, -1);
     }
 
     @Override
-    public void castAbility(Player player, final Location triggerLoc) {
-        final Location bomb = triggerLoc.clone().add(0, 1, 0);
+    public void castAbility(Player player, Location triggerLoc) {
+        final Location bomb = triggerLoc;
         if (triggerLoc.getBlock().getType() == Material.BEDROCK) {
             player.sendMessage(Util.formatMsg("&cYou can't place that here!"));
             return;
@@ -85,7 +85,7 @@ public class PotionBomb extends MobAbility {
         }
 
         bomb.getBlock().setType(Material.SKULL);
-        bomb.getBlock().setData((byte)1);
+        bomb.getBlock().setData((byte) 1);
         BlockState state  = bomb.getBlock().getState();
         if (state instanceof Skull) {
             ((Skull)state).setSkullType(SkullType.PLAYER);
@@ -116,7 +116,7 @@ public class PotionBomb extends MobAbility {
             }
         }.runTaskLater(dvz, getIntOption("fuse-time"));
         dvz.getServer().broadcastMessage(Util.formatMsg("&6A bomb has been placed at&8: &c" + bomb.getBlockX() + "&7, &a" + bomb.getBlockY() + "&7, &9" + bomb.getBlockZ()));
-        bombs.put(bomb, bt);
+        bombs.put(bomb.getBlock().getLocation(), bt);
     }
 
     @EventHandler
@@ -127,6 +127,8 @@ public class PotionBomb extends MobAbility {
             bomb = event.getBlock();
         } else if (bombs.containsKey(event.getBlock().getRelative(0, 1, 0).getLocation())) {
             bomb = event.getBlock().getRelative(0, 1, 0);
+        } else if (bombs.containsKey(event.getBlock().getRelative(0, -1, 0).getLocation())) {
+            bomb = event.getBlock().getRelative(0, -1, 0);
         } else {
             return;
         }
@@ -139,9 +141,8 @@ public class PotionBomb extends MobAbility {
 
         fixGround(bomb);
 
-
-        bombs.get(bomb.getLocation()).cancel();
         dvz.getServer().broadcastMessage(Util.formatMsg("&6The bomb (&c" + bomb.getX() + "&7, &a" + bomb.getY() + "&7, &9" + bomb.getZ() + "&6) has been destroyed!"));
+        bombs.get(bomb.getLocation()).cancel();
         bombs.remove(bomb.getLocation());
     }
 

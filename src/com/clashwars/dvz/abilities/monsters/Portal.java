@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.monsters;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.dependencies.CWWorldGuard;
 import com.clashwars.cwcore.utils.CWUtil;
@@ -43,17 +44,18 @@ public class Portal extends MobAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
+
         //Only allow 1 portal at a time.
         if (activePortal != null) {
             player.sendMessage(Util.formatMsg("&cThere is already an active portal!"));
             player.sendMessage(Util.formatMsg("&cYou can ask &4" + activePortal.getOwner().getName() + " &cto destroy his portal."));
             return;
         }
-        Location portalLoc = player.getLocation().add(0,10,0);
+        Location portalLoc = player.getLocation().add(0,15,0);
 
         //Make sure portal wont hit anything
         for (int x = portalLoc.getBlockX() - 5; x < portalLoc.getBlockX() + 5; x++) {
-            for (int y = portalLoc.getBlockY() - 5; y < portalLoc.getBlockY() + 5; y++) {
+            for (int y = portalLoc.getBlockY() - 7; y < portalLoc.getBlockY() + 7; y++) {
                 for (int z = portalLoc.getBlockZ() - 5; z < portalLoc.getBlockZ() + 5; z++) {
                     if (portalLoc.getWorld().getBlockAt(x,y,z).getType() != Material.AIR) {
                         player.sendMessage(Util.formatMsg("&cPortal can't be created here!"));
@@ -76,6 +78,9 @@ public class Portal extends MobAbility {
             Cuboid cuboid = new Cuboid(min, cc.getWidth()-1, cc.getHeight()-1, cc.getLength()-1);
 
             activePortal = new PortalData(player, portalLoc, cuboid);
+
+            player.teleport(portalLoc);
+            CWUtil.removeItemsFromHand(player, 1);
 
             dvz.getServer().broadcastMessage(Util.formatMsg("&dPortal created by &5" + player.getName() + "&d!"));
             dvz.getServer().broadcastMessage(Util.formatMsg("&7Monsters can &dtp &7to it by using the &dportal block&7."));
@@ -109,6 +114,8 @@ public class Portal extends MobAbility {
         if (event.getClickedBlock().getType() != Material.DRAGON_EGG) {
             return;
         }
+
+        event.setCancelled(true);
 
         if (activePortal == null) {
             return;

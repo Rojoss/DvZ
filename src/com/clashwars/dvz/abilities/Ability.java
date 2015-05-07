@@ -31,7 +31,7 @@ public enum Ability {
     GLIDE("BLAZE", new Glide(), new String[]{}),
     BLAST("BLAZE", new Blast(), new String[]{}),
     FIREBALL("BLAZE", new Fireball(), new String[]{}),
-    POTION_BOMB("VILLAGER", new PotionBomb(), new String[]{}),
+    POTION_BOMB("WITCH", new PotionBomb(), new String[]{}),
     PICKUP("ENDERMAN", new Pickup(), new String[]{}),
     BLINK("ENDERMAN", new Blink(), new String[]{}),
     PORTAL("ENDERMAN", new Portal(), new String[]{}),
