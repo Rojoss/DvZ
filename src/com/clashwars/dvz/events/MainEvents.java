@@ -462,6 +462,7 @@ public class MainEvents implements Listener {
 
     @EventHandler
     private void FoodChange(final FoodLevelChangeEvent event) {
+        //BLAH
         final Player player = (Player)event.getEntity(); {
         if (dvz.getPM().getPlayer(player).getPlayerClass().getType() == ClassType.MONSTER || dvz.getGM().getState() == GameState.DAY_ONE) {
                 player.setFoodLevel(20);
