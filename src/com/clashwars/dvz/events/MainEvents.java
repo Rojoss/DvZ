@@ -21,6 +21,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.*;
@@ -459,4 +460,14 @@ public class MainEvents implements Listener {
         }
     }
 
+    @EventHandler
+    private void FoodChange(final FoodLevelChangeEvent event) {
+        final Player player = (Player)event.getEntity(); {
+        if (dvz.getPM().getPlayer(player).getPlayerClass().getType() == ClassType.MONSTER || dvz.getGM().getState() == GameState.DAY_ONE) {
+                player.setFoodLevel(20);
+            return;
+            }
+
+        }
+    }
 }
