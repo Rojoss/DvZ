@@ -215,13 +215,14 @@ public class ProtectEvents implements Listener {
                 event.setCancelled(true);
             }
             //Don't allow spawning mobs with mob eggs
-            if (event.getPlayer().getItemInHand().getType() == Material.MONSTER_EGG) {
+            if (event.getPlayer().getItemInHand() != null && event.getPlayer().getItemInHand().getType() == Material.MONSTER_EGG) {
                 event.setCancelled(true);
             }
             //Allow using buckets (Handled by bucket empty/fill event)
-            if (event.getItem().getType() == Material.BUCKET || event.getItem().getType() == Material.WATER_BUCKET || event.getItem().getType() == Material.LAVA_BUCKET) {
+            if (event.getItem() != null && event.getItem().getType() == Material.BUCKET || event.getItem().getType() == Material.WATER_BUCKET || event.getItem().getType() == Material.LAVA_BUCKET) {
                 return;
             }
+
             //Allow placing blocks. (Handled by block place event)
             return;
         }

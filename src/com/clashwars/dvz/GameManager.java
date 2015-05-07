@@ -88,7 +88,10 @@ public class GameManager {
 
         if (dvz.getMM().getActiveMap() != null) {
             //Tp all players to default world.
-            for (Player player : dvz.getMM().getActiveMap().getWorld().getPlayers()) {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (player.getGameMode() == GameMode.CREATIVE) {
+                    continue;
+                }
                 player.teleport(dvz.getCfg().getDefaultWorld().getSpawnLocation());
             }
 
