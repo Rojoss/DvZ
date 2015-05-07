@@ -6,6 +6,7 @@ import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -124,7 +125,17 @@ public class ProtectEvents implements Listener {
             if (dvz.getMM().getActiveMap() == null || dvz.getMM().getActiveMap().getCuboid("innerwall").contains(event.getBlock())) {
                 event.setCancelled(true);
             }
+
         }
+        Material blockType = event.getBlock().getType();
+        if (blockType == Material.MELON_BLOCK || blockType == Material.GRAVEL || blockType == Material.RED_ROSE || blockType == Material.SUGAR_CANE_BLOCK) {
+            event.setCancelled(true);
+        }
+        blockType = event.getBlock().getRelative(BlockFace.UP).getType();
+        if (blockType == Material.SUGAR_CANE_BLOCK || blockType == Material.RED_ROSE)  {
+            event.setCancelled(true);
+        }
+
     }
 
 
