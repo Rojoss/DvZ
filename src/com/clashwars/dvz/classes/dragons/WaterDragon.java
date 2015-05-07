@@ -10,6 +10,7 @@ public class WaterDragon extends DragonClass {
         dvzClass = DvzClass.WATERDRAGON;
 
         abilities.add(Ability.GEYSER);
+        abilities.add(Ability.TOXIC_RAIN);
     }
 
 }

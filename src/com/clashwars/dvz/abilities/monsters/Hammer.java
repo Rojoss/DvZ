@@ -48,7 +48,9 @@ public class Hammer extends MobAbility {
 
         //Check if block can be destroyed
         Block block = event.getClickedBlock();
-        //TODO: Check for destroyable blocks.
+        if (block.getType() == Material.BEDROCK || block.getType() == Material.OBSIDIAN) {
+            return;
+        }
 
 
         //Shrine destroying stuff
@@ -92,7 +94,11 @@ public class Hammer extends MobAbility {
         player.getWorld().playSound(event.getClickedBlock().getLocation(), Sound.ZOMBIE_WOOD, 0.1f, 2.2f - CWUtil.randomFloat());
         if (effect == ParticleEffect.SMOKE_NORMAL) {
             if (CWUtil.randomFloat() < getFloatOption("chance")) {
-                event.getClickedBlock().setType(Material.AIR);
+                if (event.getClickedBlock().getType() == Material.SMOOTH_BRICK && event.getClickedBlock().getData() == 0) {
+                    event.getClickedBlock().setData((byte)(2));
+                } else {
+                    event.getClickedBlock().setType(Material.AIR);
+                }
                 ParticleEffect.SMOKE_LARGE.display(0.3f, 0.3f, 0.3f, 0.00001f, 15, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
                 ParticleEffect.CRIT.display(0.6f, 0.6f, 0.6f, 0.1f, 10, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
                 player.getWorld().playSound(event.getClickedBlock().getLocation(), Sound.ZOMBIE_WOODBREAK, 0.5f, 0.8f);
