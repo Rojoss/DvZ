@@ -39,8 +39,8 @@ public enum Product {
 
     MELON(new CWItem(Material.MELON), false),
     SUGAR(new CWItem(Material.SUGAR), false),
-    HEAL_POTION(new CWItem(Material.POTION), true),
-    SPEED_POTION(new CWItem(Material.POTION), true);
+    HEAL_POTION(new CWItem(Material.POTION, 1, (byte)8197), true),
+    SPEED_POTION(new CWItem(Material.POTION, 1, (byte)8194), true);
 
 
     private CWItem item;
