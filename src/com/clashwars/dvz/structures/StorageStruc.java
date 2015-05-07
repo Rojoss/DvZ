@@ -3,6 +3,7 @@ package com.clashwars.dvz.structures;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.Product;
+import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.structures.data.StorageData;
@@ -233,8 +234,8 @@ public class StorageStruc extends Structure {
         items.add(new StorageItem("&3Leggings", 22, Product.LEGGINGS.getItem(), DvzClass.TAILOR, 2));
         items.add(new StorageItem("&3Boots", 23, Product.BOOTS.getItem(), DvzClass.TAILOR, 2));
 
-        items.add(new StorageItem("&dHealth Potions", 29, Product.HEAL_POTION.getItem(), DvzClass.ALCHEMIST, 2));
-        items.add(new StorageItem("&bSpeed Potions", 30, Product.SPEED_POTION.getItem(), DvzClass.ALCHEMIST, 2));
+        items.add(new StorageItem("&dHealth Potions", 29, Ability.HEAL_POTION.getAbilityClass().getCastItem(), DvzClass.ALCHEMIST, 2));
+        items.add(new StorageItem("&bSpeed Potions", 30, Ability.SPEED_POTION.getAbilityClass().getCastItem(), DvzClass.ALCHEMIST, 2));
     }
 
 

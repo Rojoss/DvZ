@@ -88,6 +88,7 @@ public class Tailor extends DwarfClass {
             return;
         }
         final Material originalType = block.getType();
+        final byte originalData = block.getData();
 
         Player player = event.getPlayer();
         if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.TAILOR) {
@@ -107,6 +108,7 @@ public class Tailor extends DwarfClass {
             public void run() {
                 if (block.getType() == Material.AIR) {
                     block.setType(originalType);
+                    block.setData(originalData);
                     ParticleEffect.VILLAGER_HAPPY.display(0.2f, 0.3f, 0.2f, 0.0001f, 5, block.getLocation().add(0.5f, 0.5f, 0.5f));
                     block.getWorld().playSound(block.getLocation(), Sound.DIG_GRASS, 1.0f, 1.3f);
                 }
