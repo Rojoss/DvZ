@@ -14,7 +14,8 @@ public class MapData {
     public String locDragon;
 
     public String cubShrineWall;
-    public String cubShrineKeep;
+    public String cubShrine1Keep;
+    public String cubShrine2Keep;
     public String cubKeep;
     public String cubWall;
     public String cubInnerWall;
@@ -83,12 +84,21 @@ public class MapData {
     }
 
 
-    public Cuboid getShrineKeep() {
-        return Cuboid.deserialize(cubShrineKeep);
+    public Cuboid getShrine1Keep() {
+        return Cuboid.deserialize(cubShrine1Keep);
     }
 
-    public void setShrineKeep(Cuboid cuboid) {
-        this.cubShrineKeep = cuboid.toString();
+    public void setShrine1Keep(Cuboid cuboid) {
+        this.cubShrine1Keep = cuboid.toString();
+    }
+
+
+    public Cuboid getShrine2Keep() {
+        return Cuboid.deserialize(cubShrine2Keep);
+    }
+
+    public void setShrine2Keep(Cuboid cuboid) {
+        this.cubShrine2Keep = cuboid.toString();
     }
 
 

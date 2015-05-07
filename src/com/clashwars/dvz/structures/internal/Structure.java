@@ -50,11 +50,15 @@ public class Structure implements Listener {
         Location loc = event.getClickedBlock().getLocation();
         for (StructureType strucType : StructureType.values()) {
             Structure struc = strucType.getStrucClass();
-            ProtectedRegion region = CWWorldGuard.getRegion(loc.getWorld(), struc.getRegion());
-            if (region != null && region.contains(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
-                struc.onUse(player);
-                return;
+            for (int i = 0; i < 5; i++) {
+                ProtectedRegion region = CWWorldGuard.getRegion(loc.getWorld(), struc.getRegion() + i);
+                if (region != null && region.contains(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
+                    event.setCancelled(true);
+                    struc.onUse(player);
+                    return;
+                }
             }
+
         }
     }
 
@@ -73,10 +77,12 @@ public class Structure implements Listener {
         Location loc = player.getLocation();
         for (StructureType strucType : StructureType.values()) {
             Structure struc = strucType.getStrucClass();
-            ProtectedRegion region = CWWorldGuard.getRegion(loc.getWorld(), struc.getRegion());
-            if (region != null && region.contains(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
-                struc.onUse(player);
-                return;
+            for (int i = 0; i < 5; i++) {
+                ProtectedRegion region = CWWorldGuard.getRegion(loc.getWorld(), struc.getRegion() + i);
+                if (region != null && region.contains(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
+                    struc.onUse(player);
+                    return;
+                }
             }
         }
     }

@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
@@ -81,7 +82,7 @@ public class MapManager {
 
         //Kick all players remaining in the map.
         for (Player p : getActiveMap().getWorld().getPlayers()) {
-            p.kickPlayer("&4&lYou have been kicked because the map is resetting!\n&cWe couldn't teleport you to the lobby for some reason.\n&cYou can try to log back in to fix it.");
+            p.kickPlayer(CWUtil.integrateColor("&4&lYou have been kicked because the map is resetting!\n&cWe couldn't teleport you to the lobby for some reason.\n&cYou can try to log back in to fix it."));
         }
 
         //Try unload the map.
@@ -102,10 +103,12 @@ public class MapManager {
     }
 
 
-    public boolean loadMap(String mapName) {
-        if (mapName == null || mapName.isEmpty()) {
-            mapName = getRandomMapName();
+    public boolean loadMap(String name) {
+        if (name == null || name.isEmpty()) {
+            name = getRandomMapName();
         }
+        final String mapName = name;
+
         //If map is still null it means there are no maps in the map manager.
         if (mapName == null || mapName.isEmpty()) {
             Util.broadcastAdmins(Util.formatMsg("&cFailed to load the map '" + mapName + "'"));
@@ -114,7 +117,7 @@ public class MapManager {
         }
 
         //Set active map and make sure it's a valid map.
-        DvzMap newMap = getMap(mapName);
+        final DvzMap newMap = getMap(mapName);
         if (newMap == null) {
             Util.broadcastAdmins(Util.formatMsg("&cFailed to load the map '" + mapName + "'"));
             Util.broadcastAdmins(Util.formatMsg("&cThis is not a valid DvZ map!"));
@@ -145,22 +148,27 @@ public class MapManager {
         if (newMap != null && newMap.isReadyToLoad()) {
             WorldCreator wc = new WorldCreator(mapName);
             wc.createWorld();
+            dvz.getServer().createWorld(wc);
         } else {
             Util.broadcastAdmins(Util.formatMsg("&cFailed to load the map '" + mapName + "'"));
             Util.broadcastAdmins(Util.formatMsg("&cCould not find the map while trying to create the world."));
             return false;
         }
 
-        //Check if the map is loaded.
-        if (!newMap.isLoaded()) {
-            Util.broadcastAdmins(Util.formatMsg("&cFailed to load the map '" + mapName + "'"));
-            Util.broadcastAdmins(Util.formatMsg("&cThe world didn't get loaded properly."));
-            return false;
-        }
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                //Check if the map is loaded.
+                if (!newMap.isLoaded()) {
+                    Util.broadcastAdmins(Util.formatMsg("&cFailed to load the map '" + mapName + "'"));
+                    Util.broadcastAdmins(Util.formatMsg("&cThe world didn't get loaded properly."));
+                }
 
-        //Map loaded!
-        activeMap = mapName;
-        mapCfg.setActiveMap(activeMap);
+                //Map loaded!
+                activeMap = mapName;
+                mapCfg.setActiveMap(activeMap);
+            }
+        }.runTaskLater(dvz, 20);
         return true;
     }
 
@@ -189,7 +197,7 @@ public class MapManager {
     }
 
     public String[] getCuboidNames() {
-        return new String[]{"shrinewall", "shrinekeep", "keep", "wall", "innerwall"};
+        return new String[]{"shrinewall", "shrine1keep", "shrine2keep", "keep", "wall", "innerwall"};
     }
 
     public World getUsedWorld() {

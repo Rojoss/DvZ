@@ -203,6 +203,10 @@ public class ProtectEvents implements Listener {
                     || type == Material.DARK_OAK_DOOR || type == Material.SPRUCE_DOOR || type == Material.ARMOR_STAND || type == Material.BURNING_FURNACE || type == Material.TRAPPED_CHEST) {
                 event.setCancelled(true);
             }
+            //Don't allow spawning mobs with mob eggs
+            if (event.getPlayer().getItemInHand().getType() == Material.MONSTER_EGG) {
+                event.setCancelled(true);
+            }
             //Allow using buckets (Handled by bucket empty/fill event)
             if (event.getItem().getType() == Material.BUCKET || event.getItem().getType() == Material.WATER_BUCKET || event.getItem().getType() == Material.LAVA_BUCKET) {
                 return;

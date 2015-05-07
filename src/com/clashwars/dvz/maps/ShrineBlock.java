@@ -49,12 +49,23 @@ public class ShrineBlock {
                 blockCount++;
             }
         }
+
         if (blockCount <= 0) {
             if (type == ShrineType.WALL) {
                 dvz.getGM().captureWall();
+            } else if (type == ShrineType.KEEP_1) {
+                dvz.getGM().captureFirstKeepShrine();
             } else {
                 dvz.getGM().stopGame(false, null);
             }
+        }
+    }
+
+    public void remove() {
+        this.hp = dvz.getCfg().SHRINE__BLOCK_HP;
+        if (hologram != null) {
+            hologram.delete();
+            hologram = null;
         }
     }
 

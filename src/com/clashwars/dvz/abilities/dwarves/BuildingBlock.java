@@ -33,6 +33,11 @@ public class BuildingBlock extends DwarfAbility {
         if (!canCast(player)) {
             return;
         }
+
+        if (dvz.getMM().getActiveMap().getCuboid("keep").contains(event.getBlock())) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild tools have to be used outside the keep! &4&l<<"));
+            return;
+        }
         if (dvz.getMM().getActiveMap().getCuboid("innerwall").contains(event.getBlock())) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild tools have to be used outside the keep! &4&l<<"));
             return;

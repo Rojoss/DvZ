@@ -41,6 +41,10 @@ public class BuildingBrick extends DwarfAbility {
             return;
         }
 
+        if (dvz.getMM().getActiveMap().getCuboid("keep").contains(blocks.get(0))) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild tools have to be used outside the keep! &4&l<<"));
+            return;
+        }
         if (dvz.getMM().getActiveMap().getCuboid("innerwall").contains(blocks.get(0))) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild tools have to be used outside the keep! &4&l<<"));
             return;
