@@ -1,5 +1,7 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.CWCore;
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.packet.Title;
@@ -461,14 +463,19 @@ public class MainEvents implements Listener {
     }
 
     @EventHandler
-    private void FoodChange(final FoodLevelChangeEvent event) {
-        //BLAH
-        final Player player = (Player)event.getEntity(); {
-        if (dvz.getPM().getPlayer(player).getPlayerClass().getType() == ClassType.MONSTER || dvz.getGM().getState() == GameState.DAY_ONE) {
-                player.setFoodLevel(20);
+    private void FoodChange(FoodLevelChangeEvent event) {
+        if (!(event.getEntity() instanceof Player)) {
             return;
-            }
+        }
 
+        final Player player = (Player)event.getEntity();
+        if (dvz.getPM().getPlayer(player).getPlayerClass().getType() == ClassType.MONSTER || dvz.getGM().getState() == GameState.DAY_ONE) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    player.setFoodLevel(20);
+                }
+            }.runTaskLater(dvz, 5);
         }
     }
 }
