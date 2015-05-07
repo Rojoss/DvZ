@@ -77,8 +77,9 @@ public class WorkShop {
                 block.setType(Material.AIR);
                 if (block.getLocation().equals(pistonLoc)) {
                     block.setType(Material.PISTON_BASE);
+                    block.setData((byte)1);
                 } else if (block.getLocation().getY() == cuboid.getMinY()) {
-                    block.setType(Material.GRASS);
+                    block.setType(Material.WOOD);
                 }
             }
             cuboid = null;
