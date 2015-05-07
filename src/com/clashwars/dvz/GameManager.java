@@ -452,7 +452,6 @@ public class GameManager {
         }
 
         player.setMaxHealth(20);
-        player.setHealth(20);
 
         dvz.getBoard().getTeam("dragonslayer").removePlayer(player);
 
