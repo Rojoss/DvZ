@@ -1,16 +1,14 @@
 package com.clashwars.dvz.abilities.dragons;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.VectorUtils;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
+import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,7 +16,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class Wind extends DragonAbility {
@@ -35,7 +32,7 @@ public class Wind extends DragonAbility {
             return;
         }
 
-        final List<Vector> locs = VectorUtils.getPositionsInCone(player.getLocation().toVector(), 15, 20, player.getLocation().getDirection(), true);
+        final List<Vector> locs = VectorUtils.getPositionsInCone(Util.getDragonMouthPos(player.getLocation()).add(new Vector(0, 2, 0)), 15, 20, player.getLocation().getDirection(), true);
 
         new BukkitRunnable() {
             int index = 0;
@@ -52,10 +49,10 @@ public class Wind extends DragonAbility {
                             continue;
                         }
                         ((LivingEntity)e).damage(2);
-                        e.setVelocity(e.getVelocity().add( player.getLocation().getDirection().multiply(2) ));
+                        e.setVelocity(e.getVelocity().add( player.getLocation().getDirection().multiply(1.5f) ));
                     }
 
-                    ParticleEffect.CLOUD.display(0.1f, 0.1f, 0.1f, 0f, 1, loc, 500);
+                    ParticleEffect.CLOUD.display(0.1f, 0.1f, 0.1f, 0.1f, 1, loc, 500);
 
                     index++;
                     if (index >= locs.size()) {

@@ -3,8 +3,10 @@ package com.clashwars.dvz.util;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 public class Util {
 
@@ -31,6 +33,15 @@ public class Util {
 
     public static boolean isDestroyable(Material mat) {
         return DvZ.inst().getDestroyableBlocks().contains(mat);
+    }
+
+    public static Vector getDragonMouthPos(Location playerLoc) {
+        double pitch = Math.PI /2;
+        double yaw  = ((playerLoc.getYaw() + 90) * Math.PI) / 180;
+        Vector castVec = new org.bukkit.util.Vector(((float)Math.sin(pitch) * Math.cos(yaw)), ((float)Math.cos(pitch)), ((float)Math.sin(pitch) * Math.sin(yaw)));
+        castVec.multiply(6);
+        castVec.add(playerLoc.toVector());
+        return castVec;
     }
 
 }
