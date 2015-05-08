@@ -40,7 +40,10 @@ public enum Ability {
     BURN("FIREDRAGON", new Burn(), new String[]{}),
     WIND("AIRDRAGON", new Wind(), new String[]{}),
     WINDSTORM("AIRDRAGON", new WindStorm(), new String[]{}),
-    TOXIC_RAIN("WATERDRAGON", new ToxicRain(), new String[]{});
+    TOXIC_RAIN("WATERDRAGON", new ToxicRain(), new String[]{}),
+    AIRSHIELD("AIRDRAGON", new AirShield(), new String[]{});
+
+
 
     private String className;
     private BaseAbility abilityClass;
