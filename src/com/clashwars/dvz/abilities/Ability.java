@@ -43,7 +43,8 @@ public enum Ability {
     TOXIC_RAIN("WATERDRAGON", new ToxicRain(), new String[]{}),
     FIREFLY("FIREDRAGON", new FireFly(), new String[]{}),
     WATER_BUBBLE("WATERDRAGON", new WaterBubble(), new String[]{}),
-    FIRE_BREATH("FIREDRAGON", new FireBreath(), new String[]{});
+    FIRE_BREATH("FIREDRAGON", new FireBreath(), new String[]{}),
+    AIRSHIELD("AIRDRAGON", new AirShield(), new String[]{});
 
     private String className;
     private BaseAbility abilityClass;

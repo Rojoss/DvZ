@@ -11,6 +11,7 @@ public class AirDragon extends DragonClass {
 
         abilities.add(Ability.WIND);
         abilities.add(Ability.WINDSTORM);
+        abilities.add(Ability.AIRSHIELD);
     }
 
 }

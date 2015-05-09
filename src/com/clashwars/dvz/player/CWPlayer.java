@@ -150,6 +150,7 @@ public class CWPlayer {
                 player.setMaxHealth(c.getHealth());
                 player.setHealth(c.getHealth());
                 player.setWalkSpeed(c.getSpeed());
+                player.setFlySpeed(c.getSpeed());
                 player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));
                 if (c.getType() == ClassType.DWARF) {
                     player.sendMessage(CWUtil.integrateColor("&8&l❝&7" + c.getTask() + "&8&l❞"));
