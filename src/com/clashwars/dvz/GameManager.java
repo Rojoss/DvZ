@@ -3,6 +3,7 @@ package com.clashwars.dvz;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.GameCfg;
@@ -436,6 +437,8 @@ public class GameManager {
         }
 
         dvz.getBoard().getTeam("dragonslayer").addPlayer(player);
+
+        Ability.HORN.getAbilityClass().getCastItem().giveToPlayer(player);
 
         player.setMaxHealth(40);
         player.setHealth(player.getHealth() + 20);

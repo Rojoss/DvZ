@@ -12,5 +12,7 @@ public class DwarfClass extends BaseClass {
 
         abilities.add(Ability.HEAL_POTION);
         abilities.add(Ability.SPEED_POTION);
+
+        abilities.add(Ability.HORN);
     }
 }

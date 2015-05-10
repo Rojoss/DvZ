@@ -31,6 +31,9 @@ public class Horn extends DwarfAbility {
             return;
         }
 
+        if (dvz.getGM().getDragonSlayer() != player) {
+            return;
+        }
 
         new BukkitRunnable() {
             @Override
