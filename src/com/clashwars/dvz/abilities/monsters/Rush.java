@@ -27,6 +27,7 @@ public class Rush extends MobAbility {
         if (onCooldown(player)) {
             return;
         }
+        /*
 
         player.setWalkSpeed(getDvzClass().getClassClass().getSpeed() + getFloatOption("bonusspeed"));
         new BukkitRunnable() {
@@ -35,7 +36,7 @@ public class Rush extends MobAbility {
                 player.setWalkSpeed(getDvzClass().getClassClass().getSpeed());
             }
         }.runTaskLater(dvz, getIntOption("duration"));
-
+    */
     }
 
     @EventHandler

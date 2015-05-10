@@ -63,11 +63,17 @@ public class BaseAbility implements Listener {
         this.ability = ability;
     }
 
-    public DvzClass getDvzClass() {
+    public List<DvzClass> getDvzClasses() {
         if (ability == null) {
             return null;
         }
-        return ability.getDvzClass();
+        List<DvzClass> classes = new ArrayList<DvzClass>();
+        for (DvzClass dvzClass : DvzClass.values()) {
+            if (dvzClass.getClassClass().getAbilities().contains(ability)) {
+                classes.add(dvzClass);
+            }
+        }
+        return classes;
     }
 
     public DvzItem getCastItem() {
@@ -137,14 +143,11 @@ public class BaseAbility implements Listener {
     public boolean canCast(Player player) {
         CWPlayer cwp = dvz.getPM().getPlayer(player);
 
-        //Check if player class is same as ability class. (If it's base then allow using it with any class)
-        if (getDvzClass() != DvzClass.BASE && cwp.getPlayerClass() != getDvzClass()) {
-            // All classes with ClassType.DWARF can use abilities from DvZClass.DWARF etc.
-            // Stupid way to fix this but the class structure would has to be remade completely to fix it otherwise.
-            if (!cwp.getPlayerClass().getType().toString().equalsIgnoreCase(getDvzClass().toString())) {
-                return false;
-            }
+        //Check if player class has this ability.
+        if (!getDvzClasses().contains(cwp.getPlayerClass())) {
+            return false;
         }
+
         return true;
     }
 
@@ -152,7 +155,7 @@ public class BaseAbility implements Listener {
         CWPlayer cwp = dvz.getPM().getPlayer(player);
 
         if (hasCooldown()) {
-            String tag = ability.getDvzClass().toString().toLowerCase() +  "-" + ability.toString().toLowerCase();
+            String tag = cwp.getPlayerClass().toString().toLowerCase() +  "-" + ability.toString().toLowerCase();
             CooldownManager.Cooldown cd = cwp.getCDM().getCooldown(tag);
             if (cd == null) {
                 cwp.getCDM().createCooldown(tag, getCooldown());

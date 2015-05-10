@@ -8,7 +8,11 @@ public class FireDragon extends DragonClass {
     public FireDragon() {
         super();
         dvzClass = DvzClass.FIREDRAGON;
+
         abilities.add(Ability.BURN);
+        abilities.add(Ability.FIRE_BREATH);
+        abilities.add(Ability.FIREFLY);
+        abilities.add(Ability.FIREBALL);
     }
 
 }

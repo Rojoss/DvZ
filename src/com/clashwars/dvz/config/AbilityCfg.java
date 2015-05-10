@@ -118,6 +118,10 @@ public class AbilityCfg extends EasyConfig {
                 break;
             case BURN:
                 abilityData = loadDefault(abilityData, "distance", "50");
+            case GEYSER:
+                abilityData = loadDefault(abilityData, "range", "50");
+                abilityData = loadDefault(abilityData, "geyser-height", "4");
+                abilityData = loadDefault(abilityData, "force", "1");
                 break;
             case HORN:
                 abilityData = loadDefault(abilityData, "distance", "50");

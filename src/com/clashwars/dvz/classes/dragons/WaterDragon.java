@@ -11,6 +11,7 @@ public class WaterDragon extends DragonClass {
 
         abilities.add(Ability.GEYSER);
         abilities.add(Ability.TOXIC_RAIN);
+        abilities.add(Ability.WATER_BUBBLE);
     }
 
 }

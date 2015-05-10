@@ -238,7 +238,7 @@ public class Commands {
                         ClassType type = ClassType.fromString(args[1]);
                         if (type != null) {
                             classes = cm.getClasses(type);
-                            classStrings.put(type, type.getColor() + CWUtil.capitalize(type.toString().toLowerCase()) + "s&8: &7");
+                            classStrings.put(type, type.getColor() + CWUtil.capitalize(type.toString().toLowerCase()) + "&8: &7");
                         }
                     }
                     if (classes == null || classes.size() < 1) {
@@ -247,7 +247,7 @@ public class Commands {
                             if (type == ClassType.BASE) {
                                 continue;
                             }
-                            classStrings.put(type, type.getColor() + CWUtil.capitalize(type.toString().toLowerCase()) + "s&8: &7");
+                            classStrings.put(type, type.getColor() + CWUtil.capitalize(type.toString().toLowerCase()) + "&8: &7");
                         }
                     }
 
@@ -322,51 +322,31 @@ public class Commands {
                 //################################################# /dvz abilities [class] #################################################
                 //##########################################################################################################################
                 if (args[0].equalsIgnoreCase("abilities") || args[0].equalsIgnoreCase("abilitylist") || args[0].equalsIgnoreCase("al")) {
-                    Set<Ability> abilities = new HashSet<Ability>();
-                    Map<DvzClass, String> abilityStrings = new HashMap<DvzClass, String>();
+                    DvzClass[] dvzClasses = DvzClass.values();
 
                     if (args.length > 1) {
                         DvzClass dvzClass = DvzClass.fromString(args[1]);
                         if (dvzClass != null) {
-                            abilities = dvzClass.getClassClass().getAbilities();
+                            dvzClasses = new DvzClass[] {dvzClass};
                         }
-                    }
-
-                    if (abilities == null || abilities.size() < 1) {
-                        for (Ability ability : Ability.values()) {
-                            if (ability == Ability.BASE) {
-                                continue;
-                            }
-                            abilities.add(ability);
-                        }
-                    }
-
-                    for (Ability ability : abilities) {
-                        String abilityString = abilityStrings.get(ability.getDvzClass());
-                        if (abilityString == null) {
-                            abilityString = "";
-                        }
-                        abilityString += "&7" + CWUtil.stripAllColor(ability.getAbilityClass().getDisplayName()) + "&8, ";
-                        abilityStrings.put(ability.getDvzClass(), abilityString);
                     }
 
                     sender.sendMessage(CWUtil.integrateColor("&8========== &4&lALL DVZ ABILITIES &8=========="));
-                    for (DvzClass dvzClass : abilityStrings.keySet()) {
-                        String str = abilityStrings.get(dvzClass);
-                        String name = dvzClass.getType().getColor() + CWUtil.stripAllColor(dvzClass.getClassClass().getDisplayName());
-                        if (dvzClass == DvzClass.BASE) {
-                            name = "&8All classes";
-                        }
-                        if (dvzClass == DvzClass.DWARF) {
-                            name = "&8Dwarf classes";
-                        }
-                        if (dvzClass == DvzClass.MONSTER) {
-                            name = "&8Monster classes";
-                        }
-                        if (dvzClass == DvzClass.DRAGON) {
-                            name = "&8Dragon classes";
+                    for (DvzClass dvzClass : dvzClasses) {
+                        if (dvzClass == DvzClass.BASE || dvzClass == DvzClass.DWARF || dvzClass == DvzClass.MONSTER || dvzClass == DvzClass.DRAGON) {
+                            continue;
                         }
 
+                        String name = dvzClass.getType().getColor() + CWUtil.stripAllColor(dvzClass.getClassClass().getDisplayName());
+                        String str = "";
+                        for (Ability ability : dvzClass.getClassClass().getAbilities()) {
+                            String abilityString = ability.getAbilityClass().getDisplayName().isEmpty() ? ability.toString().toLowerCase().replace("_", "") : ability.getAbilityClass().getDisplayName();
+                            if (ability.getAbilityClass().getDvzClasses().size() > 1) {
+                                str += "&8&o" + CWUtil.stripAllColor(abilityString) + "&8, ";
+                            } else {
+                                str += "&7" + CWUtil.stripAllColor(abilityString) + "&8, ";
+                            }
+                        }
                         sender.sendMessage(CWUtil.integrateColor(name + "&8: &7" + str.substring(0, str.length() - 2)));
                     }
                     return true;
@@ -438,7 +418,7 @@ public class Commands {
                         long timeLeft = 0;
                         if (sender instanceof Player) {
                             CWPlayer cwp = pm.getPlayer((Player)sender);
-                            String tag = ability.getDvzClass().toString().toLowerCase() + "-" + ability.toString().toLowerCase();
+                            String tag = cwp.getPlayerClass().toString().toLowerCase() + "-" + ability.toString().toLowerCase();
                             CooldownManager.Cooldown cd = cwp.getCDM().getCooldown(tag);
                             if (cd != null) {
                                 timeLeft = cd.getTimeLeft();
