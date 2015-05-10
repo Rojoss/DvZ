@@ -137,7 +137,21 @@ public class BaseClass implements Listener {
     }
 
     public Set<Ability> getAbilities() {
-        return abilities;
+        Set<Ability> abilityList = new HashSet<Ability>();
+        abilityList.addAll(abilities);
+        if (getDvZClass() != DvzClass.BASE) {
+            abilityList.addAll(DvzClass.BASE.getClassClass().getAbilities());
+        }
+        if (getDvZClass().getType() == ClassType.MONSTER && getDvZClass() != DvzClass.MONSTER) {
+            abilityList.addAll(DvzClass.MONSTER.getClassClass().getAbilities());
+        }
+        if (getDvZClass().getType() == ClassType.DWARF && getDvZClass() != DvzClass.DWARF) {
+            abilityList.addAll(DvzClass.DWARF.getClassClass().getAbilities());
+        }
+        if (getDvZClass().getType() == ClassType.DRAGON && getDvZClass() != DvzClass.DRAGON) {
+            abilityList.addAll(DvzClass.DRAGON.getClassClass().getAbilities());
+        }
+        return abilityList;
     }
 
     public DvzClass getDvZClass() {

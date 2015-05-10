@@ -65,7 +65,7 @@ public class Fireball extends MobAbility {
         Player player = (Player) event.getEntity().getShooter();
         Location l = event.getEntity().getLocation();
 
-        if(dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.BLAZE) {
+        if (!getDvzClasses().contains(dvz.getPM().getPlayer(player).getPlayerClass())) {
             return;
         }
 

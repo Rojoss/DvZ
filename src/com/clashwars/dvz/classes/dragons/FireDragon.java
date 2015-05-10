@@ -12,6 +12,7 @@ public class FireDragon extends DragonClass {
         abilities.add(Ability.BURN);
         abilities.add(Ability.FIRE_BREATH);
         abilities.add(Ability.FIREFLY);
+        abilities.add(Ability.FIREBALL);
     }
 
 }
