@@ -124,7 +124,7 @@ public class AbilityCfg extends EasyConfig {
                 abilityData = loadDefault(abilityData, "force", "1");
                 break;
             case HORN:
-                abilityData = loadDefault(abilityData, "distance", "50");
+                abilityData = loadDefault(abilityData, "duration", "400");
                 break;
         }
 
