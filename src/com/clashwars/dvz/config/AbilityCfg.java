@@ -119,6 +119,9 @@ public class AbilityCfg extends EasyConfig {
             case BURN:
                 abilityData = loadDefault(abilityData, "distance", "50");
                 break;
+            case HORN:
+                abilityData = loadDefault(abilityData, "distance", "50");
+                break;
         }
 
         return abilityData;

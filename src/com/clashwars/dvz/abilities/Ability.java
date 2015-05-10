@@ -41,7 +41,8 @@ public enum Ability {
     WIND("AIRDRAGON", new Wind(), new String[]{}),
     WINDSTORM("AIRDRAGON", new WindStorm(), new String[]{}),
     TOXIC_RAIN("WATERDRAGON", new ToxicRain(), new String[]{}),
-    AIRSHIELD("AIRDRAGON", new AirShield(), new String[]{});
+    AIRSHIELD("AIRDRAGON", new AirShield(), new String[]{}),
+    HORN("DRAGONSLAYER", new Horn(), new String[]{});
 
 
 

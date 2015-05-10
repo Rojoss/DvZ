@@ -64,13 +64,10 @@ public class ToxicRain extends DragonAbility {
                     return;
                 }
                 if (prevLoc != null) {
-                    Debug.bc("Poisoning nearby players");
                     for (Entity e : CWUtil.getNearbyEntities(prevLoc, 20, null)) {
                         if (e instanceof Player) {
                             Player pl = (Player) e;
-                            Debug.bc(pl.getName());
                             if (dvz.getPM().getPlayer(pl).isDwarf()) {
-                                Debug.bc("Dwarf!");
                                 pl.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 40, 1));
                             }
                         }
