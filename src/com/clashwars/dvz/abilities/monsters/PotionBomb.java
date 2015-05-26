@@ -17,11 +17,12 @@ import org.bukkit.SkullType;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -38,37 +39,65 @@ public class PotionBomb extends MobAbility {
     public PotionBomb() {
         super();
         ability = Ability.POTION_BOMB;
-        castItem = new DvzItem(Material.STAINED_GLASS, 1, (short)5, displayName, 3, -1);
+        DvzItem skull = new DvzItem(Material.SKULL_ITEM, 1, (short)0, displayName, 3, -1, false);
+        skull.setSkullOwner("Scott11B");
+        castItem = skull;
     }
 
     @Override
-    public void castAbility(Player player, Location triggerLoc) {
-        final Location bomb = triggerLoc;
-        if (triggerLoc.getBlock().getType() == Material.BEDROCK) {
-            player.sendMessage(Util.formatMsg("&cYou can't place that here!"));
+    public void onCastItemGiven(Player player) {
+        CWPlayer cwp = dvz.getPM().getPlayer(player);
+        if (!cwp.getPlayerData().isBombUsed()) {
+            castItem.giveToPlayer(player);
+        }
+    }
+
+    @EventHandler
+    public void blockPlace(BlockPlaceEvent event) {
+        if (!isCastItem(event.getItemInHand())) {
             return;
         }
 
-        if(bomb.getWorld().getHighestBlockYAt(bomb) > bomb.getY()) {
-            player.sendMessage(Util.formatMsg("&cThere mustn't be a block above the bomb!"));
+        Player player = event.getPlayer();
+        if (!canCast(player)) {
+            return;
+        }
+
+        event.setCancelled(true);
+
+        final Location bomb = event.getBlock().getLocation();
+        if (event.getBlockAgainst().getType() == Material.BEDROCK) {
+            CWUtil.sendActionBar(player, Util.formatMsg("&cYou can't place that here!"));
+            return;
+        }
+
+        if(bomb.getWorld().getHighestBlockYAt(bomb) > bomb.getY() + 1) {
+            CWUtil.sendActionBar(player, Util.formatMsg("&cThere can't be a block above the bomb!"));
             return;
         }
 
         for (int y = 0; y < 20; y++) {
-            if (triggerLoc.clone().subtract(0, y, 0).getBlock().getType() == Material.BEDROCK) {
-                player.sendMessage(Util.formatMsg("&cYou can't place that here!"));
+            if (bomb.clone().subtract(0, y, 0).getBlock().getType() == Material.BEDROCK) {
+                CWUtil.sendActionBar(player, Util.formatMsg("&cYou can't place that here!"));
                 return;
             }
         }
 
-        if (CWUtil.getNearbyEntities(triggerLoc, getFloatOption("radius"), Arrays.asList(new EntityType[]{EntityType.PLAYER})).size() - 1 == 0) {
-            player.sendMessage(Util.formatMsg("&cThere are no players nearby!"));
+        boolean found = false;
+        for (Entity e : CWUtil.getNearbyEntities(bomb, getFloatOption("radius"), Arrays.asList(new EntityType[]{EntityType.PLAYER}))) {
+            if (dvz.getPM().getPlayer((Player)e).isDwarf()) {
+                found = true;
+            }
+        }
+        if (!found) {
+            CWUtil.sendActionBar(player, Util.formatMsg("&cThere are no dwarves nearby!"));
             return;
         }
 
         if (onCooldown(player)) {
             return;
         }
+        event.setCancelled(false);
 
         try {
             CuboidClipboard cc = CWWorldGuard.pasteSchematic(bomb.getWorld(), CWWorldGuard.getSchematicFile("PotionBomb"), bomb, true, 0, true);
@@ -117,6 +146,8 @@ public class PotionBomb extends MobAbility {
         }.runTaskLater(dvz, getIntOption("fuse-time"));
         dvz.getServer().broadcastMessage(Util.formatMsg("&6A bomb has been placed at&8: &c" + bomb.getBlockX() + "&7, &a" + bomb.getBlockY() + "&7, &9" + bomb.getBlockZ()));
         bombs.put(bomb.getBlock().getLocation(), bt);
+
+        dvz.getPM().getPlayer(player).getPlayerData().setbombUsed(true);
     }
 
     @EventHandler
@@ -150,11 +181,6 @@ public class PotionBomb extends MobAbility {
         bomb.getRelative(0, -1, 0).setType(bomb.getRelative(1, -1, 0).getType());
         bomb.setType(Material.AIR);
         bomb.getRelative(0, -19, 0).setType(Material.STONE);
-    }
-
-    @EventHandler
-    public void interact(PlayerInteractEvent event) {
-        super.interact(event);
     }
 
 }

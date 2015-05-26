@@ -4,16 +4,13 @@ import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.WorkShop;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
 
 public class WorkShopEvents implements Listener {
 

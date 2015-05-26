@@ -2,6 +2,10 @@ package com.clashwars.dvz.util;
 
 import com.clashwars.cwcore.helpers.CWItem;
 import org.bukkit.Material;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 public class DvzItem extends CWItem {
 
@@ -57,8 +61,13 @@ public class DvzItem extends CWItem {
     public DvzItem(Material mat, int amt, short durability, String name, String[] lore, int priority, int slot, boolean give) {
         super(mat, amt, durability, name, lore);
         init(priority, slot, give);
-
     }
+
+    public DvzItem(PotionType potion, boolean splash, int amt, int priority, int slot, boolean give) {
+        super(potion, splash, amt);
+        init(priority, slot, give);
+    }
+
 
     private void init(int priority, int slot, boolean give) {
         this.priority = priority;
@@ -98,6 +107,15 @@ public class DvzItem extends CWItem {
 
     public void setGive(boolean give) {
         this.give = give;
+    }
+
+    public DvzItem addPotionEffect(PotionEffectType effect, int amplifier, int duration) {
+        if (getType() == Material.POTION) {
+            PotionMeta pmeta = (PotionMeta)getItemMeta();
+            pmeta.addCustomEffect(new PotionEffect(effect, duration, amplifier), true);
+            setItemMeta(pmeta);
+        }
+        return this;
     }
 
 }

@@ -8,7 +8,10 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class BaseClass implements Listener {
 
@@ -27,6 +30,8 @@ public class BaseClass implements Listener {
     protected double weight = 0.0d;
     protected int health = 20;
     protected float speed = 0.2f;
+
+    protected boolean switchable = false;
 
     public BaseClass() {
         //--
@@ -86,6 +91,10 @@ public class BaseClass implements Listener {
 
     public void setDisguise(String disguise) {
         this.disguise = disguise;
+    }
+
+    public boolean isSwitchable() {
+        return switchable;
     }
 
     public String getDisplayName() {
@@ -196,7 +205,10 @@ public class BaseClass implements Listener {
         DvzItem castItem;
         for (Ability ability : getAbilities()) {
             castItem = ability.getAbilityClass().getCastItem();
-            if (castItem != null && castItem.doGive()) {
+            if (castItem != null) {
+                ability.getAbilityClass().onCastItemGiven(player);
+            }
+            if (castItem != null && (castItem.doGive())) {
                 if (castItem.hasSlot()) {
                     itemSlotMap.put(castItem, castItem.getPriority());
                 } else {

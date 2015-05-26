@@ -1,26 +1,18 @@
 package com.clashwars.dvz.abilities.dragons;
 
-import com.clashwars.cwcore.Debug;
-import com.clashwars.cwcore.config.aliases.PotionEffects;
-import com.clashwars.cwcore.effect.Particle;
-import com.clashwars.cwcore.effect.effects.SmokeEffect;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
-import com.clashwars.cwcore.utils.RandomUtils;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
 public class ToxicRain extends DragonAbility {
 

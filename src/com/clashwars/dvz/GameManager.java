@@ -13,7 +13,6 @@ import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.runnables.DragonRunnable;
 import com.clashwars.dvz.structures.StorageStruc;
-import com.clashwars.dvz.structures.extra.StorageItem;
 import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.*;

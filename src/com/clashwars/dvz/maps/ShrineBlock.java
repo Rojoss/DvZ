@@ -1,13 +1,11 @@
 package com.clashwars.dvz.maps;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.gmail.filoghost.holograms.api.Hologram;
 import com.gmail.filoghost.holograms.api.HolographicDisplaysAPI;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.event.EventHandler;
 
 import java.util.Set;
 

@@ -1,6 +1,5 @@
 package com.clashwars.dvz.abilities.monsters;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.dependencies.CWWorldGuard;
 import com.clashwars.cwcore.utils.CWUtil;

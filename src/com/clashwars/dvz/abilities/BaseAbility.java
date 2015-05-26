@@ -156,6 +156,9 @@ public class BaseAbility implements Listener {
 
         if (hasCooldown()) {
             String tag = cwp.getPlayerClass().toString().toLowerCase() +  "-" + ability.toString().toLowerCase();
+            if (cwp.getPlayerClass() == DvzClass.WITCH || cwp.getPlayerClass() == DvzClass.VILLAGER) {
+                tag = "witch_villager-" + ability.toString().toLowerCase();
+            }
             CooldownManager.Cooldown cd = cwp.getCDM().getCooldown(tag);
             if (cd == null) {
                 cwp.getCDM().createCooldown(tag, getCooldown());
@@ -218,5 +221,9 @@ public class BaseAbility implements Listener {
             loc = event.getClickedBlock().getLocation();
         }
         ability.getAbilityClass().castAbility(event.getPlayer(), loc);
+    }
+
+    public void onCastItemGiven(Player player) {
+        //--
     }
 }

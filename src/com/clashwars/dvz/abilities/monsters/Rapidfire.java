@@ -5,6 +5,7 @@ import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,7 +22,9 @@ public class Rapidfire extends MobAbility {
     public Rapidfire() {
         super();
         ability = Ability.RAPIDFIRE;
-        castItem = new DvzItem(Material.BOW, 1, (short)0, displayName, 1, -1);
+        DvzItem bow = new DvzItem(Material.BOW, 1, (short)0, displayName, 1, -1);
+        bow.addEnchantment(Enchantment.ARROW_INFINITE, 1);
+        castItem = bow;
         castActions = new ArrayList<Action>(Arrays.asList(new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}));
     }
 
@@ -32,7 +35,6 @@ public class Rapidfire extends MobAbility {
         if (onCooldown(player)) {
             return;
         }
-
         new BukkitRunnable() {
             int arrows = getIntOption("arrows");
             Double m = getDoubleOption("randomoffset");

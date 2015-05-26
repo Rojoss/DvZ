@@ -1,6 +1,7 @@
 package com.clashwars.dvz.player;
 
 import com.clashwars.cwcore.CooldownManager;
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.ExpUtil;
@@ -48,34 +49,42 @@ public class CWPlayer {
         color = CWUtil.getRandomColor();
     }
 
-
     public void reset() {
+        reset(false);
+    }
+
+    public void reset(boolean switchable) {
         Player player = getPlayer();
         if (player == null || player.getGameMode() == GameMode.CREATIVE) {
             return;
         }
-        player.setMaxHealth(20);
-        player.setHealth(20);
-        player.setFoodLevel(20);
-        player.setFlying(false);
-        player.setAllowFlight(false);
-        player.setFireTicks(0);
-        player.setGameMode(GameMode.SURVIVAL);
-        player.setSaturation(10);
-        player.setWalkSpeed(0.2f);
-        player.setFlySpeed(0.1f);
-        player.setTotalExperience(0);
-        player.setLevel(0);
-        player.setExp(0);
+
+        if (!switchable) {
+            player.setMaxHealth(20);
+            player.setHealth(20);
+            player.setFoodLevel(20);
+            player.setFlying(false);
+            player.setAllowFlight(false);
+            player.setFireTicks(0);
+            player.setGameMode(GameMode.SURVIVAL);
+            player.setSaturation(10);
+            player.setWalkSpeed(0.2f);
+            player.setFlySpeed(0.1f);
+            player.setTotalExperience(0);
+            player.setLevel(0);
+            player.setExp(0);
+
+            for (PotionEffect pe : player.getActivePotionEffects()) {
+                player.removePotionEffect(pe.getType());
+            }
+        }
+
         player.getInventory().clear();
         player.getInventory().setHelmet(new CWItem(Material.AIR));
         player.getInventory().setChestplate(new CWItem(Material.AIR));
         player.getInventory().setLeggings(new CWItem(Material.AIR));
         player.getInventory().setBoots(new CWItem(Material.AIR));
-        for (PotionEffect pe : player.getActivePotionEffects()) {
-            player.removePotionEffect(pe.getType());
-        }
-        player.updateInventory();
+
         if (teleport != null) {
             teleport.cancel();
             teleport = null;
@@ -83,6 +92,12 @@ public class CWPlayer {
         for (Team team : dvz.getBoard().getTeamList()) {
             if (team.hasPlayer(player)) {
                 team.removePlayer(player);
+            }
+        }
+        for (DvzClass dvzClass : DvzClass.values()) {
+            String perm = "prefix." + dvzClass.toString().toLowerCase();
+            if (dvz.getPerms().playerHas(player, perm)) {
+                dvz.getPerms().playerRemove(player, perm);
             }
         }
         player.updateInventory();
@@ -100,16 +115,19 @@ public class CWPlayer {
         data.setPlayerClass(DvzClass.DWARF);
         data.setClassExp(0);
         data.setParkourCompleted(false);
+        data.setbombUsed(false);
+        data.setBuffUsed(false);
+        data.setBuffed(false);
+
         color = CWUtil.getRandomColor();
     }
-
 
     public void setClass(final DvzClass dvzClass) {
         final BaseClass c = dvzClass.getClassClass();
         final Player player = getPlayer();
 
         //Reset
-        reset();
+        reset(c.isSwitchable());
 
         new BukkitRunnable() {
             @Override
@@ -129,29 +147,38 @@ public class CWPlayer {
                     dvz.getBoard().getTeam(dvzClass.getTeam()).addPlayer(player);
                 }
 
+                //Prefix
+                dvz.getPerms().playerAdd(player, "prefix." + getPlayerClass().toString().toLowerCase());
+
                 //Teleport
-                if (dvzClass.getType() == ClassType.DWARF) {
-                    player.teleport(dvz.getMM().getActiveMap().getLocation("dwarf"));
-                } else if (dvzClass.getType() == ClassType.MONSTER) {
-                    if (dvz.getGM().getState() == GameState.MONSTERS_WALL) {
-                        player.teleport(dvz.getMM().getActiveMap().getLocation("wall"));
-                    } else if (dvz.getGM().getState() == GameState.MONSTERS_KEEP) {
+                if (!c.isSwitchable()) {
+                    if (dvzClass.getType() == ClassType.DWARF) {
                         player.teleport(dvz.getMM().getActiveMap().getLocation("dwarf"));
-                    } else {
-                        player.teleport(dvz.getMM().getActiveMap().getLocation("monster"));
+                    } else if (dvzClass.getType() == ClassType.MONSTER) {
+                        if (dvz.getGM().getState() == GameState.MONSTERS_WALL) {
+                            player.teleport(dvz.getMM().getActiveMap().getLocation("wall"));
+                        } else if (dvz.getGM().getState() == GameState.MONSTERS_KEEP) {
+                            player.teleport(dvz.getMM().getActiveMap().getLocation("dwarf"));
+                        } else {
+                            player.teleport(dvz.getMM().getActiveMap().getLocation("monster"));
+                        }
+                    } else if (dvzClass.getType() == ClassType.DRAGON) {
+                        player.teleport(dvz.getMM().getActiveMap().getLocation("dragon"));
                     }
-                } else if (dvzClass.getType() == ClassType.DRAGON) {
-                    player.teleport(dvz.getMM().getActiveMap().getLocation("dragon"));
                 }
 
                 //Equip class and items etc.
                 c.equipItems(player);
                 dvzClass.getClassClass().onEquipClass(player);
-                player.setMaxHealth(c.getHealth());
-                player.setHealth(c.getHealth());
+                if (!c.isSwitchable()) {
+                    player.setMaxHealth(c.getHealth());
+                    player.setHealth(c.getHealth());
+                }
                 player.setWalkSpeed(c.getSpeed());
                 player.setFlySpeed(c.getSpeed());
-                player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));
+                if (!c.isSwitchable()) {
+                    player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));
+                }
                 if (c.getType() == ClassType.DWARF) {
                     player.sendMessage(CWUtil.integrateColor("&8&l❝&7" + c.getTask() + "&8&l❞"));
                 }

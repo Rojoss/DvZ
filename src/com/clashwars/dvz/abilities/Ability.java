@@ -3,7 +3,6 @@ package com.clashwars.dvz.abilities;
 import com.clashwars.dvz.abilities.dragons.*;
 import com.clashwars.dvz.abilities.dwarves.*;
 import com.clashwars.dvz.abilities.monsters.*;
-import com.clashwars.dvz.classes.DvzClass;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +44,8 @@ public enum Ability {
     WATER_BUBBLE(new WaterBubble(), new String[]{}),
     FIRE_BREATH(new FireBreath(), new String[]{}),
     AIRSHIELD(new AirShield(), new String[]{}),
+    MORPH(new Morph(), new String[]{}),
+    BUFF(new Buff(), new String[]{}),
     HORN(new Horn(), new String[]{});
 
     private BaseAbility abilityClass;

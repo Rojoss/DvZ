@@ -1,22 +1,28 @@
 package com.clashwars.dvz.events;
 
-import com.clashwars.cwcore.CWCore;
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
-import com.clashwars.dvz.*;
+import com.clashwars.dvz.DvZ;
+import com.clashwars.dvz.GameManager;
+import com.clashwars.dvz.GameState;
+import com.clashwars.dvz.Product;
 import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -29,6 +35,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class MainEvents implements Listener {
@@ -137,6 +145,12 @@ public class MainEvents implements Listener {
             event.setDeathMessage(CWUtil.integrateColor(prefix + player.getName() + " &7died!"));
         }
 
+        //Reset witch/villager data
+        if (cwp.getPlayerClass() != null && (cwp.getPlayerClass() == DvzClass.WITCH || cwp.getPlayerClass() == DvzClass.VILLAGER)) {
+            cwp.getPlayerData().setbombUsed(false);
+            cwp.getPlayerData().setBuffUsed(false);
+        }
+
         //Dragon died.
         if (dvz.getGM().getState() == GameState.DRAGON && dvz.getGM().getDragonPlayer().getName().equalsIgnoreCase(player.getName())) {
 
@@ -196,7 +210,9 @@ public class MainEvents implements Listener {
                         suicide = true;
                         dvz.getPM().suicidePlayers.remove(player.getUniqueId());
                     }
-
+                    if (cwp.getPlayerData().isBuffed()) {
+                        cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 0));
+                    }
                     cwp.reset();
                     cwp.setPlayerClass(DvzClass.MONSTER);
                     cwp.giveClassItems(ClassType.MONSTER, suicide);
@@ -477,6 +493,28 @@ public class MainEvents implements Listener {
                     player.setFoodLevel(20);
                 }
             }.runTaskLater(dvz, 5);
+        }
+    }
+    @EventHandler
+    private void entityInteract(PlayerInteractEntityEvent event) {
+        String name = "";
+        if (event.getRightClicked() instanceof ArmorStand) {
+            ArmorStand stand = (ArmorStand) event.getRightClicked();
+            name = stand.getCustomName();
+        }
+        if (event.getRightClicked() instanceof LivingEntity) {
+            LivingEntity npc = (LivingEntity) event.getRightClicked();
+            name = npc.getCustomName();
+        }
+        if (name == null || name.isEmpty()) {
+            return;
+        }
+        name = CWUtil.removeColour(name.toLowerCase());
+        for (DvzClass dvzClass : DvzClass.values()) {
+            if (dvzClass.toString().toLowerCase() == name) {
+                event.setCancelled(true);
+                event.getPlayer().performCommand("dvz class " + name);
+            }
         }
     }
 }

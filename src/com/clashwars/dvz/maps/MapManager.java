@@ -1,7 +1,5 @@
 package com.clashwars.dvz.maps;
 
-import com.clashwars.cwcore.CWCore;
-import com.clashwars.cwcore.cuboid.SelectionStatus;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameState;

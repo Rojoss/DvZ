@@ -11,7 +11,6 @@ import com.clashwars.dvz.structures.extra.StorageItem;
 import com.clashwars.dvz.structures.internal.Structure;
 import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

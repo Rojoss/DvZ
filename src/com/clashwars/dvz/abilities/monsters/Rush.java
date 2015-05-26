@@ -2,6 +2,8 @@ package com.clashwars.dvz.abilities.monsters;
 
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
+import com.clashwars.dvz.classes.ClassType;
+import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,23 +22,53 @@ public class Rush extends MobAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerloc) {
-        if (CWUtil.getTargetedPlayer(player, getIntOption("range")) == null) {
+
+        final Player target = CWUtil.getTargetedPlayer(player, getIntOption("range"));
+
+        if (target == null) {
+            return;
+        }
+
+        if (dvz.getPM().getPlayer(target).getPlayerClass().getType() != ClassType.DWARF) {
             return;
         }
 
         if (onCooldown(player)) {
             return;
         }
-        /*
 
-        player.setWalkSpeed(getDvzClass().getClassClass().getSpeed() + getFloatOption("bonusspeed"));
+        final DvzClass dvzClass = dvz.getPM().getPlayer(player).getPlayerClass();
+
         new BukkitRunnable() {
+            int iterations = 0;
+            double initDistance = player.getLocation().distance(target.getLocation());
+
             @Override
             public void run() {
-                player.setWalkSpeed(getDvzClass().getClassClass().getSpeed());
+                iterations++;
+                if (iterations >= 3) {
+                    iterations = 0;
+                    if (target != CWUtil.getTargetedPlayer(player, getIntOption("range"))) {
+                        player.setWalkSpeed(dvzClass.getClassClass().getSpeed());
+                        cancel();
+                        return;
+                    }
+                }
+
+                double distance = player.getLocation().distance(target.getLocation());
+
+                if (distance > initDistance / 2 && player.getWalkSpeed() < dvzClass.getClassClass().getSpeed() + 2f) {
+                    player.setWalkSpeed(player.getWalkSpeed() + 0.1f);
+                } else if (distance <= initDistance / 2 && player.getWalkSpeed() > dvzClass.getClassClass().getSpeed()) {
+                    player.setWalkSpeed(player.getWalkSpeed() - 0.1f);
+                }
+                if (distance < 1) {
+                    player.setWalkSpeed(dvzClass.getClassClass().getSpeed());
+                    cancel();
+                    return;
+                }
             }
-        }.runTaskLater(dvz, getIntOption("duration"));
-    */
+        }.runTaskTimer(dvz, 0, 3);
     }
 
     @EventHandler

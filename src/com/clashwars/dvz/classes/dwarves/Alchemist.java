@@ -1,11 +1,9 @@
 package com.clashwars.dvz.classes.dwarves;
 
-import com.clashwars.cwcore.Debug;
+import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
-import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.dvz.Product;
-import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
@@ -23,13 +21,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class Alchemist extends DwarfClass {
 

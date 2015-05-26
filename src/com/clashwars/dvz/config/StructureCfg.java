@@ -2,7 +2,10 @@ package com.clashwars.dvz.config;
 
 import com.clashwars.cwcore.config.internal.EasyConfig;
 import com.clashwars.dvz.DvZ;
-import com.clashwars.dvz.structures.data.*;
+import com.clashwars.dvz.structures.data.DisposeData;
+import com.clashwars.dvz.structures.data.EnchantData;
+import com.clashwars.dvz.structures.data.FurnaceData;
+import com.clashwars.dvz.structures.data.StorageData;
 
 public class StructureCfg extends EasyConfig {
 

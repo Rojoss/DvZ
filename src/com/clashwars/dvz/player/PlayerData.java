@@ -11,6 +11,9 @@ public class PlayerData {
     private int classExp = 0;
     private boolean parkourCompleted = false;
     private Set<DvzClass> classOptions = new HashSet<DvzClass>();
+    private boolean buffUsed = false;
+    private boolean bombUsed = false;
+    private boolean isBuffed = false;
 
     public PlayerData() {
         //--
@@ -57,5 +60,31 @@ public class PlayerData {
     public void setClassOptions(Set<DvzClass> classOptions) {
         this.classOptions = classOptions;
     }
+
+    public boolean isBuffUsed() {
+        return buffUsed;
+    }
+
+    public void setBuffUsed(boolean buffUsed) {
+        this.buffUsed = buffUsed;
+    }
+
+    public boolean isBombUsed() {
+        return bombUsed;
+    }
+
+    public void setbombUsed(boolean bombUsed) {
+        this.bombUsed = bombUsed;
+    }
+
+    public boolean isBuffed() {
+        return isBuffed;
+    }
+
+    public void setBuffed(boolean buffed) {
+        this.isBuffed = buffed;
+    }
+
+
 
 }

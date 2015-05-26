@@ -48,7 +48,7 @@ public class Hammer extends MobAbility {
 
         //Check if block can be destroyed
         Block block = event.getClickedBlock();
-        if (block.getType() == Material.BEDROCK || block.getType() == Material.OBSIDIAN) {
+        if (block.getType() == Material.BEDROCK || block.getType() == Material.OBSIDIAN || block.getType() == Material.ENDER_STONE) {
             return;
         }
 

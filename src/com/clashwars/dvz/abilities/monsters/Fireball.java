@@ -2,7 +2,6 @@ package com.clashwars.dvz.abilities.monsters;
 
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
-import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,7 +10,8 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SmallFireball;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Fireball extends MobAbility {

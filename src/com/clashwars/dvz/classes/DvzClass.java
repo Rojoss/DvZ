@@ -1,6 +1,9 @@
 package com.clashwars.dvz.classes;
 
-import com.clashwars.dvz.classes.dragons.*;
+import com.clashwars.dvz.classes.dragons.AirDragon;
+import com.clashwars.dvz.classes.dragons.DragonClass;
+import com.clashwars.dvz.classes.dragons.FireDragon;
+import com.clashwars.dvz.classes.dragons.WaterDragon;
 import com.clashwars.dvz.classes.dwarves.*;
 import com.clashwars.dvz.classes.monsters.*;
 

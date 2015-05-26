@@ -5,7 +5,6 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.util.List;

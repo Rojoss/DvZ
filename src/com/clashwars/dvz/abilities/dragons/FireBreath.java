@@ -1,9 +1,7 @@
 package com.clashwars.dvz.abilities.dragons;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
-import com.clashwars.cwcore.utils.RandomUtils;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;

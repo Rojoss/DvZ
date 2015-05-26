@@ -1,26 +1,20 @@
 package com.clashwars.dvz.abilities.dragons;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.effect.Particle;
-import com.clashwars.cwcore.effect.effects.BoilEffect;
 import com.clashwars.cwcore.effect.effects.SphereEffect;
 import com.clashwars.cwcore.packet.ParticleEffect;
-import com.clashwars.cwcore.utils.CWUtil;
-import com.clashwars.cwcore.utils.VectorUtils;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
-import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-
-import java.util.List;
 
 public class AirShield extends DragonAbility {
 

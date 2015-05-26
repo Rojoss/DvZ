@@ -1,6 +1,9 @@
 package com.clashwars.dvz.structures.internal;
 
-import com.clashwars.dvz.structures.*;
+import com.clashwars.dvz.structures.DisposeStruc;
+import com.clashwars.dvz.structures.EnchantStruc;
+import com.clashwars.dvz.structures.FurnaceStruc;
+import com.clashwars.dvz.structures.StorageStruc;
 
 public enum StructureType {
     BASE(new Structure()),
