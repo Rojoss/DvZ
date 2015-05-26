@@ -36,8 +36,8 @@ public class Horn extends DwarfAbility {
             @Override
             public void run() {
                 for (CWPlayer cwp : dvz.getPM().getPlayers(ClassType.DWARF, true)) {
-                    cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, getIntOption("duration"), 1));
-                    cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, getIntOption("duration"), 1));
+                    cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, getIntOption("duration"), 0));
+                    cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, getIntOption("duration"), 0));
                 }
             }
         }.runTaskLater(dvz, 40);

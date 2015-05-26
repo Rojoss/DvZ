@@ -192,6 +192,7 @@ public class CWPlayer {
         BaseClass c = dvzClass.getClassClass();
         Player player = getPlayer();
 
+        player.getInventory().clear();
         dvz.getPM().removeWorkshop(player);
 
         setPlayerClass(dvzClass);

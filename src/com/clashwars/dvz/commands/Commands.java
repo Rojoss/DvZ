@@ -143,7 +143,7 @@ public class Commands {
                         return true;
                     }
 
-                    cwp.timedTeleport(dvz.getMM().getActiveMap().getLocation("shrine1"), 4, "the shrine");
+                    cwp.timedTeleport(dvz.getMM().getActiveMap().getCuboid("shrine2keep").getCenterLoc().add(0,2,0), 4, "the shrine");
                     return true;
                 }
 
