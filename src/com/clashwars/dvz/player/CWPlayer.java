@@ -139,7 +139,7 @@ public class CWPlayer {
 
                 //Disguise
                 if (dvzClass.getType() == ClassType.MONSTER || dvzClass.getType() == ClassType.DRAGON) {
-                    Util.disguisePlayer(player.getName(), c.getDisguise());
+                    Util.disguisePlayer(player.getName(), c.getStrOption("disguise"));
                 }
 
                 //Team
