@@ -257,6 +257,7 @@ public class CWPlayer {
                 for (DvzClass c : classOptions.keySet()) {
                     classOptions.get(c).getClassItem().giveToPlayer(player);
                 }
+                DvzClass.ZOMBIE.getClassClass().getClassItem().giveToPlayer(player);
             }
         }.runTaskLater(dvz, 5);
     }
