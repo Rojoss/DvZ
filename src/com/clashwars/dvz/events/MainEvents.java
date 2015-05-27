@@ -226,8 +226,12 @@ public class MainEvents implements Listener {
     private void damage(EntityDamageEvent event) {
         //No durability loss
         if (event.getEntity() instanceof Player) {
+            Player player = (Player)event.getEntity();
             for (ItemStack armor : ((Player)event.getEntity()).getInventory().getArmorContents()) {
                 armor.setDurability((short)0);
+            }
+            if (dvz.getPM().getPlayer(player).getPlayerClass() == DvzClass.DWARF  || dvz.getPM().getPlayer(player).getPlayerClass() == DvzClass.MONSTER)  {
+                event.setCancelled(true);
             }
         }
 
@@ -486,7 +490,8 @@ public class MainEvents implements Listener {
         }
 
         final Player player = (Player)event.getEntity();
-        if (dvz.getPM().getPlayer(player).getPlayerClass().getType() == ClassType.MONSTER || dvz.getGM().getState() == GameState.DAY_ONE) {
+        if (dvz.getPM().getPlayer(player).getPlayerClass().getType() == ClassType.MONSTER || dvz.getGM().getState() == GameState.DAY_ONE
+                || dvz.getPM().getPlayer(player).getPlayerClass() == DvzClass.DWARF || dvz.getPM().getPlayer(player).getPlayerClass() == DvzClass.MONSTER) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
