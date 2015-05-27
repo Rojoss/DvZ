@@ -122,7 +122,11 @@ public class CWPlayer {
         color = CWUtil.getRandomColor();
     }
 
-    public void setClass(final DvzClass dvzClass) {
+    public void setClass(DvzClass dvzClass) {
+        setClass(dvzClass, false);
+    }
+
+    public void setClass(final DvzClass dvzClass, final boolean eggUse) {
         final BaseClass c = dvzClass.getClassClass();
         final Player player = getPlayer();
 
@@ -151,7 +155,7 @@ public class CWPlayer {
                 dvz.getPerms().playerAdd(player, "prefix." + getPlayerClass().toString().toLowerCase());
 
                 //Teleport
-                if (!c.isSwitchable()) {
+                if (eggUse) {
                     if (dvzClass.getType() == ClassType.DWARF) {
                         player.teleport(dvz.getMM().getActiveMap().getLocation("dwarf"));
                     } else if (dvzClass.getType() == ClassType.MONSTER) {
@@ -176,7 +180,7 @@ public class CWPlayer {
                 }
                 player.setWalkSpeed(c.getSpeed());
                 player.setFlySpeed(c.getSpeed());
-                if (!c.isSwitchable()) {
+                if (eggUse) {
                     player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));
                 }
                 if (c.getType() == ClassType.DWARF) {
@@ -250,6 +254,7 @@ public class CWPlayer {
                 cwp.clearClassOptions();
                 cwp.setClassOptions(classOptions.keySet());
                 if (type == ClassType.MONSTER) {
+                    DvzClass.ZOMBIE.getClassClass().getClassItem().giveToPlayer(player);
                     if (!classOptions.containsKey(DvzClass.ZOMBIE)) {
                         classOptions.put(DvzClass.ZOMBIE, DvzClass.ZOMBIE.getClassClass());
                     }
@@ -257,7 +262,6 @@ public class CWPlayer {
                 for (DvzClass c : classOptions.keySet()) {
                     classOptions.get(c).getClassItem().giveToPlayer(player);
                 }
-                DvzClass.ZOMBIE.getClassClass().getClassItem().giveToPlayer(player);
             }
         }.runTaskLater(dvz, 5);
     }

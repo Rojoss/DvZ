@@ -1,5 +1,6 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.packet.Title;
@@ -60,7 +61,7 @@ public class MainEvents implements Listener {
 
     @EventHandler
     private void playerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         Location spawnLoc = dvz.getGM().getUsedWorld().getSpawnLocation();
 
@@ -101,9 +102,16 @@ public class MainEvents implements Listener {
         title.setTimingsToTicks();
         title.send(player);
 
-        CWUtil.setTab(player, " &8======== &6&lDwarves &2VS &c&lZombies &8========", " &6INFO &8>>> &9&lclashwars.com/dvz &8<<< &6INFO");
+        CWUtil.setTab(player, " &8======== &6&lDwarves &2VS &c&lZombies &8========", " &6INFO &8>>> &9&lclashwars.com/info &8<<< &6INFO");
 
-        player.teleport(spawnLoc);
+        final Location spawnLocFinal = spawnLoc;
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                player.teleport(spawnLocFinal);
+            }
+        }.runTaskLater(dvz, 10);
     }
 
 
@@ -345,7 +353,7 @@ public class MainEvents implements Listener {
                 player.sendMessage(Util.formatMsg("&cSee &4/dvz &cfor more info."));
                 break;
             }
-            cwp.setClass(dvzClass);
+            cwp.setClass(dvzClass, true);
         }
     }
 
@@ -503,20 +511,38 @@ public class MainEvents implements Listener {
     @EventHandler
     private void entityInteract(PlayerInteractEntityEvent event) {
         String name = "";
-        if (event.getRightClicked() instanceof ArmorStand) {
-            ArmorStand stand = (ArmorStand) event.getRightClicked();
-            name = stand.getCustomName();
-        }
         if (event.getRightClicked() instanceof LivingEntity) {
             LivingEntity npc = (LivingEntity) event.getRightClicked();
             name = npc.getCustomName();
+        }
+
+        if (name == null || name.isEmpty()) {
+            return;
+        }
+        name = CWUtil.removeColour(name.toLowerCase());
+
+        for (DvzClass dvzClass : DvzClass.values()) {
+            if (dvzClass.toString().toLowerCase().equalsIgnoreCase(name)) {
+                event.setCancelled(true);
+                event.getPlayer().performCommand("dvz class " + name);
+            }
+        }
+    }
+
+    @EventHandler
+    private void interactAtEntity(PlayerInteractAtEntityEvent event) {
+        String name = "";
+        if (event.getRightClicked() instanceof ArmorStand) {
+            ArmorStand stand = (ArmorStand) event.getRightClicked();
+            name = stand.getCustomName();
         }
         if (name == null || name.isEmpty()) {
             return;
         }
         name = CWUtil.removeColour(name.toLowerCase());
+
         for (DvzClass dvzClass : DvzClass.values()) {
-            if (dvzClass.toString().toLowerCase() == name) {
+            if (dvzClass.toString().toLowerCase().equalsIgnoreCase(name)) {
                 event.setCancelled(true);
                 event.getPlayer().performCommand("dvz class " + name);
             }

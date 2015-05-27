@@ -1,6 +1,7 @@
 package com.clashwars.dvz.runnables;
 
 import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.Util;
@@ -10,23 +11,23 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.WitherSkull;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class AntiCamp extends BukkitRunnable {
 
     private DvZ dvz;
-    private Entity center = null;
-    private Location centerLoc = null;
+    private Location monsterLoc = null;
     private int warnRange = 100;
     private int range = 75;
 
     public AntiCamp(DvZ dvz) {
         this.dvz = dvz;
-        recalculate();
+
+        warnRange = dvz.getCfg().CAMP_WARN_RANGE;
+        range = dvz.getCfg().CAMP_RANGE;
     }
 
     private void recalculate() {
@@ -34,38 +35,25 @@ public class AntiCamp extends BukkitRunnable {
             return;
         }
         World world = dvz.getMM().getActiveMap().getWorld();
-
-        Location spawnLoc = dvz.getMM().getActiveMap().getLocation("monster");
-        spawnLoc.setY(255);
-        center = world.spawnEntity(spawnLoc, EntityType.WITHER_SKULL);
-        center.setVelocity(new Vector(0,0,0));
-        ((WitherSkull)center).setDirection(new Vector(0,0,0));
-        ((WitherSkull)center).setCharged(false);
-
-        centerLoc = center.getLocation();
-
-        warnRange = dvz.getCfg().CAMP_WARN_RANGE;
-        range = dvz.getCfg().CAMP_RANGE;
+        monsterLoc = dvz.getMM().getActiveMap().getLocation("monster");
     }
 
 
     @Override
     public void run() {
-        if (center == null || centerLoc == null || center.isDead()) {
+        if (monsterLoc == null) {
             if (dvz.getGM().isMonsters()) {
                 recalculate();
             }
             return;
         }
-        List<Entity> entities = center.getNearbyEntities(warnRange, 256, warnRange);
+        List<Entity> entities = CWUtil.getNearbyEntities(monsterLoc, warnRange, Arrays.asList(new EntityType[] {EntityType.PLAYER}));
         for (Entity e : entities) {
             if (e instanceof Player) {
                 Player player = (Player)e;
                 CWPlayer cwp = dvz.getPM().getPlayer(player);
                 if (cwp.isDwarf()) {
-                    centerLoc = center.getLocation().clone();
-                    centerLoc.setY(player.getLocation().getY());
-                    if (player.getLocation().distance(centerLoc) <= range) {
+                    if (player.getLocation().distance(monsterLoc) <= range) {
                         player.damage(2);
                         ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(Material.REDSTONE_BLOCK, (byte) 0), 0.4f, 1.0f, 0.4f, 0.01f, 20, player.getLocation());
                     } else {
