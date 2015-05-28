@@ -129,7 +129,7 @@ public class StorageStruc extends Structure {
                 cwp.productsTaken.put(storageItem.getName(), 0);
             }
             int remainingTillLimit = storageItem.getLimit() - cwp.productsTaken.get(storageItem.getName());
-            if (remainingTillLimit >= amtToChange) {
+            if (remainingTillLimit >= amtToChange || storageItem.getLimit() == -1) {
                 cwp.productsTaken.put(storageItem.getName(), cwp.productsTaken.get(storageItem.getName()) + amtToChange);
             } else if (remainingTillLimit > 0) {
                 amtToChange = remainingTillLimit;
