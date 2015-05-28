@@ -2,6 +2,7 @@ package com.clashwars.dvz.player;
 
 import com.clashwars.cwcore.CooldownManager;
 import com.clashwars.cwcore.Debug;
+import com.clashwars.cwcore.effect.EffectType;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.ExpUtil;
@@ -19,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
 
@@ -185,10 +187,11 @@ public class CWPlayer {
                 }
                 if (c.getType() == ClassType.DWARF) {
                     player.sendMessage(CWUtil.integrateColor("&8&l❝&7" + c.getTask() + "&8&l❞"));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999999, 0));
                 }
                 savePlayer();
             }
-        }.runTaskLater(dvz, 5);
+        }.runTaskLater(dvz, 10);
     }
 
 
@@ -241,7 +244,7 @@ public class CWPlayer {
                 CWPlayer cwp = dvz.getPM().getPlayer(player);
                 if (forcePrevious) {
                     if (type == ClassType.MONSTER) {
-                        if (!cwp.getClassOptions().contains(DvzClass.ZOMBIE)) {
+                        if (cwp.getClassOptions() != null && !cwp.getClassOptions().contains(DvzClass.ZOMBIE)) {
                             cwp.getClassOptions().add(DvzClass.ZOMBIE);
                         }
                     }

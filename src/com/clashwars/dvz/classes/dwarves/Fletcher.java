@@ -13,6 +13,7 @@ import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -33,7 +34,9 @@ public class Fletcher extends DwarfClass {
 
         equipment.add(new DvzItem(Material.WORKBENCH, 1, (byte)0, "&2&lWorkshop", new String[] {"&7Place this down on any of the pistons.", "&7Your workshop will be build then."}, 500, -1));
         equipment.add(new DvzItem(Material.STONE_SWORD, 1, -1, -1));
-        equipment.add(new DvzItem(Material.STONE_SPADE, 1, -1, -1));
+        DvzItem spade = new DvzItem(Material.STONE_SPADE, 1, -1, -1);
+        spade.addEnchantment(Enchantment.DIG_SPEED, 1);
+        equipment.add(spade);
     }
 
     @EventHandler

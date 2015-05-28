@@ -219,7 +219,10 @@ public class ProtectEvents implements Listener {
                 event.setCancelled(true);
             }
             //Allow using buckets (Handled by bucket empty/fill event)
-            if (event.getItem() != null && event.getItem().getType() == Material.BUCKET || event.getItem().getType() == Material.WATER_BUCKET || event.getItem().getType() == Material.LAVA_BUCKET) {
+            if (event.getItem() == null || event.getItem().getType() == null) {
+                return;
+            }
+            if (event.getItem().getType() == Material.BUCKET || event.getItem().getType() == Material.WATER_BUCKET || event.getItem().getType() == Material.LAVA_BUCKET) {
                 return;
             }
 

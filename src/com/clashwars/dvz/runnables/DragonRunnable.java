@@ -12,12 +12,13 @@ public class DragonRunnable extends BukkitRunnable {
     private Player dragon;
 
     public DragonRunnable(DvZ dvz) {
+        this.dvz = dvz;
         dragon = dvz.getGM().getDragonPlayer();
     }
 
     @Override
     public void run() {
-        if (dvz.getGM().getDragonPlayer() == null || dvz.getGM().getDragonType() == null || dvz.getGM().isMonsters()) {
+        if (dvz.getGM() == null || dvz.getGM().getDragonPlayer() == null || dvz.getGM().getDragonType() == null || dvz.getGM().isMonsters()) {
             this.cancel();
         }
         if (dragon == null) {

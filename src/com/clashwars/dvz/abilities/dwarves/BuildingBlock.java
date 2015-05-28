@@ -76,9 +76,10 @@ public class BuildingBlock extends DwarfAbility {
             }
             if (!placed) {
                 CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cNo more stone in your hotbar! &4&l<<"));
-            } else {
-                dvz.getPM().getPlayer(player).addClassExp(1);
             }
+        }
+        if (placed) {
+            dvz.getPM().getPlayer(player).addClassExp(1);
         }
     }
 

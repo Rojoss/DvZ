@@ -19,8 +19,6 @@ public class Blaze extends MobClass {
         abilities.add(Ability.GLIDE);
         abilities.add(Ability.FIREBALL);
         abilities.add(Ability.BLAST);
-
-        equipment.add(new DvzItem(Material.GOLD_SWORD, -1, -1));
     }
 
     @EventHandler

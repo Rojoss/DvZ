@@ -72,6 +72,8 @@ public class MainEvents implements Listener {
             subtitleStr = "&9You have joined dvz as a " + cwp.getPlayerClass().getClassClass().getDisplayName() + "&9!";
             player.sendMessage(Util.formatMsg("&6Welcome back!"));
         } else {
+            cwp.reset();
+            cwp.resetData();
             if (gm.isDwarves()) {
                 player.sendMessage(Util.formatMsg("&6You have joined DvZ as a &8Dwarf&6!"));
                 cwp.setPlayerClass(DvzClass.DWARF);
@@ -98,9 +100,13 @@ public class MainEvents implements Listener {
             }
         }
 
-        Title title = new Title(titleStr, subtitleStr, 10, 100, 30);
-        title.setTimingsToTicks();
-        title.send(player);
+        if (cwp.getPlayerClass().getType() == ClassType.DWARF) {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999999, 0));
+        }
+
+        //Title title = new Title(titleStr, subtitleStr, 10, 100, 30);
+        //title.setTimingsToTicks();
+        //title.send(player);
 
         CWUtil.setTab(player, " &8======== &6&lDwarves &2VS &c&lZombies &8========", " &6INFO &8>>> &9&lclashwars.com/info &8<<< &6INFO");
 
@@ -353,6 +359,9 @@ public class MainEvents implements Listener {
                 player.sendMessage(Util.formatMsg("&cSee &4/dvz &cfor more info."));
                 break;
             }
+            player.getInventory().clear();
+            player.updateInventory();
+            CWUtil.removeItemsFromHand(player, 1);
             cwp.setClass(dvzClass, true);
         }
     }

@@ -48,17 +48,17 @@ public class GameManager {
             Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &9&lhttp://twitch.tv/clashwars"));
             Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &9&lhttp://clashwars.com"));
             setState(GameState.CLOSED);
-            Title title = new Title("&c&lDvZ has ended!", "&7Come back again later for more DvZ!", 10, 500, 30);
-            title.setTimingsToTicks();
-            title.broadcast();
+            //Title title = new Title("&c&lDvZ has ended!", "&7Come back again later for more DvZ!", 10, 500, 30);
+            //title.setTimingsToTicks();
+            //title.broadcast();
         } else {
             Bukkit.broadcastMessage(CWUtil.integrateColor("&7========== &a&lDvZ is resetting! &7=========="));
             Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7A new game will be starting soon."));
             Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7If you're not watching the stream yet make sure to do!"));
             Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &9&lhttp://twitch.tv/clashwars"));
-            Title title = new Title("&a&lDvZ is resetting!", "&7A new game will be starting soon.", 10, 100, 30);
-            title.setTimingsToTicks();
-            title.broadcast();
+            //Title title = new Title("&a&lDvZ is resetting!", "&7A new game will be starting soon.", 10, 100, 30);
+            //title.setTimingsToTicks();
+            //title.broadcast();
         }
 
         //Reset data
@@ -151,9 +151,9 @@ public class GameManager {
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Beat the parkour to get 3 classes instead of 2!"));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7If you're not watching the stream yet make sure to do!"));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &9&lhttp://twitch.tv/clashwars"));
-        Title title = new Title("&a&lDvZ has opened!", "&7The game will be starting soon so please wait.", 10, 100, 30);
-        title.setTimingsToTicks();
-        title.broadcast();
+        //Title title = new Title("&a&lDvZ has opened!", "&7The game will be starting soon so please wait.", 10, 100, 30);
+        //title.setTimingsToTicks();
+        //title.broadcast();
 
         //Tp all players to active world.
         for (Player player : dvz.getServer().getOnlinePlayers()) {
@@ -170,9 +170,9 @@ public class GameManager {
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7You can now choose a dwarf class!"));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7You get one and a half day to prepare."));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Do your tasks and get fully equipped!."));
-        Title title = new Title("&a&lDvZ has started!", "&7You can now choose a dwarf class!", 10, 50, 30);
-        title.setTimingsToTicks();
-        title.broadcast();
+        //Title title = new Title("&a&lDvZ has started!", "&7You can now choose a dwarf class!", 10, 50, 30);
+        //title.setTimingsToTicks();
+        //title.broadcast();
 
         for (Player player : dvz.getServer().getOnlinePlayers()) {
             if (player.getGameMode() != GameMode.CREATIVE) {
@@ -211,9 +211,9 @@ public class GameManager {
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Stop working and get to the walls!"));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Kill the dragon and become the &bDragonSlayer&7!"));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &8Remember: &7If you die you become a monster."));
-        Title title = new Title("&a&lThe " + dragonType.getClassClass().getDisplayName() + " &a&larises!", "&7Kill the dragon and become the &bDragonSlayer&7!", 10, 50, 30);
-        title.setTimingsToTicks();
-        title.broadcast();
+        //Title title = new Title("&a&lThe " + dragonType.getClassClass().getDisplayName() + " &a&larises!", "&7Kill the dragon and become the &bDragonSlayer&7!", 10, 50, 30);
+        //title.setTimingsToTicks();
+        //title.broadcast();
 
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         cwp.setClass(dragonType);
@@ -251,9 +251,9 @@ public class GameManager {
         Bukkit.broadcastMessage(CWUtil.integrateColor("&7===== &a&lThe monsters have been released! &7====="));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Get to the front wall to hold the monsters of!"));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Don't let them break the shrine at the wall."));
-        Title title = new Title("&c&lMonsters Released!", "&7Get to the front wall to hold the monsters of!", 10, 50, 30);
-        title.setTimingsToTicks();
-        title.broadcast();
+        //Title title = new Title("&c&lMonsters Released!", "&7Get to the front wall to hold the monsters of!", 10, 50, 30);
+        //title.setTimingsToTicks();
+        //title.broadcast();
         setState(GameState.MONSTERS);
     }
 
@@ -262,9 +262,9 @@ public class GameManager {
         Bukkit.broadcastMessage(CWUtil.integrateColor("&7===== &a&lThe wall has been captured! &7====="));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Get back to the keep to defend the main shrine!"));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Monsters will now spawn at the wall."));
-        Title title = new Title("&c&lWall captured!", "&7Get back to the keep to defend the keep shrine!", 10, 50, 30);
-        title.setTimingsToTicks();
-        title.broadcast();
+        //Title title = new Title("&c&lWall captured!", "&7Get back to the keep to defend the keep shrine!", 10, 50, 30);
+        //title.setTimingsToTicks();
+        //title.broadcast();
         setState(GameState.MONSTERS_WALL);
 
         Cuboid wall = dvz.getMM().getActiveMap().getCuboid("wall");
@@ -298,9 +298,9 @@ public class GameManager {
         Bukkit.broadcastMessage(CWUtil.integrateColor("&7===== &a&lThe bottom of the keep has been captured! &7====="));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Defend the shrine at the top!"));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Monsters will now spawn in the keep!"));
-        Title title = new Title("&c&lKeep captured!", "&7Get to the top of the keep to defend the final shrine!", 10, 50, 30);
-        title.setTimingsToTicks();
-        title.broadcast();
+        //Title title = new Title("&c&lKeep captured!", "&7Get to the top of the keep to defend the final shrine!", 10, 50, 30);
+        //title.setTimingsToTicks();
+        //title.broadcast();
         setState(GameState.MONSTERS_KEEP);
     }
 
@@ -319,9 +319,9 @@ public class GameManager {
             Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7The game will be closed soon."));
             Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Don't log off yet! There might be another round."));
         }
-        Title title = new Title("&c&lGame Ended!", "&4Don't log off yet! &7There might be another round.", 10, 100, 30);
-        title.setTimingsToTicks();
-        title.broadcast();
+        //Title title = new Title("&c&lGame Ended!", "&4Don't log off yet! &7There might be another round.", 10, 100, 30);
+        //title.setTimingsToTicks();
+        //title.broadcast();
         setState(GameState.ENDED);
     }
 
@@ -439,8 +439,8 @@ public class GameManager {
 
         Ability.HORN.getAbilityClass().getCastItem().giveToPlayer(player);
 
-        player.setMaxHealth(40);
-        player.setHealth(player.getHealth() + 20);
+        player.setMaxHealth(30);
+        player.setHealth(player.getHealth() + 10);
     }
 
     public void resetDragonSlayer() {

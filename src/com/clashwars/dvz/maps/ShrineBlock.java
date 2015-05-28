@@ -73,9 +73,11 @@ public class ShrineBlock {
             destroy();
             return;
         }
-        if (hologram != null) {
-            hologram.removeLine(0);
-            hologram.addLine(CWUtil.integrateColor(getHpPercString()));
+        if (this.hp == 10 || this.hp == 25 || this.hp == 50 || this.hp == 75) {
+            if (hologram != null) {
+                hologram.removeLine(0);
+                hologram.addLine(CWUtil.integrateColor(getHpPercString()));
+            }
         }
     }
 
