@@ -40,17 +40,17 @@ public class WindStorm extends DragonAbility {
 
                     Vector v = RandomUtils.getRandomCircleVector();
                     float y;
-                    if (iteration > 6) {
+                    if (iteration > 7) {
                         y = CWUtil.randomFloat() - 1;
                     } else {
                         y = CWUtil.randomFloat();
                     }
                     ParticleEffect.CLOUD.display(0.5f, 0.5f, 0.5f, 0f, 10, pl.getLocation());
-                    pl.setVelocity(new Vector(v.getX() * 0.8f, y * 0.8f, v.getZ() * 0.8f));
+                    pl.setVelocity(new Vector(v.getX() * 0.8f, y, v.getZ() * 0.8f));
                 }
 
                 iteration++;
-                if (iteration > 10) {
+                if (iteration > 11) {
                     cancel();
                     return;
                 }
