@@ -27,6 +27,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class Tailor extends DwarfClass {
 
+    private Product[] armorPieces = new Product[] {Product.HELMET, Product.CHESTPLATE, Product.LEGGINGS, Product.BOOTS};
+    private int armorID = 0;
+
     public Tailor() {
         super();
         dvzClass = DvzClass.TAILOR;
@@ -165,8 +168,11 @@ public class Tailor extends DwarfClass {
                 CWUtil.removeItems(inv, Product.DYE_1.getItem(), dye1Needed, true, true);
                 CWUtil.removeItems(inv, Product.DYE_2.getItem(), dye2Needed, true, true);
 
-                Product[] leatherArmor  = new Product[] {Product.HELMET, Product.CHESTPLATE, Product.LEGGINGS, Product.BOOTS};
-                dropLoc.getWorld().dropItem(dropLoc, CWUtil.random(leatherArmor).getItem().setLeatherColor(CWUtil.getRandomColor()));
+                dropLoc.getWorld().dropItem(dropLoc, armorPieces[armorID].getItem().setLeatherColor(CWUtil.getRandomColor()));
+                armorID++;
+                if (armorID >= armorPieces.length) {
+                    armorID = 0;
+                }
 
                 ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
                 player.updateInventory();

@@ -216,12 +216,12 @@ public class GameManager {
         //title.broadcast();
 
         CWPlayer cwp = dvz.getPM().getPlayer(player);
-        cwp.setClass(dragonType);
+        cwp.setClass(dragonType, true);
         player.setAllowFlight(true);
         player.setFlying(true);
         setState(GameState.DRAGON);
 
-        player.setMaxHealth(10 + dvz.getPM().getPlayers(ClassType.DWARF, true).size());
+        player.setMaxHealth(20 + dvz.getPM().getPlayers(ClassType.DWARF, true).size() * 2);
         player.setHealth(player.getMaxHealth());
         new DragonRunnable(dvz).runTaskTimer(dvz, 100, 100);
     }
