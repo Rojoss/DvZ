@@ -36,21 +36,23 @@ public class WaterBubble extends DragonAbility {
             int iterations = 0;
             float radius = 0.5f;
 
+            final Location playerLoc = player.getLocation();
+
             @Override
             public void run() {
                 iterations++;
                 if (iterations > 20) {
                     radius += 0.5f;
-                    CWUtil.createSphere(player.getLocation(), Material.STAINED_GLASS, (byte) 11, radius, false, false);
+                    CWUtil.createSphere(playerLoc, Material.STAINED_GLASS, (byte) 11, radius, false, false);
 
-                    List<Entity> entities = CWUtil.getNearbyEntities(player.getLocation(), 5f, null);
+                    List<Entity> entities = CWUtil.getNearbyEntities(playerLoc, 5f, null);
                     for (Entity e : entities) {
                         if (e instanceof Player) {
-                            ((Player)e).setRemainingAir(80);
+                            ((Player)e).setRemainingAir(60);
                         }
                     }
 
-                    player.teleport(player.getLocation().add(0,6,0));
+                    player.teleport(playerLoc.add(0, 6, 0));
                     player.setFlySpeed(dvz.getPM().getPlayer(player).getPlayerClass().getClassClass().getSpeed());
 
                     cancel();
@@ -58,22 +60,22 @@ public class WaterBubble extends DragonAbility {
                 }
 
                 if (iterations <= 10) {
-                    CWUtil.createSphere(player.getLocation(), Material.STATIONARY_WATER, (byte)0, radius, false, false);
+                    CWUtil.createSphere(playerLoc, Material.STATIONARY_WATER, (byte)0, radius, false, false);
                     radius += 0.5f;
                 }
 
-                List<Entity> entities = CWUtil.getNearbyEntities(player.getLocation(), 30f, null);
+                List<Entity> entities = CWUtil.getNearbyEntities(playerLoc, 30f, null);
                 for (Entity e : entities) {
-                    double distance = e.getLocation().distance(player.getLocation());
+                    double distance = e.getLocation().distance(playerLoc);
                     if (distance > 1) {
-                        Vector dir = player.getLocation().toVector().subtract(e.getLocation().toVector());
+                        Vector dir = playerLoc.toVector().subtract(e.getLocation().toVector());
                         Vector v = CWUtil.lerp(dir.multiply(0.1f), dir, distance / 30);
                         e.setVelocity(v);
                         ParticleEffect.WATER_SPLASH.display(1,1,1,0,10,e.getLocation());
                     }
                 }
 
-                ParticleEffect.WATER_BUBBLE.display(5,5,5,0, 300, player.getLocation());
+                ParticleEffect.WATER_BUBBLE.display(5,5,5,0, 300, playerLoc);
             }
         }.runTaskTimer(dvz, 0, 5);
 
