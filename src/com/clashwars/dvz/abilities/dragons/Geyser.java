@@ -35,6 +35,7 @@ public class Geyser extends DragonAbility {
             if (e instanceof Player) {
                 players.put(((Player)e).getUniqueId(), ((Player)e).getLocation().toVector());
                 e.setVelocity(new Vector(0, getFloatOption("force"), 0));
+                ((Player) e).damage(2);
             }
         }
 
