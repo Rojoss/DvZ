@@ -182,6 +182,10 @@ public class StorageStruc extends Structure {
                 amtToAdd = item.getAmount() >= 16 ? 16 : item.getAmount();
             }
 
+            //Players can also add items back by accident so decrease the amount they took.
+            CWPlayer cwp = dvz.getPM().getPlayer(player);
+            cwp.productsTaken.put(storageItem.getName(), Math.min(0, cwp.productsTaken.get(storageItem.getName()) - amtToAdd));
+
             //Add item(s) to menu.
             storageItem.changeAmt(amtToAdd);
             updateItem(storageItem);

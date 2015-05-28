@@ -336,37 +336,39 @@ public class MainEvents implements Listener {
         }
 
         //Check for class item usage.
-        for (DvzClass dvzClass : DvzClass.values()) {
-            BaseClass c = dvzClass.getClassClass();
-            if (c == null || c.getClassItem() == null || c.getClassItem().getType() != item.getType()) {
-                continue;
-            }
-            if ((c.getClassItem().hasItemMeta() && !item.hasItemMeta()) || (!c.getClassItem().hasItemMeta() && item.hasItemMeta())) {
-                continue;
-            }
-            if (item.hasItemMeta()) {
-                if ((c.getClassItem().getItemMeta().hasDisplayName() && !item.getItemMeta().hasDisplayName()) || (!c.getClassItem().getItemMeta().hasDisplayName() && item.getItemMeta().hasDisplayName())) {
+        if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
+            for (DvzClass dvzClass : DvzClass.values()) {
+                BaseClass c = dvzClass.getClassClass();
+                if (c == null || c.getClassItem() == null || c.getClassItem().getType() != item.getType()) {
                     continue;
                 }
-                if (item.getItemMeta().hasDisplayName()) {
-                    if (!CWUtil.integrateColor(c.getDisplayName()).equalsIgnoreCase(CWUtil.integrateColor(item.getItemMeta().getDisplayName()))) {
+                if ((c.getClassItem().hasItemMeta() && !item.hasItemMeta()) || (!c.getClassItem().hasItemMeta() && item.hasItemMeta())) {
+                    continue;
+                }
+                if (item.hasItemMeta()) {
+                    if ((c.getClassItem().getItemMeta().hasDisplayName() && !item.getItemMeta().hasDisplayName()) || (!c.getClassItem().getItemMeta().hasDisplayName() && item.getItemMeta().hasDisplayName())) {
                         continue;
                     }
+                    if (item.getItemMeta().hasDisplayName()) {
+                        if (!CWUtil.integrateColor(c.getDisplayName()).equalsIgnoreCase(CWUtil.integrateColor(item.getItemMeta().getDisplayName()))) {
+                            continue;
+                        }
+                    }
                 }
+                if (!dvz.getGM().isStarted()) {
+                    player.sendMessage(Util.formatMsg("&cThe game hasn't started yet!"));
+                    break;
+                }
+                if (dvzClass.getType() == ClassType.MONSTER && !dvz.getGM().isMonsters()) {
+                    player.sendMessage(Util.formatMsg("&cThe monsters haven't been released yet."));
+                    player.sendMessage(Util.formatMsg("&cSee &4/dvz &cfor more info."));
+                    break;
+                }
+                player.getInventory().clear();
+                player.updateInventory();
+                CWUtil.removeItemsFromHand(player, 1);
+                cwp.setClass(dvzClass, true);
             }
-            if (!dvz.getGM().isStarted()) {
-                player.sendMessage(Util.formatMsg("&cThe game hasn't started yet!"));
-                break;
-            }
-            if (dvzClass.getType() == ClassType.MONSTER && !dvz.getGM().isMonsters()) {
-                player.sendMessage(Util.formatMsg("&cThe monsters haven't been released yet."));
-                player.sendMessage(Util.formatMsg("&cSee &4/dvz &cfor more info."));
-                break;
-            }
-            player.getInventory().clear();
-            player.updateInventory();
-            CWUtil.removeItemsFromHand(player, 1);
-            cwp.setClass(dvzClass, true);
         }
     }
 

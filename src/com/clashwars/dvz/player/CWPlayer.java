@@ -57,9 +57,16 @@ public class CWPlayer {
 
     public void reset(boolean switchable) {
         Player player = getPlayer();
-        if (player == null || player.getGameMode() == GameMode.CREATIVE) {
+        if (player == null) {
             return;
         }
+
+        player.getInventory().clear();
+        player.getInventory().setHelmet(new CWItem(Material.AIR));
+        player.getInventory().setChestplate(new CWItem(Material.AIR));
+        player.getInventory().setLeggings(new CWItem(Material.AIR));
+        player.getInventory().setBoots(new CWItem(Material.AIR));
+        player.updateInventory();
 
         if (!switchable) {
             player.setMaxHealth(20);
@@ -80,12 +87,6 @@ public class CWPlayer {
                 player.removePotionEffect(pe.getType());
             }
         }
-
-        player.getInventory().clear();
-        player.getInventory().setHelmet(new CWItem(Material.AIR));
-        player.getInventory().setChestplate(new CWItem(Material.AIR));
-        player.getInventory().setLeggings(new CWItem(Material.AIR));
-        player.getInventory().setBoots(new CWItem(Material.AIR));
 
         if (teleport != null) {
             teleport.cancel();
@@ -191,7 +192,7 @@ public class CWPlayer {
                 }
                 savePlayer();
             }
-        }.runTaskLater(dvz, 10);
+        }.runTaskLater(dvz, 30);
     }
 
 

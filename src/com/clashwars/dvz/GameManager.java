@@ -89,9 +89,6 @@ public class GameManager {
         if (dvz.getMM().getActiveMap() != null) {
             //Tp all players to default world.
             for (Player player : Bukkit.getOnlinePlayers()) {
-                if (player.getGameMode() == GameMode.CREATIVE) {
-                    continue;
-                }
                 player.teleport(dvz.getCfg().getDefaultWorld().getSpawnLocation());
             }
 
@@ -158,9 +155,7 @@ public class GameManager {
         //Tp all players to active world.
         for (Player player : dvz.getServer().getOnlinePlayers()) {
             dvz.getPM().getPlayer(player).reset();
-            if (player.getGameMode() != GameMode.CREATIVE) {
-                player.teleport(dvz.getMM().getUsedWorld().getSpawnLocation());
-            }
+            player.teleport(dvz.getMM().getUsedWorld().getSpawnLocation());
         }
     }
 
@@ -175,9 +170,7 @@ public class GameManager {
         title.broadcast();
 
         for (Player player : dvz.getServer().getOnlinePlayers()) {
-            if (player.getGameMode() != GameMode.CREATIVE) {
-                dvz.getPM().getPlayer(player).giveClassItems(ClassType.DWARF, false);
-            }
+            dvz.getPM().getPlayer(player).giveClassItems(ClassType.DWARF, false);
         }
 
         getUsedWorld().setTime(23000);
