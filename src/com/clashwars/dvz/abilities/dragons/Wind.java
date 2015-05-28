@@ -48,7 +48,7 @@ public class Wind extends DragonAbility {
                         if (!(e instanceof LivingEntity) || e == player) {
                             continue;
                         }
-                        ((LivingEntity)e).damage(2);
+                        ((LivingEntity)e).damage(6);
                         e.setVelocity(e.getVelocity().add( player.getLocation().getDirection().multiply(1.5f) ));
                     }
 
