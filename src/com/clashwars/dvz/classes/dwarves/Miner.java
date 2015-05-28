@@ -66,15 +66,18 @@ public class Miner extends DwarfClass {
         //Particle effect for breaking blocks and drop ores/stone.
         final Material mat = block.getType();
         if (mat == Material.STONE) {
-            block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(mat, getIntOption("stone-drops")));
+            block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(Material.SMOOTH_BRICK, getIntOption("stone-drops")));
             ParticleEffect.SMOKE_NORMAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, block.getLocation().add(0.5f,0.5f,0.5f));
         } else if (mat == Material.DIAMOND_ORE) {
+            dvz.getPM().getPlayer(player).addClassExp(5);
             block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(mat, getIntOption("ore-drops")));
             ParticleEffect.CRIT_MAGIC.display(0.5f, 0.5f, 0.5f, 0.0001f, 20, block.getLocation().add(0.5f,0.5f,0.5f));
         } else if (mat == Material.GOLD_ORE) {
+            dvz.getPM().getPlayer(player).addClassExp(5);
             block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(mat, getIntOption("ore-drops")));
             ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 15, block.getLocation().add(0.5f,0.5f,0.5f));
         } else if (mat == Material.IRON_ORE) {
+            dvz.getPM().getPlayer(player).addClassExp(5);
             block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(mat, getIntOption("ore-drops")));
             ParticleEffect.CRIT.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, block.getLocation().add(0.5f,0.5f,0.5f));
         }
@@ -167,6 +170,9 @@ public class Miner extends DwarfClass {
                 player.updateInventory();
 
                 dvz.getPM().getPlayer(player).addClassExp(50);
+                // + 5 per ore mined
+                // + 5 per ore smelted
+                // = 70 per craft
                 return;
             }
         }

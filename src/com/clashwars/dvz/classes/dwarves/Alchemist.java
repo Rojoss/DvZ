@@ -96,6 +96,7 @@ public class Alchemist extends DwarfClass {
             player.playSound(block.getLocation(), Sound.SPLASH2, 1.0f, 2.0f);
             player.getItemInHand().setType(Material.WATER_BUCKET);
             block.setData((byte)0);
+            dvz.getPM().getPlayer(player).addClassExp(1);
         }
     }
 
@@ -153,6 +154,7 @@ public class Alchemist extends DwarfClass {
         if (block.getType() == Material.MELON_BLOCK) {
             event.setCancelled(false);
             block.getWorld().dropItem(block.getLocation(), Product.MELON.getItem());
+            dvz.getPM().getPlayer(player).addClassExp(3);
 
             new BukkitRunnable() {
                 @Override
@@ -179,6 +181,7 @@ public class Alchemist extends DwarfClass {
             CWItem sugar = Product.SUGAR.getItem();
             sugar.setAmount(sugarcane.size());
             block.getWorld().dropItem(block.getLocation(), sugar);
+            dvz.getPM().getPlayer(player).addClassExp(sugarcane.size());
 
             for (Block sugarcaneBlock : sugarcane) {
                 sugarcaneBlock.setType(Material.AIR);

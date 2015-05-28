@@ -64,6 +64,7 @@ public class Tailor extends DwarfClass {
         cwe.setSheared(true);
         entity.getWorld().dropItemNaturally(entity.getLocation(), Product.WOOL.getItem(getIntOption("wool-drop-amount")));
         player.playSound(entity.getLocation(), Sound.SHEEP_SHEAR, 1.0f, 1.0f);
+        dvz.getPM().getPlayer(player).addClassExp(1);
 
         final CWEntity sheep = cwe;
         new BukkitRunnable() {
@@ -101,6 +102,7 @@ public class Tailor extends DwarfClass {
         } else if (block.getData() == 1) {
             block.getWorld().dropItem(block.getLocation(), Product.DYE_2.getItem());
         }
+        dvz.getPM().getPlayer(player).addClassExp(5);
         block.setType(Material.AIR);
 
         new BukkitRunnable() {
@@ -178,6 +180,9 @@ public class Tailor extends DwarfClass {
                 player.updateInventory();
 
                 dvz.getPM().getPlayer(player).addClassExp(50);
+                // + 5 per flower broken
+                // + 1 per sheep sheared
+                // = 78
                 return;
             }
         }

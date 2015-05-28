@@ -91,6 +91,7 @@ public class FurnaceStruc extends Structure {
                 ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 5, player.getLocation());
                 menu.setSlot(new CWItem(Material.AIR), event.getSlot(), null);
                 furnaceItem.getResult().giveToPlayer(player);
+                dvz.getPM().getPlayer(player).addClassExp(furnaceItem.getXP());
             } else {
                 player.sendMessage(Util.formatMsg("&cThis item isn't done yet."));
             }
@@ -130,10 +131,10 @@ public class FurnaceStruc extends Structure {
 
 
     private void populateFurnaceItems() {
-        furnaceItems.add(new FurnaceItem(Product.RAW_PORK.getItem(), Product.COOKED_PORK.getItem(), 200));
-        furnaceItems.add(new FurnaceItem(Product.DIAMOND_ORE.getItem(), Product.DIAMOND.getItem(), 600));
-        furnaceItems.add(new FurnaceItem(Product.IRON_ORE.getItem(), Product.IRON_INGOT.getItem(), 500));
-        furnaceItems.add(new FurnaceItem(Product.GOLD_ORE.getItem(), Product.GOLD_INGOT.getItem(), 400));
+        furnaceItems.add(new FurnaceItem(Product.RAW_PORK.getItem(), Product.COOKED_PORK.getItem(), 200, 1));
+        furnaceItems.add(new FurnaceItem(Product.DIAMOND_ORE.getItem(), Product.DIAMOND.getItem(), 600, 5));
+        furnaceItems.add(new FurnaceItem(Product.IRON_ORE.getItem(), Product.IRON_INGOT.getItem(), 500, 5));
+        furnaceItems.add(new FurnaceItem(Product.GOLD_ORE.getItem(), Product.GOLD_INGOT.getItem(), 400, 5));
     }
 
     public FurnaceItem getFurnaceItem(Material type) {

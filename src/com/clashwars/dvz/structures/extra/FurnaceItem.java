@@ -7,11 +7,13 @@ public class FurnaceItem {
     private CWItem original;
     private CWItem result;
     private int cookDuration;
+    private int xp;
 
-    public FurnaceItem(CWItem original, CWItem result, int cookDuration) {
+    public FurnaceItem(CWItem original, CWItem result, int cookDuration, int xp) {
         this.original = original;
         this.result = result;
         this.cookDuration = cookDuration;
+        this.xp = xp;
     }
 
 
@@ -25,6 +27,10 @@ public class FurnaceItem {
 
     public int getCookDuration() {
         return cookDuration;
+    }
+
+    public int getXP() {
+        return xp;
     }
 
 }

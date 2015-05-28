@@ -115,6 +115,7 @@ public class Fletcher extends DwarfClass {
             CWItem pork = Product.RAW_PORK.getItem();
             pork.setAmount(getIntOption("pig-drop-amount"));
             entity.getWorld().dropItem(entity.getLocation(), pork);
+            cwp.addClassExp(1);
             ParticleEffect.PORTAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 8, entity.getLocation());
             ws.spawnAnimal(EntityType.PIG, 0);
             return;
@@ -127,8 +128,10 @@ public class Fletcher extends DwarfClass {
         if (loc.getBlockY() > ws.getCuboid().getMinY() + getIntOption("chicken-bonus-height")) {
             feathers.setAmount(2);
             ParticleEffect.VILLAGER_HAPPY.display(0.5f, 0.5f, 0.5f, 0.0001f, 8, entity.getLocation());
+            cwp.addClassExp(2);
         } else {
             ParticleEffect.PORTAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 8, entity.getLocation());
+            cwp.addClassExp(1);
         }
         entity.getWorld().dropItem(entity.getLocation(), feathers);
         ws.spawnAnimal(EntityType.CHICKEN, CWUtil.random(ws.getCuboid().getMaxY() + 10, ws.getCuboid().getMaxY() + 20));
@@ -190,6 +193,12 @@ public class Fletcher extends DwarfClass {
                 ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
 
                 dvz.getPM().getPlayer(player).addClassExp(50);
+                // + 1 per gravel
+                // + 1 per chicken
+                // + 2 per chicken in air
+                // + 1 per pig
+                // + 1 per pork cooked
+                // ~ 78
                 return;
     }
 }
@@ -218,5 +227,6 @@ public class Fletcher extends DwarfClass {
         if (CWUtil.randomFloat() <= getDoubleOption("flint-chance")) {
             block.getWorld().dropItemNaturally(block.getLocation().add(0.5f, 0.5f, 0.5f), Product.FLINT.getItem());
         }
+        dvz.getPM().getPlayer(player).addClassExp(1);
     }
 }
