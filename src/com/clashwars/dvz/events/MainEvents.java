@@ -15,6 +15,7 @@ import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
+import org.apache.logging.log4j.core.net.Priority;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,6 +27,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -104,9 +106,11 @@ public class MainEvents implements Listener {
             player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999999, 0));
         }
 
-        //Title title = new Title(titleStr, subtitleStr, 10, 100, 30);
-        //title.setTimingsToTicks();
-        //title.send(player);
+        player.sendMessage(CWUtil.integrateColor("&a&lTIP&8&l: &8\"&7" + dvz.getTM().getRandomTip() + "&8\""));
+
+        Title title = new Title(titleStr, subtitleStr, 10, 100, 30);
+        title.setTimingsToTicks();
+        title.send(player);
 
         CWUtil.setTab(player, " &8======== &6&lDwarves &2VS &c&lZombies &8========", " &6INFO &8>>> &9&lclashwars.com/info &8<<< &6INFO");
 
@@ -557,4 +561,21 @@ public class MainEvents implements Listener {
             }
         }
     }
+
+    @EventHandler
+    private void chat(final AsyncPlayerChatEvent event) {
+        //Tips based on keywords
+        final String tip = dvz.getTM().getTipFromChat(event.getMessage(), dvz.getPM().getPlayer(event.getPlayer()));
+        if (tip != null && !tip.isEmpty()) {
+            event.setMessage(event.getMessage() + "&a&l*");
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    event.getPlayer().sendMessage(CWUtil.integrateColor("&a&lTIP&8&l: &8\"&7" + tip + "&8\""));
+                }
+            }.runTaskLater(dvz, 5);
+        }
+    }
+
+
 }

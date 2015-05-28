@@ -16,6 +16,7 @@ import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.runnables.AntiCamp;
 import com.clashwars.dvz.runnables.GameRunnable;
 import com.clashwars.dvz.structures.internal.StructureType;
+import com.clashwars.dvz.tips.TipManager;
 import com.clashwars.dvz.util.ItemMenu;
 import com.gmail.filoghost.holograms.api.Hologram;
 import com.gmail.filoghost.holograms.api.HolographicDisplaysAPI;
@@ -29,6 +30,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.NameTagVisibility;
 
 import java.util.*;
@@ -58,8 +60,11 @@ public class DvZ extends JavaPlugin {
     private MapManager mm;
     private ClassManager cm;
     private PlayerManager pm;
+    private TipManager tm;
 
     private final Logger log = Logger.getLogger("Minecraft");
+
+    public GameRunnable gameRunnable;
 
     public Set<UUID> entities = new HashSet<UUID>();
     private List<Material> destroyableBlocks = Arrays.asList(new Material[] {Material.SMOOTH_BRICK, Material.STONE, Material.GRASS, Material.COBBLESTONE,
@@ -136,6 +141,7 @@ public class DvZ extends JavaPlugin {
         gm = new GameManager(this);
         cm = new ClassManager(this);
         pm = new PlayerManager(this);
+        tm = new TipManager();
 
         registerEvents();
 
@@ -165,7 +171,8 @@ public class DvZ extends JavaPlugin {
     }
 
     private void startRunnables() {
-        new GameRunnable(this).runTaskTimer(this, 0, 2);
+        gameRunnable = new GameRunnable(this);
+        gameRunnable.runTaskTimer(this, 0, 2);
         new AntiCamp(this).runTaskTimer(this, 40, getCfg().CAMP_DELAY_TICKS);
     }
 
@@ -267,6 +274,10 @@ public class DvZ extends JavaPlugin {
 
     public PlayerManager getPM() {
         return pm;
+    }
+
+    public TipManager getTM() {
+        return tm;
     }
 
 }

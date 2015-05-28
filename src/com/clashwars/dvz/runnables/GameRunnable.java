@@ -13,6 +13,7 @@ public class GameRunnable extends BukkitRunnable {
 
     private DvZ dvz;
     private GameManager gm;
+    private int ticks = 0;
 
 
     public GameRunnable(DvZ dvz) {
@@ -27,6 +28,12 @@ public class GameRunnable extends BukkitRunnable {
         }
         if (gm.getDragonSlayer() != null) {
             ParticleEffect.SPELL_WITCH.display(0.2f, 0.4f, 0.2f, 0.01f, 5, gm.getDragonSlayer().getLocation());
+        }
+
+        ticks++;
+        if (ticks >= 1200) {
+            dvz.getPM().savePlayers();
+            ticks = 0;
         }
 
         if (gm.isMonsters()) {
