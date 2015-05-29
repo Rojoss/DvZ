@@ -1,8 +1,6 @@
 package com.clashwars.dvz.player;
 
 import com.clashwars.cwcore.CooldownManager;
-import com.clashwars.cwcore.Debug;
-import com.clashwars.cwcore.effect.EffectType;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.ExpUtil;
@@ -20,7 +18,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
 
@@ -213,8 +210,15 @@ public class CWPlayer {
                 }
             }
             dvz.getBoard().getTeam(dvzClass.getTeam()).addPlayer(player);
-            //TODO: Maybe update the board? (not sure if it's neeeded)
         }
+
+        for (DvzClass dvzClasss : DvzClass.values()) {
+            String perm = "prefix." + dvzClasss.toString().toLowerCase();
+            if (dvz.getPerms().playerHas(player, perm)) {
+                dvz.getPerms().playerRemove(player, perm);
+            }
+        }
+        dvz.getPerms().playerAdd(player, "prefix." + getPlayerClass().toString().toLowerCase());
 
         for (int i = 9; i < menu.getSize(); i++) {
             if (menu.getItems()[i] != null && menu.getItems()[i].getType() != Material.AIR) {
