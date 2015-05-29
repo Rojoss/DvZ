@@ -102,10 +102,6 @@ public class MainEvents implements Listener {
             }
         }
 
-        if (cwp.getPlayerClass().getType() == ClassType.DWARF) {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999999, 0));
-        }
-
         player.sendMessage(CWUtil.integrateColor("&a&lTIP&8&l: &8\"&7" + dvz.getTM().getRandomTip() + "&8\""));
 
         Title title = new Title(titleStr, subtitleStr, 10, 100, 30);

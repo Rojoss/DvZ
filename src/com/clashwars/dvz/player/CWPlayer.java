@@ -188,7 +188,6 @@ public class CWPlayer {
                 }
                 if (c.getType() == ClassType.DWARF) {
                     player.sendMessage(CWUtil.integrateColor("&8&l❝&7" + c.getTask() + "&8&l❞"));
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999999, 0));
                 }
                 savePlayer();
             }
