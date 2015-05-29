@@ -1,8 +1,11 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.cuboid.Cuboid;
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.maps.DvzMap;
 import com.clashwars.dvz.player.CWPlayer;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -96,6 +99,22 @@ public class ProtectEvents implements Listener {
         if (gm.isDwarves() && cwp.isDwarf()) {
             if (dvz.getMM().getActiveMap() == null || dvz.getMM().getActiveMap().getCuboid("innerwall").contains(event.getBlock())) {
                 event.setCancelled(true);
+            }
+        }
+
+        //Don't allow near shrines
+        DvzMap activeMap = dvz.getMM().getActiveMap();
+        if (activeMap != null) {
+            String[] shrines = new String[] {"shrinewall", "shrine1keep", "shrine2keep"};
+            for (String shrineName : shrines) {
+                Cuboid cub = activeMap.getCuboid(shrineName);
+                if (cub != null && cub.getCenterLoc() != null) {
+                    if (cub.getCenterLoc().distance(event.getBlock().getLocation()) < 10) {
+                        CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("Can't build this close to the shrine!"));
+                        event.setCancelled(true);
+                        return;
+                    }
+                }
             }
         }
     }
