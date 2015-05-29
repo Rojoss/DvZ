@@ -1,25 +1,17 @@
 package com.clashwars.dvz.events;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
-import com.clashwars.dvz.DvZ;
-import com.clashwars.dvz.GameManager;
-import com.clashwars.dvz.GameState;
-import com.clashwars.dvz.Product;
+import com.clashwars.dvz.*;
 import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
-import org.apache.logging.log4j.core.net.Priority;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.enchantments.Enchantment;
@@ -27,13 +19,9 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
@@ -232,7 +220,7 @@ public class MainEvents implements Listener {
                     cwp.giveClassItems(ClassType.MONSTER, suicide);
                 }
             }
-        }.runTaskLater(dvz, 5);
+        }.runTaskLater(dvz, 15);
     }
 
 

@@ -248,6 +248,7 @@ public class CWPlayer {
                 CWPlayer cwp = dvz.getPM().getPlayer(player);
                 if (forcePrevious) {
                     if (type == ClassType.MONSTER) {
+                        DvzClass.ZOMBIE.getClassClass().getClassItem().giveToPlayer(player);
                         if (cwp.getClassOptions() != null && !cwp.getClassOptions().contains(DvzClass.ZOMBIE)) {
                             cwp.getClassOptions().add(DvzClass.ZOMBIE);
                         }
