@@ -43,12 +43,12 @@ public class Miner extends DwarfClass {
 
     @EventHandler(priority = EventPriority.HIGH)
     private void blockBreak(BlockBreakEvent event) {
-        Block block = event.getBlock();
+        final Block block = event.getBlock();
         if (!mineableMaterials.contains(block.getType())) {
             return;
         }
 
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
         if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.MINER) {
             return;
         }
@@ -85,6 +85,11 @@ public class Miner extends DwarfClass {
         new BukkitRunnable() {
             @Override
             public void run() {
+                if (!dvz.getPM().locGetWorkShop(block.getLocation()).getOwner().getName().equalsIgnoreCase(player.getName())) {
+                    cancel();
+                    return;
+                }
+
                 //Get a list of all blocks that are currently air.
                 List<Block> airBlocks = new ArrayList<Block>();
                 List<Block> stoneblocks = new ArrayList<Block>();
