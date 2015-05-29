@@ -68,7 +68,11 @@ public class ShrineBlock {
     }
 
     public void damage() {
-        this.hp -= dvz.getCfg().SHRINE__DAMAGE_PER_HIT;
+        damage(dvz.getCfg().SHRINE__DAMAGE_PER_HIT);
+    }
+
+    public void damage(int amount) {
+        this.hp -= amount;
         if (this.hp <= 0) {
             destroy();
             return;
