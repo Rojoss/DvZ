@@ -59,14 +59,14 @@ public class TipManager {
         addTip("&7Hold the item you want to enchant, open the enchanting structure, click the enchant you want. (You pay full XP price for upgrades!)", DvzClass.DWARF, new String[] {"how", "enchant|enchanting|enchantments|enchantment"});
         addTip("&7Swords, bows and armor can be enchanted. Each item has different enchantments that can be applied!", DvzClass.DWARF, new String[] {"what", "enchant|enchanting|enchantments|enchantment"});
         addTip("&7You gain experience by doing your tasks. Experience is used for enchanting!", DvzClass.DWARF, new String[] {"how|get|where", "xp|exp|experience"});
-        addTip("&7You can teleport to your workshop (if you have one) by using &2/dvz ws&7!", DvzClass.DWARF, new String[] {"tp|teleport|tele|go|back", "workshop|ws"});
-        addTip("&7You can teleport to the keep by using &2/dvz keep&7!", DvzClass.DWARF, new String[] {"tp|teleport|tele|go|back", "keep|mountain|fortress|dwarf"});
-        addTip("&7You can teleport to the top shrine by using &2/dvz shrine&7!", DvzClass.DWARF, new String[] {"tp|teleport|tele|go|back", "top|shrine"});
-        addTip("&7You can teleport to the front wall by using &2/dvz wall&7!", DvzClass.DWARF, new String[] {"tp|teleport|tele|go|back", "wall|bigwall|frontwall|outerwall"});
-        addTip("&7Use &2/dvz {wall,shrine,keep,ws} &7for teleportation!", DvzClass.DWARF, new String[] {"tp|teleport|tele"});
+        addTip("&7You can teleport to your workshop (if you have one) by using &a/dvz ws&7!", DvzClass.DWARF, new String[] {"tp|teleport|tele|go|back", "workshop|ws"});
+        addTip("&7You can teleport to the keep by using &a/dvz keep&7!", DvzClass.DWARF, new String[] {"tp|teleport|tele|go|back", "keep|mountain|fortress|dwarf"});
+        addTip("&7You can teleport to the top shrine by using &a/dvz shrine&7!", DvzClass.DWARF, new String[] {"tp|teleport|tele|go|back", "top|shrine"});
+        addTip("&7You can teleport to the front wall by using &a/dvz wall&7!", DvzClass.DWARF, new String[] {"tp|teleport|tele|go|back", "wall|bigwall|frontwall|outerwall"});
+        addTip("&7Use &a/dvz {wall,shrine,keep,ws} &7for teleportation!", DvzClass.DWARF, new String[] {"tp|teleport|tele"});
         addTip("&7At the second night (mc time) the dragon will arise. When the dragon dies the monsters will come!", DvzClass.DWARF, new String[] {"time|long|when", "left|remaining|dragon|dragons"});
         addTip("&7To create your workshop place down the workbench on one of the pistons outside the keep!", DvzClass.DWARF, new String[] {"build|place|create|spawn", "workshop|ws"});
-        addTip("&7You can switch to another class by using &2/dvz switch&7! You can only switch to the classes you received at the start and you will keep your items.", DvzClass.DWARF, new String[] {"switch|swap|change|become", "class|classes|dwarf"});
+        addTip("&7You can switch to another class by using &a/dvz switch&7! You can only switch to the classes you received at the start and you will keep your items.", DvzClass.DWARF, new String[] {"switch|swap|change|become", "class|classes|dwarf"});
 
 
         //-- MONSTERS

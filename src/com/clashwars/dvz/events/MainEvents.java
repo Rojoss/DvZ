@@ -90,8 +90,6 @@ public class MainEvents implements Listener {
             }
         }
 
-        player.sendMessage(CWUtil.integrateColor("&a&lTIP&8&l: &8\"&7" + dvz.getTM().getRandomTip() + "&8\""));
-
         Title title = new Title(titleStr, subtitleStr, 10, 100, 30);
         title.setTimingsToTicks();
         title.send(player);
@@ -553,11 +551,14 @@ public class MainEvents implements Listener {
         //Tips based on keywords
         final String tip = dvz.getTM().getTipFromChat(event.getMessage(), dvz.getPM().getPlayer(event.getPlayer()));
         if (tip != null && !tip.isEmpty()) {
-            event.setMessage(event.getMessage() + "&a&l*");
+            if (event.getMessage().startsWith("!") || event.getMessage().startsWith("?")) {
+                event.setCancelled(true);
+            }
+            event.setMessage(event.getMessage() + "*");
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    event.getPlayer().sendMessage(CWUtil.integrateColor("&a&lTIP&8&l: &8\"&7" + tip + "&8\""));
+                    event.getPlayer().sendMessage(CWUtil.integrateColor("&2&lINFO&8&l: &7" + tip));
                 }
             }.runTaskLater(dvz, 5);
         }
