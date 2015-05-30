@@ -7,6 +7,7 @@ import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TipManager {
@@ -126,8 +127,8 @@ public class TipManager {
     }
 
     public String getTipFromChat(String chatMsg, CWPlayer cwp) {
-        String[] chatWords = chatMsg.toLowerCase().split(" ");
-        if (chatWords.length < 1) {
+        List<String> chatWords = Arrays.asList(chatMsg.toLowerCase().split(" "));
+        if (chatWords.size() < 1) {
             return "";
         }
         for (Tip tip : tips) {
@@ -156,13 +157,8 @@ public class TipManager {
                 //Keywords can have multiple worlds and at least one of them needs to exist in chat msg.
                 boolean wordMatch = false;
                 for (String word : keyword.getWords()) {
-                    for (String chatWord : chatWords) {
-                        if (chatWord.equals(word)) {
-                            wordMatch = true;
-                            break;
-                        }
-                    }
-                    if (wordMatch == true) {
+                    if (chatWords.contains(word)) {
+                        wordMatch = true;
                         break;
                     }
                 }

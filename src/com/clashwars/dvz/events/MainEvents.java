@@ -549,11 +549,14 @@ public class MainEvents implements Listener {
     @EventHandler
     private void chat(final AsyncPlayerChatEvent event) {
         //Tips based on keywords
-        final String tip = dvz.getTM().getTipFromChat(event.getMessage(), dvz.getPM().getPlayer(event.getPlayer()));
-        if (tip != null && !tip.isEmpty()) {
-            if (event.getMessage().startsWith("!") || event.getMessage().startsWith("?")) {
-                event.setCancelled(true);
+        final String tip = dvz.getTM().getTipFromChat(event.getMessage().replaceAll("[^a-zA-Z ]", ""), dvz.getPM().getPlayer(event.getPlayer()));
+        if (event.getMessage().startsWith("!") || event.getMessage().startsWith("?")) {
+            event.setCancelled(true);
+            if (tip == null || tip.isEmpty()) {
+                event.getPlayer().sendMessage(Util.formatMsg("&cNo answer to this question. (Remove the ! or ? from the start of your message to chat normally)"));
             }
+        }
+        if (tip != null && !tip.isEmpty()) {
             event.setMessage(event.getMessage() + "*");
             new BukkitRunnable() {
                 @Override
