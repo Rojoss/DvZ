@@ -254,7 +254,9 @@ public class CWPlayer {
                         }
                     }
                     for (DvzClass c : cwp.getClassOptions()) {
-                        dvz.getCM().getClass(c).getClassItem().giveToPlayer(player);
+                        if (dvz.getCM().getClass(c) != null && dvz.getCM().getClass(c).getClassItem() != null) {
+                            dvz.getCM().getClass(c).getClassItem().giveToPlayer(player);
+                        }
                     }
                     return;
                 }
@@ -268,7 +270,9 @@ public class CWPlayer {
                     }
                 }
                 for (DvzClass c : classOptions.keySet()) {
-                    classOptions.get(c).getClassItem().giveToPlayer(player);
+                    if (classOptions.get(c) != null && classOptions.get(c).getClassItem() != null) {
+                        classOptions.get(c).getClassItem().giveToPlayer(player);
+                    }
                 }
             }
         }.runTaskLater(dvz, 5);
