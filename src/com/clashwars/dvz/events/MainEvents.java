@@ -58,7 +58,7 @@ public class MainEvents implements Listener {
 
         String titleStr = "&6Welcome to &6&lDvZ&6!";
         String subtitleStr = "";
-        if (cwp.getClassOptions() != null && !cwp.getClassOptions().isEmpty()) {
+        if (cwp.getPlayerClass() != null && !cwp.getPlayerClass().isBaseClass()) {
             titleStr = "&6Welcome back to &6&lDvZ&6!";
             subtitleStr = "&9You have joined dvz as a " + cwp.getPlayerClass().getClassClass().getDisplayName() + "&9!";
             player.sendMessage(Util.formatMsg("&6Welcome back!"));
@@ -73,9 +73,9 @@ public class MainEvents implements Listener {
                     spawnLoc = dvz.getMM().getActiveMap().getLocation("lobby");
                 }
                 subtitleStr = "&9You have joined DvZ as a &8Dwarf&9!";
-            } else if (gm.isMonsters()) {
+            } else if (gm.isMonsters() || gm.getState() == GameState.DRAGON) {
                 player.sendMessage(Util.formatMsg("&6You have joined DvZ as a &4Monster&6!"));
-                player.sendMessage(Util.formatMsg("&6This is because the dragon has been killed already."));
+                player.sendMessage(Util.formatMsg("&6This is because the dragon has been released already."));
                 cwp.setPlayerClass(DvzClass.MONSTER);
                 cwp.giveClassItems(ClassType.MONSTER, false);
                 if (dvz.getMM().getActiveMap() != null && dvz.getMM().getActiveMap().getLocation("monsterlobby") != null) {
