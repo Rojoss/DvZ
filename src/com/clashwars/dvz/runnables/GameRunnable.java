@@ -73,7 +73,7 @@ public class GameRunnable extends BukkitRunnable {
             }
 
             if (shrineBlocks != null && center != null && shrineBlocks.size() > 0) {
-                List<Entity> nearbyEntities = CWUtil.getNearbyEntities(center, 20f, Arrays.asList(new EntityType[] {EntityType.PLAYER}));
+                List<Entity> nearbyEntities = CWUtil.getNearbyEntities(center, 75f, Arrays.asList(new EntityType[] {EntityType.PLAYER}));
                 int dwarfCount = 0;
                 for (Entity e : nearbyEntities) {
                     CWPlayer cwp = dvz.getPM().getPlayer((Player)e);
@@ -81,7 +81,7 @@ public class GameRunnable extends BukkitRunnable {
                         dwarfCount++;
                     }
                 }
-                if (dwarfCount <= Math.round(dvz.getPM().getPlayers(ClassType.DWARF, true).size() * 0.3f)) {
+                if (dwarfCount <= Math.round(dvz.getPM().getPlayers(ClassType.DWARF, true).size() * 0.2f)) {
                     for (ShrineBlock shrineBlock : shrineBlocks) {
                         if (shrineBlock != null && !shrineBlock.isDestroyed()) {
                             shrineBlock.damage();

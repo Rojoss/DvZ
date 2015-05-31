@@ -1,5 +1,6 @@
 package com.clashwars.dvz;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
@@ -18,6 +19,7 @@ import com.clashwars.dvz.util.Util;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
@@ -214,8 +216,15 @@ public class GameManager {
         player.setFlying(true);
         setState(GameState.DRAGON);
 
-        player.setMaxHealth(20 + dvz.getPM().getPlayers(ClassType.DWARF, true).size() * 2);
-        player.setHealth(player.getMaxHealth());
+        final Player dragonPlayer = player;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                double health = 20 + dvz.getPM().getPlayers(ClassType.DWARF, true).size() * 2;
+                dragonPlayer.setMaxHealth(health);
+                dragonPlayer.setHealth(health);
+            }
+        }.runTaskLater(dvz, 60);
         new DragonRunnable(dvz).runTaskTimer(dvz, 100, 100);
     }
 

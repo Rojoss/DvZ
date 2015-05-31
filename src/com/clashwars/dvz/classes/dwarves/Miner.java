@@ -85,7 +85,7 @@ public class Miner extends DwarfClass {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!dvz.getPM().locGetWorkShop(block.getLocation()).getOwner().getName().equalsIgnoreCase(player.getName())) {
+                if (dvz.getPM().locGetWorkShop(block.getLocation()) == null || !dvz.getPM().locGetWorkShop(block.getLocation()).getOwner().getName().equalsIgnoreCase(player.getName())) {
                     cancel();
                     return;
                 }
