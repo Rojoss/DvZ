@@ -64,13 +64,13 @@ public class Fireball extends MobAbility {
         }
 
         Player player = (Player) event.getEntity().getShooter();
-        Location l = event.getEntity().getLocation();
+        final Location l = event.getEntity().getLocation();
 
         if (!getDvzClasses().contains(dvz.getPM().getPlayer(player).getPlayerClass())) {
             return;
         }
 
-        int radius = getIntOption("fire-radius");
+        final int radius = getIntOption("fire-radius");
 
         for(int x = l.getBlockX() - radius; x <= l.getBlockX() + radius; x++) {
             for(int y = l.getBlockY() - radius; y <= l.getBlockY() + radius; y++) {
@@ -80,16 +80,6 @@ public class Fireball extends MobAbility {
                         if (b.getRelative(BlockFace.UP).getType() == Material.AIR) {
                             if (CWUtil.randomFloat() <= getDoubleOption("fire-chance")) {
                                 b.getRelative(BlockFace.UP).setType(Material.FIRE);
-                                final Location blockLoc = b.getLocation();
-                                new BukkitRunnable() {
-                                    @Override
-                                    public void run() {
-                                        if (blockLoc.getBlock().getType() == Material.FIRE) {
-                                            blockLoc.getBlock().setType(Material.AIR);
-                                        }
-
-                                    }
-                                }.runTaskLater(dvz, 200);
                                 //TODO: Add sound and particle effects.
                             }
                         }
@@ -97,6 +87,22 @@ public class Fireball extends MobAbility {
                 }
             }
         }
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for(int x = l.getBlockX() - radius; x <= l.getBlockX() + radius; x++) {
+                    for (int y = l.getBlockY() - radius; y <= l.getBlockY() + radius; y++) {
+                        for (int z = l.getBlockZ() - radius; z <= l.getBlockZ() + radius; z++) {
+                            Block b = l.getWorld().getBlockAt(x, y, z).getRelative(BlockFace.UP);
+                            if (b.getType() == Material.FIRE) {
+                                b.setType(Material.AIR);
+                            }
+                        }
+                    }
+                }
+            }
+        }.runTaskLater(dvz, 200);
 
     }
 
