@@ -1,5 +1,6 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.packet.Title;
@@ -23,10 +24,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -591,5 +594,29 @@ public class MainEvents implements Listener {
             }
         }.runTaskLater(dvz, 200);
 
+    }
+
+    @EventHandler
+    private void inventoryClick(InventoryClickEvent event) {
+        String itemName = "";
+        if (event.getCurrentItem().hasItemMeta()) {
+            ItemMeta meta = event.getCurrentItem().getItemMeta();
+            if (meta.hasDisplayName()) {
+                itemName = CWUtil.removeColour(meta.getDisplayName());
+            }
+        }
+        for (DvzClass dvzClass : DvzClass.values()) {
+            if (dvzClass == null || dvzClass.getClassClass() == null || dvzClass.getClassClass().getClassItem() == null) {
+                continue;
+            }
+            if (CWUtil.removeColour(dvzClass.getClassClass().getClassItem().getName()).equals(itemName)) {
+                Player player = (Player)event.getWhoClicked();
+                player.getInventory().clear();
+                player.updateInventory();
+                CWUtil.removeItemsFromHand(player, 1);
+                dvz.getPM().getPlayer(player).setClass(dvzClass, true);
+                break;
+            }
+        }
     }
 }
