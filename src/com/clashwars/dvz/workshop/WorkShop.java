@@ -1,5 +1,6 @@
 package com.clashwars.dvz.workshop;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.dependencies.CWWorldGuard;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -41,7 +42,7 @@ public class WorkShop {
 
 
     public boolean build(Location origin) {
-        List<Integer> degrees = Arrays.asList(new Integer[] {0,90,180,270});
+        List<Integer> degrees = Arrays.asList(new Integer[] {180,270,360});
         try {
             //Get a random workshop based on type.
             int typeID = CWUtil.random(0, data.getType().getClassClass().getIntOption("workshop-types")-1);
