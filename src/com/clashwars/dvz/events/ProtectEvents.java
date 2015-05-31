@@ -110,7 +110,7 @@ public class ProtectEvents implements Listener {
                 Cuboid cub = activeMap.getCuboid(shrineName);
                 if (cub != null && cub.getCenterLoc() != null) {
                     if (cub.getCenterLoc().distance(event.getBlock().getLocation()) < 10) {
-                        CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("Can't build this close to the shrine!"));
+                        CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&cCan't build this close to the shrine!"));
                         event.setCancelled(true);
                         return;
                     }
