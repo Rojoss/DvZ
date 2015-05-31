@@ -553,7 +553,7 @@ public class MainEvents implements Listener {
     private void chat(final AsyncPlayerChatEvent event) {
         //Tips based on keywords
         final String tip = dvz.getTM().getTipFromChat(event.getMessage().replaceAll("[^a-zA-Z ]", ""), dvz.getPM().getPlayer(event.getPlayer()));
-        if (event.getMessage().startsWith("!") || event.getMessage().startsWith("?")) {
+        if (event.getMessage().startsWith("!") || event.getMessage().startsWith("?") && event.getMessage().length() > 3) {
             event.setCancelled(true);
             if (tip == null || tip.isEmpty()) {
                 event.getPlayer().sendMessage(Util.formatMsg("&cNo answer to this question. (Remove the ! or ? from the start of your message to chat normally)"));
