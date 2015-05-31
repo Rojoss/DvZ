@@ -228,7 +228,7 @@ public class GameManager {
         cwp.setClass(dragonType, true);
         player.setAllowFlight(true);
         player.setFlying(true);
-        if (force) {
+        if (!force) {
             setState(GameState.DRAGON);
         }
 
