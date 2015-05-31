@@ -179,11 +179,12 @@ public class DvZ extends JavaPlugin {
     private void setupBoard() {
         cwb = CWBoard.get("dvz");
         cwb.init(true);
-        cwb.addTeam("builder", "&e", "", "&eBuilder", true, true, NameTagVisibility.ALWAYS);
+        cwb.addTeam("builder", "&9", "", "&eBuilder", true, true, NameTagVisibility.ALWAYS);
         cwb.addTeam("miner", "&8", "", "&8Minrt", true, true, NameTagVisibility.ALWAYS);
         cwb.addTeam("tailor", "&3", "", "&3Tailor", true, true, NameTagVisibility.ALWAYS);
         cwb.addTeam("fletcher", "&2", "", "&2Fletcher", true, true, NameTagVisibility.ALWAYS);
         cwb.addTeam("alchemist", "&5", "", "&5Alchemist", true, true, NameTagVisibility.ALWAYS);
+        cwb.addTeam("baker", "&6", "", "&5Alchemist", true, true, NameTagVisibility.ALWAYS);
         cwb.addTeam("monster", "&c", "", "&cMonster", false, true, NameTagVisibility.ALWAYS);
         cwb.addTeam("dragonslayer", "&d", "", "&dDragon-Slayer", true, true, NameTagVisibility.ALWAYS);
         cwb.show();

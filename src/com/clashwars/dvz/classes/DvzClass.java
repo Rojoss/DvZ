@@ -19,6 +19,7 @@ public enum DvzClass {
     FLETCHER(ClassType.DWARF, "fletcher", new Fletcher(), new String[]{"fletchers", "hunter", "hunters"}),
     TAILOR(ClassType.DWARF, "tailor", new Tailor(), new String[]{"tailors"}),
     ALCHEMIST(ClassType.DWARF, "alchemist", new Alchemist(), new String[]{"alchemists", "brewer", "brewers"}),
+    BAKER(ClassType.DWARF, "baker", new Baker(), new String[]{"bakers"}),
 
     MONSTER(ClassType.BASE, "monster", new MobClass(), new String[]{"monsters", "mob", "mobs"}),
     ZOMBIE(ClassType.MONSTER, "monster", new Zombie(), new String[]{"zombies"}),

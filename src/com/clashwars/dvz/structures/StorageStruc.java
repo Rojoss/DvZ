@@ -43,6 +43,7 @@ public class StorageStruc extends Structure {
         menu.setSlot(new CWItem(Material.BOW).setName("&2&lFletcher Items"), 9, null);
         menu.setSlot(new CWItem(Material.SHEARS).setName("&3&lTailor Items"), 18, null);
         menu.setSlot(new CWItem(Material.POTION).setName("&5&lAlchemist Items"), 27, null);
+        menu.setSlot(new CWItem(Material.WHEAT).setName("&6&lBaker Items"), 36, null);
 
         //Load in items from config
         for (String name : dvz.getGameCfg().STORAGE_PRODUCTS.keySet()) {
@@ -241,6 +242,8 @@ public class StorageStruc extends Structure {
 
         items.add(new StorageItem("&dHealth Potions", 29, Ability.HEAL_POTION.getAbilityClass().getCastItem(), DvzClass.ALCHEMIST, 2));
         items.add(new StorageItem("&bSpeed Potions", 30, Ability.SPEED_POTION.getAbilityClass().getCastItem(), DvzClass.ALCHEMIST, 2));
+
+        items.add(new StorageItem("&6Bread", 38, Product.BREAD.getItem(), DvzClass.BAKER, 32));
     }
 
 

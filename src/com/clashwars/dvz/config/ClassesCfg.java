@@ -98,6 +98,10 @@ public class ClassesCfg extends EasyConfig {
                 classData = loadDefault(classData, "melon-respawn-time", "600");
                 classData = loadDefault(classData, "sugarcane-respawn-time", "200");
                 break;
+            case BAKER:
+                classData = loadDefault(classData, "workshop-types", "1");
+                classData = loadDefault(classData, "wheat-per-flour", "5");
+                break;
         }
 
         return classData;

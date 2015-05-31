@@ -4,7 +4,7 @@ public class StorageData {
 
     public String region = "struc-storage";
 
-    public int guiSize = 36;
+    public int guiSize = 45;
     public String guiTitle = "&1&lShared Storage";
 
     public String getRegion() {

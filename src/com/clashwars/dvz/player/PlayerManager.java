@@ -56,6 +56,9 @@ public class PlayerManager {
                 case ALCHEMIST:
                     ws = new AlchemistWorkshop(uuid, cfgWorkshops.get(uuid));
                     break;
+                case BAKER:
+                    ws = new BakerWorkshop(uuid, cfgWorkshops.get(uuid));
+                    break;
                 default:
                     ws = new WorkShop(uuid, cfgWorkshops.get(uuid));
             }
@@ -108,6 +111,9 @@ public class PlayerManager {
                     break;
                 case ALCHEMIST:
                     ws = new AlchemistWorkshop(uuid, new WorkShopData());
+                    break;
+                case BAKER:
+                    ws = new BakerWorkshop(uuid, new WorkShopData());
                     break;
                 default:
                     break;

@@ -203,6 +203,14 @@ public class ProtectEvents implements Listener {
             event.setCancelled(true);
             return;
         }
+
+        //Don't allow if it has a owner.
+        if (event.getItem().hasMetadata("owner")) {
+            if (!event.getItem().getMetadata("owner").get(0).asString().equals(event.getPlayer().getName())) {
+                event.setCancelled(true);
+                return;
+            }
+        }
     }
 
 

@@ -2,7 +2,10 @@ package com.clashwars.dvz;
 
 import com.clashwars.cwcore.helpers.CWItem;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 
 public enum Product {
 
@@ -40,7 +43,12 @@ public enum Product {
     MELON(new CWItem(Material.MELON), false),
     SUGAR(new CWItem(Material.SUGAR), false),
     HEAL_POTION(new CWItem(Material.POTION, 1, (byte)8197), true),
-    SPEED_POTION(new CWItem(Material.POTION, 1, (byte)8194), true);
+    SPEED_POTION(new CWItem(Material.POTION, 1, (byte)8194), true),
+
+    WHEAT(new CWItem(Material.WHEAT), false),
+    FLOUR(new CWItem(Material.SUGAR, 1, (byte)0, "&eFlour"), false),
+    BREAD(new CWItem(Material.BREAD), true),
+    SEED(new CWItem(Material.SEEDS), false);
 
 
     private CWItem item;
