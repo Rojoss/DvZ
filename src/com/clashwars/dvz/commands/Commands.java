@@ -590,7 +590,7 @@ public class Commands {
 
                     gm.setDragonPlayer(player.getUniqueId());
                     if (gm.getState() == GameState.NIGHT_TWO) {
-                        gm.createDragon();
+                        gm.createDragon(false);
                     } else {
                         player.sendMessage(Util.formatMsg("&6You will be the " + CWUtil.capitalize(gm.getDragonType().toString().toLowerCase()) + " when the second night falls."));
                     }
@@ -635,7 +635,14 @@ public class Commands {
                     cwp.resetData();
                     cwp.undisguise();
                     dvz.getPM().removeWorkshop(player);
-                    cwp.setClass(dvzClass);
+
+                    if (dvzClass.getType() == ClassType.DRAGON) {
+                        dvz.getGM().setDragonPlayer(player.getUniqueId());
+                        dvz.getGM().setDragonType(dvzClass);
+                        dvz.getGM().createDragon(true);
+                    } else {
+                        cwp.setClass(dvzClass);
+                    }
                     player.sendMessage(Util.formatMsg("&6Your class has been set to &5" + args[1]));
                     return true;
                 }

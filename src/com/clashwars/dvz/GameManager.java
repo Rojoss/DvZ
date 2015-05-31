@@ -180,9 +180,12 @@ public class GameManager {
     }
 
 
-    public void createDragon() {
+    public void createDragon(boolean force) {
         Player player = getDragonPlayer();
         if (player == null) {
+            if (force) {
+                return;
+            }
             for (Player p : dvz.getServer().getOnlinePlayers()) {
                 if (p.isOp() || p.hasPermission("dvz.admin")) {
                     p.sendMessage(Util.formatMsg("&cNo dragon was set up so you have been set as dragon!"));
@@ -194,6 +197,9 @@ public class GameManager {
                 }
             }
         }
+        if (force && player == null) {
+            return;
+        }
         if (player == null) {
             Bukkit.broadcastMessage(Util.formatMsg("&4&lThere is no staff member to player the dragon. &c&lPlease wait..."));
             Bukkit.broadcastMessage(Util.formatMsg("&7If there has been no dragon when the sun rises again, the monsters will be automatically released. Random dwarves will be killed!"));
@@ -204,9 +210,17 @@ public class GameManager {
 
         Bukkit.broadcastMessage(CWUtil.integrateColor("&7======= &a&lThe " + dragonType.getClassClass().getDisplayName() + " &a&larises! &7======="));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Stop working and get to the walls!"));
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Kill the dragon and become the &bDragonSlayer&7!"));
+        if (getDragonPlayer() == null) {
+            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Kill the dragon and become the &bDragonSlayer&7!"));
+        }
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &8Remember: &7If you die you become a monster."));
-        Title title = new Title("&a&lThe " + dragonType.getClassClass().getDisplayName() + " &a&larises!", "&7Kill the dragon and become the &bDragonSlayer&7!", 10, 50, 30);
+
+        Title title;
+        if (getDragonPlayer() == null) {
+            title = new Title("&a&lThe " + dragonType.getClassClass().getDisplayName() + " &a&larises!", "&7Kill the dragon and become the &bDragonSlayer&7!", 10, 50, 30);
+        } else {
+            title = new Title("&a&lThe " + dragonType.getClassClass().getDisplayName() + " &a&larises!", "", 10, 50, 30);
+        }
         title.setTimingsToTicks();
         title.broadcast();
 
@@ -214,7 +228,9 @@ public class GameManager {
         cwp.setClass(dragonType, true);
         player.setAllowFlight(true);
         player.setFlying(true);
-        setState(GameState.DRAGON);
+        if (force) {
+            setState(GameState.DRAGON);
+        }
 
         final Player dragonPlayer = player;
         new BukkitRunnable() {

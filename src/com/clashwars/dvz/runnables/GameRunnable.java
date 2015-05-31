@@ -105,7 +105,7 @@ public class GameRunnable extends BukkitRunnable {
             }
             if (gm.getState() == GameState.DAY_TWO) {
                 gm.setState(GameState.DRAGON);
-                gm.createDragon();
+                gm.createDragon(false);
             }
         } else if (time > 22500 || time < 14000) {
             if (gm.getState() == GameState.NIGHT_ONE) {
