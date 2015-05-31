@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class Fireball extends MobAbility {
 
@@ -79,6 +80,16 @@ public class Fireball extends MobAbility {
                         if (b.getRelative(BlockFace.UP).getType() == Material.AIR) {
                             if (CWUtil.randomFloat() <= getDoubleOption("fire-chance")) {
                                 b.getRelative(BlockFace.UP).setType(Material.FIRE);
+                                final Location blockLoc = b.getLocation();
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        if (blockLoc.getBlock().getType() == Material.FIRE) {
+                                            blockLoc.getBlock().setType(Material.AIR);
+                                        }
+
+                                    }
+                                }.runTaskLater(dvz, 600)
                                 //TODO: Add sound and particle effects.
                             }
                         }
