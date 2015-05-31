@@ -4,6 +4,7 @@ import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.dependencies.CWWorldGuard;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.cwcore.utils.RandomUtils;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
 import com.sk89q.minecraft.util.commands.CommandException;
@@ -17,6 +18,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,11 +41,12 @@ public class WorkShop {
 
 
     public boolean build(Location origin) {
+        List<Integer> degrees = Arrays.asList(new Integer[] {0,90,180,270});
         try {
             //Get a random workshop based on type.
             int typeID = CWUtil.random(0, data.getType().getClassClass().getIntOption("workshop-types")-1);
             //Try and paste the schematic.
-            CuboidClipboard cc = CWWorldGuard.pasteSchematic(origin.getWorld(), CWWorldGuard.getSchematicFile("ws-" + data.getType().toString().toLowerCase() + "-" + typeID), origin, true, 0, true);
+            CuboidClipboard cc = CWWorldGuard.pasteSchematic(origin.getWorld(), CWWorldGuard.getSchematicFile("ws-" + data.getType().toString().toLowerCase() + "-" + typeID), origin, true, CWUtil.random(degrees), true);
 
             //Get the min location from the schematic.
             Location min = new Location(origin.getWorld(), origin.getBlockX() + cc.getOffset().getBlockX(), origin.getBlockY() + cc.getOffset().getBlockY(), origin.getBlockZ() + cc.getOffset().getBlockZ());
