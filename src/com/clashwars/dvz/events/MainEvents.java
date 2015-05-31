@@ -589,7 +589,7 @@ public class MainEvents implements Listener {
                     block.setType(Material.AIR);
                 }
             }
-        }.runTaskLater(dvz, 600);
+        }.runTaskLater(dvz, 200);
 
     }
 }

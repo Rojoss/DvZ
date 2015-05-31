@@ -89,7 +89,7 @@ public class Fireball extends MobAbility {
                                         }
 
                                     }
-                                }.runTaskLater(dvz, 600)
+                                }.runTaskLater(dvz, 200);
                                 //TODO: Add sound and particle effects.
                             }
                         }

@@ -63,7 +63,7 @@ public class FireFly extends DragonAbility {
 
                                 }
 
-                            }.runTaskLater(dvz, 600);
+                            }.runTaskLater(dvz, 200);
                         }
                         ParticleEffect.LAVA.display(0.7f, 0.7f, 0.7f, 0.1f, 3, block.getLocation(), 500);
                         if (CWUtil.randomFloat() < 0.2f) {
