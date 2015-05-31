@@ -232,8 +232,6 @@ public class StorageStruc extends Structure {
 
         items.add(new StorageItem("&6Bows", 11, Product.BOW.getItem(), DvzClass.FLETCHER, 2));
         items.add(new StorageItem("&7Arrows", 12, Product.ARROW.getItem(), DvzClass.FLETCHER, 256));
-        items.add(new StorageItem("&7Raw Porkchops", 14, Product.RAW_PORK.getItem(), DvzClass.FLETCHER, 32));
-        items.add(new StorageItem("&cCooked Porkchops", 15, Product.COOKED_PORK.getItem(), DvzClass.FLETCHER, 32));
 
         items.add(new StorageItem("&3Helmets", 20, Product.HELMET.getItem(), DvzClass.TAILOR, 2));
         items.add(new StorageItem("&3Chestplates", 21, Product.CHESTPLATE.getItem(), DvzClass.TAILOR, 2));

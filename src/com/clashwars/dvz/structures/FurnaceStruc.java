@@ -131,7 +131,6 @@ public class FurnaceStruc extends Structure {
 
 
     private void populateFurnaceItems() {
-        furnaceItems.add(new FurnaceItem(Product.RAW_PORK.getItem(), Product.COOKED_PORK.getItem(), 200, 1));
         furnaceItems.add(new FurnaceItem(Product.DIAMOND_ORE.getItem(), Product.DIAMOND.getItem(), 600, 5));
         furnaceItems.add(new FurnaceItem(Product.IRON_ORE.getItem(), Product.IRON_INGOT.getItem(), 500, 5));
         furnaceItems.add(new FurnaceItem(Product.GOLD_ORE.getItem(), Product.GOLD_INGOT.getItem(), 400, 5));

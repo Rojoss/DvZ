@@ -41,7 +41,7 @@ public class Fletcher extends DwarfClass {
 
     @EventHandler
     private void mobDamage(EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof Pig) && !(event.getEntity() instanceof Chicken)) {
+        if (!(event.getEntity() instanceof Chicken)) {
             return;
         }
 
@@ -83,7 +83,7 @@ public class Fletcher extends DwarfClass {
 
     @EventHandler
     private void mobKill(EntityDeathEvent event) {
-        if (event.getEntityType() != EntityType.PIG && event.getEntityType() != EntityType.CHICKEN) {
+        if (event.getEntityType() != EntityType.CHICKEN) {
             return;
         }
 
@@ -107,17 +107,6 @@ public class Fletcher extends DwarfClass {
             }
         }
         if (!isOwnAnimal) {
-            return;
-        }
-
-        //Pork for killing pigs.
-        if (event.getEntityType() == EntityType.PIG) {
-            CWItem pork = Product.RAW_PORK.getItem();
-            pork.setAmount(getIntOption("pig-drop-amount"));
-            entity.getWorld().dropItem(entity.getLocation(), pork);
-            cwp.addClassExp(1);
-            ParticleEffect.PORTAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 8, entity.getLocation());
-            ws.spawnAnimal(EntityType.PIG, 0);
             return;
         }
 
@@ -196,8 +185,6 @@ public class Fletcher extends DwarfClass {
                 // + 1 per gravel
                 // + 1 per chicken
                 // + 2 per chicken in air
-                // + 1 per pig
-                // + 1 per pork cooked
                 // ~ 78
                 return;
     }

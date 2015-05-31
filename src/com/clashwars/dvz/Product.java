@@ -27,8 +27,6 @@ public enum Product {
 
     FLINT(new CWItem(Material.FLINT), false),
     FEATHER(new CWItem(Material.FEATHER), false),
-    RAW_PORK(new CWItem(Material.PORK), true),
-    COOKED_PORK(new CWItem(Material.GRILLED_PORK), true),
     BOW(new CWItem(Material.BOW), true),
     ARROW(new CWItem(Material.ARROW), true),
 
