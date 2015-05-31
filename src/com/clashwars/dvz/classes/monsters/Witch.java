@@ -16,8 +16,8 @@ public class Witch extends MobClass {
         abilities.add(Ability.POTION_BOMB);
         abilities.add(Ability.MORPH);
 
-        equipment.add(new DvzItem(PotionType.POISON, true, 3, -1, -1, true).addPotionEffect(PotionEffectType.POISON, 0, 40));
-        equipment.add(new DvzItem(PotionType.SLOWNESS, true, 3, -1, -1, true).addPotionEffect(PotionEffectType.SLOW, 0, 80));
+        equipment.add(new DvzItem(PotionType.POISON, true, 1, -1, -1, true).addPotionEffect(PotionEffectType.POISON, 1, 60));
+        equipment.add(new DvzItem(PotionType.SLOWNESS, true, 1, -1, -1, true).addPotionEffect(PotionEffectType.SLOW, 1, 100));
         equipment.add(new DvzItem(Material.WOOD_SWORD, -1, -1));
 
         switchable = true;
