@@ -16,6 +16,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -226,11 +227,11 @@ public class MainEvents implements Listener {
     private void damage(EntityDamageEvent event) {
         //No durability loss
         if (event.getEntity() instanceof Player) {
-            Player player = (Player)event.getEntity();
-            for (ItemStack armor : ((Player)event.getEntity()).getInventory().getArmorContents()) {
-                armor.setDurability((short)0);
+            Player player = (Player) event.getEntity();
+            for (ItemStack armor : ((Player) event.getEntity()).getInventory().getArmorContents()) {
+                armor.setDurability((short) 0);
             }
-            if (dvz.getPM().getPlayer(player).getPlayerClass() == DvzClass.DWARF  || dvz.getPM().getPlayer(player).getPlayerClass() == DvzClass.MONSTER)  {
+            if (dvz.getPM().getPlayer(player).getPlayerClass() == DvzClass.DWARF || dvz.getPM().getPlayer(player).getPlayerClass() == DvzClass.MONSTER) {
                 event.setCancelled(true);
             }
         }
@@ -251,7 +252,7 @@ public class MainEvents implements Listener {
         if (!(event.getEntity() instanceof Player)) {
             return;
         }
-        Player damaged = (Player)event.getEntity();
+        Player damaged = (Player) event.getEntity();
 
         if (!damaged.isBlocking()) {
             return;
@@ -277,7 +278,7 @@ public class MainEvents implements Listener {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Block block = event.getClickedBlock();
             if ((block.getType() == Material.SIGN || block.getType() == Material.WALL_SIGN) && block.getState() instanceof Sign) {
-                Sign sign = (Sign)block.getState();
+                Sign sign = (Sign) block.getState();
                 for (String str : sign.getLines()) {
                     if (CWUtil.removeColour(str).equalsIgnoreCase("&9[PARKOUR]")) {
                         if (cwp.hasCompletedParkour()) {
@@ -314,7 +315,7 @@ public class MainEvents implements Listener {
 
         //No durability loss
         if (item.getType().getMaxDurability() > 0) {
-            item.setDurability((short)0);
+            item.setDurability((short) 0);
         }
 
         //Check for class item usage.
@@ -360,7 +361,7 @@ public class MainEvents implements Listener {
 
     @EventHandler
     private void invClose(InventoryCloseEvent event) {
-        Player player = (Player)event.getPlayer();
+        Player player = (Player) event.getPlayer();
         Inventory inv = event.getInventory();
 
         if (!dvz.getCM().switchMenus.containsKey(player.getUniqueId())) {
@@ -394,7 +395,7 @@ public class MainEvents implements Listener {
     @EventHandler
     private void menuClick(final ItemMenu.ItemMenuClickEvent event) {
         ItemMenu menu = event.getItemMenu();
-        final Player player = (Player)event.getWhoClicked();
+        final Player player = (Player) event.getWhoClicked();
         ItemStack item = event.getCurrentItem();
 
         if (menu.getName().equals("switch")) {
@@ -455,8 +456,8 @@ public class MainEvents implements Listener {
 
                 //Move item from top inv to player inv.
                 if (rawSlot >= 9 && rawSlot <= 44) {
-                    if (player.getInventory().getItem(rawSlot-9) == null || player.getInventory().getItem(rawSlot-9).getType() == Material.AIR) {
-                        player.getInventory().setItem(rawSlot-9, item);
+                    if (player.getInventory().getItem(rawSlot - 9) == null || player.getInventory().getItem(rawSlot - 9).getType() == Material.AIR) {
+                        player.getInventory().setItem(rawSlot - 9, item);
                     } else {
                         player.getInventory().addItem(item);
                     }
@@ -497,7 +498,7 @@ public class MainEvents implements Listener {
             return;
         }
 
-        final Player player = (Player)event.getEntity();
+        final Player player = (Player) event.getEntity();
         if (dvz.getPM().getPlayer(player).getPlayerClass().getType() == ClassType.MONSTER || dvz.getGM().getState() == GameState.DAY_ONE
                 || dvz.getPM().getPlayer(player).getPlayerClass() == DvzClass.DWARF || dvz.getPM().getPlayer(player).getPlayerClass() == DvzClass.MONSTER) {
             new BukkitRunnable() {
@@ -508,6 +509,7 @@ public class MainEvents implements Listener {
             }.runTaskLater(dvz, 5);
         }
     }
+
     @EventHandler
     private void entityInteract(PlayerInteractEntityEvent event) {
         String name = "";
@@ -570,5 +572,24 @@ public class MainEvents implements Listener {
         }
     }
 
+    @EventHandler
+    private void fallingBlockLand(EntityChangeBlockEvent event) {
+        if (!(event.getEntity() instanceof FallingBlock)) {
+            return;
+        }
+        if (event.getTo() != Material.FIRE) {
+            return;
+        }
 
+        final Block block = event.getBlock();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (block.getType() == Material.FIRE) {
+                    block.setType(Material.AIR);
+                }
+            }
+        }.runTaskLater(dvz, 600);
+
+    }
 }

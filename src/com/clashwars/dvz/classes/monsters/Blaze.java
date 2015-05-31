@@ -7,6 +7,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class Blaze extends MobClass {
 
@@ -36,6 +38,10 @@ public class Blaze extends MobClass {
         }
 
         event.setCancelled(true);
+    }
+    @Override
+    public void onEquipClass(Player player) {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, Integer.MAX_VALUE, 1));
     }
 
 }

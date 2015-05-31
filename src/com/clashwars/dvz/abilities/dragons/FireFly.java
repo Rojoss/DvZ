@@ -53,6 +53,17 @@ public class FireFly extends DragonAbility {
                         Block block = player.getWorld().getHighestBlockAt(player.getLocation().add(x, 0, z));
                         if (block.getType() == Material.AIR && CWUtil.randomFloat() < 0.1f) {
                             block.setType(Material.FIRE);
+                            final Location blockLoc = block.getLocation();
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    if (blockLoc.getBlock().getType() == Material.FIRE) {
+                                        blockLoc.getBlock().setType(Material.AIR);
+                                    }
+
+                                }
+
+                            }.runTaskLater(dvz, 600);
                         }
                         ParticleEffect.LAVA.display(0.7f, 0.7f, 0.7f, 0.1f, 3, block.getLocation(), 500);
                         if (CWUtil.randomFloat() < 0.2f) {
