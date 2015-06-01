@@ -8,9 +8,7 @@ import com.clashwars.dvz.classes.ClassManager;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.commands.Commands;
 import com.clashwars.dvz.config.*;
-import com.clashwars.dvz.events.MainEvents;
-import com.clashwars.dvz.events.ProtectEvents;
-import com.clashwars.dvz.events.WorkShopEvents;
+import com.clashwars.dvz.events.*;
 import com.clashwars.dvz.maps.MapManager;
 import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.runnables.AntiCamp;
@@ -156,7 +154,11 @@ public class DvZ extends JavaPlugin {
     private void registerEvents() {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new MainEvents(this), this);
+        pm.registerEvents(new LobbyEvents(this), this);
+        pm.registerEvents(new SwitchEvents(this), this);
+        pm.registerEvents(new UtilityEvents(this), this);
         pm.registerEvents(new WorkShopEvents(this), this);
+
         for (Ability a : Ability.values()) {
             pm.registerEvents(a.getAbilityClass(), this);
         }
@@ -166,6 +168,7 @@ public class DvZ extends JavaPlugin {
         for (StructureType s : StructureType.values()) {
             pm.registerEvents(s.getStrucClass(), this);
         }
+
         pm.registerEvents(new ItemMenu.Events(), this);
         pm.registerEvents(new ProtectEvents(this), this);
     }
