@@ -140,7 +140,7 @@ public class PotionBomb extends MobAbility {
                     }
 
                     cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, getIntOption("blindness-duration"), 0));
-                    cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, getIntOption("poison-duration"), 0));
+                    cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, getIntOption("poison-duration"), 1));
                 }
             }
         }.runTaskLater(dvz, getIntOption("fuse-time"));
