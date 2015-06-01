@@ -120,8 +120,7 @@ public class UtilityEvents implements Listener {
 
         //No food loss during dwarf/lobby time and no food loss for monsters.
         final Player player = (Player) event.getEntity();
-        if (dvz.getPM().getPlayer(player).getPlayerClass().getType() == ClassType.MONSTER || dvz.getGM().getState() == GameState.DAY_ONE
-                || dvz.getPM().getPlayer(player).getPlayerClass() == DvzClass.DWARF || dvz.getPM().getPlayer(player).getPlayerClass() == DvzClass.MONSTER) {
+        if (dvz.getPM().getPlayer(player).getPlayerClass().getType() == ClassType.MONSTER || dvz.getGM().isDwarves() || dvz.getPM().getPlayer(player).getPlayerClass().isBaseClass()) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
