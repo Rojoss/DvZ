@@ -31,7 +31,7 @@ public class PickupRunnable extends BukkitRunnable {
         this.target = target;
         cwt = dvz.getPM().getPlayer(target);
         this.offset = offset;
-        maxTime = 300;
+        maxTime = 160;
     }
 
 
