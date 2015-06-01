@@ -158,9 +158,9 @@ public class Miner extends DwarfClass {
         //Custom crafting. (first try crafting with items in hand then go through all items in inv)
         ItemStack hand = player.getItemInHand();
         Location dropLoc = event.getClickedBlock().getLocation().add(0.5f, 1f, 0.5f);
-        if (hand.getAmount() > 2) {
+        if (hand.getAmount() > 3) {
             if (tryCraft(hand, dropLoc)) {
-                CWUtil.removeItemsFromHand(player, 2);
+                CWUtil.removeItemsFromHand(player, 3);
                 ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
                 player.updateInventory();
                 return;
@@ -170,7 +170,7 @@ public class Miner extends DwarfClass {
         Inventory inv = player.getInventory();
         for (int i = 0; i < inv.getSize(); i++) {
             if (tryCraft(inv.getItem(i), dropLoc)) {
-                CWUtil.removeItemsFromSlot(inv, i, 2);
+                CWUtil.removeItemsFromSlot(inv, i, 3);
                 ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
                 player.updateInventory();
 
@@ -181,7 +181,7 @@ public class Miner extends DwarfClass {
                 return;
             }
         }
-        CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need at least 2 iron, gold or diamond to craft! &4&l<<"));
+        CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need at least 3 iron, gold or diamond to craft! &4&l<<"));
     }
 
     //Try craft a item with the given itemstack.
@@ -189,7 +189,7 @@ public class Miner extends DwarfClass {
         if (item == null) {
             return false;
         }
-        if (item.getAmount() < 2) {
+        if (item.getAmount() < 3) {
             return false;
         }
         if (Product.DIAMOND.getItem().getType() == item.getType()) {
