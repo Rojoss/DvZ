@@ -21,6 +21,7 @@ import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -46,6 +47,15 @@ public class Commands {
 
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (label.equalsIgnoreCase("cow")) {
+            sender.sendMessage("/cow");
+            if (sender instanceof Player) {
+                Player player = (Player)sender;
+                player.playSound(player.getLocation(), Sound.COW_HURT, 2, 2 - CWUtil.randomFloat());
+            }
+            return true;
+        }
+
         if (label.equalsIgnoreCase("dvz") || label.equalsIgnoreCase("dvz:dvz") || label.equalsIgnoreCase("d") || label.equalsIgnoreCase("dz") || label.equalsIgnoreCase("dvsz")) {
             if (args.length >= 1) {
                 //##########################################################################################################################

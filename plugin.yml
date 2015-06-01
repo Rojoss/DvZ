@@ -8,3 +8,6 @@ commands:
     description: Main dvz command
     usage: /<command>
     aliases: [d, dz, dvsz]
+  cow:
+    description: /cow
+    usage: /<command>
