@@ -47,7 +47,7 @@ public class Builder extends DwarfClass {
         }
 
         event.setCancelled(false);
-        dvz.getPM().getPlayer(player).addClassExp(1);
+        dvz.getPM().getPlayer(player).addClassExp(2);
     }
 
     @EventHandler
