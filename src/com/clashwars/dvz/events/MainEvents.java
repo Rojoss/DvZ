@@ -12,9 +12,12 @@ import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
+import net.minecraft.server.v1_8_R2.PacketPlayInClientCommand;
+import net.minecraft.server.v1_8_R2.PacketPlayOutRespawn;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.FallingBlock;
@@ -124,7 +127,7 @@ public class MainEvents implements Listener {
 
     @EventHandler
     private void death(PlayerDeathEvent event) {
-        Player player = event.getEntity();
+        final Player player = event.getEntity();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         Player killer = player.getKiller();
 
@@ -173,6 +176,14 @@ public class MainEvents implements Listener {
             dvz.getGM().resetDragonSlayer();
             dvz.getServer().broadcastMessage(Util.formatMsg("&d&lThe DragonSlayer died!"));
         }
+
+        dvz.getServer().getScheduler().scheduleSyncDelayedTask(dvz, new Runnable(){
+            public void run(){
+                if (player.isDead()){
+                    ((CraftPlayer)player).getHandle().playerConnection.a(new PacketPlayInClientCommand(PacketPlayInClientCommand.EnumClientCommand.PERFORM_RESPAWN));
+                }
+            }
+        });
     }
 
 
@@ -618,5 +629,13 @@ public class MainEvents implements Listener {
                 break;
             }
         }
+    }
+
+    @EventHandler
+    private void foodEat(PlayerItemConsumeEvent event) {
+        if (event.getItem().getType() != Material.BREAD) {
+            return;
+        }
+        event.getPlayer().setFoodLevel(event.getPlayer().getFoodLevel() + 5);
     }
 }
