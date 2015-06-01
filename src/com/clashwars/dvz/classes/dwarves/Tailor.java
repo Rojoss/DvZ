@@ -179,7 +179,7 @@ public class Tailor extends DwarfClass {
                 ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
                 player.updateInventory();
 
-                dvz.getPM().getPlayer(player).addClassExp(50);
+                dvz.getPM().getPlayer(player).addClassExp(35);
                 // + 5 per flower broken
                 // + 1 per sheep sheared
                 // = 78
