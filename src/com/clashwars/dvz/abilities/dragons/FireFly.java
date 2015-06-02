@@ -41,21 +41,24 @@ public class FireFly extends DragonAbility {
                     return;
                 }
 
-                if (dvz.getGM().getDragonPower() > 1) {
-                    List<Entity> entities = player.getNearbyEntities(3, 100, 3);
-                    for (Entity e : entities) {
-                        if (e instanceof LivingEntity) {
+                List<Entity> entities = player.getNearbyEntities(3, 100, 3);
+                for (Entity e : entities) {
+                    if (e instanceof LivingEntity) {
+                        if (dvz.getGM().getDragonPower() == 1) {
+                            ((LivingEntity) e).damage(1);
+                        } else {
                             ((LivingEntity) e).damage(dvz.getGM().getDragonPower() * 2);
                         }
                     }
                 }
 
 
+                float perc = ((float)dvz.getGM().getDragonPower() / 30);
                 for (int x = -3; x < 3; x++) {
                     for (int z = -3; z < 3; z++) {
                         Block block = player.getWorld().getHighestBlockAt(player.getLocation().add(x, 0, z));
 
-                        if (block.getType() == Material.AIR && CWUtil.randomFloat() < dvz.getGM().getDragonPower() / 20) {
+                        if (block.getType() == Material.AIR && CWUtil.randomFloat() < perc) {
                             block.setType(Material.FIRE);
                             final Location blockLoc = block.getLocation();
                             new BukkitRunnable() {
@@ -76,7 +79,7 @@ public class FireFly extends DragonAbility {
                     }
                 }
             }
-        }.runTaskTimer(dvz, 0, 5);
+        }.runTaskTimer(dvz, 0, 8);
     }
 
     @EventHandler
