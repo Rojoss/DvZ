@@ -193,13 +193,13 @@ public class Miner extends DwarfClass {
             return false;
         }
         if (Product.DIAMOND.getItem().getType() == item.getType()) {
-            dropLoc.getWorld().dropItem(dropLoc, Product.DIAMOND_SWORD.getItem());
+            dropLoc.getWorld().dropItem(dropLoc, Product.BATTLEAXE.getItem());
             return true;
         } else if (Product.GOLD_INGOT.getItem().getType() == item.getType()) {
-            dropLoc.getWorld().dropItem(dropLoc, Product.GOLD_SWORD.getItem());
+            dropLoc.getWorld().dropItem(dropLoc, Product.FIERY_FLAIL.getItem());
             return true;
         } else if (Product.IRON_INGOT.getItem().getType() == item.getType()) {
-            dropLoc.getWorld().dropItem(dropLoc, Product.IRON_SWORD.getItem());
+            dropLoc.getWorld().dropItem(dropLoc, Product.GREATSWORD.getItem());
             return true;
         }
         return false;

@@ -224,18 +224,17 @@ public class StorageStruc extends Structure {
 
 
     private void populateStorageItems() {
-        items.add(new StorageItem("&bDiamond Swords", 2, Product.DIAMOND_SWORD.getItem(), DvzClass.MINER, 2));
-        items.add(new StorageItem("&7Iron Swords", 3, Product.IRON_SWORD.getItem(), DvzClass.MINER, 2));
-        items.add(new StorageItem("&6Gold Swords", 4, Product.GOLD_SWORD.getItem(), DvzClass.MINER, 2));
-        items.add(new StorageItem("&7Stone Blocks", 6, Product.STONE.getItem(), DvzClass.MINER, -1));
-        items.add(new StorageItem("&8Stone Bricks", 7, Product.STONE_BRICK.getItem(), DvzClass.MINER, -1));
+        items.add(new StorageItem("&bBattle axes", 2, Product.BATTLEAXE.getItem(), DvzClass.MINER, 2));
+        items.add(new StorageItem("&7Greatswords", 3, Product.GREATSWORD.getItem(), DvzClass.MINER, 2));
+        items.add(new StorageItem("&6Fiery flails", 4, Product.FIERY_FLAIL.getItem(), DvzClass.MINER, 2));
+        items.add(new StorageItem("&8Reinforced Bricks", 6, Product.STONE_BRICK.getItem(), DvzClass.MINER, -1));
 
         items.add(new StorageItem("&6Bows", 11, Product.BOW.getItem(), DvzClass.FLETCHER, 2));
         items.add(new StorageItem("&7Arrows", 12, Product.ARROW.getItem(), DvzClass.FLETCHER, 256));
 
         items.add(new StorageItem("&3Helmets", 20, Product.HELMET.getItem(), DvzClass.TAILOR, 2));
-        items.add(new StorageItem("&3Chestplates", 21, Product.CHESTPLATE.getItem(), DvzClass.TAILOR, 2));
-        items.add(new StorageItem("&3Leggings", 22, Product.LEGGINGS.getItem(), DvzClass.TAILOR, 2));
+        items.add(new StorageItem("&3Tunics", 21, Product.CHESTPLATE.getItem(), DvzClass.TAILOR, 2));
+        items.add(new StorageItem("&3Greaves", 22, Product.LEGGINGS.getItem(), DvzClass.TAILOR, 2));
         items.add(new StorageItem("&3Boots", 23, Product.BOOTS.getItem(), DvzClass.TAILOR, 2));
 
         items.add(new StorageItem("&dHealth Potions", 29, Ability.HEAL_POTION.getAbilityClass().getCastItem(), DvzClass.ALCHEMIST, 2));
