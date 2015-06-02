@@ -31,7 +31,7 @@ public class Burn extends DragonAbility {
             if (entity == player) {
                 continue;
             }
-            entity.setFireTicks(60);
+            entity.setFireTicks(dvz.getGM().getDragonPower() * 40 - 40);
             LineEffect effect = new LineEffect(dvz.getEM());
             effect.setLocation(player.getLocation());
             effect.setTargetEntity(entity);

@@ -34,7 +34,7 @@ public class FireBreath extends DragonAbility {
             @Override
             public void run() {
                 iterations++;
-                if (iterations > 40) {
+                if (iterations > dvz.getGM().getDragonPower() * 30 - 20) {
                     cancel();
                     return;
                 }

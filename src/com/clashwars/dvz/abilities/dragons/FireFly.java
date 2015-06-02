@@ -41,17 +41,21 @@ public class FireFly extends DragonAbility {
                     return;
                 }
 
-                List<Entity> entities = player.getNearbyEntities(3, 100, 3);
-                for (Entity e : entities) {
-                    if (e instanceof LivingEntity) {
-                        ((LivingEntity) e).damage(4);
+                if (dvz.getGM().getDragonPower() > 1) {
+                    List<Entity> entities = player.getNearbyEntities(3, 100, 3);
+                    for (Entity e : entities) {
+                        if (e instanceof LivingEntity) {
+                            ((LivingEntity) e).damage(dvz.getGM().getDragonPower() * 2);
+                        }
                     }
                 }
+
 
                 for (int x = -3; x < 3; x++) {
                     for (int z = -3; z < 3; z++) {
                         Block block = player.getWorld().getHighestBlockAt(player.getLocation().add(x, 0, z));
-                        if (block.getType() == Material.AIR && CWUtil.randomFloat() < 0.1f) {
+
+                        if (block.getType() == Material.AIR && CWUtil.randomFloat() < dvz.getGM().getDragonPower() / 20) {
                             block.setType(Material.FIRE);
                             final Location blockLoc = block.getLocation();
                             new BukkitRunnable() {
