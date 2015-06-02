@@ -16,6 +16,7 @@ import com.clashwars.dvz.runnables.GameRunnable;
 import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.tips.TipManager;
 import com.clashwars.dvz.util.ItemMenu;
+import com.clashwars.dvz.workshop.WorkShop;
 import com.gmail.filoghost.holograms.api.Hologram;
 import com.gmail.filoghost.holograms.api.HolographicDisplaysAPI;
 import com.google.gson.Gson;
@@ -81,6 +82,11 @@ public class DvZ extends JavaPlugin {
 
         Bukkit.getScheduler().cancelTasks(this);
         getPM().savePlayers();
+
+        for (WorkShop ws : getPM().getWorkShops().values()) {
+            ws.onRemove();
+            ws.remove();
+        }
 
         abilityCfg.load();
         abilityCfg.save();
