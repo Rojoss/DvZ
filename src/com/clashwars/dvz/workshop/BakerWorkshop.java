@@ -1,11 +1,21 @@
 package com.clashwars.dvz.workshop;
 
+import com.clashwars.cwcore.Debug;
+import com.clashwars.cwcore.helpers.CWEntity;
+import com.clashwars.cwcore.helpers.CWItem;
+import com.clashwars.cwcore.helpers.PoseType;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Rotation;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.EulerAngle;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +25,8 @@ public class BakerWorkshop extends WorkShop {
 
     private List<Block> wheatBlocks = new ArrayList<Block>();
     private Block hopperBlock;
+    private CWEntity mill;
+    private float millRotation = 0;
     private boolean removed = false;
 
     public BakerWorkshop(UUID owner, WorkShopData wsd) {
@@ -39,19 +51,40 @@ public class BakerWorkshop extends WorkShop {
             }
             build(getOrigin());
         }
+
         for (Block block : cuboid.getBlocks()) {
             if (block.getType() == Material.HOPPER) {
                 hopperBlock = block;
             }
             if (block.getType() == Material.CROPS) {
                 wheatBlocks.add(block);
+
+            }
+            if (block.getType() == Material.HAY_BLOCK) {
+                block.setType(Material.AIR);
+                Debug.bc("Creating mill!");
+                Debug.bc(getRotation());
+                Location millLoc = block.getLocation();
+                millLoc.setYaw(getRotation());
+                if (getRotation() == 0 || getRotation() == 360) {
+                    millLoc.add(0.5f, -1f, 0.9f);
+                } else if (getRotation() == 90) {
+                    millLoc.add(-0.9f, -1f, 0.5f);
+                } else if (getRotation() == 180) {
+                    millLoc.add(0.5f, -1f, 0.1f);
+                } else if (getRotation() == 270) {
+                    millLoc.add(0.9f, -1f, 0.5f);
+                }
+                mill = CWEntity.create(EntityType.ARMOR_STAND, millLoc)
+                        .setArmorstandVisibility(false)
+                        .setArmorstandGravity(false)
+                        .setPose(PoseType.HEAD, new EulerAngle(67.5f, 0, 0))
+                        .setHelmet(new CWItem(Material.HAY_BLOCK));
             }
         }
 
-        //Cauldron refilling and rain effect.
+        //Fast wheat regrowth.
         new BukkitRunnable() {
-            int iterations = 0;
-
             @Override
             public void run() {
                 if (removed) {
@@ -71,8 +104,30 @@ public class BakerWorkshop extends WorkShop {
                         block.getWorld().playSound(block.getLocation(), Sound.DIG_GRASS, 0.1f, 2.0f);
                     }
                 }
+                if (mill != null && mill.entity() != null) {
+                    mill.setPose(PoseType.HEAD, new EulerAngle(67.5f, 0, millRotation));
+                    millRotation -= 0.2f;
+                    if (millRotation >= 359) {
+                        millRotation = 0;
+                    }
+                }
             }
         }.runTaskTimer(dvz, 10, 10);
+
+        //Mill rotation
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (removed) {
+                    cancel();
+                    return;
+                }
+                if (mill != null && mill.entity() != null) {
+                    mill.setPose(PoseType.HEAD, new EulerAngle(67.5f, 0, millRotation));
+                    millRotation -= 0.1f;
+                }
+            }
+        }.runTaskTimerAsynchronously(dvz, 1, 1);
     }
 
     @Override
@@ -93,5 +148,9 @@ public class BakerWorkshop extends WorkShop {
     @Override
     public void onRemove() {
         removed = true;
+        if (mill != null && mill.entity() != null) {
+            mill.entity().remove();
+        }
+        mill = null;
     }
 }

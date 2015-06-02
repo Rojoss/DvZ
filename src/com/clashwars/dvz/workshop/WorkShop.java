@@ -30,6 +30,7 @@ public class WorkShop {
     protected WorkShopData data;
     protected UUID owner;
     protected Cuboid cuboid;
+    protected int rotation = 0;
 
     protected Block craftBlock;
 
@@ -43,11 +44,12 @@ public class WorkShop {
 
     public boolean build(Location origin) {
         List<Integer> degrees = Arrays.asList(new Integer[] {180,270,360});
+        rotation = CWUtil.random(degrees);
         try {
             //Get a random workshop based on type.
             int typeID = CWUtil.random(0, data.getType().getClassClass().getIntOption("workshop-types")-1);
             //Try and paste the schematic.
-            CuboidClipboard cc = CWWorldGuard.pasteSchematic(origin.getWorld(), CWWorldGuard.getSchematicFile("ws-" + data.getType().toString().toLowerCase() + "-" + typeID), origin, true, CWUtil.random(degrees), true);
+            CuboidClipboard cc = CWWorldGuard.pasteSchematic(origin.getWorld(), CWWorldGuard.getSchematicFile("ws-" + data.getType().toString().toLowerCase() + "-" + typeID), origin, true, rotation, true);
 
             //Get the min location from the schematic.
             Location min = new Location(origin.getWorld(), origin.getBlockX() + cc.getOffset().getBlockX(), origin.getBlockY() + cc.getOffset().getBlockY(), origin.getBlockZ() + cc.getOffset().getBlockZ());
@@ -162,6 +164,9 @@ public class WorkShop {
         dvz.getWSCfg().setWorkShop(owner, data);
     }
 
+    public int getRotation() {
+        return rotation;
+    }
 
 
     public void setCraftBlock() {
