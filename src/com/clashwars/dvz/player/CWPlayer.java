@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
 
@@ -180,6 +181,12 @@ public class CWPlayer {
                 }
                 player.setWalkSpeed(c.getSpeed());
                 player.setFlySpeed(c.getSpeed());
+
+                //Reaply buff
+                if (getPlayerData().isBuffed()) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 0));
+                }
+
                 if (eggUse) {
                     player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));
                 }

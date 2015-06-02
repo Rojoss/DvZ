@@ -244,13 +244,6 @@ public class MainEvents implements Listener {
                     cwp.reset();
                     cwp.setPlayerClass(DvzClass.MONSTER);
                     cwp.giveClassItems(ClassType.MONSTER, suicide);
-
-
-                    //TODO: Move this somewhere else because player gets reset after picking class.
-                    //Reapply the buff
-                    if (cwp.getPlayerData().isBuffed()) {
-                        cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 0));
-                    }
                 }
             }
         }.runTaskLater(dvz, 15);
