@@ -27,9 +27,11 @@ public class WindStorm extends DragonAbility {
         if (onCooldown(player)) {
             return;
         }
+
         //for (Entity entity : CWUtil.getNearbyEntities(triggerLoc, getFloatOption("distance"), Arrays.asList(new EntityType[]{EntityType.PLAYER}))) {
         new BukkitRunnable() {
             int iteration = 0;
+            int maxIterations = dvz.getGM().getDragonPower() * 4;
 
             @Override
             public void run() {
@@ -40,7 +42,7 @@ public class WindStorm extends DragonAbility {
 
                     Vector v = RandomUtils.getRandomCircleVector();
                     float y;
-                    if (iteration > 7) {
+                    if (iteration > (Math.round(maxIterations / 2) + 2)) {
                         y = CWUtil.randomFloat() - 1;
                     } else {
                         y = CWUtil.randomFloat();
@@ -50,12 +52,12 @@ public class WindStorm extends DragonAbility {
                 }
 
                 iteration++;
-                if (iteration > 11) {
+                if (iteration > maxIterations) {
                     cancel();
                     return;
                 }
             }
-        }.runTaskTimer(dvz, 8, 8);
+        }.runTaskTimer(dvz, 9, 9);
 
     }
 

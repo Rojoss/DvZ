@@ -32,7 +32,7 @@ public class Wind extends DragonAbility {
             return;
         }
 
-        final List<Vector> locs = VectorUtils.getPositionsInCone(Util.getDragonMouthPos(player.getLocation()).add(new Vector(0, 2, 0)), 15, 20, player.getLocation().getDirection(), true);
+        final List<Vector> locs = VectorUtils.getPositionsInCone(Util.getDragonMouthPos(player.getLocation()).add(new Vector(0, 2, 0)), 20, 28, player.getLocation().getDirection(), true);
 
         new BukkitRunnable() {
             int index = 0;
@@ -48,8 +48,8 @@ public class Wind extends DragonAbility {
                         if (!(e instanceof LivingEntity) || e == player) {
                             continue;
                         }
-                        ((LivingEntity)e).damage(6);
-                        e.setVelocity(e.getVelocity().add( player.getLocation().getDirection().multiply(1.5f) ));
+                        ((LivingEntity)e).damage(dvz.getGM().getDragonPower() * 2 - 1);
+                        e.setVelocity(e.getVelocity().add( player.getLocation().getDirection().multiply(dvz.getGM().getDragonPower() * 0.6f) ));
                     }
 
                     ParticleEffect.CLOUD.display(0.1f, 0.1f, 0.1f, 0.1f, 1, loc, 500);
@@ -60,7 +60,7 @@ public class Wind extends DragonAbility {
                         return;
                     }
                 }
-                particles += 3;
+                particles += 4;
             }
         }.runTaskTimer(dvz, 1, 1);
     }
