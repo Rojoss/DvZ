@@ -136,6 +136,16 @@ public class PlayerManager {
         return players;
     }
 
+    public List<CWPlayer> getPlayers(boolean onlineOnly) {
+        List<CWPlayer> playerList = new ArrayList<CWPlayer>();
+        for (CWPlayer cwp : players.values()) {
+            if (cwp.isOnline()) {
+                playerList.add(cwp);
+            }
+        }
+        return playerList;
+    }
+
     public List<CWPlayer> getPlayers(ClassType classType, boolean onlineOnly) {
         List<CWPlayer> playersByClass = new ArrayList<CWPlayer>();
         for (CWPlayer cwp : players.values()) {
@@ -146,6 +156,10 @@ public class PlayerManager {
                 continue;
             }
             if (cwp.getPlayerClass().getType() == classType) {
+                playersByClass.add(cwp);
+                continue;
+            }
+            if ((cwp.getPlayerClass() == DvzClass.MONSTER && classType == ClassType.MONSTER) || (cwp.getPlayerClass() == DvzClass.DWARF && classType == ClassType.DWARF)) {
                 playersByClass.add(cwp);
                 continue;
             }

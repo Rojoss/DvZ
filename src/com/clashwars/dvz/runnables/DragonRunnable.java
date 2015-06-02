@@ -1,8 +1,10 @@
 package com.clashwars.dvz.runnables;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.ClassType;
+import com.clashwars.dvz.util.Util;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -10,10 +12,12 @@ public class DragonRunnable extends BukkitRunnable {
 
     private DvZ dvz;
     private Player dragon;
+    private int prevPower = 3;
 
     public DragonRunnable(DvZ dvz) {
         this.dvz = dvz;
         dragon = dvz.getGM().getDragonPlayer();
+        prevPower = 3;
     }
 
     @Override
@@ -25,7 +29,7 @@ public class DragonRunnable extends BukkitRunnable {
             dragon = dvz.getGM().getDragonPlayer();
         }
 
-        Double monsterPerc = CWUtil.getPercentage(dvz.getPM().getPlayers(ClassType.MONSTER, false).size(), dvz.getPM().getPlayers().size());
+        Double monsterPerc = CWUtil.getPercentage(dvz.getPM().getPlayers(ClassType.MONSTER, true).size(), dvz.getPM().getPlayers(true).size()) / 100;
         int power = 1;
         if (monsterPerc < dvz.getCfg().MONSTER_PERCENTAGE_MIN) {
             power = 3;
@@ -34,9 +38,13 @@ public class DragonRunnable extends BukkitRunnable {
         } else {
             power = 1;
         }
+        if (power != prevPower) {
+            dvz.getServer().broadcastMessage(Util.formatMsg("&aDragon power decreased! &8[&2" + prevPower + "&7>&a" + power + "&8]"));
+        }
+        prevPower = power;
         dvz.getGM().setDragonPower(power);
 
-        Double hpRegen = (power * 0.5d) - 0.5d;
+        Double hpRegen = (double)(power * 0.5f) - 0.5f;
         dragon.setHealth(Math.min(dragon.getHealth() + hpRegen, dragon.getMaxHealth()));
     }
 }

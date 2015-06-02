@@ -241,7 +241,7 @@ public class GameManager {
                 dragonPlayer.setHealth(health);
             }
         }.runTaskLater(dvz, 60);
-        new DragonRunnable(dvz).runTaskTimer(dvz, 100, 100);
+        new DragonRunnable(dvz).runTaskTimer(dvz, 20, 20);
     }
 
 
