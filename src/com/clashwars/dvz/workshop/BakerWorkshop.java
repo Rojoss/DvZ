@@ -12,12 +12,14 @@ import org.bukkit.Rotation;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,7 +27,8 @@ public class BakerWorkshop extends WorkShop {
 
     private List<Block> wheatBlocks = new ArrayList<Block>();
     private Block hopperBlock;
-    private CWEntity mill;
+    private Location millLoc;
+    private ArmorStand mill;
     private float millRotation = 0;
     private boolean removed = false;
 
@@ -62,9 +65,7 @@ public class BakerWorkshop extends WorkShop {
             }
             if (block.getType() == Material.HAY_BLOCK) {
                 block.setType(Material.AIR);
-                Debug.bc("Creating mill!");
-                Debug.bc(getRotation());
-                Location millLoc = block.getLocation();
+                millLoc = block.getLocation();
                 millLoc.setYaw(getRotation());
                 if (getRotation() == 0 || getRotation() == 360) {
                     millLoc.add(0.5f, -1f, 0.9f);
@@ -75,11 +76,15 @@ public class BakerWorkshop extends WorkShop {
                 } else if (getRotation() == 270) {
                     millLoc.add(0.9f, -1f, 0.5f);
                 }
-                mill = CWEntity.create(EntityType.ARMOR_STAND, millLoc)
+                mill = (ArmorStand)CWEntity.create(EntityType.ARMOR_STAND, millLoc)
+                        .setName("Mill")
+                        .setNameVisible(false)
+                        .setRemoveWhenFarAway(false)
                         .setArmorstandVisibility(false)
                         .setArmorstandGravity(false)
                         .setPose(PoseType.HEAD, new EulerAngle(67.5f, 0, 0))
-                        .setHelmet(new CWItem(Material.HAY_BLOCK));
+                        .setHelmet(new CWItem(Material.HAY_BLOCK))
+                        .entity();
             }
         }
 
@@ -104,13 +109,6 @@ public class BakerWorkshop extends WorkShop {
                         block.getWorld().playSound(block.getLocation(), Sound.DIG_GRASS, 0.1f, 2.0f);
                     }
                 }
-                if (mill != null && mill.entity() != null) {
-                    mill.setPose(PoseType.HEAD, new EulerAngle(67.5f, 0, millRotation));
-                    millRotation -= 0.2f;
-                    if (millRotation >= 359) {
-                        millRotation = 0;
-                    }
-                }
             }
         }.runTaskTimer(dvz, 10, 10);
 
@@ -122,12 +120,12 @@ public class BakerWorkshop extends WorkShop {
                     cancel();
                     return;
                 }
-                if (mill != null && mill.entity() != null) {
-                    mill.setPose(PoseType.HEAD, new EulerAngle(67.5f, 0, millRotation));
-                    millRotation -= 0.1f;
+                if (mill != null && mill.isValid()) {
+                    mill.setHeadPose(new EulerAngle(67.5f, 0, millRotation));
+                    millRotation -= 0.05f;
                 }
             }
-        }.runTaskTimerAsynchronously(dvz, 1, 1);
+        }.runTaskTimer(dvz, 1, 1);
     }
 
     @Override
@@ -148,9 +146,13 @@ public class BakerWorkshop extends WorkShop {
     @Override
     public void onRemove() {
         removed = true;
-        if (mill != null && mill.entity() != null) {
-            mill.entity().remove();
+        if (mill != null) {
+            mill.remove();
         }
         mill = null;
+        List<Entity> entities = CWUtil.getNearbyEntities(millLoc, 3, Arrays.asList(new EntityType[] {EntityType.ARMOR_STAND}));
+        for (Entity e : entities) {
+            e.remove();
+        }
     }
 }
