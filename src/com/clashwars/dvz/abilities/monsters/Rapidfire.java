@@ -44,6 +44,7 @@ public class Rapidfire extends MobAbility {
             public void run() {
                 for (int i = 0; i < amt; i++) {
                     Arrow arrow = player.launchProjectile(Arrow.class);
+
                     arrow.setVelocity(arrow.getVelocity().add(new Vector((CWUtil.randomFloat() - 0.5f) * m, (CWUtil.randomFloat() - 0.5f) * m, (CWUtil.randomFloat() - 0.5f) * m)));
                     arrows--;
                     if (arrows <= 0) {

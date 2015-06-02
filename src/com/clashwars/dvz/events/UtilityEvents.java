@@ -6,11 +6,16 @@ import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.maps.ShrineBlock;
+import com.clashwars.dvz.maps.ShrineType;
+import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -164,5 +169,17 @@ public class UtilityEvents implements Listener {
             }
         }.runTaskLater(dvz, 200);
 
+    }
+
+    @EventHandler
+    public void onArrowHit(final ProjectileHitEvent event){
+        if(event.getEntity() instanceof Arrow){
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    event.getEntity().remove();
+                }
+            }.runTaskLater(dvz, 5);
+        }
     }
 }
