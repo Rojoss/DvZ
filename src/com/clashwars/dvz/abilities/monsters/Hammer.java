@@ -6,15 +6,18 @@ import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
+import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Hammer extends MobAbility {
@@ -57,23 +60,9 @@ public class Hammer extends MobAbility {
         ParticleEffect effect = ParticleEffect.SMOKE_NORMAL;
         int effectAmt = 3;
         if (block.getType() == Material.ENDER_PORTAL_FRAME) {
-            ShrineBlock shrineBlock = dvz.getGM().getShrineBlock(block.getLocation());
-            if (shrineBlock == null) {
+            if (!damageShrine(block.getLocation(), player)) {
                 return;
             }
-            if (dvz.getGM().getState() == GameState.MONSTERS) {
-                if (shrineBlock.getType() == ShrineType.KEEP_1 || shrineBlock.getType() == ShrineType.KEEP_2) {
-                    player.sendMessage(CWUtil.formatCWMsg("&cYou have to destroy the shrine at the wall first!"));
-                    return;
-                }
-            } else if (dvz.getGM().getState() == GameState.MONSTERS_WALL) {
-                if (shrineBlock.getType() == ShrineType.KEEP_2) {
-                    player.sendMessage(CWUtil.formatCWMsg("&cYou have to destroy the shrine at the bottom of the keep first!"));
-                    return;
-                }
-            }
-
-            shrineBlock.damage();
             effect = ParticleEffect.SPELL_WITCH;
             effectAmt = 8;
         }
@@ -83,13 +72,13 @@ public class Hammer extends MobAbility {
         }
 
         if (event.getBlockFace() == BlockFace.DOWN || event.getBlockFace() == BlockFace.UP) {
-            effect.display(0.3f, 0.0f, 0.3f, 0.00001f, effectAmt, CWUtil.getBlockCenterByBlockface(event.getClickedBlock().getLocation(), event.getBlockFace()));
+            effect.display(0.2f, 0.0f, 0.2f, 0.00001f, effectAmt, CWUtil.getBlockCenterByBlockface(event.getClickedBlock().getLocation(), event.getBlockFace()));
         }
         if (event.getBlockFace() == BlockFace.NORTH || event.getBlockFace() == BlockFace.SOUTH) {
-            effect.display(0.3f, 0.3f, 0.0f, 0.00001f, effectAmt, CWUtil.getBlockCenterByBlockface(event.getClickedBlock().getLocation(), event.getBlockFace()));
+            effect.display(0.2f, 0.2f, 0.0f, 0.00001f, effectAmt, CWUtil.getBlockCenterByBlockface(event.getClickedBlock().getLocation(), event.getBlockFace()));
         }
         if (event.getBlockFace() == BlockFace.EAST || event.getBlockFace() == BlockFace.WEST) {
-            effect.display(0.0f, 0.3f, 0.3f, 0.00001f, effectAmt, CWUtil.getBlockCenterByBlockface(event.getClickedBlock().getLocation(), event.getBlockFace()));
+            effect.display(0.0f, 0.2f, 0.2f, 0.00001f, effectAmt, CWUtil.getBlockCenterByBlockface(event.getClickedBlock().getLocation(), event.getBlockFace()));
         }
         player.getWorld().playSound(event.getClickedBlock().getLocation(), Sound.ZOMBIE_WOOD, 0.1f, 2.2f - CWUtil.randomFloat());
         if (effect == ParticleEffect.SMOKE_NORMAL) {
@@ -104,5 +93,65 @@ public class Hammer extends MobAbility {
                 player.getWorld().playSound(event.getClickedBlock().getLocation(), Sound.ZOMBIE_WOODBREAK, 0.5f, 0.8f);
             }
         }
+    }
+
+    @EventHandler
+    private void onDamageByEntity(EntityDamageByEntityEvent event) {
+        //Hitting shrine armorstands/holograms.
+        if (!(event.getEntity() instanceof ArmorStand)) {
+            return;
+        }
+        Block block = event.getEntity().getLocation().getBlock();
+        if (block.getType() != Material.ENDER_PORTAL_FRAME) {
+            block = block.getRelative(BlockFace.UP);
+            if (block.getType() != Material.ENDER_PORTAL_FRAME) {
+                return;
+            }
+        }
+
+        if (!(event.getDamager() instanceof Player)) {
+            return;
+        }
+        Player damager = (Player) event.getDamager();
+
+        if (!isCastItem(damager.getItemInHand())) {
+            return;
+        }
+
+        if (!canCast(damager)) {
+            return;
+        }
+
+        if (!damageShrine(block.getLocation(), damager)) {
+            return;
+        }
+
+        if (onCooldown(damager)) {
+            return;
+        }
+
+        ParticleEffect.SPELL_WITCH.display(0.2f, 0.0f, 0.2f, 0.00001f, 8, block.getLocation().add(0.5f, 1, 0.5f));
+        damager.getWorld().playSound(block.getLocation(), Sound.ZOMBIE_WOOD, 0.1f, 2.2f - CWUtil.randomFloat());
+    }
+
+    private boolean damageShrine(Location shrineLoc, Player player) {
+        ShrineBlock shrineBlock = dvz.getGM().getShrineBlock(shrineLoc);
+        if (shrineBlock == null) {
+            return false;
+        }
+        if (dvz.getGM().getState() == GameState.MONSTERS) {
+            if (shrineBlock.getType() == ShrineType.KEEP_1 || shrineBlock.getType() == ShrineType.KEEP_2) {
+                player.sendMessage(CWUtil.formatCWMsg("&cYou have to destroy the shrine at the wall first!"));
+                return false;
+            }
+        } else if (dvz.getGM().getState() == GameState.MONSTERS_WALL) {
+            if (shrineBlock.getType() == ShrineType.KEEP_2) {
+                player.sendMessage(CWUtil.formatCWMsg("&cYou have to destroy the shrine at the bottom of the keep first!"));
+                return false;
+            }
+        }
+
+        shrineBlock.damage();
+        return true;
     }
 }
