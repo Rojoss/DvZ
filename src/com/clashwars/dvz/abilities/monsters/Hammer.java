@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.monsters;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.GameState;
@@ -82,7 +83,7 @@ public class Hammer extends MobAbility {
         }
         player.getWorld().playSound(event.getClickedBlock().getLocation(), Sound.ZOMBIE_WOOD, 0.1f, 2.2f - CWUtil.randomFloat());
         if (effect == ParticleEffect.SMOKE_NORMAL) {
-            if (CWUtil.randomFloat() < getFloatOption("chance")) {
+            if (CWUtil.randomFloat() < dvz.getGM().getMonsterPower(0.3f) + 0.05f) {
                 if (event.getClickedBlock().getType() == Material.SMOOTH_BRICK && event.getClickedBlock().getData() == 0) {
                     event.getClickedBlock().setData((byte)(2));
                 } else {
