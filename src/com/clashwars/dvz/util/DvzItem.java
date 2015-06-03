@@ -13,6 +13,26 @@ public class DvzItem extends CWItem {
     private int slot = -1;
     private boolean give = true;
 
+    public DvzItem(CWItem item) {
+        super(item);
+        init(priority, slot, true);
+    }
+
+    public DvzItem(CWItem item, int priority) {
+        super(item);
+        init(priority, slot, true);
+    }
+
+    public DvzItem(CWItem item, int priority, int slot) {
+        super(item);
+        init(priority, slot, true);
+    }
+
+    public DvzItem(CWItem item, int priority, int slot, boolean give) {
+        super(item);
+        init(priority, slot, give);
+    }
+
     public DvzItem(Material mat, int priority, int slot) {
         super(mat);
         init(priority, slot, true);
