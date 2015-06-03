@@ -1,9 +1,12 @@
 package com.clashwars.dvz.abilities.monsters;
 
+import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -23,8 +26,10 @@ public class Glide extends MobAbility {
             return;
         }
         Vector d = player.getLocation().getDirection();
-        player.setVelocity(d.multiply(getDoubleOption("force")).setY(getDoubleOption("height-force")));
-        //TODO: Add particle and sound effects.
+        player.setVelocity(d.multiply(dvz.getGM().getMonsterPower(0.4f) + 0.4f).setY(0.32f));
+        ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0, 5, player.getLocation());
+        ParticleEffect.LAVA.display(0.5f, 0.5f, 0.5f, 0, 1, player.getLocation());
+        player.getWorld().playSound(player.getLocation(), Sound.ENDERDRAGON_WINGS, 0.1f, 2);
     }
 
     @EventHandler
