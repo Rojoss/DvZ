@@ -84,43 +84,75 @@ public class FurnaceStruc extends Structure {
 
         //Check if clicked in furnace inv or own inv.
         if (event.getRawSlot() < menu.getSize()) {
-            if (furnaceItem.getResult().getType() == item.getType()) {
-                //Take item out of furnace.
-                player.getWorld().playSound(player.getLocation(), Sound.FIZZ, 0.5f, 1.3f);
-                ParticleEffect.SMOKE_NORMAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 15, player.getLocation());
-                ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 5, player.getLocation());
-                menu.setSlot(new CWItem(Material.AIR), event.getSlot(), null);
-                furnaceItem.getResult().giveToPlayer(player);
-                dvz.getPM().getPlayer(player).addClassExp(furnaceItem.getXP());
+            if (event.isShiftClick()) {
+                //Try take all items out of furnace.
+                for (int i = 0; i < menu.getSize() - 9; i++) {
+                    for (FurnaceItem fItem : furnaceItems) {
+                        if (menu.getItems()[i].getType() == fItem.getResult().getType()) {
+                            player.getWorld().playSound(player.getLocation(), Sound.FIZZ, 0.5f, 1.3f);
+                            ParticleEffect.SMOKE_NORMAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 15, player.getLocation());
+                            ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 5, player.getLocation());
+                            menu.setSlot(new CWItem(Material.AIR), i, null);
+                            fItem.getResult().giveToPlayer(player);
+                            dvz.getPM().getPlayer(player).addClassExp(fItem.getXP());
+                        }
+                    }
+                }
             } else {
-                player.sendMessage(Util.formatMsg("&cThis item isn't done yet."));
+                //Take item out of furnace.
+                if (furnaceItem.getResult().getType() == item.getType()) {
+                    player.getWorld().playSound(player.getLocation(), Sound.FIZZ, 0.5f, 1.3f);
+                    ParticleEffect.SMOKE_NORMAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 15, player.getLocation());
+                    ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 5, player.getLocation());
+                    menu.setSlot(new CWItem(Material.AIR), event.getSlot(), null);
+                    furnaceItem.getResult().giveToPlayer(player);
+                    dvz.getPM().getPlayer(player).addClassExp(furnaceItem.getXP());
+                } else {
+                    player.sendMessage(Util.formatMsg("&cThis item isn't done yet."));
+                }
             }
+
         } else {
             if (furnaceItem.getOriginal().getType() == item.getType()) {
                 //Try look for a empty slot.
-                int availableSlot = -1;
+                List<Integer> availableSlots = new ArrayList<Integer>();
                 for (int i = 0; i < menu.getSize() - 9; i++) {
                     if (menu.getItems()[i] == null || menu.getItems()[i].getType() == Material.AIR) {
-                        availableSlot = i;
-                        break;
+                        availableSlots.add(i);
                     }
                 }
 
                 //if there is a empty slot add item in furnace else not.
-                if (availableSlot >= 0) {
-                    player.getWorld().playSound(player.getLocation(), Sound.FIZZ, 0.3f, 2.0f);
-                    ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 5, player.getLocation());
-                    menu.setSlot(new CWItem(furnaceItem.getOriginal()), availableSlot, null);
-                    CWUtil.removeItemsFromSlot(player.getInventory(), event.getSlot(), 1);
+                if (availableSlots.size() >= 0) {
+                    if (event.isShiftClick()) {
+                        for (int i = 0; i < Math.min(item.getAmount(), availableSlots.size()); i++) {
+                            player.getWorld().playSound(player.getLocation(), Sound.FIZZ, 0.3f, 2.0f);
+                            ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 5, player.getLocation());
+                            menu.setSlot(new CWItem(furnaceItem.getOriginal()), availableSlots.get(i), null);
+                            CWUtil.removeItemsFromSlot(player.getInventory(), event.getSlot(), 1);
 
-                    final int slot = availableSlot;
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            menu.setSlot(new CWItem(furnaceItem.getResult()), slot, null);
+                            final int slot = availableSlots.get(i);
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    menu.setSlot(new CWItem(furnaceItem.getResult()), slot, null);
+                                }
+                            }.runTaskLater(dvz, furnaceItem.getCookDuration());
                         }
-                    }.runTaskLater(dvz, furnaceItem.getCookDuration());
+                    } else {
+                        player.getWorld().playSound(player.getLocation(), Sound.FIZZ, 0.3f, 2.0f);
+                        ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 5, player.getLocation());
+                        menu.setSlot(new CWItem(furnaceItem.getOriginal()), availableSlots.get(0), null);
+                        CWUtil.removeItemsFromSlot(player.getInventory(), event.getSlot(), 1);
 
+                        final int slot = availableSlots.get(0);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                menu.setSlot(new CWItem(furnaceItem.getResult()), slot, null);
+                            }
+                        }.runTaskLater(dvz, furnaceItem.getCookDuration());
+                    }
                 } else {
                     player.sendMessage(Util.formatMsg("&cYour furnace is full right now."));
                 }
