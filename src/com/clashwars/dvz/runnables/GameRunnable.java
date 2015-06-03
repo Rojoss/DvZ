@@ -81,7 +81,7 @@ public class GameRunnable extends BukkitRunnable {
                         dwarfCount++;
                     }
                 }
-                if (dwarfCount <= Math.round(dvz.getPM().getPlayers(ClassType.DWARF, true).size() * 0.2f)) {
+                if (dwarfCount <= Math.round(dvz.getPM().getPlayers(ClassType.DWARF, true, true).size() * 0.2f)) {
                     for (ShrineBlock shrineBlock : shrineBlocks) {
                         if (shrineBlock != null && !shrineBlock.isDestroyed()) {
                             shrineBlock.damage();

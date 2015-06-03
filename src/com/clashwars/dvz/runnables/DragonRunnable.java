@@ -29,7 +29,7 @@ public class DragonRunnable extends BukkitRunnable {
             dragon = dvz.getGM().getDragonPlayer();
         }
 
-        Double monsterPerc = CWUtil.getPercentage(dvz.getPM().getPlayers(ClassType.MONSTER, true).size(), dvz.getPM().getPlayers(true).size()) / 100;
+        Double monsterPerc = CWUtil.getPercentage(dvz.getPM().getPlayers(ClassType.MONSTER, true, true).size(), dvz.getPM().getPlayers(true).size()) / 100;
         int power = 1;
         if (monsterPerc < dvz.getCfg().MONSTER_PERCENTAGE_MIN) {
             power = 3;

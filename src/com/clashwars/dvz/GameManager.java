@@ -236,7 +236,7 @@ public class GameManager {
         new BukkitRunnable() {
             @Override
             public void run() {
-                double health = 20 + dvz.getPM().getPlayers(ClassType.DWARF, true).size() * 2;
+                double health = 20 + dvz.getPM().getPlayers(ClassType.DWARF, true, true).size() * 2;
                 dragonPlayer.setMaxHealth(health);
                 dragonPlayer.setHealth(health);
             }
@@ -247,8 +247,8 @@ public class GameManager {
 
     public void releaseMonsters(boolean doExecution) {
         if (doExecution) {
-            List<CWPlayer> dwarves = dvz.getPM().getPlayers(ClassType.DWARF, false);
-            List<CWPlayer> monsters = dvz.getPM().getPlayers(ClassType.MONSTER, false);
+            List<CWPlayer> dwarves = dvz.getPM().getPlayers(ClassType.DWARF, false, true);
+            List<CWPlayer> monsters = dvz.getPM().getPlayers(ClassType.MONSTER, false, true);
             List<CWPlayer> killed = new ArrayList<CWPlayer>();
 
             int dwarvesToKill = (int)Math.round((monsters.size() + dwarves.size()) * dvz.getCfg().MONSTER_PERCENTAGE_MIN);

@@ -1,5 +1,6 @@
 package com.clashwars.dvz.classes;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
@@ -95,7 +96,7 @@ public class ClassManager {
             //The problem is at game start everyone gets classes but nobody has picked it yet so then the system will give the same classes to everyone.
             //So at game start everyone will get random classes but when new players join it will fill up all gaps and make it all equal based on weights
             //It will skip all methods below and move on to the check if all classes are given which is false because none are given yet because we skip it.
-            List<CWPlayer> dwarves = dvz.getPM().getPlayers(ClassType.DWARF, true);
+            List<CWPlayer> dwarves = dvz.getPM().getPlayers(ClassType.DWARF, true, false);
             if (dwarves.size() > classes.size()) {
                 //Get the amount of times each class is picked.
                 HashMap<DvzClass, Double> classCounts = new HashMap<DvzClass, Double>();

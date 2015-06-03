@@ -129,7 +129,7 @@ public class PotionBomb extends MobAbility {
                 bombs.remove(bomb);
                 fixGround(bomb.getBlock());
 
-                for(CWPlayer cwp : dvz.getPM().getPlayers(ClassType.DWARF, true)) {
+                for(CWPlayer cwp : dvz.getPM().getPlayers(ClassType.DWARF, true, false)) {
                     for (PotionEffect pe : cwp.getPlayer().getActivePotionEffects()) {
                         if(pe.getType().equals(PotionEffectType.BLINDNESS)) {
                             cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, getIntOption("blindness-duration") + pe.getDuration(), pe.getAmplifier()), true);

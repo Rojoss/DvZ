@@ -36,7 +36,7 @@ public class WindStorm extends DragonAbility {
 
             @Override
             public void run() {
-                for (CWPlayer cwp : dvz.getPM().getPlayers(ClassType.DWARF, true)) {
+                for (CWPlayer cwp : dvz.getPM().getPlayers(ClassType.DWARF, true, false)) {
                     if (cwp.getPlayer() == player) {
                         continue;
                     }

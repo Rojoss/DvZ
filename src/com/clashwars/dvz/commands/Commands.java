@@ -897,8 +897,8 @@ public class Commands {
             sender.sendMessage(CWUtil.integrateColor("&6Current map&8: &5" + dvz.getMM().getActiveMapName()));
             sender.sendMessage(CWUtil.integrateColor("&6Game speed&8: &5" + gm.getSpeed()));
             sender.sendMessage(CWUtil.integrateColor("&6Shrines remaining&8: &5" + shrines));
-            sender.sendMessage(CWUtil.integrateColor("&6Players&8: &a&l" + dvz.getPM().getPlayers(ClassType.DWARF, true).size() + " &2Dwarves &6&lVS &c&l"
-                    + dvz.getPM().getPlayers(ClassType.MONSTER, true).size() + " &4Zombies"));
+            sender.sendMessage(CWUtil.integrateColor("&6Players&8: &a&l" + dvz.getPM().getPlayers(ClassType.DWARF, true, true).size() + " &2Dwarves &6&lVS &c&l"
+                    + dvz.getPM().getPlayers(ClassType.MONSTER, true, true).size() + " &4Zombies"));
             if (sender instanceof Player) {
                 Player player = (Player)sender;
                 CWPlayer cwp = dvz.getPM().getPlayer(player);

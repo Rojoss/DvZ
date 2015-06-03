@@ -35,7 +35,7 @@ public class Horn extends DwarfAbility {
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (CWPlayer cwp : dvz.getPM().getPlayers(ClassType.DWARF, true)) {
+                for (CWPlayer cwp : dvz.getPM().getPlayers(ClassType.DWARF, true, false)) {
                     cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, getIntOption("duration"), 0));
                     cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, getIntOption("duration"), 0));
                 }
