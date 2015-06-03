@@ -3,6 +3,7 @@ package com.clashwars.dvz.events;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
+import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
@@ -22,6 +23,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -189,6 +191,47 @@ public class LobbyEvents implements Listener {
             }
         }
         return false;
+    }
+
+    @EventHandler
+    private void serverPing(ServerListPingEvent event) {
+        GameState state = dvz.getGM().getState();
+        if (state == GameState.CLOSED) {
+            event.setMotd(CWUtil.integrateColor("&4&lClashWars &6&lDwarves &2&lVS &c&lZombies\n&cNo DvZ right now!"));
+        }
+        if (state == GameState.SETUP) {
+            event.setMotd(CWUtil.integrateColor("&4&lClashWars &6&lDwarves &2&lVS &c&lZombies\n&6Setting up..."));
+        }
+        if (state == GameState.OPENED) {
+            event.setMotd(CWUtil.integrateColor("&4&lClashWars &6&lDwarves &2&lVS &c&lZombies\n&aOpened! &8(&7Join now!&8)"));
+        }
+        if (state == GameState.DAY_ONE) {
+            event.setMotd(CWUtil.integrateColor("&4&lClashWars &6&lDwarves &2&lVS &c&lZombies\n&aStarted! &8(&7First day!&8)"));
+        }
+        if (state == GameState.NIGHT_ONE) {
+            event.setMotd(CWUtil.integrateColor("&4&lClashWars &6&lDwarves &2&lVS &c&lZombies\n&aStarted! &8(&7First night!&8)"));
+        }
+        if (state == GameState.DAY_TWO) {
+            event.setMotd(CWUtil.integrateColor("&4&lClashWars &6&lDwarves &2&lVS &c&lZombies\n&aStarted! &8(&7Second day!&8)"));
+        }
+        if (state == GameState.NIGHT_TWO) {
+            event.setMotd(CWUtil.integrateColor("&4&lClashWars &6&lDwarves &2&lVS &c&lZombies\n&aStarted! &8(&7Second night!&8)"));
+        }
+        if (state == GameState.DRAGON) {
+            event.setMotd(CWUtil.integrateColor("&4&lClashWars &6&lDwarves &2&lVS &c&lZombies\n&aStarted! &8(&7Dragon!&8)"));
+        }
+        if (state == GameState.MONSTERS) {
+            event.setMotd(CWUtil.integrateColor("&4&lClashWars &6&lDwarves &2&lVS &c&lZombies\n&aStarted! &8(&7Monsters released!&8)"));
+        }
+        if (state == GameState.MONSTERS_WALL) {
+            event.setMotd(CWUtil.integrateColor("&4&lClashWars &6&lDwarves &2&lVS &c&lZombies\n&aStarted! &8(&7Monsters have taken the wall!&8)"));
+        }
+        if (state == GameState.MONSTERS_KEEP) {
+            event.setMotd(CWUtil.integrateColor("&4&lClashWars &6&lDwarves &2&lVS &c&lZombies\n&aStarted! &8(&7Monsters have taken the keep!&8)"));
+        }
+        if (state == GameState.ENDED) {
+            event.setMotd(CWUtil.integrateColor("&4&lClashWars &6&lDwarves &2&lVS &c&lZombies\n&cEnded! &8(&7There might be another round!&8)"));
+        }
     }
 
 }

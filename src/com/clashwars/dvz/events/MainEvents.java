@@ -130,6 +130,7 @@ public class MainEvents implements Listener {
             @Override
             public void run() {
                 player.teleport(spawnLocFinal);
+                player.setResourcePack("http://web.clashwars.com/ResourcePack/CWDvZ.zip");
             }
         }.runTaskLater(dvz, 10);
     }
