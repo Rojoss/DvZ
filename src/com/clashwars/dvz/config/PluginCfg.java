@@ -12,7 +12,6 @@ public class PluginCfg extends EasyConfig {
     public int PORTAL_TYPES = 1;
     public Double MONSTER_PERCENTAGE_MIN = 0.05;
     public Double MONSTER_PERCENTAGE_MAX = 0.15;
-    public int WEB_REMOVAL_TIME = 100;
 
     public int SHRINE__BLOCK_HP = 1000;
     public int SHRINE__DAMAGE_PER_HIT = 5;

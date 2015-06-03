@@ -1,10 +1,13 @@
 package com.clashwars.dvz.abilities.monsters;
 
+import com.clashwars.cwcore.Debug;
+import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
@@ -29,8 +32,7 @@ public class Web extends MobAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
-
-        if (player.getLocation().getPitch() >= -5) {
+        if (player.getLocation().getPitch() >= 50) {
             return;
         }
 
@@ -38,10 +40,11 @@ public class Web extends MobAbility {
             return;
         }
 
+        player.getWorld().playSound(player.getLocation(), Sound.DIG_GRAVEL, 0.5f, 2);
         CWUtil.removeItemsFromHand(player, 1);
-        final FallingBlock web = player.getLocation().getWorld().spawnFallingBlock(player.getLocation(), Material.WEB, (byte)0);
+        final FallingBlock web = player.getLocation().getWorld().spawnFallingBlock(player.getLocation().add(0, 1.5f, 0), Material.WEB, (byte)0);
         web.setDropItem(false);
-        web.setVelocity(player.getLocation().getDirection().multiply(getDoubleOption("force")));
+        web.setVelocity(player.getLocation().add(0,1.5f,0).getDirection().multiply(0.8f));
     }
 
     @EventHandler
@@ -60,16 +63,20 @@ public class Web extends MobAbility {
         if (!canCast(event.getPlayer())) {
             return;
         }
-
         event.setCancelled(false);
+
+        block.getWorld().playSound(block.getLocation(), Sound.DIG_GRAVEL, 0.5f, 2);
+        ParticleEffect.FIREWORKS_SPARK.display(0.3f, 0.3f, 0.3f, 0, 20, block.getLocation().add(0.5f, 0.5f, 0.5f));
+
         new BukkitRunnable() {
             @Override
             public void run() {
                 if (block.getType() == Material.WEB) {
+                    ParticleEffect.FIREWORKS_SPARK.display(0.3f, 0.3f, 0.3f, 0, 5, block.getLocation().add(0.5f, 0.5f, 0.5f));
                     block.setType(Material.AIR);
                 }
             }
-        }.runTaskLater(dvz, dvz.getCfg().WEB_REMOVAL_TIME);
+        }.runTaskLater(dvz, (int)dvz.getGM().getMonsterPower(140) + 60);
     }
 
     @EventHandler
@@ -82,14 +89,16 @@ public class Web extends MobAbility {
         }
 
         final Block block = event.getBlock();
+        ParticleEffect.FIREWORKS_SPARK.display(0.3f, 0.3f, 0.3f, 0, 20, block.getLocation().add(0.5f, 0.5f, 0.5f));
         new BukkitRunnable() {
             @Override
             public void run() {
                 if (block.getType() == Material.WEB) {
+                    ParticleEffect.FIREWORKS_SPARK.display(0.3f, 0.3f, 0.3f, 0, 5, block.getLocation().add(0.5f, 0.5f, 0.5f));
                     block.setType(Material.AIR);
                 }
             }
-        }.runTaskLater(dvz, dvz.getCfg().WEB_REMOVAL_TIME);
+        }.runTaskLater(dvz, (int)dvz.getGM().getMonsterPower(140) + 60);
 
     }
 }
