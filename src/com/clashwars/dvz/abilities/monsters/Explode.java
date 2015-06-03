@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.monsters;
 
+import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.maps.ShrineBlock;
@@ -8,10 +9,14 @@ import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.List;
 
 public class Explode extends MobAbility {
 
@@ -48,10 +53,22 @@ public class Explode extends MobAbility {
         }
 
         Util.disguisePlayer(player.getName(), (cwp.getPlayerClass().getClassClass().getDisguise() + " setPowered true"));
+        player.getWorld().playSound(player.getLocation(), Sound.FUSE, 1, 2);
+        ParticleEffect.FIREWORKS_SPARK.display(0.5f, 1f, 0.5f, 0, 10, player.getLocation().add(0, 1, 0));
+
+        double pps = 0.5f;
+        if (dvz.getGM().getMonsterPower(1) >= 0.8f) {
+            pps = 1.5f;
+        } else if (dvz.getGM().getMonsterPower(1) >= 0.3f) {
+            pps = 1f;
+        }
+        final double powerPerSec = dvz.getGM().getMonsterPower(2) + 0.5f;
 
         new BukkitRunnable() {
+            int minPower = 1;
+            int maxPower = (int)dvz.getGM().getMonsterPower(3, 12);
             int ticks = 0;
-            Double power = getDoubleOption("minpower");
+            Double power = (double)minPower;
             Location playerLoc = player.getLocation();
 
             @Override
@@ -67,15 +84,19 @@ public class Explode extends MobAbility {
                         return;
                     }
                     //Increase the power by powerpersec value and clamp it between min/max value.
-                    power = Math.min(Math.max((ticks / 20) * getDoubleOption("powerpersec"), getDoubleOption("minpower")), getDoubleOption("maxpower"));
-                    CWUtil.sendActionBar(player, CWUtil.integrateColor("&9&l>> &3Charge power&8: &6&l" + power + " &9&l<<"));
-                    //TODO: Add sound effects and particles.
+                    double prevPower = power;
+                    power = Math.min(Math.max((ticks / 20) * powerPerSec, minPower), maxPower);
+                    CWUtil.sendActionBar(player, CWUtil.integrateColor("&9&l>> &3Charge power&8: &6&l" + power + "&7&l/&8&l" + maxPower + " &9&l<<"));
+                    if (power != prevPower) {
+                        player.getWorld().playSound(playerLoc, Sound.FUSE, 1, 2);
+                        ParticleEffect.FIREWORKS_SPARK.display(0.5f, 1f, 0.5f, 0, 10, playerLoc.clone().add(0,1,0));
+                    }
                 }
 
                 //If player died create small explosion.
                 if (player.isDead()) {
-                    player.sendMessage(Util.formatMsg("&cExploded with &4" + getDoubleOption("minpower") + " &cpower!"));
-                    createExplosion(playerLoc, (float)getDoubleOption("minpower"));
+                    player.sendMessage(Util.formatMsg("&cExploded with &4" + minPower + " &cpower because you died!"));
+                    createExplosion(playerLoc, (float)minPower);
                     this.cancel();
                     return;
                 }
@@ -83,8 +104,8 @@ public class Explode extends MobAbility {
                 //If player stops sneaking then explode!
                 if (!player.isSneaking()) {
                     player.sendMessage(Util.formatMsg("&cExploded with &4" + power + " &cpower!"));
-                    createExplosion(playerLoc, power.floatValue());
                     player.setHealth(0);
+                    createExplosion(playerLoc, power.floatValue());
                     this.cancel();
                     return;
                 }
@@ -92,8 +113,8 @@ public class Explode extends MobAbility {
                 //After 30 seconds force explosion. [because this is quite a heavy task so it's just a waste running this forever]
                 if (ticks > 600) {
                     player.sendMessage(Util.formatMsg("&cOvercharge!"));
-                    createExplosion(playerLoc, power.floatValue());
                     player.setHealth(0);
+                    createExplosion(playerLoc, power.floatValue());
                     this.cancel();
                 }
             }
@@ -101,7 +122,20 @@ public class Explode extends MobAbility {
     }
 
     private void createExplosion(Location loc, float power) {
-        loc.getWorld().createExplosion(loc, power);
+        loc.getWorld().createExplosion(loc, power, false);
+
+        if (dvz.getGM().getMonsterPower(3) >= 1) {
+            List<Entity> entities = CWUtil.getNearbyEntities(loc, power * 0.75f, null);
+            for (Entity e : entities) {
+                if (!(e instanceof Player)) {
+                    continue;
+                }
+                CWPlayer cwp = dvz.getPM().getPlayer((Player)e);
+                if (cwp.isDwarf()) {
+                    ((Player)e).damage(dvz.getGM().getMonsterPower(3));
+                }
+            }
+        }
 
         //Damage shrine blocks.
         for (ShrineBlock shrineBlock : dvz.getGM().getShrineBlocks()) {
