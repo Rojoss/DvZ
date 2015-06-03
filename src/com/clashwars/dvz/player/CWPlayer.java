@@ -183,9 +183,9 @@ public class CWPlayer {
                 player.setFlySpeed(c.getSpeed());
 
                 //Reaply buff
-                if (getPlayerData().isBuffed()) {
+                /* if (getPlayerData().isBuffed()) {
                     player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 0));
-                }
+                }*/
 
                 if (eggUse) {
                     player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));

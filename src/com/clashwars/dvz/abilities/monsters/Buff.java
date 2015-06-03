@@ -11,6 +11,8 @@ import com.clashwars.dvz.util.Util;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -65,9 +67,27 @@ public class Buff extends BaseAbility {
         CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&6Buff given to &5" + target.getDisplayName() + "&6!"));
         CWUtil.sendActionBar(target, CWUtil.integrateColor("&6You received a buff from &5" + event.getPlayer().getDisplayName() + "&6!"));
         target.sendMessage(Util.formatMsg("&6You received a buff from &5" + event.getPlayer().getDisplayName() + "&6!"));
-        cwt.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 0));
+        //cwt.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 0));
         cwt.getPlayerData().setBuffed(true);
         dvz.getPM().getPlayer(event.getPlayer()).getPlayerData().setBuffUsed(true);
         CWUtil.removeItemsFromHand(event.getPlayer(), 1);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void playerDmg(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+        if (!(event.getDamager() instanceof Player)) {
+            return;
+        }
+        CWPlayer cwd = dvz.getPM().getPlayer((Player)event.getDamager());
+        if (cwd == null) {
+            return;
+        }
+        if (!cwd.getPlayerData().isBuffed()) {
+            return;
+        }
+        event.setDamage(event.getDamage() + 2);
     }
 }
