@@ -16,7 +16,7 @@ public class Util {
 
     public static void disguisePlayer(String player, String disguiseStr) {
         Bukkit.dispatchCommand(DvZ.inst().getServer().getConsoleSender(), "disguiseplayer " + player + " "
-                + (disguiseStr == null || disguiseStr.isEmpty() ? DvZ.inst().getPM().getPlayer(player).getPlayerClass().toString().toLowerCase() : disguiseStr));
+                + (disguiseStr == null || disguiseStr.isEmpty() ? DvZ.inst().getPM().getPlayer(player).getPlayerClass().toString().toLowerCase() : disguiseStr) + " setCustomName &c" + player + " setCustomNameVisible true");
     }
 
     public static void undisguisePlayer(String player) {
