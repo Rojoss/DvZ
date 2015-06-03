@@ -1,5 +1,6 @@
 package com.clashwars.dvz.structures;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.Product;
@@ -186,7 +187,7 @@ public class StorageStruc extends Structure {
             //Players can also add items back by accident so decrease the amount they took.
             CWPlayer cwp = dvz.getPM().getPlayer(player);
             if (cwp.productsTaken.containsKey(storageItem.getName())) {
-                cwp.productsTaken.put(storageItem.getName(), Math.min(0, cwp.productsTaken.get(storageItem.getName()) - amtToAdd));
+                cwp.productsTaken.put(storageItem.getName(), Math.max(0, cwp.productsTaken.get(storageItem.getName()) - amtToAdd));
             }
 
             //Add item(s) to menu.
