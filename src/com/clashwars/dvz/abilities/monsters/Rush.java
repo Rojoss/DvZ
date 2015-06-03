@@ -78,7 +78,21 @@ public class Rush extends MobAbility {
                 }
                 if (distance < 2) {
                     player.setWalkSpeed(dvzClass.getClassClass().getSpeed());
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (int)dvz.getGM().getMonsterPower(60) + 20, 0));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (int) dvz.getGM().getMonsterPower(60) + 20, 0));
+
+                    player.getWorld().playSound(player.getLocation(), Sound.ZOMBIE_IDLE, 0.8f, 0.6f);
+                    new BukkitRunnable() {
+                        private int iterations = 0;
+                        @Override
+                        public void run () {
+                            iterations++;
+                            if (iterations >= (int)(dvz.getGM().getMonsterPower(60) + 20) / 3) {
+                                cancel();
+                                return;
+                            }
+                            ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.REDSTONE_BLOCK, (byte)0), 0.5f, 1.5f, 0.5f, 0, 10, player.getLocation().add(0,1,0));
+                        }
+                    }.runTaskTimer(dvz, 3, 3);
                     cancel();
                     return;
                 }
