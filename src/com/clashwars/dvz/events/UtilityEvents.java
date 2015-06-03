@@ -136,9 +136,10 @@ public class UtilityEvents implements Listener {
 
 
     @EventHandler
-    private void foodEat(PlayerItemConsumeEvent event) {
+    private void foodEat(final PlayerItemConsumeEvent event) {
         //More food restored from bread
         if (event.getItem().getType() == Material.BREAD) {
+            event.getPlayer().setSaturation(event.getPlayer().getSaturation() + 6);
             event.getPlayer().setFoodLevel(event.getPlayer().getFoodLevel() + 5);
         }
 

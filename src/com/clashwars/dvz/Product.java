@@ -42,7 +42,7 @@ public enum Product {
 
     WHEAT(new CWItem(Material.WHEAT).setName("&eWheat").setLore(new String[] {"&7Perfectly harvested common wheat!", "&eThrow it in the grinder(hopper) to make flour!"}), false),
     FLOUR(new CWItem(Material.SUGAR).setName("&eFlour").setLore(new String[] {"&7Dwarves finest flour, to make delicous bread!", "&ePlace in the furnace to create bread."}), false),
-    BREAD(new CWItem(Material.BREAD).setName("&eBread").setLore(new String[] {"&7Delicious bread. (It's still warm!)", "&eRestores &65 hunger&e!"}), true),
+    BREAD(new CWItem(Material.BREAD).setName("&eBread").setLore(new String[] {"&7Delicious bread. (It's still warm!)", "&eRestores &65 hunger and 12 saturation&e!"}), true),
     SEED(new CWItem(Material.SEEDS).setName("&eGrain").setLore(new String[]{"&7Whole grain with lots of proteins!", "&eSow them in the soil to grow wheat!"}), false);
 
 
