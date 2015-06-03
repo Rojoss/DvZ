@@ -1,9 +1,11 @@
 package com.clashwars.dvz.util;
 
+import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.maps.DvzMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -50,6 +52,22 @@ public class Util {
         castVec.multiply(6);
         castVec.add(playerLoc.toVector());
         return castVec;
+    }
+
+    public static boolean isNearShrine(Location loc, float range) {
+        DvzMap activeMap = DvZ.inst().getMM().getActiveMap();
+        if (activeMap != null) {
+            String[] shrines = new String[] {"shrinewall", "shrine1keep", "shrine2keep"};
+            for (String shrineName : shrines) {
+                Cuboid cub = activeMap.getCuboid(shrineName);
+                if (cub != null && cub.getCenterLoc() != null) {
+                    if (cub.getCenterLoc().distance(loc) < 10) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 }

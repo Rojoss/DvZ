@@ -7,6 +7,7 @@ import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.maps.DvzMap;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.util.Util;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -105,25 +106,16 @@ public class ProtectEvents implements Listener {
             }
 
             //Don't allow near monster spawn.
-            if (event.getBlock().getLocation().distance(activeMap.getLocation("monsterlobby")) <  30f) {
-                CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&cCan't build this close to the monster spawn!"));
+            if (event.getBlock().getLocation().distance(activeMap.getLocation("monster")) <  50f) {
+                CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't build this close to the monster spawn! &4&l<<"));
                 event.setCancelled(true);
                 return;
             }
 
             //Don't allow near shrines
-            if (activeMap != null) {
-                String[] shrines = new String[] {"shrinewall", "shrine1keep", "shrine2keep"};
-                for (String shrineName : shrines) {
-                    Cuboid cub = activeMap.getCuboid(shrineName);
-                    if (cub != null && cub.getCenterLoc() != null) {
-                        if (cub.getCenterLoc().distance(event.getBlock().getLocation()) < 10) {
-                            CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&cCan't build this close to the shrine!"));
-                            event.setCancelled(true);
-                            return;
-                        }
-                    }
-                }
+            if (Util.isNearShrine(event.getBlock().getLocation(), 10)) {
+                CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't build this close to the shrine! &4&l<<"));
+                event.setCancelled(true);
             }
         }
     }
@@ -170,25 +162,16 @@ public class ProtectEvents implements Listener {
             }
 
             //Don't allow near monster spawn.
-            if (event.getBlock().getLocation().distance(activeMap.getLocation("monsterlobby")) <  30f) {
-                CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&cCan't break blocks this close to the monster spawn!"));
+            if (event.getBlock().getLocation().distance(activeMap.getLocation("monster")) <  50f) {
+                CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't break blocks this close to the monster spawn! &4&l<<"));
                 event.setCancelled(true);
                 return;
             }
 
             //Don't allow near shrines
-            if (activeMap != null) {
-                String[] shrines = new String[] {"shrinewall", "shrine1keep", "shrine2keep"};
-                for (String shrineName : shrines) {
-                    Cuboid cub = activeMap.getCuboid(shrineName);
-                    if (cub != null && cub.getCenterLoc() != null) {
-                        if (cub.getCenterLoc().distance(event.getBlock().getLocation()) < 10) {
-                            CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&cCan't break blocks this close to the shrine!"));
-                            event.setCancelled(true);
-                            return;
-                        }
-                    }
-                }
+            if (Util.isNearShrine(event.getBlock().getLocation(), 10)) {
+                CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't break blocks this close to the shrine! &4&l<<"));
+                event.setCancelled(true);
             }
         }
 

@@ -4,6 +4,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
+import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -40,6 +41,12 @@ public class BuildingBlock extends DwarfAbility {
         }
         if (dvz.getMM().getActiveMap().getCuboid("innerwall").contains(event.getBlock())) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild tools have to be used outside the keep! &4&l<<"));
+            return;
+        }
+        if (Util.isNearShrine(event.getBlock().getLocation(), 10)) {
+            return;
+        }
+        if (dvz.getMM().getActiveMap().getLocation("monster").distance(event.getBlock().getLocation()) < 50f) {
             return;
         }
 

@@ -1,8 +1,10 @@
 package com.clashwars.dvz.classes.dwarves;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.maps.DvzMap;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Material;
@@ -41,6 +43,18 @@ public class Builder extends DwarfClass {
         if (dvz.getPM().locGetWorkShop(block.getLocation()) != null) {
             return;
         }
+
+        DvzMap activeMap = dvz.getMM().getActiveMap();
+        if (activeMap != null && event.getBlock().getLocation().distance(activeMap.getLocation("monster")) < 50f) {
+            CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't build this close to the monster spawn! &4&l<<"));
+                    event.setCancelled(true);
+            return;
+        }
+
+        if (Util.isNearShrine(block.getLocation(), 10)) {
+            return;
+        }
+
         if ((block.getWorld().getHighestBlockAt(block.getLocation()).getLocation().getBlockY() -1) <= block.getLocation().getBlockY() && dvz.getMM().getActiveMap().getCuboid("keep").contains(event.getBlock())) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't build in the keep right now! &4&l<<"));
             return;
@@ -66,6 +80,18 @@ public class Builder extends DwarfClass {
         if (dvz.getPM().locGetWorkShop(block.getLocation()) != null) {
             return;
         }
+
+        DvzMap activeMap = dvz.getMM().getActiveMap();
+        if (activeMap != null && event.getBlock().getLocation().distance(activeMap.getLocation("monster")) <  50f) {
+            CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't break blocks this close to the monster spawn! &4&l<<"));
+            event.setCancelled(true);
+            return;
+        }
+
+        if (Util.isNearShrine(block.getLocation(), 10)) {
+            return;
+        }
+
         if ((block.getWorld().getHighestBlockAt(block.getLocation()).getLocation().getBlockY() -1) <= block.getLocation().getBlockY() && dvz.getMM().getActiveMap().getCuboid("keep").contains(event.getBlock())) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't break blocks in the keep right now! &4&l<<"));
             return;

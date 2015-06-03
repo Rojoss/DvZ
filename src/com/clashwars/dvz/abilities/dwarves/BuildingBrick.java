@@ -4,6 +4,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
+import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -47,6 +48,15 @@ public class BuildingBrick extends DwarfAbility {
         }
         if (dvz.getMM().getActiveMap().getCuboid("innerwall").contains(blocks.get(0))) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild tools have to be used outside the keep! &4&l<<"));
+            return;
+        }
+
+        if (Util.isNearShrine(blocks.get(0).getLocation(), 10)) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't build this close to the shrine! &4&l<<"));
+            return;
+        }
+        if (dvz.getMM().getActiveMap().getLocation("monster").distance(blocks.get(0).getLocation()) < 50f) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't build this close to the monster spawn! &4&l<<"));
             return;
         }
 
