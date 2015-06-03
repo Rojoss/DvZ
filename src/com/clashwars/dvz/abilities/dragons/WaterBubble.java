@@ -48,7 +48,10 @@ public class WaterBubble extends DragonAbility {
                     List<Entity> entities = CWUtil.getNearbyEntities(playerLoc, 5f, null);
                     for (Entity e : entities) {
                         if (e instanceof Player) {
-                            ((Player)e).setRemainingAir(60);
+                            if (!dvz.getPM().getPlayer((Player)e).isDwarf()) {
+                                continue;
+                            }
+                            ((Player)e).setRemainingAir(160 - dvz.getGM().getDragonPower() * 40);
                         }
                     }
 
@@ -66,6 +69,12 @@ public class WaterBubble extends DragonAbility {
 
                 List<Entity> entities = CWUtil.getNearbyEntities(playerLoc, 30f, null);
                 for (Entity e : entities) {
+                    if (!(e instanceof Player)) {
+                        continue;
+                    }
+                    if (!dvz.getPM().getPlayer((Player)e).isDwarf()) {
+                        continue;
+                    }
                     double distance = e.getLocation().distance(playerLoc);
                     if (distance > 1) {
                         Vector dir = playerLoc.toVector().subtract(e.getLocation().toVector());
