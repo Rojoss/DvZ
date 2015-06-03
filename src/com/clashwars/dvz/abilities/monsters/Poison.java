@@ -7,6 +7,7 @@ import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,7 +29,9 @@ public class Poison extends MobAbility {
             return;
         }
 
-        double range = getDoubleOption("range");
+        double range = 4;
+        player.getWorld().playSound(player.getLocation(), Sound.SILVERFISH_HIT, 0.8f, 0f);
+        player.getWorld().playSound(player.getLocation(), Sound.ZOMBIE_REMEDY, 0.2f, 2f);
         ExpandingCircleEffect poisonEffect = new ExpandingCircleEffect(dvz.getEM());
         poisonEffect.particleList.add(new Particle(ParticleEffect.SPELL_MOB, 0.1f, 0.2f, 0.1f, 0, 0, new ParticleEffect.OrdinaryColor(109, 138, 47)));
         poisonEffect.particleList.add(new Particle(ParticleEffect.REDSTONE, 0.1f, 0.2f, 0.1f, 0.1f, 0, new ParticleEffect.OrdinaryColor(117, 166, 13)));
@@ -46,7 +49,7 @@ public class Poison extends MobAbility {
             final Player p = (Player) ent;
 
             if(dvz.getPM().getPlayer(p).isDwarf()) {
-                p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, getIntOption("duration"), getIntOption("amplifier")));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(100) + 40, 2));
                 ParticleEffect.CRIT.display(1, 0.5f, 1, 0.01f, 10, p.getLocation());
             }
         }

@@ -54,11 +54,6 @@ public class AbilityCfg extends EasyConfig {
                 abilityData = loadDefault(abilityData, "bonusspeed", "0.3");
                 abilityData = loadDefault(abilityData, "duration", "40");
                 break;
-            case POISON:
-                abilityData = loadDefault(abilityData, "range", "4");
-                abilityData = loadDefault(abilityData, "amplifier", "0");
-                abilityData = loadDefault(abilityData, "duration", "160");
-                break;
             case WEB:
                 abilityData = loadDefault(abilityData, "force", "0.8");
                 break;
