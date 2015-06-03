@@ -6,13 +6,16 @@ import com.clashwars.cwcore.effect.effects.ArcEffect;
 import com.clashwars.cwcore.effect.effects.ExpandingCircleEffect;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.dvz.abilities.Ability;
+import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class Blast extends MobAbility {
 
@@ -23,12 +26,12 @@ public class Blast extends MobAbility {
     }
 
     @Override
-    public void castAbility(Player player, Location triggerLoc) {
+    public void castAbility(final Player player, Location triggerLoc) {
         if (onCooldown(player)) {
             return;
         }
 
-        int radius = getIntOption("radius");
+        final int radius = (int)dvz.getGM().getMonsterPower(5, 7);
         ExpandingCircleEffect ce = new ExpandingCircleEffect(dvz.getEM());
         ce.particleList.add(new Particle(ParticleEffect.FLAME, 0.1f, 0.4f, 0.1f, 0.001f, 0));
         ce.period = 1;
@@ -37,29 +40,24 @@ public class Blast extends MobAbility {
         ce.setLocation(player.getLocation().clone().add(0, 0.5, 0));
         ce.start();
 
-        for (Entity e : player.getNearbyEntities(radius, radius, radius)) {
-            if(e instanceof Player) {
-                final Player p = (Player) e;
-                if(dvz.getPM().getPlayer(p).isDwarf()) {
-                    ArcEffect ae = new ArcEffect(dvz.getEM());
-                    ae.setLocation(player.getLocation());
-                    ae.particleList.add(new Particle(ParticleEffect.FLAME));
-                    ae.particles = 30;
-                    ae.iterations = 10;
-                    ae.setTargetEntity(e);
-                    ae.type = EffectType.INSTANT;
-                    ae.callback = new Runnable() {
+        player.getWorld().playSound(player.getLocation(), Sound.ENDERDRAGON_WINGS, 1, 0);
+        player.getWorld().playSound(player.getLocation(), Sound.GHAST_FIREBALL, 1, 0);
 
-                        @Override
-                        public void run() {
-                            p.setFireTicks(getIntOption("fire-ticks"));
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (Entity e : player.getNearbyEntities(radius, radius, radius)) {
+                    if(e instanceof Player) {
+                        CWPlayer cwp = dvz.getPM().getPlayer((Player)e);
+                        if (cwp.isDwarf()) {
+                            cwp.getPlayer().setFireTicks((int)dvz.getGM().getMonsterPower(80) + 40);
+                            player.getWorld().playSound(e.getLocation(), Sound.BLAZE_HIT, 0.5f, 0);
+                            ParticleEffect.FLAME.display(0.5f, 0.2f, 0.5f, 0, 10, player.getLocation());
                         }
-
-                    };
-                    ae.start();
+                    }
                 }
             }
-        }
+        }.runTaskLater(dvz, 10);
     }
 
     @EventHandler
