@@ -125,7 +125,8 @@ public class FurnaceStruc extends Structure {
                 //if there is a empty slot add item in furnace else not.
                 if (availableSlots.size() >= 0) {
                     if (event.isShiftClick()) {
-                        for (int i = 0; i < Math.min(item.getAmount(), availableSlots.size()); i++) {
+                        final int itemsToAdd = Math.min(item.getAmount(), availableSlots.size());
+                        for (int i = 0; i < itemsToAdd; i++) {
                             player.getWorld().playSound(player.getLocation(), Sound.FIZZ, 0.3f, 2.0f);
                             ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 5, player.getLocation());
                             menu.setSlot(new CWItem(furnaceItem.getOriginal()), availableSlots.get(i), null);
