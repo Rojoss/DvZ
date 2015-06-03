@@ -15,6 +15,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,44 +37,49 @@ public class EnchantStruc extends Structure {
 
 
     @Override
-    public void onUse(Player player) {
-        ItemStack item = player.getItemInHand();
+    public void onUse(final Player player) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                ItemStack item = player.getItemInHand();
 
-        //Get list of all enchants with the item clicked.
-        List<CustomEnchant> matchedEnchants = new ArrayList<CustomEnchant>();
-        for (CustomEnchant enchant : enchants) {
-            if (enchant.getItems().contains(item.getType())) {
-                matchedEnchants.add(enchant);
-            }
-        }
-
-        if (matchedEnchants.size() <= 0) {
-            player.sendMessage(Util.formatMsg("&cThis item can't be enchanted."));
-            return;
-        }
-
-        menu.show(player);
-        menu.clear(player);
-        menu.setSlot(new CWItem(item), 0, player);
-        int slotID = 1;
-        for (CustomEnchant enchant : matchedEnchants) {
-            if (new ExpUtil(player).getCurrentExp() >= enchant.getXpNeeded()) {
-                if (item.getEnchantments().containsKey(enchant.getEnchant())) {
-                    if (item.getEnchantmentLevel(enchant.getEnchant()) >= enchant.getLevel()) {
-                        menu.setSlot(new CWItem(Material.BOOK).setName("&4&l" + enchant.getName()).addLore("&a&lExp Cost&8: &2" + enchant.getXpNeeded())
-                                .addLore("&7You already have this enchantment."), slotID, player);
-                        slotID++;
-                        continue;
+                //Get list of all enchants with the item clicked.
+                List<CustomEnchant> matchedEnchants = new ArrayList<CustomEnchant>();
+                for (CustomEnchant enchant : enchants) {
+                    if (enchant.getItems().contains(item.getType())) {
+                        matchedEnchants.add(enchant);
                     }
                 }
-                menu.setSlot(new CWItem(Material.ENCHANTED_BOOK).setName("&a&l" + enchant.getName()).addLore("&a&lExp Cost&8: &2" + enchant.getXpNeeded())
-                        .addLore("&7Click to purchase this enchantment."), slotID, player);
-            } else {
-                menu.setSlot(new CWItem(Material.BOOK).setName("&4&l" + enchant.getName()).addLore("&c&lExp Cost&8: &4" + enchant.getXpNeeded())
-                        .addLore("&7You don't have enough experience."), slotID, player);
+
+                if (matchedEnchants.size() <= 0) {
+                    player.sendMessage(Util.formatMsg("&cThis item can't be enchanted."));
+                    return;
+                }
+
+                menu.show(player);
+                menu.clear(player);
+                menu.setSlot(new CWItem(item), 0, player);
+                int slotID = 1;
+                for (CustomEnchant enchant : matchedEnchants) {
+                    if (new ExpUtil(player).getCurrentExp() >= enchant.getXpNeeded()) {
+                        if (item.getEnchantments().containsKey(enchant.getEnchant())) {
+                            if (item.getEnchantmentLevel(enchant.getEnchant()) >= enchant.getLevel()) {
+                                menu.setSlot(new CWItem(Material.BOOK).setName("&4&l" + enchant.getName()).addLore("&a&lExp Cost&8: &2" + enchant.getXpNeeded())
+                                        .addLore("&7You already have this enchantment."), slotID, player);
+                                slotID++;
+                                continue;
+                            }
+                        }
+                        menu.setSlot(new CWItem(Material.ENCHANTED_BOOK).setName("&a&l" + enchant.getName()).addLore("&a&lExp Cost&8: &2" + enchant.getXpNeeded())
+                                .addLore("&7Click to purchase this enchantment."), slotID, player);
+                    } else {
+                        menu.setSlot(new CWItem(Material.BOOK).setName("&4&l" + enchant.getName()).addLore("&c&lExp Cost&8: &4" + enchant.getXpNeeded())
+                                .addLore("&7You don't have enough experience."), slotID, player);
+                    }
+                    slotID++;
+                }
             }
-            slotID++;
-        }
+        }.runTaskLater(dvz, 3);
     }
 
 
