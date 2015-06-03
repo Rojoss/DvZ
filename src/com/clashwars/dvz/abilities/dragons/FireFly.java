@@ -43,7 +43,10 @@ public class FireFly extends DragonAbility {
 
                 List<Entity> entities = player.getNearbyEntities(3, 100, 3);
                 for (Entity e : entities) {
-                    if (e instanceof LivingEntity) {
+                    if (e instanceof Player) {
+                        if (!dvz.getPM().getPlayer((Player)e).isDwarf()) {
+                            continue;
+                        }
                         if (dvz.getGM().getDragonPower() == 1) {
                             ((LivingEntity) e).damage(1);
                         } else {

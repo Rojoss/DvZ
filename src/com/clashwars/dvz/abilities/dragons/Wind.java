@@ -9,7 +9,6 @@ import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -45,10 +44,13 @@ public class Wind extends DragonAbility {
 
                     List<Entity> entities = CWUtil.getNearbyEntities(loc, 1f, null);
                     for (Entity e : entities) {
-                        if (!(e instanceof LivingEntity) || e == player) {
+                        if (!(e instanceof Player) || e == player) {
                             continue;
                         }
-                        ((LivingEntity)e).damage(dvz.getGM().getDragonPower() * 2 - 1);
+                        if (!dvz.getPM().getPlayer((Player)e).isDwarf()) {
+                            continue;
+                        }
+                        ((Player)e).damage(dvz.getGM().getDragonPower() * 2 - 1);
                         e.setVelocity(e.getVelocity().add( player.getLocation().getDirection().multiply(dvz.getGM().getDragonPower() * 0.6f) ));
                     }
 
