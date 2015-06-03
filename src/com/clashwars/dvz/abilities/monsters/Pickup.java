@@ -22,6 +22,7 @@ import java.util.UUID;
 public class Pickup extends MobAbility {
 
     public static Map<UUID, UUID> pickupPlayers = new HashMap<UUID, UUID>();
+    public static Map<UUID, PickupRunnable> pickupRunnables = new HashMap<UUID, PickupRunnable>();
 
     public Pickup() {
         super();
@@ -36,6 +37,7 @@ public class Pickup extends MobAbility {
         }
         Player target = dvz.getServer().getPlayer(pickupPlayers.get(uuid));
         pickupPlayers.remove(uuid);
+        pickupRunnables.remove(uuid);
 
         target.setVelocity(target.getVelocity().setY(0.5f));
         target.showPlayer(player);
@@ -74,7 +76,9 @@ public class Pickup extends MobAbility {
 
         target.hidePlayer(player);
         pickupPlayers.put(player.getUniqueId(), target.getUniqueId());
-        new PickupRunnable(dvz, player, target, new Vector(0,0,0)).runTaskTimer(dvz, 1, 1);
+        PickupRunnable runnable = new PickupRunnable(dvz, player, target, new Vector(0, 0, 0));
+        runnable.runTaskTimer(dvz, 1, 1);
+        pickupRunnables.put(player.getUniqueId(), runnable);
         Util.disguisePlayer(player.getName(), (DvzClass.ENDERMAN.getClassClass().getDisguise() + " setAggressive true"));
     }
 
@@ -125,7 +129,7 @@ public class Pickup extends MobAbility {
             return;
         }
         cwp.setEndermanBlock(block.getType());
-        Util.disguisePlayer(player.getName(), (DvzClass.ENDERMAN.getClassClass().getDisguise() + " setItemInHand " + block.getType() + ":" + block.getData()));
+        Util.disguisePlayer(player.getName(), (DvzClass.ENDERMAN.getClassClass().getDisguise() + " setHideHeldItemFromSelf false setItemInHand " + block.getType().getId() + ":" + block.getData()));
         block.setType(Material.AIR);
     }
 }

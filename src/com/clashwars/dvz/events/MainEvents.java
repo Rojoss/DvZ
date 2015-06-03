@@ -1,40 +1,24 @@
 package com.clashwars.dvz.events;
 
-import com.clashwars.cwcore.Debug;
-import com.clashwars.cwcore.helpers.CWItem;
-import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
-import com.clashwars.dvz.*;
-import com.clashwars.dvz.classes.BaseClass;
+import com.clashwars.dvz.DvZ;
+import com.clashwars.dvz.GameManager;
+import com.clashwars.dvz.GameState;
+import com.clashwars.dvz.abilities.monsters.Pickup;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
-import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
 import net.minecraft.server.v1_8_R2.PacketPlayInClientCommand;
-import net.minecraft.server.v1_8_R2.PacketPlayOutRespawn;
-import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.*;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class MainEvents implements Listener {
@@ -160,6 +144,13 @@ public class MainEvents implements Listener {
             }
         } else {
             event.setDeathMessage(CWUtil.integrateColor(prefix + player.getName() + " &7died!"));
+        }
+
+        //Enderman died. (Drop picked up player)
+        if (cwp.getPlayerClass() == DvzClass.ENDERMAN) {
+            if (Pickup.pickupRunnables.containsKey(cwp.getUUID())) {
+                Pickup.pickupRunnables.get(cwp.getUUID()).died = true;
+            }
         }
 
         //Reset witch/villager data
