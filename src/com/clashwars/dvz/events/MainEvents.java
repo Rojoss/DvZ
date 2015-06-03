@@ -44,12 +44,14 @@ public class MainEvents implements Listener {
     private void playerQuit(PlayerQuitEvent event) {
         //Save when quiting.
         dvz.getPM().getPlayer(event.getPlayer()).savePlayer();
+        dvz.getGM().calculateMonsterPerc();
     }
 
     @EventHandler
     private void playerKick(PlayerKickEvent event) {
         //Save when being kicked.
         dvz.getPM().getPlayer(event.getPlayer()).savePlayer();
+        dvz.getGM().calculateMonsterPerc();
     }
 
 
@@ -100,6 +102,7 @@ public class MainEvents implements Listener {
                 subtitleStr = "&c&lThere is &4&lno DvZ &c&lright now.";
             }
         }
+        dvz.getGM().calculateMonsterPerc();
 
         //Send title and tab list format.
         Title title = new Title(titleStr, subtitleStr, 10, 100, 30);
@@ -223,6 +226,7 @@ public class MainEvents implements Listener {
                     //Player died as a dwarf.
                     if (cwp.isDwarf()) {
                         player.sendMessage(Util.formatMsg("&4&lYou have turned into a monster!!!"));
+                        dvz.getGM().calculateMonsterPerc();
                     }
 
                     //Remove player from suicide list if he suicided.

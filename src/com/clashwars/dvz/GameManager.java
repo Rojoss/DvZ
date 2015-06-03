@@ -29,6 +29,7 @@ public class GameManager {
     private GameCfg gCfg;
     private Set<ShrineBlock> shrineBlocks = new HashSet<ShrineBlock>();
     private int dragonPower = 1;
+    private float monsterPerc = 0;
 
     public GameManager(DvZ dvz) {
         this.dvz = dvz;
@@ -515,5 +516,19 @@ public class GameManager {
             }
         }
         return null;
+    }
+
+    public void calculateMonsterPerc() {
+        int dwarves = dvz.getPM().getPlayers(ClassType.DWARF, true, true).size();
+        int monsters = dvz.getPM().getPlayers(ClassType.MONSTER, true, true).size();
+        monsterPerc = (float)monsters / (monsters + dwarves);
+    }
+
+    public float getMonsterPerc() {
+        return monsterPerc;
+    }
+
+    public float getMonsterPower(int scale) {
+        return scale - (float)scale * monsterPerc;
     }
 }

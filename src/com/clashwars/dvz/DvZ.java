@@ -146,6 +146,7 @@ public class DvZ extends JavaPlugin {
         cm = new ClassManager(this);
         pm = new PlayerManager(this);
         tm = new TipManager();
+        gm.calculateMonsterPerc();
 
         registerEvents();
 
