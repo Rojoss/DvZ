@@ -77,7 +77,7 @@ public class FurnaceStruc extends Structure {
             return;
         }
 
-        final FurnaceItem furnaceItem = getFurnaceItem(item.getType());
+        final FurnaceItem furnaceItem = getFurnaceItem(item);
         if (furnaceItem == null) {
             return;
         }
@@ -169,10 +169,10 @@ public class FurnaceStruc extends Structure {
         furnaceItems.add(new FurnaceItem(Product.FLOUR.getItem(), Product.BREAD.getItem(), 300, 3));
     }
 
-    public FurnaceItem getFurnaceItem(Material type) {
-        for (FurnaceItem item : furnaceItems) {
-            if (item.getOriginal().getType() == type || item.getResult().getType() == type) {
-                return item;
+    public FurnaceItem getFurnaceItem(ItemStack item) {
+        for (FurnaceItem furnaceItem : furnaceItems) {
+            if (CWUtil.compareItems(item, furnaceItem.getOriginal(), true, false) || CWUtil.compareItems(item, furnaceItem.getResult(), true, false)) {
+                return furnaceItem;
             }
         }
         return null;
