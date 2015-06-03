@@ -44,12 +44,6 @@ public class AbilityCfg extends EasyConfig {
                 abilityData = loadDefault(abilityData, "duration", "40");
                 abilityData = loadDefault(abilityData, "amplifier", "15");
                 break;
-            case RAPIDFIRE:
-                abilityData = loadDefault(abilityData, "arrows", "20");
-                abilityData = loadDefault(abilityData, "arrowspershot", "1");
-                abilityData = loadDefault(abilityData, "tickdelay", "1");
-                abilityData = loadDefault(abilityData, "randomoffset", "0.2");
-                break;
             case POISON_ATTACK:
                 abilityData = loadDefault(abilityData, "duration", "40");
                 abilityData = loadDefault(abilityData, "amplifier", "1");

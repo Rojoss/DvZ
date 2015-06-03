@@ -1,10 +1,12 @@
 package com.clashwars.dvz.abilities.monsters;
 
+import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
@@ -36,23 +38,28 @@ public class Rapidfire extends MobAbility {
             return;
         }
         new BukkitRunnable() {
-            int arrows = getIntOption("arrows");
-            Double m = getDoubleOption("randomoffset");
-            int amt = getIntOption("arrowspershot");
+            int arrows = (int)dvz.getGM().getMonsterPower(8, 50);
+            float randomoffset = 0.2f;
+            int amt = (int)dvz.getGM().getMonsterPower(1, 4);
 
             @Override
             public void run() {
                 for (int i = 0; i < amt; i++) {
                     Arrow arrow = player.launchProjectile(Arrow.class);
+                    arrow.setVelocity(arrow.getVelocity().add(new Vector((CWUtil.randomFloat() - 0.5f) * randomoffset, (CWUtil.randomFloat() - 0.5f) * randomoffset, (CWUtil.randomFloat() - 0.5f) * randomoffset)));
 
-                    arrow.setVelocity(arrow.getVelocity().add(new Vector((CWUtil.randomFloat() - 0.5f) * m, (CWUtil.randomFloat() - 0.5f) * m, (CWUtil.randomFloat() - 0.5f) * m)));
+                    ParticleEffect.CRIT.display(0.5f, 0.5f, 0.5f, 0.001f, 1, arrow.getLocation());
+                    if (amt == 1 || CWUtil.randomFloat() < 0.5f) {
+                        arrow.getWorld().playSound(arrow.getLocation(), Sound.SHOOT_ARROW, 0.3f, 1.2f);
+                    }
+
                     arrows--;
                     if (arrows <= 0) {
                         this.cancel();
                     }
                 }
             }
-        }.runTaskTimer(dvz, 0, getIntOption("tickdelay"));
+        }.runTaskTimer(dvz, 0, 1);
     }
 
     @EventHandler
