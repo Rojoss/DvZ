@@ -32,11 +32,10 @@ public class Rapidfire extends MobAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
-        //TODO: Add particle and sound effects.
-
         if (onCooldown(player)) {
             return;
         }
+
         new BukkitRunnable() {
             int arrows = (int)dvz.getGM().getMonsterPower(8, 50);
             float randomoffset = 0.2f;

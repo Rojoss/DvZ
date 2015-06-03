@@ -11,3 +11,7 @@ commands:
   cow:
     description: /cow
     usage: /<command>
+  soundtest:
+    description: Command to test sounds.
+    usage: /<command> <category>
+    aliases: [st]

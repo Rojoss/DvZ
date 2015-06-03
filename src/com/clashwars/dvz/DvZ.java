@@ -3,6 +3,7 @@ package com.clashwars.dvz;
 import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.scoreboard.CWBoard;
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.ClassManager;
 import com.clashwars.dvz.classes.DvzClass;
@@ -16,6 +17,7 @@ import com.clashwars.dvz.runnables.GameRunnable;
 import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.tips.TipManager;
 import com.clashwars.dvz.util.ItemMenu;
+import com.clashwars.dvz.util.SoundMenu;
 import com.clashwars.dvz.workshop.WorkShop;
 import com.gmail.filoghost.holograms.api.Hologram;
 import com.gmail.filoghost.holograms.api.HolographicDisplaysAPI;
@@ -60,6 +62,8 @@ public class DvZ extends JavaPlugin {
     private ClassManager cm;
     private PlayerManager pm;
     private TipManager tm;
+
+    private SoundMenu soundMenu;
 
     private final Logger log = Logger.getLogger("Minecraft");
 
@@ -148,6 +152,8 @@ public class DvZ extends JavaPlugin {
         tm = new TipManager();
         gm.calculateMonsterPerc();
 
+        soundMenu = new SoundMenu(this);
+
         registerEvents();
 
         cmds = new Commands(this);
@@ -178,6 +184,7 @@ public class DvZ extends JavaPlugin {
 
         pm.registerEvents(new ItemMenu.Events(), this);
         pm.registerEvents(new ProtectEvents(this), this);
+        pm.registerEvents(soundMenu, this);
     }
 
     private void startRunnables() {
@@ -289,6 +296,10 @@ public class DvZ extends JavaPlugin {
 
     public TipManager getTM() {
         return tm;
+    }
+
+    public SoundMenu getSoundMenu() {
+        return soundMenu;
     }
 
 }

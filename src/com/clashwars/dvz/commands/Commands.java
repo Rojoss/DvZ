@@ -56,6 +56,24 @@ public class Commands {
             return true;
         }
 
+        if (label.equalsIgnoreCase("soundtest") || label.equalsIgnoreCase("st")) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                return true;
+            }
+            Player player = (Player)sender;
+
+            if (!player.isOp() && !player.hasPermission("cmd.soundtest")) {
+                sender.sendMessage(Util.formatMsg("Insufficient permissions."));
+                return true;
+            }
+
+            dvz.getSoundMenu().menu.show(player);
+            dvz.getSoundMenu().showMenu(player, 0, null);
+
+            return true;
+        }
+
         if (label.equalsIgnoreCase("dvz") || label.equalsIgnoreCase("dvz:dvz") || label.equalsIgnoreCase("d") || label.equalsIgnoreCase("dz") || label.equalsIgnoreCase("dvsz")) {
             if (args.length >= 1) {
                 //##########################################################################################################################
