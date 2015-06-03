@@ -4,8 +4,9 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.RandomUtils;
 import com.clashwars.dvz.abilities.Ability;
+import com.clashwars.dvz.classes.ClassType;
+import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -35,8 +36,8 @@ public class WindStorm extends DragonAbility {
 
             @Override
             public void run() {
-                for (Player pl : Bukkit.getOnlinePlayers() ) {
-                    if (pl == player) {
+                for (CWPlayer cwp : dvz.getPM().getPlayers(ClassType.DWARF, true)) {
+                    if (cwp.getPlayer() == player) {
                         continue;
                     }
 
@@ -47,8 +48,8 @@ public class WindStorm extends DragonAbility {
                     } else {
                         y = CWUtil.randomFloat();
                     }
-                    ParticleEffect.CLOUD.display(0.5f, 0.5f, 0.5f, 0f, 10, pl.getLocation());
-                    pl.setVelocity(new Vector(v.getX() * 0.8f, y, v.getZ() * 0.8f));
+                    ParticleEffect.CLOUD.display(0.5f, 0.5f, 0.5f, 0f, 10, cwp.getLocation());
+                    cwp.getPlayer().setVelocity(new Vector(v.getX() * 0.8f, y, v.getZ() * 0.8f));
                 }
 
                 iteration++;

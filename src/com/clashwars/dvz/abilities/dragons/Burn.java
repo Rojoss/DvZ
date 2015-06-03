@@ -28,7 +28,13 @@ public class Burn extends DragonAbility {
         }
         //for (Entity entity : CWUtil.getNearbyEntities(triggerLoc, getFloatOption("distance"), Arrays.asList(new EntityType[]{EntityType.PLAYER}))) {
         for (Entity entity : CWUtil.getNearbyEntities(triggerLoc, getFloatOption("distance"), null)) {
+            if (!(entity instanceof Player)) {
+                continue;
+            }
             if (entity == player) {
+                continue;
+            }
+            if (!dvz.getPM().getPlayer((Player)entity).isDwarf()) {
                 continue;
             }
             entity.setFireTicks(dvz.getGM().getDragonPower() * 60 - 40);

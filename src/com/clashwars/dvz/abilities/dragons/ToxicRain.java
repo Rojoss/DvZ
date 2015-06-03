@@ -59,15 +59,18 @@ public class ToxicRain extends DragonAbility {
                     for (Entity e : CWUtil.getNearbyEntities(prevLoc, 20, null)) {
                         if (e instanceof Player) {
                             Player pl = (Player) e;
+                            if (!dvz.getPM().getPlayer(pl).isDwarf()) {
+                                continue;
+                            }
                             if (dvz.getPM().getPlayer(pl).isDwarf()) {
-                                pl.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 40, 1));
+                                pl.addPotionEffect(new PotionEffect(PotionEffectType.POISON, dvz.getGM().getDragonPower() * 20, dvz.getGM().getDragonPower() - 1));
                             }
                         }
                     }
                 }
                 prevLoc = player.getLocation();
             }
-        }.runTaskTimer(dvz, 0, 40);
+        }.runTaskTimer(dvz, 0, dvz.getGM().getDragonPower() * 20);
     }
 
 

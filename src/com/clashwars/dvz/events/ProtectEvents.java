@@ -95,24 +95,33 @@ public class ProtectEvents implements Listener {
             return;
         }
 
-        //Don't allow dwarves during dwarf time within the inner walls.
-        if (gm.isDwarves() && cwp.isDwarf()) {
-            if (dvz.getMM().getActiveMap() == null || dvz.getMM().getActiveMap().getCuboid("innerwall").contains(event.getBlock())) {
-                event.setCancelled(true);
-            }
-        }
-
-        //Don't allow near shrines
         DvzMap activeMap = dvz.getMM().getActiveMap();
         if (activeMap != null) {
-            String[] shrines = new String[] {"shrinewall", "shrine1keep", "shrine2keep"};
-            for (String shrineName : shrines) {
-                Cuboid cub = activeMap.getCuboid(shrineName);
-                if (cub != null && cub.getCenterLoc() != null) {
-                    if (cub.getCenterLoc().distance(event.getBlock().getLocation()) < 10) {
-                        CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&cCan't build this close to the shrine!"));
-                        event.setCancelled(true);
-                        return;
+            //Don't allow dwarves during dwarf time within the inner walls.
+            if (gm.isDwarves() && cwp.isDwarf()) {
+                if (activeMap.getCuboid("innerwall").contains(event.getBlock())) {
+                    event.setCancelled(true);
+                }
+            }
+
+            //Don't allow near monster spawn.
+            if (event.getBlock().getLocation().distance(activeMap.getLocation("monsterlobby")) <  30f) {
+                CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&cCan't build this close to the monster spawn!"));
+                event.setCancelled(true);
+                return;
+            }
+
+            //Don't allow near shrines
+            if (activeMap != null) {
+                String[] shrines = new String[] {"shrinewall", "shrine1keep", "shrine2keep"};
+                for (String shrineName : shrines) {
+                    Cuboid cub = activeMap.getCuboid(shrineName);
+                    if (cub != null && cub.getCenterLoc() != null) {
+                        if (cub.getCenterLoc().distance(event.getBlock().getLocation()) < 10) {
+                            CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&cCan't build this close to the shrine!"));
+                            event.setCancelled(true);
+                            return;
+                        }
                     }
                 }
             }
@@ -139,20 +148,48 @@ public class ProtectEvents implements Listener {
             return;
         }
 
-        //Don't allow dwarves during dwarf time within the inner walls
-        if (gm.isDwarves() && cwp.isDwarf()) {
-            if (dvz.getMM().getActiveMap() == null || dvz.getMM().getActiveMap().getCuboid("innerwall").contains(event.getBlock())) {
-                event.setCancelled(true);
-            }
-
-        }
+        //Don't allow breaking plants (overwritten for specific dwarf classes)
         Material blockType = event.getBlock().getType();
         if (blockType == Material.MELON_BLOCK || blockType == Material.GRAVEL || blockType == Material.RED_ROSE || blockType == Material.SUGAR_CANE_BLOCK) {
             event.setCancelled(true);
         }
+
+        //Don't allow breaking block underneath plants.
         blockType = event.getBlock().getRelative(BlockFace.UP).getType();
         if (blockType == Material.SUGAR_CANE_BLOCK || blockType == Material.RED_ROSE)  {
             event.setCancelled(true);
+        }
+
+        DvzMap activeMap = dvz.getMM().getActiveMap();
+        if (activeMap != null) {
+            //Don't allow dwarves during dwarf time within the inner walls.
+            if (gm.isDwarves() && cwp.isDwarf()) {
+                if (activeMap.getCuboid("innerwall").contains(event.getBlock())) {
+                    event.setCancelled(true);
+                }
+            }
+
+            //Don't allow near monster spawn.
+            if (event.getBlock().getLocation().distance(activeMap.getLocation("monsterlobby")) <  30f) {
+                CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&cCan't break blocks this close to the monster spawn!"));
+                event.setCancelled(true);
+                return;
+            }
+
+            //Don't allow near shrines
+            if (activeMap != null) {
+                String[] shrines = new String[] {"shrinewall", "shrine1keep", "shrine2keep"};
+                for (String shrineName : shrines) {
+                    Cuboid cub = activeMap.getCuboid(shrineName);
+                    if (cub != null && cub.getCenterLoc() != null) {
+                        if (cub.getCenterLoc().distance(event.getBlock().getLocation()) < 10) {
+                            CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&cCan't break blocks this close to the shrine!"));
+                            event.setCancelled(true);
+                            return;
+                        }
+                    }
+                }
+            }
         }
 
     }

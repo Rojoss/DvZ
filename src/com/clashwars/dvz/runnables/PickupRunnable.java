@@ -22,6 +22,7 @@ public class PickupRunnable extends BukkitRunnable {
 
     private int timer = 0;
     private int maxTime = 20;
+    public boolean died = false;
 
 
     public PickupRunnable(DvZ dvz, Player player, Player target, Vector offset) {
@@ -40,7 +41,7 @@ public class PickupRunnable extends BukkitRunnable {
         if (player == null || target == null) {
             return;
         }
-        if (player.isDead() || target.isDead() || cwp.getPlayerClass() != DvzClass.ENDERMAN) {
+        if (died || player.isDead() || target.isDead() || cwp.getPlayerClass() != DvzClass.ENDERMAN) {
             ((Pickup)Ability.PICKUP.getAbilityClass()).dropTarget(player);
             cancel();
             return;
