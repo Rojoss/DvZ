@@ -1,7 +1,9 @@
 package com.clashwars.dvz.abilities.monsters;
 
+import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -34,13 +36,16 @@ public class PoisonAttack extends MobAbility {
             return;
         }
 
-        if (CWUtil.randomFloat() <= getFloatOption("chance")) {
+        if (CWUtil.randomFloat() <= dvz.getGM().getMonsterPower(0.4f) + 0.1f) {
             if (onCooldown(damager)) {
                 return;
             }
 
-            damaged.addPotionEffect(new PotionEffect(PotionEffectType.POISON, getIntOption("duration"), getIntOption("amplifier")));
-            //TODO: Add particle and sound effects.
+            damaged.addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(50) + 20, 1));
+            damaged.getWorld().playSound(damaged.getLocation(), Sound.SPIDER_IDLE, 1, 2);
+            for (int i = 0; i < 20; i++) {
+                ParticleEffect.REDSTONE.display(new ParticleEffect.OrdinaryColor(109, 138, 47), damaged.getLocation().add(0.5f - CWUtil.randomFloat(), 0.5f + CWUtil.randomFloat(), 0.5f - CWUtil.randomFloat()), 16);
+            }
         }
     }
 
