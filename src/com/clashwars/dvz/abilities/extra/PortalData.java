@@ -15,11 +15,13 @@ public class PortalData {
     private Player owner;
     private Location location;
     private Location eggLoc;
+    private Cuboid cuboid;
     public List<UUID> downvotes = new ArrayList<UUID>();
 
     public PortalData(Player owner, Location location, Cuboid cuboid) {
         this.owner = owner;
         this.location = location;
+        this.cuboid = cuboid;
         List<Block> eggs = cuboid.getBlocks(new Material[] {Material.DRAGON_EGG});
         eggLoc = eggs.get(0).getLocation();
     }
@@ -35,5 +37,9 @@ public class PortalData {
 
     public Location getEgg() {
         return eggLoc;
+    }
+
+    public Cuboid getCuboid() {
+        return cuboid;
     }
 }

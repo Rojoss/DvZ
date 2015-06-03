@@ -1,8 +1,11 @@
 package com.clashwars.dvz.abilities.monsters;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.dependencies.CWWorldGuard;
+import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.cwcore.utils.RandomUtils;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.extra.PortalData;
 import com.clashwars.dvz.classes.DvzClass;
@@ -13,9 +16,7 @@ import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.util.io.file.FilenameException;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -25,9 +26,11 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
 
 import java.io.IOException;
+import java.util.List;
 
 //There can be multiple portal schematics.
 //Name the schematics like portal-0, portal-1 etc..
@@ -50,12 +53,12 @@ public class Portal extends MobAbility {
             player.sendMessage(Util.formatMsg("&cYou can ask &4" + activePortal.getOwner().getName() + " &cto destroy his portal."));
             return;
         }
-        Location portalLoc = player.getLocation().add(0,15,0);
+        Location portalLoc = player.getLocation().add(0,10,0);
 
         //Make sure portal wont hit anything
-        for (int x = portalLoc.getBlockX() - 5; x < portalLoc.getBlockX() + 5; x++) {
-            for (int y = portalLoc.getBlockY() - 7; y < portalLoc.getBlockY() + 7; y++) {
-                for (int z = portalLoc.getBlockZ() - 5; z < portalLoc.getBlockZ() + 5; z++) {
+        for (int x = portalLoc.getBlockX() - 4; x < portalLoc.getBlockX() + 4; x++) {
+            for (int y = portalLoc.getBlockY() - 6; y < portalLoc.getBlockY() + 6; y++) {
+                for (int z = portalLoc.getBlockZ() - 4; z < portalLoc.getBlockZ() + 4; z++) {
                     if (portalLoc.getWorld().getBlockAt(x,y,z).getType() != Material.AIR) {
                         player.sendMessage(Util.formatMsg("&cPortal can't be created here!"));
                         player.sendMessage(Util.formatMsg("&cThere has to be enough empty space above you."));
@@ -75,6 +78,14 @@ public class Portal extends MobAbility {
 
             Location min = new Location(portalLoc.getWorld(), portalLoc.getBlockX() + cc.getOffset().getBlockX(), portalLoc.getBlockY() + cc.getOffset().getBlockY(), portalLoc.getBlockZ() + cc.getOffset().getBlockZ());
             Cuboid cuboid = new Cuboid(min, cc.getWidth()-1, cc.getHeight()-1, cc.getLength()-1);
+
+            portalLoc.getWorld().playSound(portalLoc, Sound.WITHER_SPAWN, 2, 0);
+            for (Block block : cuboid.getBlocks()) {
+                if (block.getType() != Material.AIR) {
+                    ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(block.getType(), (byte)block.getData()), 0.5f, 0.5f, 0.5f, 0.1f, 10, block.getLocation(), 500);
+                    ParticleEffect.PORTAL.display(1, 1, 1, 0, 5, block.getLocation().add(0.5f, 0.5f, 0.5f), 500);
+                }
+            }
 
             activePortal = new PortalData(player, portalLoc, cuboid);
 
@@ -123,19 +134,15 @@ public class Portal extends MobAbility {
         Player portalOwner = activePortal.getOwner();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         if (cwp.isDwarf()) {
-            dvz.getServer().broadcastMessage(Util.formatMsg("&cThe portal has been deactivated by &4" + player.getName()));
-            portalOwner.sendMessage("&cYou have been killed because your portal was destroyed!");
-            portalOwner.setHealth(0);
-            activePortal.getEgg().getBlock().setType(Material.AIR);
-            activePortal = null;
+            dvz.getServer().broadcastMessage(Util.formatMsg("&cThe portal has been destroyed by &4" + player.getName()));
+            portalOwner.sendMessage(Util.formatMsg("&cYou have been killed because your portal was destroyed!"));
+            destroyPortal(true);
             return;
         }
 
         if (portalOwner.getName().equals(player.getName())) {
-            portalOwner.sendMessage("&cYou have been killed because you deactivated your portal!");
-            portalOwner.setHealth(0);
-            activePortal.getEgg().getBlock().setType(Material.AIR);
-            activePortal = null;
+            portalOwner.sendMessage(Util.formatMsg("&cYou have been killed because you deactivated your portal!"));
+            destroyPortal(true);
             return;
         }
 
@@ -145,15 +152,15 @@ public class Portal extends MobAbility {
                 player.sendMessage(Util.formatMsg("&6Downvote for portal deactivation &cremoved&6."));
             } else {
                 activePortal.downvotes.add(player.getUniqueId());
-                player.sendMessage(Util.formatMsg("&6Downvote for portal deactivation &aadded&6. &8[&a" + activePortal.downvotes.size() + "&7/&25&8]"));
-                portalOwner.sendMessage(Util.formatMsg("&cYou received a downvote for your portal. &8[&c" + activePortal.downvotes.size() + "&7/&45&8]"));
+                cwp.getWorld().playSound(event.getClickedBlock().getLocation(), Sound.ANVIL_LAND, 1, 2);
+                ParticleEffect.SMOKE_LARGE.display(0.5f, 0.5f, 0.5f, 0, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
+                Bukkit.broadcastMessage(Util.formatMsg("&6Downvote for portal deactivation &aadded&6. &8[&a" + activePortal.downvotes.size() + "&7/&25&8]"));
 
                 //Enough votes so remove the portal.
                 if (activePortal.downvotes.size() >= 5) {
-                    portalOwner.sendMessage("&cYou have been killed because your portal has been deactivated!");
-                    portalOwner.setHealth(0);
-                    activePortal.getEgg().getBlock().setType(Material.AIR);
-                    activePortal = null;
+                    dvz.getServer().broadcastMessage(Util.formatMsg("&cThe portal has been destroyed by downvoting!"));
+                    portalOwner.sendMessage(Util.formatMsg("&cYou have been killed because your portal has been deactivated!"));
+                    destroyPortal(true);
                 }
             }
         }
@@ -184,11 +191,9 @@ public class Portal extends MobAbility {
             }
             CWPlayer cwp = dvz.getPM().getPlayer(player);
             if (cwp.isDwarf()) {
-                dvz.getServer().broadcastMessage(Util.formatMsg("&cThe portal has been deactivated by &4" + player.getName()));
-                activePortal.getOwner().sendMessage("&cYou have been killed because your portal was destroyed!");
-                activePortal.getOwner().setHealth(0);
-                activePortal.getEgg().getBlock().setType(Material.AIR);
-                activePortal = null;
+                dvz.getServer().broadcastMessage(Util.formatMsg("&cThe portal has been destroyed by &4" + player.getName()));
+                activePortal.getOwner().sendMessage("&cYou have been killed because your portal was shot!");
+                destroyPortal(true);
             }
         }
     }
@@ -196,9 +201,60 @@ public class Portal extends MobAbility {
     @EventHandler (priority = EventPriority.HIGH)
     private void endermanDeath(PlayerDeathEvent event) {
         if (dvz.getPM().getPlayer(event.getEntity()).getPlayerClass() == DvzClass.ENDERMAN) {
-            dvz.getServer().broadcastMessage(Util.formatMsg("&cThe portal has been deactivated!"));
-            activePortal.getEgg().getBlock().setType(Material.AIR);
-            activePortal = null;
+            if (activePortal == null || !activePortal.getOwner().equals(event.getEntity())) {
+                return;
+            }
+            dvz.getServer().broadcastMessage(Util.formatMsg("&cThe portal has been destroyed!"));
+            destroyPortal(false);
         }
+    }
+
+    public void destroyPortal(boolean kill) {
+        if (activePortal == null || activePortal.getCuboid() == null) {
+            return;
+        }
+        if (kill) {
+            activePortal.getOwner().setHealth(0);
+        }
+
+        activePortal.getEgg().getBlock().setType(Material.AIR);
+
+        ParticleEffect.EXPLOSION_HUGE.display(0, 3, 0, 0, 5, activePortal.getEgg().getBlock().getLocation(), 500);
+        new BukkitRunnable() {
+            Location loc = activePortal.getLocation();
+
+            int index = 0;
+            @Override
+            public void run() {
+                index++;
+                if (index >= 6) {
+                    cancel();
+                    return;
+                }
+                loc.getWorld().playSound(loc, Sound.EXPLODE, 5, 0.5f);
+            }
+        }.runTaskTimer(dvz, 0, 3);
+
+        //Slowly remove blocks.
+        new BukkitRunnable() {
+            List<Block> portalBlocks = activePortal.getCuboid().getBlocks(new Material[] {Material.ENDER_STONE, Material.OBSIDIAN, Material.GLOWSTONE});
+
+            @Override
+            public void run() {
+                if (portalBlocks.size() <= 0) {
+                    cancel();
+                    return;
+                }
+                Block b = CWUtil.random(portalBlocks);
+                portalBlocks.remove(b);
+                if (b.getType() == Material.ENDER_STONE || b.getType() == Material.OBSIDIAN || b.getType() == Material.GLOWSTONE) {
+                    ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(b.getType(), (byte)b.getData()), 0.5f, 0.5f, 0.5f, 0.1f, 10, b.getLocation(), 500);
+                    ParticleEffect.PORTAL.display(1, 1, 1, 0, 8, b.getLocation().add(0.5f, 0.5f, 0.5f), 500);
+                    b.setType(Material.AIR);
+                }
+            }
+        }.runTaskTimer(dvz, 0, 5);
+
+        activePortal = null;
     }
 }
