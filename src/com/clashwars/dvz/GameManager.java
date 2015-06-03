@@ -172,7 +172,7 @@ public class GameManager {
         title.broadcast();
 
         for (Player player : dvz.getServer().getOnlinePlayers()) {
-            dvz.getPM().getPlayer(player).giveClassItems(ClassType.DWARF, false);
+            dvz.getPM().getPlayer(player).giveClassItems(ClassType.DWARF, false, -1);
         }
 
         getUsedWorld().setTime(23000);

@@ -75,7 +75,7 @@ public class MainEvents implements Listener {
                 //Player joined during dwarf time.
                 player.sendMessage(Util.formatMsg("&6You have joined DvZ as a &8Dwarf&6!"));
                 cwp.setPlayerClass(DvzClass.DWARF);
-                cwp.giveClassItems(ClassType.DWARF, false);
+                cwp.giveClassItems(ClassType.DWARF, false, -1);
                 if (dvz.getMM().getActiveMap() != null && dvz.getMM().getActiveMap().getLocation("lobby") != null) {
                     spawnLoc = dvz.getMM().getActiveMap().getLocation("lobby");
                 }
@@ -85,7 +85,7 @@ public class MainEvents implements Listener {
                 player.sendMessage(Util.formatMsg("&6You have joined DvZ as a &4Monster&6!"));
                 player.sendMessage(Util.formatMsg("&6This is because the dragon has been released already."));
                 cwp.setPlayerClass(DvzClass.MONSTER);
-                cwp.giveClassItems(ClassType.MONSTER, false);
+                cwp.giveClassItems(ClassType.MONSTER, false, -1);
                 if (dvz.getMM().getActiveMap() != null && dvz.getMM().getActiveMap().getLocation("monsterlobby") != null) {
                     spawnLoc = dvz.getMM().getActiveMap().getLocation("monsterlobby");
                 }
@@ -235,7 +235,7 @@ public class MainEvents implements Listener {
                     //Reset player and give class items.
                     cwp.reset();
                     cwp.setPlayerClass(DvzClass.MONSTER);
-                    cwp.giveClassItems(ClassType.MONSTER, suicide);
+                    cwp.giveClassItems(ClassType.MONSTER, suicide, -1);
                 }
             }
         }.runTaskLater(dvz, 15);

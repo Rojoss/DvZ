@@ -868,7 +868,7 @@ public class Commands {
                     }
 
                     for (int i = 0; i < (args.length > 2 && CWUtil.getInt(args[2]) > 0 ? CWUtil.getInt(args[2]) : 100); i++) {
-                        Map<DvzClass, BaseClass> classes = dvz.getCM().getRandomClasses(player, args.length > 1 && args[1].equalsIgnoreCase("monster") ? ClassType.MONSTER : ClassType.DWARF);
+                        Map<DvzClass, BaseClass> classes = dvz.getCM().getRandomClasses(player, args.length > 1 && args[1].equalsIgnoreCase("monster") ? ClassType.MONSTER : ClassType.DWARF, -1);
                         for (DvzClass dvzClass : classes.keySet()) {
                             if (dvz.getPM().fakePlayers.containsKey(dvzClass)) {
                                 dvz.getPM().fakePlayers.put(dvzClass, dvz.getPM().fakePlayers.get(dvzClass) + 1);

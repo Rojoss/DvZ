@@ -11,10 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class ClassManager {
 
@@ -47,12 +44,23 @@ public class ClassManager {
         return classes;
     }
 
+    public List<DvzClass> getClassList(ClassType type) {
+        List<DvzClass> classes = new ArrayList<DvzClass>();
+        for (DvzClass c : DvzClass.values()) {
+            if (type == null || c.getType() == type) {
+                classes.add(c);
+            }
+        }
+        return classes;
+    }
+
     //Get a map with semi 'random' classes.
     //It will get classes based on weight.
     //For dwarf classes it will only return the configured amount of classes.
     //It will also calculate extra classes for example if a player completed parkour.
     //For monster classes it will try give each class based on weight. (The zombie class is always given)
-    public Map<DvzClass, BaseClass> getRandomClasses(Player player, ClassType type) {
+    //Set amount to -1 to get give class amount based on defaults.
+    public Map<DvzClass, BaseClass> getRandomClasses(Player player, ClassType type, int amount) {
         Map<DvzClass, BaseClass> classes = getClasses(type);
         HashMap<DvzClass, BaseClass> randomclasses = new HashMap<DvzClass, BaseClass>();
         BaseClass c;
@@ -71,15 +79,15 @@ public class ClassManager {
         } else if (type == ClassType.DWARF) {
             CWPlayer cwp = dvz.getPM().getPlayer(player);
             //Default amount of classes to give.
-            int classCount = dvz.getCfg().DWARF_CLASS_COUNT;
+            int classCount = amount == -1 ? dvz.getCfg().DWARF_CLASS_COUNT : amount;
 
             //Add bonus class if parkour is completed.
-            if (cwp.hasCompletedParkour()) {
+            if (amount == -1 && cwp.hasCompletedParkour()) {
                 classCount++;
             }
 
             //Get bonus classes by permissions for example dvz.extraclasses.2 (Max is 10)
-            if (!player.isOp()) {
+            if (amount == -1 && !player.isOp()) {
                 for (int i = 10; i > 0; i--) {
                     if (player.hasPermission("dvz.extraclasses." + i)) {
                         classCount += i;
@@ -127,6 +135,9 @@ public class ClassManager {
                 //So builder might have 10 players while miner has 8 but it would still pick builder if builder has a higher weight.
                 Map<DvzClass, Double> sortedClassCounts = CWUtil.sortByValue(classCounts, false);
                 for (Map.Entry<DvzClass, Double> entry : sortedClassCounts.entrySet()) {
+                    if (cwp.getClassOptions().contains(entry.getKey())) {
+                        continue;
+                    }
                     randomclasses.put(entry.getKey(), entry.getKey().getClassClass());
                     classCount--;
                     if (classCount <= 0) {
@@ -157,7 +168,7 @@ public class ClassManager {
                     }
 
                     //If this class was already picked then pick a new one to make sure we get 'classCount' classes.
-                    if (randomClass == null || randomclasses.containsKey(randomClass)) {
+                    if (randomClass == null || randomclasses.containsKey(randomClass) || cwp.getClassOptions().contains(randomClass)) {
                         i--;
                         attempts--;
                         continue;

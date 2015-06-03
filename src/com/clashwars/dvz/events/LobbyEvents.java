@@ -29,6 +29,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.EventListener;
+import java.util.Set;
 
 public class LobbyEvents implements Listener {
 
@@ -52,6 +53,7 @@ public class LobbyEvents implements Listener {
                 Sign sign = (Sign) block.getState();
                 for (String str : sign.getLines()) {
                     if (CWUtil.removeColour(str).equalsIgnoreCase("&9[PARKOUR]")) {
+                        event.setCancelled(true);
                         if (cwp.hasCompletedParkour()) {
                             player.sendMessage(Util.formatMsg("&cYou already completed the parkour this game!"));
                         } else {
@@ -72,8 +74,19 @@ public class LobbyEvents implements Listener {
                                     ParticleEffect.SPELL_WITCH.display(0.2f, 1.0f, 0.2f, 0.05f, 10, player.getLocation(), 50);
                                 }
                             }.runTaskTimer(dvz, 1, 2);
+
+                            //Give extra class item because game already started.
+                            if (dvz.getGM().isStarted() && dvz.getGM().getState() != GameState.OPENED) {
+                                if (cwp.getPlayerClass() == null || cwp.getPlayerClass() == DvzClass.DWARF) {
+                                    Set<DvzClass> classOptions = cwp.getClassOptions();
+                                    if (classOptions.size() >= dvz.getCM().getClasses(ClassType.DWARF).size()) {
+                                        player.sendMessage(Util.formatMsg("&cYou already received all classes. (No reward)"));
+                                        return;
+                                    }
+                                    cwp.giveClassItems(ClassType.DWARF, false, 1);
+                                }
+                            }
                         }
-                        event.setCancelled(true);
                         return;
                     }
                 }

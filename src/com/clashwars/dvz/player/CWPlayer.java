@@ -247,29 +247,28 @@ public class CWPlayer {
     }
 
 
-    public void giveClassItems(final ClassType type, final boolean forcePrevious) {
+    public void giveClassItems(final ClassType type, final boolean forcePrevious, final int amount) {
         new BukkitRunnable() {
             @Override
             public void run() {
                 Player player = getPlayer();
-                CWPlayer cwp = dvz.getPM().getPlayer(player);
                 if (forcePrevious) {
                     if (type == ClassType.MONSTER) {
                         DvzClass.ZOMBIE.getClassClass().getClassItem().giveToPlayer(player);
-                        if (cwp.getClassOptions() != null && !cwp.getClassOptions().contains(DvzClass.ZOMBIE)) {
-                            cwp.getClassOptions().add(DvzClass.ZOMBIE);
+                        if (getClassOptions() != null && !getClassOptions().contains(DvzClass.ZOMBIE)) {
+                            getClassOptions().add(DvzClass.ZOMBIE);
                         }
                     }
-                    for (DvzClass c : cwp.getClassOptions()) {
+                    for (DvzClass c : getClassOptions()) {
                         if (dvz.getCM().getClass(c) != null && dvz.getCM().getClass(c).getClassItem() != null) {
                             dvz.getCM().getClass(c).getClassItem().giveToPlayer(player);
                         }
                     }
                     return;
                 }
-                Map<DvzClass, BaseClass> classOptions = dvz.getCM().getRandomClasses(player, type);
-                cwp.clearClassOptions();
-                cwp.setClassOptions(classOptions.keySet());
+                Map<DvzClass, BaseClass> classOptions = dvz.getCM().getRandomClasses(player, type, amount);
+                clearClassOptions();
+                setClassOptions(classOptions.keySet());
                 if (type == ClassType.MONSTER) {
                     DvzClass.ZOMBIE.getClassClass().getClassItem().giveToPlayer(player);
                     if (!classOptions.containsKey(DvzClass.ZOMBIE)) {
