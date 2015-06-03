@@ -2,6 +2,8 @@ package com.clashwars.dvz.util;
 
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
+import com.clashwars.dvz.classes.ClassType;
+import com.clashwars.dvz.classes.DvzClass;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,8 +17,14 @@ public class Util {
     }
 
     public static void disguisePlayer(String player, String disguiseStr) {
+        disguisePlayer(player, disguiseStr, DvzClass.MONSTER);
+    }
+
+    public static void disguisePlayer(String player, String disguiseStr, DvzClass dvzClass) {
         Bukkit.dispatchCommand(DvZ.inst().getServer().getConsoleSender(), "disguiseplayer " + player + " "
-                + (disguiseStr == null || disguiseStr.isEmpty() ? DvZ.inst().getPM().getPlayer(player).getPlayerClass().toString().toLowerCase() : disguiseStr) + " setCustomName &c" + player + " setCustomNameVisible true");
+                + (disguiseStr == null || disguiseStr.isEmpty() ? DvZ.inst().getPM().getPlayer(player).getPlayerClass().toString().toLowerCase() : disguiseStr)
+                + " setCustomName &c" + (dvzClass.getType() == ClassType.DRAGON ? dvzClass.getClassClass().getDisplayName() : player)
+                + " setCustomNameVisible true");
     }
 
     public static void undisguisePlayer(String player) {
