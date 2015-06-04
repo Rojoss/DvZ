@@ -109,6 +109,7 @@ public class ProtectEvents implements Listener {
             if (gm.isDwarves() && cwp.isDwarf()) {
                 if (activeMap.getCuboid("innerwall").contains(event.getBlock())) {
                     event.setCancelled(true);
+                    return;
                 }
             }
 
@@ -123,6 +124,7 @@ public class ProtectEvents implements Listener {
             if (Util.isNearShrine(event.getBlock().getLocation(), 10)) {
                 CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't build this close to the shrine! &4&l<<"));
                 event.setCancelled(true);
+                return;
             }
         }
     }
@@ -151,12 +153,20 @@ public class ProtectEvents implements Listener {
         Material blockType = event.getBlock().getType();
         if (blockType == Material.MELON_BLOCK || blockType == Material.GRAVEL || blockType == Material.RED_ROSE || blockType == Material.SUGAR_CANE_BLOCK) {
             event.setCancelled(true);
+            return;
         }
 
         //Don't allow breaking block underneath plants.
         blockType = event.getBlock().getRelative(BlockFace.UP).getType();
         if (blockType == Material.SUGAR_CANE_BLOCK || blockType == Material.RED_ROSE)  {
             event.setCancelled(true);
+            return;
+        }
+
+        //Don't allow breaking ice (will create water)
+        if (blockType == Material.ICE || blockType == Material.PACKED_ICE) {
+            event.setCancelled(true);
+            return;
         }
 
         DvzMap activeMap = dvz.getMM().getActiveMap();
@@ -165,6 +175,7 @@ public class ProtectEvents implements Listener {
             if (gm.isDwarves() && cwp.isDwarf()) {
                 if (activeMap.getCuboid("innerwall").contains(event.getBlock())) {
                     event.setCancelled(true);
+                    return;
                 }
             }
 
@@ -179,6 +190,7 @@ public class ProtectEvents implements Listener {
             if (Util.isNearShrine(event.getBlock().getLocation(), 10)) {
                 CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't break blocks this close to the shrine! &4&l<<"));
                 event.setCancelled(true);
+                return;
             }
         }
 
