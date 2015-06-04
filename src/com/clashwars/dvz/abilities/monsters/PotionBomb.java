@@ -1,6 +1,8 @@
 package com.clashwars.dvz.abilities.monsters;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.dependencies.CWWorldGuard;
+import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.ClassType;
@@ -14,6 +16,7 @@ import com.sk89q.worldedit.util.io.file.FilenameException;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
@@ -67,30 +70,30 @@ public class PotionBomb extends MobAbility {
 
         final Location bomb = event.getBlock().getLocation();
         if (event.getBlockAgainst().getType() == Material.BEDROCK) {
-            CWUtil.sendActionBar(player, Util.formatMsg("&cYou can't place that here!"));
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou can't place it on bedrock! &4&l<<"));
             return;
         }
 
         if(bomb.getWorld().getHighestBlockYAt(bomb) > bomb.getY() + 1) {
-            CWUtil.sendActionBar(player, Util.formatMsg("&cThere can't be a block above the bomb!"));
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThere can't be a block above the bomb! &4&l<<"));
             return;
         }
 
         for (int y = 0; y < 20; y++) {
             if (bomb.clone().subtract(0, y, 0).getBlock().getType() == Material.BEDROCK) {
-                CWUtil.sendActionBar(player, Util.formatMsg("&cYou can't place that here!"));
+                CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou can't place that here! &8(&7bedrock underneath&8) &4&l<<"));
                 return;
             }
         }
 
         boolean found = false;
-        for (Entity e : CWUtil.getNearbyEntities(bomb, getFloatOption("radius"), Arrays.asList(new EntityType[]{EntityType.PLAYER}))) {
+        for (Entity e : CWUtil.getNearbyEntities(bomb, dvz.getGM().getMonsterPower(20, 30), Arrays.asList(new EntityType[]{EntityType.PLAYER}))) {
             if (dvz.getPM().getPlayer((Player)e).isDwarf()) {
                 found = true;
             }
         }
         if (!found) {
-            CWUtil.sendActionBar(player, Util.formatMsg("&cThere are no dwarves nearby!"));
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThere are no dwarves nearby! &4&l<<"));
             return;
         }
 
@@ -122,32 +125,68 @@ public class PotionBomb extends MobAbility {
             ((Skull)state).update();
         }
 
+        int fuseTime = 1000 - (int)dvz.getGM().getMonsterPower(800);
         BukkitTask bt = new BukkitRunnable() {
             @Override
             public void run() {
-                //TODO: Add bomb explosion particles
                 bombs.remove(bomb);
                 fixGround(bomb.getBlock());
 
+                ParticleEffect.EXPLOSION_HUGE.display(0, 0, 0, 0, 3, bomb);
+                bomb.getWorld().playSound(bomb, Sound.EXPLODE, 3, 2);
+
+                dvz.getServer().broadcastMessage(Util.formatMsg("&6The bomb (&c" + bomb.getX() + "&7, &a" + bomb.getY() + "&7, &9" + bomb.getZ() + "&6) has exploded!"));
+
                 for(CWPlayer cwp : dvz.getPM().getPlayers(ClassType.DWARF, true, false)) {
+                    boolean blindAdded = false;
+                    boolean poisonAdded = false;
                     for (PotionEffect pe : cwp.getPlayer().getActivePotionEffects()) {
                         if(pe.getType().equals(PotionEffectType.BLINDNESS)) {
-                            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, getIntOption("blindness-duration") + pe.getDuration(), pe.getAmplifier()), true);
+                            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int)dvz.getGM().getMonsterPower(100, 200) + pe.getDuration(), 1), true);
+                            blindAdded = true;
                         } else if (pe.getType().equals(PotionEffectType.POISON)) {
-                            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, getIntOption("poison-duration") + pe.getDuration(), pe.getAmplifier()), true);
+                            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(150, 300) + pe.getDuration(), 1), true);
+                            poisonAdded = true;
                         }
-                        return;
                     }
 
-                    cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, getIntOption("blindness-duration"), 0));
-                    cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, getIntOption("poison-duration"), 1));
+                    if (!blindAdded) {
+                        cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int)dvz.getGM().getMonsterPower(100, 200), 0));
+                    }
+                    if (!poisonAdded) {
+                        cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(200, 400), 1));
+                    }
+                    cwp.playSound(cwp.getLocation(), Sound.ZOMBIE_REMEDY, 1, 0);
                 }
             }
-        }.runTaskLater(dvz, getIntOption("fuse-time"));
+        }.runTaskLater(dvz, fuseTime);
+
         dvz.getServer().broadcastMessage(Util.formatMsg("&6A bomb has been placed at&8: &c" + bomb.getBlockX() + "&7, &a" + bomb.getBlockY() + "&7, &9" + bomb.getBlockZ()));
+        dvz.getServer().broadcastMessage(Util.formatMsg("&6If not destroyed, it will explode in &a&l" + fuseTime / 20 + " &6seconds!"));
         bombs.put(bomb.getBlock().getLocation(), bt);
 
         dvz.getPM().getPlayer(player).getPlayerData().setbombUsed(true);
+
+        ParticleEffect.SPELL_WITCH.display(1, 1, 1, 0, 50, bomb.clone().add(0.5f, 0.5f, 0.5f));
+        bomb.getWorld().playSound(bomb, Sound.IRONGOLEM_DEATH, 2, 2);
+        new BukkitRunnable() {
+            int i = 0;
+            @Override
+            public void run() {
+                if (!bombs.containsKey(bomb.getBlock().getLocation())) {
+                    cancel();
+                    return;
+                }
+                i++;
+                if (i % 5 == 0) {
+                    bomb.getWorld().playSound(bomb, Sound.NOTE_STICKS, 1, 2);
+                }
+                ParticleEffect.SPELL_WITCH.display(1,1,1,0,1, bomb.clone().add(0.5f, 0.5f, 0.5f));
+                ParticleEffect.SPELL_MOB.display(new ParticleEffect.OrdinaryColor(104, 184, 0), bomb.clone().add(CWUtil.randomFloat(), CWUtil.randomFloat(), CWUtil.randomFloat()), 500);
+                ParticleEffect.SPELL_MOB.display(new ParticleEffect.OrdinaryColor(158, 171, 43), bomb.clone().add(CWUtil.randomFloat(), CWUtil.randomFloat(), CWUtil.randomFloat()), 500);
+                ParticleEffect.SPELL_MOB.display(new ParticleEffect.OrdinaryColor(94, 68, 11), bomb.clone().add(CWUtil.randomFloat(), CWUtil.randomFloat(), CWUtil.randomFloat()), 500);
+            }
+        }.runTaskTimer(dvz, 10, 1);
     }
 
     @EventHandler

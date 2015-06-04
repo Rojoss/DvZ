@@ -58,12 +58,6 @@ public class AbilityCfg extends EasyConfig {
                 abilityData = loadDefault(abilityData, "fire-radius", "3");
                 abilityData = loadDefault(abilityData, "fire-chance", "0.5");
                 break;
-            case POTION_BOMB:
-                abilityData = loadDefault(abilityData, "radius", "30");
-                abilityData = loadDefault(abilityData, "fuse-time", "30");
-                abilityData = loadDefault(abilityData, "blindness-duration", "200");
-                abilityData = loadDefault(abilityData, "poison-duration", "400");
-                break;
             case BUILDING_BRICK:
                 abilityData = loadDefault(abilityData, "range", "50");
                 break;
