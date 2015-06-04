@@ -1,6 +1,7 @@
 package com.clashwars.dvz.abilities.monsters;
 
 import com.clashwars.cwcore.Debug;
+import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
@@ -9,6 +10,7 @@ import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -51,12 +53,12 @@ public class Buff extends BaseAbility {
         Player target = (Player) event.getRightClicked();
         CWPlayer cwt = dvz.getPM().getPlayer(target);
         if (cwt.getPlayerClass().getType() != ClassType.MONSTER ) {
-            CWUtil.sendActionBar(event.getPlayer(),  CWUtil.integrateColor("&cYou can only give buffs to monsters!"));
+            CWUtil.sendActionBar(event.getPlayer(),  CWUtil.integrateColor("&4&l>> &cYou can only give buffs to monsters! &4&l<<"));
             return;
         }
 
         if (cwt.getPlayerData().isBuffed()) {
-            CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&cThis player is already buffed!"));
+            CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cThis player is already buffed! &4&l<<"));
             return;
         }
 
@@ -64,13 +66,17 @@ public class Buff extends BaseAbility {
             return;
         }
 
-        CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&6Buff given to &5" + target.getDisplayName() + "&6!"));
-        CWUtil.sendActionBar(target, CWUtil.integrateColor("&6You received a buff from &5" + event.getPlayer().getDisplayName() + "&6!"));
+        CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&9&l>> &6Buff given to &5" + target.getDisplayName() + "&6! &9&l<<"));
+        CWUtil.sendActionBar(target, CWUtil.integrateColor("&9&l>> &6You received a buff from &5" + event.getPlayer().getDisplayName() + "&6! &9&l<<"));
         target.sendMessage(Util.formatMsg("&6You received a buff from &5" + event.getPlayer().getDisplayName() + "&6!"));
-        //cwt.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 0));
         cwt.getPlayerData().setBuffed(true);
         dvz.getPM().getPlayer(event.getPlayer()).getPlayerData().setBuffUsed(true);
         CWUtil.removeItemsFromHand(event.getPlayer(), 1);
+
+        target.getWorld().playSound(target.getLocation(), Sound.ORB_PICKUP, 1, 0);
+        target.getWorld().playSound(target.getLocation(), Sound.VILLAGER_YES, 0.8f, 1);
+        ParticleEffect.VILLAGER_HAPPY.display(0.5f, 1f, 0.5f, 0, 50, target.getLocation().add(0, 1.5f, 0));
+        ParticleEffect.FIREWORKS_SPARK.display(0.5f, 1f, 0.5f, 0, 50, target.getLocation().add(0, 1.5f, 0));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -88,6 +94,7 @@ public class Buff extends BaseAbility {
         if (!cwd.getPlayerData().isBuffed()) {
             return;
         }
-        event.setDamage(event.getDamage() + 2);
+        ParticleEffect.VILLAGER_ANGRY.display(0.3f, 0.5f, 0.3f, 0, 3, cwd.getLocation().add(0,2,0));
+        event.setDamage(event.getDamage() + dvz.getGM().getMonsterPower(1, 2));
     }
 }
