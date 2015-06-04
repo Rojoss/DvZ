@@ -1,6 +1,7 @@
 package com.clashwars.dvz.abilities;
 
 import com.clashwars.cwcore.CooldownManager;
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
@@ -152,11 +153,11 @@ public class BaseAbility implements Listener {
     }
 
     public boolean onCooldown(Player player) {
-        return onCooldown(player, "");
+        return onCooldown(player, "", getCooldown(), 0);
     }
 
     public boolean onCooldown(Player player, String extraPrefix) {
-        return onCooldown(player, extraPrefix, 0, getCooldown());
+        return onCooldown(player, extraPrefix, getCooldown(), 0);
     }
 
     public boolean onCooldown(Player player, String extraPrefix, int cooldownTime) {
