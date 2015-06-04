@@ -145,9 +145,9 @@ public class ShrineBlock {
         if (percentage > 80) {
             return "&a" + Math.round(percentage) + "%";
         } else if (percentage > 60) {
-            return "&6" + Math.round(percentage) + "%";
-        } else if (percentage > 40) {
             return "&e" + Math.round(percentage) + "%";
+        } else if (percentage > 40) {
+            return "&6" + Math.round(percentage) + "%";
         } else if (percentage > 20) {
             return "&c" + Math.round(percentage) + "%";
         } else if (percentage <= 20) {
