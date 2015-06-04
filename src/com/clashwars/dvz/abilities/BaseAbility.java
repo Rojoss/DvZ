@@ -152,20 +152,41 @@ public class BaseAbility implements Listener {
     }
 
     public boolean onCooldown(Player player) {
+        return onCooldown(player, "");
+    }
+
+    public boolean onCooldown(Player player, String extraPrefix) {
+        return onCooldown(player, extraPrefix, 0, getCooldown());
+    }
+
+    public boolean onCooldown(Player player, String extraPrefix, float cooldownReduction) {
+        return onCooldown(player, extraPrefix, cooldownReduction, getCooldown());
+    }
+
+    public boolean onCooldown(Player player, float cooldownReduction) {
+        return onCooldown(player, "", cooldownReduction, getCooldown());
+    }
+
+    public boolean onCooldown(Player player, String extraPrefix, float cooldownReduction, int cooldownTime) {
         CWPlayer cwp = dvz.getPM().getPlayer(player);
+
+        cooldownReduction = 1 - Math.max(Math.min(cooldownReduction, 1), 0);
 
         if (hasCooldown()) {
             String tag = cwp.getPlayerClass().toString().toLowerCase() +  "-" + ability.toString().toLowerCase();
             if (cwp.getPlayerClass() == DvzClass.WITCH || cwp.getPlayerClass() == DvzClass.VILLAGER) {
                 tag = "witch_villager-" + ability.toString().toLowerCase();
             }
+            if (extraPrefix != null && !extraPrefix.isEmpty()) {
+                tag += "-" + extraPrefix;
+            }
             CooldownManager.Cooldown cd = cwp.getCDM().getCooldown(tag);
             if (cd == null) {
-                cwp.getCDM().createCooldown(tag, getCooldown());
+                cwp.getCDM().createCooldown(tag, Math.round(cooldownTime * cooldownReduction));
                 return false;
             }
             if (!cd.onCooldown()) {
-                cd.setTime(getCooldown());
+                cd.setTime(Math.round(cooldownTime * cooldownReduction));
                 return false;
             }
             CWUtil.sendActionBar(player, CWUtil.integrateColor(getDisplayName() + " &4&l> &7" + CWUtil.formatTime(cd.getTimeLeft(), "&c%S&4.&c%%%&4s")));
