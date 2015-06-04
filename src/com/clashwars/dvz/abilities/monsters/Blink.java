@@ -21,7 +21,7 @@ public class Blink extends MobAbility {
     public Blink() {
         super();
         this.ability = Ability.BLINK;
-        castItem = new DvzItem(Material.RED_ROSE, 1, (short)0, 196, -1);
+        castItem = new DvzItem(Material.ENDER_PEARL, 1, (short)0, 196, -1);
     }
 
     @Override

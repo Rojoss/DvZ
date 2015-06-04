@@ -1,10 +1,12 @@
 package com.clashwars.dvz.abilities.monsters;
 
+import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -23,10 +25,14 @@ public class Morph extends MobAbility {
             return;
         }
         DvzClass dvzClass = dvz.getPM().getPlayer(player).getPlayerClass();
+        ParticleEffect.SPELL_WITCH.display(0.5f, 1f, 0.5f, 0, 50, player.getLocation().add(0,1,0));
+        ParticleEffect.VILLAGER_HAPPY.display(0.5f, 1f, 0.5f, 0, 50, player.getLocation().add(0,1,0));
         if (dvzClass == DvzClass.VILLAGER) {
+            player.getWorld().playSound(player.getLocation(), Sound.ZOMBIE_UNFECT, 1, 0);
             dvz.getPM().getPlayer(player).setClass(DvzClass.WITCH);
         }
         else if (dvzClass == DvzClass.WITCH) {
+            player.getWorld().playSound(player.getLocation(), Sound.ZOMBIE_UNFECT, 1, 2);
             dvz.getPM().getPlayer(player).setClass(DvzClass.VILLAGER);
         }
     }
