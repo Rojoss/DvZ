@@ -39,16 +39,6 @@ public class AbilityCfg extends EasyConfig {
         a.getAbilityClass().setCooldown(CWUtil.getInt(abilityData.get("cooldown")));
 
         switch (a) {
-            case INFECT:
-                abilityData = loadDefault(abilityData, "chance", "0.1");
-                abilityData = loadDefault(abilityData, "duration", "40");
-                abilityData = loadDefault(abilityData, "amplifier", "15");
-                break;
-            case RUSH:
-                abilityData = loadDefault(abilityData, "range", "15");
-                abilityData = loadDefault(abilityData, "bonusspeed", "0.3");
-                abilityData = loadDefault(abilityData, "duration", "40");
-                break;
             case PICKUP:
                 abilityData = loadDefault(abilityData, "block-cooldown", "5000");
                 break;
