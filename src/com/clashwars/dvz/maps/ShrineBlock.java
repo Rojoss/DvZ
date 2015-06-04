@@ -82,9 +82,14 @@ public class ShrineBlock {
                     location.getWorld().playSound(location, Sound.EXPLODE, 1.5f, 0.8f);
                 }
             }.runTaskTimer(dvz, 0, 2);
+
+            int yOffset = 3;
+            if (type == ShrineType.KEEP_1) {
+                yOffset = 1;
+            }
             final Vector loc = location.toVector();
             for (int x = loc.getBlockX() - 6; x < loc.getBlockX() + 6; x++) {
-                for (int y = loc.getBlockY() - 3; y < loc.getBlockY() + 3; y++) {
+                for (int y = loc.getBlockY() - yOffset; y < loc.getBlockY() + yOffset; y++) {
                     for (int z = loc.getBlockZ() - 6; z < loc.getBlockZ() + 6; z++) {
                         Block block = world.getBlockAt(x, y, z);
                         if (block.getType() == Material.BEDROCK) {
