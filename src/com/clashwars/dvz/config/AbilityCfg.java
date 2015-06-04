@@ -49,6 +49,9 @@ public class AbilityCfg extends EasyConfig {
                 abilityData = loadDefault(abilityData, "bonusspeed", "0.3");
                 abilityData = loadDefault(abilityData, "duration", "40");
                 break;
+            case PICKUP:
+                abilityData = loadDefault(abilityData, "block-cooldown", "5000");
+                break;
             case FIREBALL:
                 abilityData = loadDefault(abilityData, "damage", "2");
                 abilityData = loadDefault(abilityData, "fire-duration", "40");

@@ -1,5 +1,6 @@
 package com.clashwars.dvz.runnables;
 
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.monsters.Pickup;
@@ -13,6 +14,7 @@ public class PickupRunnable extends BukkitRunnable {
 
     private DvZ dvz;
     private Vector offset;
+    private double depth;
 
     private Player player;
     private CWPlayer cwp;
@@ -32,7 +34,9 @@ public class PickupRunnable extends BukkitRunnable {
         this.target = target;
         cwt = dvz.getPM().getPlayer(target);
         this.offset = offset;
-        maxTime = 160;
+        depth = offset.getX();
+        offset.setX(0);
+        maxTime = (int)dvz.getGM().getMonsterPower(40, 100);
     }
 
 
@@ -59,7 +63,11 @@ public class PickupRunnable extends BukkitRunnable {
             return;
         }
 
-        target.teleport(player.getLocation().add(offset));
+        String timeLeft = CWUtil.formatTime((int)((float)(maxTime - timer) / 20 * 1000), "&7%S&8.&7%%%&ds");
+        CWUtil.sendActionBar(target, CWUtil.integrateColor("&5&l>> &dPicked up by an enderman! &8(&7" + timeLeft + "&8) &5&l<<"));
+        CWUtil.sendActionBar(player, CWUtil.integrateColor("&5&l>> &dPicked up " + target.getName() + "! &8(&7" + timeLeft + "&8) &5&l<<"));
+
+        target.teleport(player.getLocation().add(offset).add(player.getLocation().getDirection().multiply(depth)));
         target.setVelocity(player.getVelocity());
         timer++;
     }
