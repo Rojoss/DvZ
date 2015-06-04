@@ -48,14 +48,6 @@ public class AbilityCfg extends EasyConfig {
             case BUILDING_BLOCK:
                 abilityData = loadDefault(abilityData, "blocks", "5");
                 break;
-            case HEAL_POTION:
-                abilityData = loadDefault(abilityData, "duration", "100");
-                abilityData = loadDefault(abilityData, "amplifier", "0");
-                break;
-            case SPEED_POTION:
-                abilityData = loadDefault(abilityData, "duration", "200");
-                abilityData = loadDefault(abilityData, "amplifier", "0");
-                break;
             case BURN:
                 abilityData = loadDefault(abilityData, "distance", "50");
             case GEYSER:
