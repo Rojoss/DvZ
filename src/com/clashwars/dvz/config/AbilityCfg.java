@@ -61,9 +61,6 @@ public class AbilityCfg extends EasyConfig {
                 abilityData = loadDefault(abilityData, "blindness-duration", "200");
                 abilityData = loadDefault(abilityData, "poison-duration", "400");
                 break;
-            case BLINK:
-                abilityData = loadDefault(abilityData, "range", "20");
-                break;
             case BUILDING_BRICK:
                 abilityData = loadDefault(abilityData, "range", "50");
                 break;

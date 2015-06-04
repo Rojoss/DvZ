@@ -11,6 +11,7 @@ import com.clashwars.dvz.util.Util;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -20,6 +21,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.PlayerLeashEntityEvent;
 import org.bukkit.event.player.*;
@@ -64,7 +66,12 @@ public class ProtectEvents implements Listener {
 
         //Don't allow hitting mobs
         if (!(event.getEntity() instanceof Player)) {
-            event.setCancelled(true);
+            //Allow hitting monsters during monster time for like endermite etc as a dwarf.
+            if (event.getEntity() instanceof Monster && gm.isMonsters() && dvz.getPM().getPlayer(damagerPlayer).isDwarf()) {
+               event.setCancelled(false);
+            } else {
+                event.setCancelled(true);
+            }
             return;
         }
 
@@ -343,5 +350,17 @@ public class ProtectEvents implements Listener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void portalUse(PlayerPortalEvent event) {
         event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    private void entityTarget(EntityTargetEvent event) {
+        //Don't allow mobs to target monster players.
+        if (!(event.getTarget() instanceof Player)) {
+            return;
+        }
+        Player target = (Player)event.getTarget();
+        if (dvz.getPM().getPlayer(target).isMonster()) {
+            event.setCancelled(true);
+        }
     }
 }
