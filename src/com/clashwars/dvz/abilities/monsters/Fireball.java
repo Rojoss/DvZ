@@ -1,19 +1,26 @@
 package com.clashwars.dvz.abilities.monsters;
 
+import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
+import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SmallFireball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.List;
 
 public class Fireball extends MobAbility {
 
@@ -29,7 +36,11 @@ public class Fireball extends MobAbility {
             return;
         }
         SmallFireball smallFireball = player.launchProjectile(SmallFireball.class);
+        smallFireball.setMetadata("type", new FixedMetadataValue(dvz, "Fireball-Ability"));
         smallFireball.setVelocity(player.getVelocity());
+
+        player.getWorld().playSound(player.getLocation(), Sound.GHAST_FIREBALL, 1, 0.6f);
+        ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0, 20, player.getLocation().add(0,1,0));
     }
 
     @EventHandler
@@ -42,15 +53,11 @@ public class Fireball extends MobAbility {
             return;
         }
 
-        Player player = (Player) event.getEntity();
-
-        if(!dvz.getPM().getPlayer(player).isDwarf()) {
-            event.setCancelled(true);
+        if (!event.getDamager().hasMetadata("type")) {
             return;
         }
 
-        event.setDamage(getDoubleOption("damage"));
-        player.setFireTicks(getIntOption("fireDuration"));
+        event.setCancelled(true);
     }
 
     @EventHandler
@@ -70,7 +77,12 @@ public class Fireball extends MobAbility {
             return;
         }
 
-        final int radius = getIntOption("fire-radius");
+        final int radius = (int)dvz.getGM().getMonsterPower(1, 1);
+
+        ParticleEffect.LAVA.display(radius,radius,radius, 0, 15, l);
+        ParticleEffect.FLAME.display(radius, radius, radius, 0, 20, l);
+        l.getWorld().playSound(l, Sound.EXPLODE, 0.5f, 0);
+        l.getWorld().playSound(l, Sound.GHAST_FIREBALL, 0.4f, 0);
 
         for(int x = l.getBlockX() - radius; x <= l.getBlockX() + radius; x++) {
             for(int y = l.getBlockY() - radius; y <= l.getBlockY() + radius; y++) {
@@ -78,13 +90,24 @@ public class Fireball extends MobAbility {
                     Block b = l.getWorld().getBlockAt(x, y, z);
                     if(b.getType().isSolid()) {
                         if (b.getRelative(BlockFace.UP).getType() == Material.AIR) {
-                            if (CWUtil.randomFloat() <= getDoubleOption("fire-chance")) {
+                            if (CWUtil.randomFloat() <= 0.1f + dvz.getGM().getMonsterPower(0.4f)) {
                                 b.getRelative(BlockFace.UP).setType(Material.FIRE);
-                                //TODO: Add sound and particle effects.
                             }
                         }
                     }
                 }
+            }
+        }
+
+        List<Entity> entities = CWUtil.getNearbyEntities(l, radius + 2, null);
+        for (Entity e : entities) {
+            if (!(e instanceof Player)) {
+                return;
+            }
+            CWPlayer cwp = dvz.getPM().getPlayer((Player)e);
+            if (cwp.isDwarf()) {
+                cwp.getPlayer().damage((int)dvz.getGM().getMonsterPower(1, 3));
+                cwp.getPlayer().setFireTicks((int)dvz.getGM().getMonsterPower(20, 60));
             }
         }
 
