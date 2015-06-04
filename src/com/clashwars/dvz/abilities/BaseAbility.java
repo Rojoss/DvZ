@@ -159,15 +159,15 @@ public class BaseAbility implements Listener {
         return onCooldown(player, extraPrefix, 0, getCooldown());
     }
 
-    public boolean onCooldown(Player player, String extraPrefix, float cooldownReduction) {
-        return onCooldown(player, extraPrefix, cooldownReduction, getCooldown());
+    public boolean onCooldown(Player player, String extraPrefix, int cooldownTime) {
+        return onCooldown(player, extraPrefix, cooldownTime, 0);
     }
 
     public boolean onCooldown(Player player, float cooldownReduction) {
-        return onCooldown(player, "", cooldownReduction, getCooldown());
+        return onCooldown(player, "", getCooldown(), cooldownReduction);
     }
 
-    public boolean onCooldown(Player player, String extraPrefix, float cooldownReduction, int cooldownTime) {
+    public boolean onCooldown(Player player, String extraPrefix, int cooldownTime, float cooldownReduction) {
         CWPlayer cwp = dvz.getPM().getPlayer(player);
 
         cooldownReduction = 1 - Math.max(Math.min(cooldownReduction, 1), 0);
