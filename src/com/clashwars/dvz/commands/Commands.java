@@ -4,6 +4,9 @@ import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.CooldownManager;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.cuboid.SelectionStatus;
+import com.clashwars.cwcore.hat.Hat;
+import com.clashwars.cwcore.hat.HatManager;
+import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
@@ -25,6 +28,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -38,6 +42,8 @@ public class Commands {
     private PlayerManager pm;
     private ClassManager cm;
 
+    private List<UUID> cows = new ArrayList<UUID>();
+
     public Commands(DvZ dvz) {
         this.dvz = dvz;
         gm = dvz.getGM();
@@ -48,10 +54,30 @@ public class Commands {
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (label.equalsIgnoreCase("cow")) {
-            sender.sendMessage("/cow");
             if (sender instanceof Player) {
-                Player player = (Player)sender;
+                final Player player = (Player)sender;
                 player.playSound(player.getLocation(), Sound.COW_HURT, 2, 2 - CWUtil.randomFloat());
+
+                if (!cows.contains(player.getUniqueId())) {
+                    cows.add(player.getUniqueId());
+                    final Hat prevHat = HatManager.getHat(player);
+                    final Hat h = new Hat(player, EntityType.COW);
+                    h.equip();
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            h.remove();
+                            cows.remove(player.getUniqueId());
+                            if (prevHat != null) {
+                                if (prevHat.getItem() != null) {
+                                    Hat newHat = new Hat(player, prevHat.getItem());
+                                } else {
+                                    Hat newHat = new Hat(player, prevHat.getEntityType());
+                                }
+                            }
+                        }
+                    }.runTaskLater(dvz, 100);
+                }
             }
             return true;
         }

@@ -1,5 +1,7 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.hat.Hat;
+import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
@@ -13,6 +15,7 @@ import com.clashwars.dvz.util.Util;
 import net.minecraft.server.v1_8_R2.PacketPlayInClientCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -110,6 +113,11 @@ public class MainEvents implements Listener {
         title.send(player);
 
         CWUtil.setTab(player, " &8======== &6&lDwarves &2VS &c&lZombies &8========", " &6INFO &8>>> &9&lclashwars.com/info &8<<< &6INFO");
+
+        if (player.isOp()) {
+            Hat hat = new Hat(player, new CWItem(Material.REDSTONE));
+            hat.equip();
+        }
 
         //Teleport player
         final Location spawnLocFinal = spawnLoc;
