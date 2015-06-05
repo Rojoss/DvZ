@@ -83,6 +83,11 @@ public class AlchemistWorkshop extends WorkShop {
                 }
                 iterations = 0;
 
+                if (cauldrons == null || cauldrons.size() < 1) {
+                    calculateLocations();
+                    return;
+                }
+
                 //Refill a random cauldron that isn't full.
                 Block cauldron = CWUtil.random(new ArrayList<Block>(cauldrons));
                 for (int i = 0; i < 6; i++) {
