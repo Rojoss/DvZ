@@ -114,11 +114,6 @@ public class MainEvents implements Listener {
 
         CWUtil.setTab(player, " &8======== &6&lDwarves &2VS &c&lZombies &8========", " &6INFO &8>>> &9&lclashwars.com/info &8<<< &6INFO");
 
-        if (player.isOp()) {
-            Hat hat = new Hat(player, new CWItem(Material.REDSTONE));
-            hat.equip();
-        }
-
         //Teleport player
         final Location spawnLocFinal = spawnLoc;
         new BukkitRunnable() {

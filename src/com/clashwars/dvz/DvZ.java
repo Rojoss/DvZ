@@ -184,6 +184,7 @@ public class DvZ extends JavaPlugin {
 
         pm.registerEvents(new ItemMenu.Events(), this);
         pm.registerEvents(new ProtectEvents(this), this);
+        pm.registerEvents(new VIPEvents(this), this);
         pm.registerEvents(soundMenu, this);
     }
 
