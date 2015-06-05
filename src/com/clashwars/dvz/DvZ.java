@@ -4,6 +4,8 @@ import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.scoreboard.CWBoard;
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.dvz.VIP.ArmorMenu;
+import com.clashwars.dvz.VIP.ColorMenu;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.ClassManager;
 import com.clashwars.dvz.classes.DvzClass;
@@ -53,6 +55,7 @@ public class DvZ extends JavaPlugin {
     private AbilityCfg abilityCfg;
     private PlayerCfg playerCfg;
     private WorkShopCfg wsCfg;
+    private ArmorPresetsCfg presetCfg;
 
     private Commands cmds;
 
@@ -63,6 +66,8 @@ public class DvZ extends JavaPlugin {
     private PlayerManager pm;
     private TipManager tm;
 
+    private ArmorMenu armorMenu;
+    private ColorMenu colorMenu;
     private SoundMenu soundMenu;
 
     private final Logger log = Logger.getLogger("Minecraft");
@@ -145,6 +150,9 @@ public class DvZ extends JavaPlugin {
         wsCfg = new WorkShopCfg("plugins/DvZ/data/Workshops.yml");
         wsCfg.load();
 
+        presetCfg = new ArmorPresetsCfg("plugins/DvZ/data/ArmorPresets.yml");
+        presetCfg.load();
+
         mm = new MapManager(this);
         gm = new GameManager(this);
         cm = new ClassManager(this);
@@ -153,6 +161,8 @@ public class DvZ extends JavaPlugin {
         gm.calculateMonsterPerc();
 
         soundMenu = new SoundMenu(this);
+        armorMenu = new ArmorMenu(this);
+        colorMenu = new ColorMenu(this);
 
         registerEvents();
 
@@ -185,6 +195,8 @@ public class DvZ extends JavaPlugin {
         pm.registerEvents(new ItemMenu.Events(), this);
         pm.registerEvents(new ProtectEvents(this), this);
         pm.registerEvents(new VIPEvents(this), this);
+        pm.registerEvents(armorMenu, this);
+        pm.registerEvents(colorMenu, this);
         pm.registerEvents(soundMenu, this);
     }
 
@@ -274,6 +286,10 @@ public class DvZ extends JavaPlugin {
         return wsCfg;
     }
 
+    public ArmorPresetsCfg getPresetCfg() {
+        return presetCfg;
+    }
+
 
     public EffectManager getEM() {
         return em;
@@ -297,6 +313,14 @@ public class DvZ extends JavaPlugin {
 
     public TipManager getTM() {
         return tm;
+    }
+
+    public ArmorMenu getArmorMenu() {
+        return armorMenu;
+    }
+
+    public ColorMenu getColorMenu() {
+        return colorMenu;
     }
 
     public SoundMenu getSoundMenu() {

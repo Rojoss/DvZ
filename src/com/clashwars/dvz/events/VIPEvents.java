@@ -1,16 +1,21 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.hat.Hat;
 import com.clashwars.cwcore.hat.HatManager;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.dvz.DvZ;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class VIPEvents implements Listener {
 
@@ -21,8 +26,30 @@ public class VIPEvents implements Listener {
     }
 
     @EventHandler
-    private void onJoin(PlayerJoinEvent event) {
-        equipHat(event.getPlayer());
+    private void onInteract(PlayerInteractEvent event) {
+        //Clicking on dispenser to open armor coloring.
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+            return;
+        }
+        if (event.getClickedBlock().getType() != Material.DISPENSER) {
+            return;
+        }
+        if (event.getClickedBlock().getData() != 1) {
+            return;
+        }
+        event.setCancelled(true);
+        dvz.getArmorMenu().showMenu(event.getPlayer());
+    }
+
+
+    @EventHandler
+    private void onJoin(final PlayerJoinEvent event) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                equipHat(event.getPlayer());
+            }
+        }.runTaskLater(dvz, 20);
     }
 
     @EventHandler
