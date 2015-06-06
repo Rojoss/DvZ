@@ -7,6 +7,8 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.RandomUtils;
 import com.clashwars.dvz.DvZ;
+import com.clashwars.dvz.Product;
+import com.clashwars.dvz.VIP.BannerData;
 import com.clashwars.dvz.classes.DvzClass;
 import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.worldedit.CuboidClipboard;
@@ -17,8 +19,10 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -79,6 +83,7 @@ public class WorkShop {
     public boolean remove() {
         if (cuboid != null && cuboid.getBlocks() != null) {
             Location pistonLoc = getOrigin().add(0,-1,0);
+
             for (Block block : cuboid.getBlocks()) {
                 block.setType(Material.AIR);
                 if (block.getLocation().equals(pistonLoc)) {
@@ -88,6 +93,22 @@ public class WorkShop {
                     block.setType(Material.WOOD);
                 }
             }
+
+            //Remove banners for VIP's and give back items.
+            BannerData data = dvz.getBannerCfg().getBanner(owner);
+            if (data != null) {
+                Product.VIP_BANNER.getItem(data.getBannerLocations().size()).setBaseColor(data.getBaseColor()).setPatterns(data.getPatterns()).giveToPlayer(getOwner());
+
+                for (Vector loc : data.getBannerLocations()) {
+                    Block block = getOwner().getWorld().getBlockAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+                    if (block.getType() == Material.STANDING_BANNER || block.getType() == Material.WALL_BANNER) {
+                        block.setType(Material.AIR);
+                    }
+                }
+                data.setBannerLocations(null);
+                dvz.getBannerCfg().setBanner(owner, data);
+            }
+
             cuboid = null;
             data = null;
             owner = null;

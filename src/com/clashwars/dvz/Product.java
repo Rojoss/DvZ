@@ -1,7 +1,10 @@
 package com.clashwars.dvz;
 
 import com.clashwars.cwcore.helpers.CWItem;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -43,7 +46,9 @@ public enum Product {
     WHEAT(new CWItem(Material.WHEAT).setName("&eWheat").setLore(new String[] {"&7Perfectly harvested common wheat!", "&eThrow it in the grinder(hopper) to make flour!"}), false),
     FLOUR(new CWItem(Material.SUGAR).setName("&eFlour").setLore(new String[] {"&7Dwarves finest flour, to make delicous bread!", "&ePlace in the furnace to create bread."}), false),
     BREAD(new CWItem(Material.BREAD).setName("&eBread").setLore(new String[] {"&7Delicious bread. (It's still warm!)", "&eRestores &65 hunger and 12 saturation&e!"}), true),
-    SEED(new CWItem(Material.SEEDS).setName("&eGrain").setLore(new String[]{"&7Whole grain with lots of proteins!", "&eSow them in the soil to grow wheat!"}), false);
+    SEED(new CWItem(Material.SEEDS).setName("&eGrain").setLore(new String[]{"&7Whole grain with lots of proteins!", "&eSow them in the soil to grow wheat!"}), false),
+
+    VIP_BANNER(new CWItem(Material.BANNER).setName("&3&lVIP BANNER").setLore(new String[]{"&7Place it down and click the banner to customize it.", "&eYou only have to customize it once!"}).setBaseColor(DyeColor.GRAY).setPattern(0, new Pattern(DyeColor.RED, PatternType.MOJANG)), true);
 
 
     private CWItem item;

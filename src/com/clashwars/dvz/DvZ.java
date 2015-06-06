@@ -4,14 +4,14 @@ import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.scoreboard.CWBoard;
 import com.clashwars.cwcore.utils.CWUtil;
-import com.clashwars.dvz.VIP.ArmorMenu;
-import com.clashwars.dvz.VIP.ColorMenu;
+import com.clashwars.dvz.VIP.*;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.ClassManager;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.commands.Commands;
 import com.clashwars.dvz.config.*;
 import com.clashwars.dvz.events.*;
+import com.clashwars.dvz.maps.DvzMap;
 import com.clashwars.dvz.maps.MapManager;
 import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.runnables.AntiCamp;
@@ -27,14 +27,20 @@ import com.google.gson.Gson;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Banner;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.NameTagVisibility;
+import org.bukkit.util.*;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -56,6 +62,7 @@ public class DvZ extends JavaPlugin {
     private PlayerCfg playerCfg;
     private WorkShopCfg wsCfg;
     private ArmorPresetsCfg presetCfg;
+    private BannerCfg bannerCfg;
 
     private Commands cmds;
 
@@ -69,6 +76,8 @@ public class DvZ extends JavaPlugin {
     private ArmorMenu armorMenu;
     private ColorMenu colorMenu;
     private SoundMenu soundMenu;
+    private BannerMenu bannerMenu;
+    private PatternMenu patternMenu;
 
     private final Logger log = Logger.getLogger("Minecraft");
 
@@ -153,6 +162,9 @@ public class DvZ extends JavaPlugin {
         presetCfg = new ArmorPresetsCfg("plugins/DvZ/data/ArmorPresets.yml");
         presetCfg.load();
 
+        bannerCfg = new BannerCfg("plugins/DvZ/data/Banners.yml");
+        bannerCfg.load();
+
         mm = new MapManager(this);
         gm = new GameManager(this);
         cm = new ClassManager(this);
@@ -163,6 +175,8 @@ public class DvZ extends JavaPlugin {
         soundMenu = new SoundMenu(this);
         armorMenu = new ArmorMenu(this);
         colorMenu = new ColorMenu(this);
+        bannerMenu = new BannerMenu(this);
+        patternMenu = new PatternMenu(this);
 
         registerEvents();
 
@@ -198,6 +212,8 @@ public class DvZ extends JavaPlugin {
         pm.registerEvents(armorMenu, this);
         pm.registerEvents(colorMenu, this);
         pm.registerEvents(soundMenu, this);
+        pm.registerEvents(bannerMenu, this);
+        pm.registerEvents(patternMenu, this);
     }
 
     private void startRunnables() {
@@ -290,6 +306,10 @@ public class DvZ extends JavaPlugin {
         return presetCfg;
     }
 
+    public BannerCfg getBannerCfg() {
+        return bannerCfg;
+    }
+
 
     public EffectManager getEM() {
         return em;
@@ -325,6 +345,14 @@ public class DvZ extends JavaPlugin {
 
     public SoundMenu getSoundMenu() {
         return soundMenu;
+    }
+
+    public BannerMenu getBannerMenu() {
+        return bannerMenu;
+    }
+
+    public PatternMenu getPatternMenu() {
+        return patternMenu;
     }
 
 }

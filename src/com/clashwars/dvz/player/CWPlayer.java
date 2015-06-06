@@ -6,6 +6,8 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.ExpUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameState;
+import com.clashwars.dvz.Product;
+import com.clashwars.dvz.VIP.BannerData;
 import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
@@ -182,10 +184,31 @@ public class CWPlayer {
                 player.setWalkSpeed(c.getSpeed());
                 player.setFlySpeed(c.getSpeed());
 
-                //Reaply buff
-                /* if (getPlayerData().isBuffed()) {
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 999999, 0));
-                }*/
+                //Equip VIP items.
+                if (c.getType() == ClassType.DWARF) {
+                    int bannerCount = 0;
+                    for (int i = 10; i > 0; i--) {
+                        if (player.hasPermission("banner." + i)) {
+                            bannerCount = i;
+                            break;
+                        }
+                    }
+                    if (bannerCount > 0) {
+                        CWItem banner = Product.VIP_BANNER.getItem(bannerCount);
+                        BannerData bannerData;
+                        if (dvz.getBannerCfg().BANNERS.containsKey(player.getUniqueId().toString())) {
+                            bannerData = dvz.getBannerCfg().getBanner(player.getUniqueId());
+                            banner.setBaseColor(bannerData.getBaseColor());
+                            banner.setPatterns(bannerData.getPatterns());
+                        } else {
+                            bannerData = new BannerData();
+                        }
+                        bannerData.setGiven(true);
+                        dvz.getBannerCfg().setBanner(uuid, bannerData);
+
+                        banner.giveToPlayer(player);
+                    }
+                }
 
                 if (eggUse) {
                     player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));

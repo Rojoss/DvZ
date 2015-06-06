@@ -4,6 +4,7 @@ import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.dvz.VIP.BannerData;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
@@ -20,6 +21,8 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.*;
+import org.bukkit.util.Vector;
 
 import java.util.*;
 
@@ -86,6 +89,12 @@ public class GameManager {
         setDragonType(null);
         resetDragonSlayer();
         setSpeed(0);
+
+        for (Map.Entry<UUID, BannerData> banner : dvz.getBannerCfg().getBanners().entrySet()) {
+            banner.getValue().setBannerLocations(null);
+            banner.getValue().setGiven(false);
+            dvz.getBannerCfg().setBanner(banner.getKey(), banner.getValue());
+        }
 
         Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &5All data has been removed/reset"));
 
