@@ -69,7 +69,14 @@ public class ClassManager {
             //Loop through all monsters and check weight/chance.
             for (DvzClass dvzClass : classes.keySet()) {
                 c = classes.get(dvzClass);
-                if (CWUtil.randomFloat() <= c.getWeight()) {
+                double weight = c.getWeight();
+                if (player.hasPermission("vip.gold")) {
+                    weight += 0.08;
+                }
+                if (player.hasPermission("vip.diamond")) {
+                    weight += 0.03;
+                }
+                if (CWUtil.randomFloat() <= weight) {
                     randomclasses.put(dvzClass, c);
                 }
             }
