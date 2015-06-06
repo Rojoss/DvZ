@@ -113,6 +113,11 @@ public class Commands {
                 return true;
             }
 
+            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted()) {
+                sender.sendMessage(Util.formatMsg("&cCan only be used as a dwarf!"));
+                return true;
+            }
+
             StructureType.STORAGE.getStrucClass().onUse(player);
             return true;
         }
@@ -126,6 +131,11 @@ public class Commands {
 
             if (!player.isOp() && !player.hasPermission("cmd.furnace")) {
                 sender.sendMessage(Util.formatMsg("&3Purchase &a&lVIP &3to be able to use the virtual furnace."));
+                return true;
+            }
+
+            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted()) {
+                sender.sendMessage(Util.formatMsg("&cCan only be used as a dwarf!"));
                 return true;
             }
 
@@ -145,6 +155,11 @@ public class Commands {
                 return true;
             }
 
+            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted()) {
+                sender.sendMessage(Util.formatMsg("&cCan only be used as a dwarf!"));
+                return true;
+            }
+
             StructureType.ENCHANT.getStrucClass().onUse(player);
             return true;
         }
@@ -155,6 +170,11 @@ public class Commands {
                 return true;
             }
             Player player = (Player)sender;
+
+            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted()) {
+                sender.sendMessage(Util.formatMsg("&cCan only be used as a dwarf!"));
+                return true;
+            }
 
             StructureType.DEPOSIT.getStrucClass().onUse(player);
             return true;
