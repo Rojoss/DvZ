@@ -217,7 +217,9 @@ public class Portal extends MobAbility {
             activePortal.getOwner().setHealth(0);
         }
 
-        activePortal.getEgg().getBlock().setType(Material.AIR);
+        if (activePortal.getEgg() != null) {
+            activePortal.getEgg().getBlock().setType(Material.AIR);
+        }
 
         ParticleEffect.EXPLOSION_HUGE.display(0, 3, 0, 0, 5, activePortal.getEgg().getBlock().getLocation(), 500);
         new BukkitRunnable() {
