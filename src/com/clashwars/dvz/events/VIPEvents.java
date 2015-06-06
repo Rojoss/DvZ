@@ -3,6 +3,7 @@ package com.clashwars.dvz.events;
 import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.hat.Hat;
 import com.clashwars.cwcore.helpers.CWItem;
+import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.Product;
@@ -10,6 +11,7 @@ import com.clashwars.dvz.VIP.BannerData;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.DyeColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -20,10 +22,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.util.Map;
 import java.util.UUID;
@@ -34,6 +39,86 @@ public class VIPEvents implements Listener {
 
     public VIPEvents(DvZ dvz) {
         this.dvz = dvz;
+
+        new BukkitRunnable() {
+            @Override
+
+            public void run() {
+                for (Player player : DvZ.inst().getServer().getOnlinePlayers()) {
+                    if (player.hasPermission("rank.admin")) {
+                        ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.REDSTONE_BLOCK, (byte)0), 0.3f, 0.1f, 0.3f, 0, 3, player.getLocation());
+                    } else if (player.hasPermission("rank.mod")) {
+                        ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.EMERALD_BLOCK, (byte)0), 0.3f, 0.1f, 0.3f, 0, 3, player.getLocation());
+                    } else if (player.hasPermission("rank.helper")) {
+                        ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.PRISMARINE, (byte)0), 0.3f, 0.1f, 0.3f, 0, 3, player.getLocation());
+                    } else if (player.hasPermission("vip.diamond")) {
+                        ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.DIAMOND_BLOCK, (byte)0), 0.3f, 0.1f, 0.3f, 0, 3, player.getLocation());
+                    } else if (player.hasPermission("vip.gold")) {
+                        ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.GOLD_BLOCK, (byte)0), 0.3f, 0.1f, 0.3f, 0, 2, player.getLocation());
+                    } else if (player.hasPermission("vip.iron")) {
+                        ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.IRON_BLOCK, (byte)0), 0.3f, 0.1f, 0.3f, 0, 1, player.getLocation());
+                    }
+                }
+            }
+        }.runTaskTimer(dvz, 3, 3);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    private void onDamageTake(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+        Player player = (Player)event.getEntity();
+        if (player.hasPermission("rank.admin")) {
+            ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.REDSTONE_BLOCK, (byte)0), 0.3f, 1f, 0.3f, 0, 20, player.getLocation().add(0,1,0));
+        } else if (player.hasPermission("rank.mod")) {
+            ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.EMERALD_BLOCK, (byte)0), 0.3f, 1f, 0.3f, 0, 20, player.getLocation().add(0, 1, 0));
+        } else if (player.hasPermission("rank.helper")) {
+            ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.PRISMARINE, (byte)0), 0.3f, 1f, 0.3f, 0, 20,player.getLocation().add(0, 1, 0));
+        } else if (player.hasPermission("vip.diamond")) {
+            ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.DIAMOND_BLOCK, (byte)0), 0.3f, 1f, 0.3f, 0, 20, player.getLocation().add(0, 1, 0));
+        } else if (player.hasPermission("vip.gold")) {
+            ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.GOLD_BLOCK, (byte)0), 0.3f, 1f, 0.3f, 0, 15, player.getLocation().add(0, 1, 0));
+        } else if (player.hasPermission("vip.iron")) {
+            ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.IRON_BLOCK, (byte)0), 0.3f, 1f, 0.3f, 0, 10, player.getLocation().add(0,1,0));
+        }
+    }
+
+    @EventHandler
+    private void onDeath(PlayerDeathEvent event) {
+        final Player player = event.getEntity();
+
+        Material blockType = Material.STONE;
+        final Location loc = player.getLocation().add(0, 1, 0);
+        if (player.hasPermission("rank.admin")) {
+            blockType = Material.REDSTONE_BLOCK;
+        } else if (player.hasPermission("rank.mod")) {
+            blockType = Material.EMERALD_BLOCK;
+        } else if (player.hasPermission("rank.helper")) {
+            blockType = Material.PRISMARINE;
+        } else if (player.hasPermission("vip.diamond")) {
+            blockType = Material.DIAMOND_BLOCK;
+        } else if (player.hasPermission("vip.gold")) {
+            blockType = Material.GOLD_BLOCK;
+        } else if (player.hasPermission("vip.iron")) {
+            blockType = Material.IRON_BLOCK;
+        }
+
+        final Material blockTypeF = blockType;
+        new BukkitRunnable() {
+            int i = 0;
+
+            @Override
+            public void run() {
+                if (i > 100) {
+                    cancel();
+                    return;
+                }
+                i++;
+                ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(blockTypeF, (byte)0), 0.8f, 1.3f, 0.8f, 0, 15, loc);
+            }
+        }.runTaskTimer(dvz, 0, 1);
+
     }
 
     @EventHandler
@@ -138,7 +223,7 @@ public class VIPEvents implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                //equipHat(event.getPlayer());
+                equipHat(event.getPlayer());
             }
         }.runTaskLater(dvz, 20);
     }
@@ -146,7 +231,7 @@ public class VIPEvents implements Listener {
     @EventHandler
      private void onEnable(PluginEnableEvent event) {
         for (Player player : dvz.getServer().getOnlinePlayers()) {
-            //equipHat(player);
+            equipHat(player);
         }
     }
 
