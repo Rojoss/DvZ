@@ -94,6 +94,7 @@ public class GameManager {
             banner.getValue().setBannerLocations(null);
             banner.getValue().setGiven(false);
             dvz.getBannerCfg().setBanner(banner.getKey(), banner.getValue());
+            dvz.getBannerMenu().tempBanners.put(banner.getKey(), banner.getValue());
         }
 
         Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &5All data has been removed/reset"));

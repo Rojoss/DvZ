@@ -107,6 +107,7 @@ public class WorkShop {
                 }
                 data.setBannerLocations(null);
                 dvz.getBannerCfg().setBanner(owner, data);
+                dvz.getBannerMenu().tempBanners.put(owner, data);
             }
 
             cuboid = null;

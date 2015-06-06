@@ -1,5 +1,6 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.hat.Hat;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
@@ -8,6 +9,7 @@ import com.clashwars.dvz.Product;
 import com.clashwars.dvz.VIP.BannerData;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.workshop.WorkShop;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -91,9 +93,11 @@ public class VIPEvents implements Listener {
         BannerData data = dvz.getBannerCfg().getBanner(player.getUniqueId());
         if (data == null) {
             data = new BannerData();
+            data.setBaseColor(DyeColor.WHITE);
         }
         data.addBannerLocation(block.getLocation().toVector());
         dvz.getBannerCfg().setBanner(player.getUniqueId(), data);
+        dvz.getBannerMenu().tempBanners.put(player.getUniqueId(), data);
 
         CWUtil.sendActionBar(player, CWUtil.integrateColor("&3&l>> &bBanner placed! &3&l<<"));
     }
@@ -122,6 +126,7 @@ public class VIPEvents implements Listener {
                 CWUtil.sendActionBar(player, CWUtil.integrateColor("&3&l>> &bBanner removed! &3&l<<"));
                 banner.getValue().removeBannerLocation(block.getLocation().toVector());
                 dvz.getBannerCfg().setBanner(banner.getKey(), banner.getValue());
+                dvz.getBannerMenu().tempBanners.put(banner.getKey(), banner.getValue());
                 Product.VIP_BANNER.getItem().setBaseColor(banner.getValue().getBaseColor()).setPatterns(banner.getValue().getPatterns()).giveToPlayer(player);
                 return;
             }
