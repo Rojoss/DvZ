@@ -31,6 +31,8 @@ public class PatternMenu implements Listener {
 
         menu.setSlot(new CWItem(Material.PAPER).setName("&4&lINFORMATION").setLore(new String[]{"&6Click on one of the patterns to apply!"}), 0, null);
         color_menu.setSlot(new CWItem(Material.PAPER).setName("&4&lINFORMATION").setLore(new String[]{"&6Click on one of the dyes to apply!"}), 0, null);
+        menu.setSlot(new CWItem(Material.REDSTONE_BLOCK).setName("&4&lBACK").setLore(new String[]{"&cGo back to the banner editing menu!"}), 44, null);
+        color_menu.setSlot(new CWItem(Material.REDSTONE_BLOCK).setName("&4&lBACK").setLore(new String[]{"&cGo back to the banner editing menu!"}), 17, null);
 
         for (DyeColor clr : DyeColor.values()) {
             color_menu.setSlot(new CWItem(Material.WOOL, 1, clr.getWoolData()).setName("&a&l" + clr.toString()).setLore(new String[]{"&6Click to apply this color!"}), clr.getWoolData() + 1, null);
@@ -67,15 +69,19 @@ public class PatternMenu implements Listener {
 
         final Player player = (Player) event.getWhoClicked();
         UUID uuid = player.getUniqueId();
-        CWItem item = new CWItem(event.getCurrentItem());
 
-        if (item == null) {
+        if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) {
             return;
         }
+        CWItem item = new CWItem(event.getCurrentItem());
 
         event.setCancelled(true);
 
         if (event.getRawSlot() >= menu.getSize()) {
+            return;
+        }
+
+        if (event.getSlot() == 0) {
             return;
         }
 
@@ -84,6 +90,10 @@ public class PatternMenu implements Listener {
 
         //Pattern
         if (event.getItemMenu().getID() == menu.getID()) {
+            if (event.getSlot() == 44) {
+                dvz.getBannerMenu().showMenu(player);
+                return;
+            }
             Pattern itemPattern = item.getPattern(0);
             DyeColor color = tempBanner.getPattern(patternIndex).getColor();
             if (color == null) {
@@ -97,6 +107,11 @@ public class PatternMenu implements Listener {
 
         //Color
         if (event.getItemMenu().getID() == color_menu.getID()) {
+            if (event.getSlot() == 17) {
+                dvz.getBannerMenu().showMenu(player);
+                return;
+            }
+
             //Edit base color
             if (patternIndex == -1) {
                 tempBanner.setBaseColor(DyeColor.valueOf(CWUtil.stripAllColor(item.getName())));

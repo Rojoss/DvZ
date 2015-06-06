@@ -123,11 +123,11 @@ public class BannerMenu implements Listener {
 
         Player player = (Player)event.getWhoClicked();
         UUID uuid = player.getUniqueId();
-        CWItem item = new CWItem(event.getCurrentItem());
 
-        if (item == null) {
+        if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) {
             return;
         }
+        CWItem item = new CWItem(event.getCurrentItem());
 
         event.setCancelled(true);
 
