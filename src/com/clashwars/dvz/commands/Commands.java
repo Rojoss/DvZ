@@ -21,6 +21,7 @@ import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.player.PlayerManager;
+import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -99,6 +100,66 @@ public class Commands {
 
             return true;
         }
+
+        if (label.equalsIgnoreCase("storage") || label.equalsIgnoreCase("chests") || label.equalsIgnoreCase("chest")) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                return true;
+            }
+            Player player = (Player)sender;
+
+            if (!player.isOp() && !player.hasPermission("cmd.storage")) {
+                sender.sendMessage(Util.formatMsg("&3Purchase &a&lVIP &3to be able to use the virtual storage."));
+                return true;
+            }
+
+            StructureType.STORAGE.getStrucClass().onUse(player);
+            return true;
+        }
+
+        if (label.equalsIgnoreCase("furnace") || label.equalsIgnoreCase("furnaces") || label.equalsIgnoreCase("cook") || label.equalsIgnoreCase("smelt")) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                return true;
+            }
+            Player player = (Player)sender;
+
+            if (!player.isOp() && !player.hasPermission("cmd.furnace")) {
+                sender.sendMessage(Util.formatMsg("&3Purchase &a&lVIP &3to be able to use the virtual furnace."));
+                return true;
+            }
+
+            StructureType.FURNACE.getStrucClass().onUse(player);
+            return true;
+        }
+
+        if (label.equalsIgnoreCase("enchant") || label.equalsIgnoreCase("enchanting")) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                return true;
+            }
+            Player player = (Player)sender;
+
+            if (!player.isOp() && !player.hasPermission("cmd.enchant")) {
+                sender.sendMessage(Util.formatMsg("&3Purchase &a&lVIP &3to be able to use virtual enchanting."));
+                return true;
+            }
+
+            StructureType.ENCHANT.getStrucClass().onUse(player);
+            return true;
+        }
+
+        if (label.equalsIgnoreCase("disposal") || label.equalsIgnoreCase("dispose") || label.equalsIgnoreCase("clear")) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                return true;
+            }
+            Player player = (Player)sender;
+
+            StructureType.DEPOSIT.getStrucClass().onUse(player);
+            return true;
+        }
+
 
         if (label.equalsIgnoreCase("dvz") || label.equalsIgnoreCase("dvz:dvz") || label.equalsIgnoreCase("d") || label.equalsIgnoreCase("dz") || label.equalsIgnoreCase("dvsz")) {
             if (args.length >= 1) {
