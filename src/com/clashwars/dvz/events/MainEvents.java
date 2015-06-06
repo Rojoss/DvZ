@@ -1,5 +1,6 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.hat.Hat;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.Title;
@@ -10,6 +11,8 @@ import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.abilities.monsters.Pickup;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.maps.ShrineBlock;
+import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.Util;
 import net.minecraft.server.v1_8_R2.PacketPlayInClientCommand;
@@ -23,6 +26,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.List;
 
 public class MainEvents implements Listener {
 
@@ -184,6 +189,34 @@ public class MainEvents implements Listener {
             dvz.getGM().resetDragonSlayer();
             dvz.getServer().broadcastMessage(Util.formatMsg("&d&lThe DragonSlayer died!"));
         }
+
+        ClassType playerClass = dvz.getPM().getPlayer(player).getPlayerClass().getType();
+
+        final ShrineType[] shrineTypes = new ShrineType[] {ShrineType.WALL, ShrineType.KEEP_1, ShrineType.KEEP_2};
+        new BukkitRunnable() {
+            int index = 0;
+            @Override
+            public void run() {
+                List<CWPlayer> dwarvesLeft = dvz.getPM().getPlayers(ClassType.DWARF, true, false);
+                if (dwarvesLeft == null || dwarvesLeft.size() == 0) {
+                    for (ShrineBlock shrineBlock : dvz.getGM().getShrineBlocks(shrineTypes[index])) {
+                        if (shrineBlock != null && shrineBlock.isDestroyed() == false) {
+                            dvz.getGM().getShrineBlock(shrineBlock.getLocation()).damage(500);
+                        }
+                    }
+
+                    index++;
+                    if (index >= 3) {
+                        cancel();
+                        return;
+                    }
+                } else {
+                    cancel();
+                    return;
+                }
+            }
+        }.runTaskTimer(dvz, 60, 60);
+
 
         //Instant respawning.
         dvz.getServer().getScheduler().scheduleSyncDelayedTask(dvz, new Runnable() {
