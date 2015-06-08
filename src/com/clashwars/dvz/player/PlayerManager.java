@@ -38,12 +38,15 @@ public class PlayerManager {
         }
         Map<UUID, WorkShopData> cfgWorkshops = wsCfg.getWorkShops();
         for (UUID uuid : cfgWorkshops.keySet()) {
-            DvzClass type = cfgWorkshops.get(uuid).getType();
-            if (type == null) {
+            WorkShopData wsData = cfgWorkshops.get(uuid);
+            if (wsData == null) {
                 continue;
             }
+            if (wsData.getType() == null) {
+                wsData.setType(players.get(uuid).getPlayerClass());
+            }
             WorkShop ws;
-            switch(type) {
+            switch(wsData.getType()) {
                 case MINER:
                     ws = new MinerWorkshop(uuid, cfgWorkshops.get(uuid));
                     break;
@@ -62,8 +65,8 @@ public class PlayerManager {
                 default:
                     ws = new WorkShop(uuid, cfgWorkshops.get(uuid));
             }
-            ws.onLoad();
             workshops.put(uuid, ws);
+            ws.onLoad();
         }
     }
 

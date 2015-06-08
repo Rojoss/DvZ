@@ -98,9 +98,7 @@ public class DvZ extends JavaPlugin {
 
         em.dispose();
 
-        Bukkit.getScheduler().cancelTasks(this);
         getPM().savePlayers();
-
         for (WorkShop ws : getPM().getWorkShops().values()) {
             ws.onRemove();
             ws.remove();
@@ -113,6 +111,8 @@ public class DvZ extends JavaPlugin {
         for (Hologram hologram : HolographicDisplaysAPI.getHolograms(this)) {
             hologram.delete();
         }
+
+        Bukkit.getScheduler().cancelTasks(this);
 
         log("disabled");
     }
