@@ -24,11 +24,12 @@ public class TeleportPortal extends MobAbility {
             player.sendMessage(Util.formatMsg("&cThere is no active portal right now."));
             return;
         }
-        //TODO: Maybe a teleport delay so you don't tp instantly (might get abused)
+
         if (onCooldown(player)) {
             return;
         }
-        player.teleport(Portal.activePortal.getLocation());
+
+        dvz.getPM().getPlayer(player).timedTeleport(Portal.activePortal.getLocation(), 5, "the portal");
     }
 
     @EventHandler

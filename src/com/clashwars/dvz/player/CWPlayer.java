@@ -17,6 +17,8 @@ import com.clashwars.dvz.runnables.TeleportRunnable;
 import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -373,6 +375,26 @@ public class CWPlayer {
         if (teleport != null) {
             return false;
         }
+
+        //If dwarf and no monsters nearby tp instant and other way around.
+        List<Entity> nearbyPlayers = CWUtil.getNearbyEntities(getPlayer().getLocation(), 20, Arrays.asList(new EntityType[] {EntityType.PLAYER}));
+        boolean nearbyEnemy = false;
+        for (Entity e : nearbyPlayers) {
+            CWPlayer cwp = dvz.getPM().getPlayer((Player)e);
+            if (cwp.getPlayerClass().getType() == ClassType.DWARF) {
+                if (getPlayerClass().getType() == ClassType.MONSTER) {
+                    nearbyEnemy = true;
+                }
+            } else if (cwp.getPlayerClass().getType() == ClassType.MONSTER) {
+                if (getPlayerClass().getType() == ClassType.DWARF) {
+                    nearbyEnemy = true;
+                }
+            }
+        }
+        if (!nearbyEnemy) {
+            seconds = 0;
+        }
+
         if (seconds <= 0) {
             if (locationMsg != null && !locationMsg.isEmpty()) {
                 sendMessage(Util.formatMsg("&6Teleported to &5" + locationMsg));

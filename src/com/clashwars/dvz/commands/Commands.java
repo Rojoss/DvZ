@@ -253,7 +253,7 @@ public class Commands {
                         return true;
                     }
 
-                    cwp.timedTeleport(dvz.getMM().getActiveMap().getLocation("dwarf"), 4, "the keep");
+                    cwp.timedTeleport(dvz.getMM().getActiveMap().getLocation("dwarf"), 5, "the keep");
                     return true;
                 }
 
@@ -278,7 +278,7 @@ public class Commands {
                         return true;
                     }
 
-                    cwp.timedTeleport(dvz.getMM().getActiveMap().getCuboid("shrine2keep").getCenterLoc().add(0,2,0), 4, "the shrine");
+                    cwp.timedTeleport(dvz.getMM().getActiveMap().getCuboid("shrine2keep").getCenterLoc().add(0,2,0), 5, "the shrine");
                     return true;
                 }
 
@@ -308,7 +308,7 @@ public class Commands {
                         return true;
                     }
 
-                    cwp.timedTeleport(dvz.getMM().getActiveMap().getLocation("wall"), 4, "the wall");
+                    cwp.timedTeleport(dvz.getMM().getActiveMap().getLocation("wall"), 5, "the wall");
                     return true;
                 }
 
@@ -334,7 +334,7 @@ public class Commands {
                     }
 
                     Location loc = pm.getWorkshop(player).getCuboid().getMinLoc().add(2, 1, -1);
-                    cwp.timedTeleport(loc, 4, "your workshop");
+                    cwp.timedTeleport(loc, 5, "your workshop");
                     return true;
                 }
 
