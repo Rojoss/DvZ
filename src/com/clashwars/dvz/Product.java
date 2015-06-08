@@ -33,8 +33,8 @@ public enum Product {
     ARROW(new CWItem(Material.ARROW).setName("&aArrow").setLore(new String[] {"&7Light arrow with high accuracy and high damage!", "&7Makes your bow more useful!"}), true),
 
     WOOL(new CWItem(Material.WOOL).setName("&bWool").setLore(new String[] {"&7Strong wool from Merino sheep!", "&7Great for making strong armor!", "&bCombine &38 with &32 blue &band &32 white &bdye", "&bon your workbench to make armor!"}), false),
-    DYE_1(new CWItem(Material.INK_SACK, 1, (byte)7).setName("&bBlue Dye").setLore(new String[] {"&7Clear blue dye.", "&7Can change into any color!", "&bYou need &32 &bto make dwarven armor!"}), false),
-    DYE_2(new CWItem(Material.INK_SACK, 1, (byte)12).setName("&bWhite Dye").setLore(new String[] {"&7Clean white dye.", "&7Great to use as a base for dying armor!", "&bYou need &32 &bto make dwarven armor!"}), false),
+    DYE_1(new CWItem(Material.INK_SACK, 1, (byte)7).setName("&bWhite Dye").setLore(new String[] {"&7Clean white dye.", "&7Great to use as a base for dying armor!", "&bYou need &32 &bto make dwarven armor!"}), false),
+    DYE_2(new CWItem(Material.INK_SACK, 1, (byte)12).setName("&bBlue Dye").setLore(new String[] {"&7Clear blue dye.", "&7Can change into any color!", "&bYou need &32 &bto make dwarven armor!"}), false),
     HELMET(new CWItem(Material.LEATHER_HELMET).setName("&bDwarven Helmet").setLore(new String[]{"&7One of the strongest and finest helmets!", "&7Will protect you from almost everything!"}), true),
     CHESTPLATE(new CWItem(Material.LEATHER_CHESTPLATE).setName("&bDwarven Tunic").setLore(new String[]{"&7A very comfy tunic.", "&7One size fits all!"}), true),
     LEGGINGS(new CWItem(Material.LEATHER_LEGGINGS).setName("&bDwarven Greaves").setLore(new String[] {"&7Comfortable greaves with high defence!"}), true),
