@@ -262,7 +262,6 @@ public class MainEvents implements Listener {
                     //Player died as a dwarf.
                     if (cwp.isDwarf()) {
                         player.sendMessage(Util.formatMsg("&4&lYou have turned into a monster!!!"));
-                        dvz.getGM().calculateMonsterPerc();
                     }
 
                     //Remove player from suicide list if he suicided.

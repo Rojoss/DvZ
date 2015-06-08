@@ -341,6 +341,7 @@ public class CWPlayer {
     }
 
     public void setPlayerClass(DvzClass playerClass) {
+        dvz.getGM().calculateMonsterPerc();
         data.setPlayerClass(playerClass);
     }
 
