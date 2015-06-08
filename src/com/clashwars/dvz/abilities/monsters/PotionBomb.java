@@ -142,10 +142,10 @@ public class PotionBomb extends MobAbility {
                     boolean poisonAdded = false;
                     for (PotionEffect pe : cwp.getPlayer().getActivePotionEffects()) {
                         if(pe.getType().equals(PotionEffectType.BLINDNESS)) {
-                            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int)dvz.getGM().getMonsterPower(100, 200) + pe.getDuration(), 1), true);
+                            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int)dvz.getGM().getMonsterPower(80, 140) + pe.getDuration(), 1), true);
                             blindAdded = true;
                         } else if (pe.getType().equals(PotionEffectType.POISON)) {
-                            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(150, 300) + pe.getDuration(), 1), true);
+                            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(100, 180) + pe.getDuration(), 1), true);
                             poisonAdded = true;
                         }
                     }
