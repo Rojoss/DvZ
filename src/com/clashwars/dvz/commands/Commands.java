@@ -1027,13 +1027,11 @@ public class Commands {
 
 
             sender.sendMessage(CWUtil.integrateColor("&8========== &4&lDvZ Game Information &8=========="));
-            sender.sendMessage(CWUtil.integrateColor("&6Game State&8: &5" + gm.getState().getColor() + gm.getState().getName()));
-            sender.sendMessage(CWUtil.integrateColor("&6Current map&8: &5" + dvz.getMM().getActiveMapName()));
-            sender.sendMessage(CWUtil.integrateColor("&6Game speed&8: &5" + gm.getSpeed()));
+            sender.sendMessage(CWUtil.integrateColor("&6Game State&8: &5" + gm.getState().getColor() + gm.getState().getName() + " &8(&7Speed: &a" + gm.getSpeed() + "&7)"));
             if (gm.getState() == GameState.DRAGON) {
                 sender.sendMessage(CWUtil.integrateColor("&6Dragon power&8: &d" + gm.getDragonPower() + "&8/&53"));
             }
-            sender.sendMessage(CWUtil.integrateColor("&6Monster power&8: &d" + gm.getMonsterPower(10) + "&8/&510"));
+            sender.sendMessage(CWUtil.integrateColor("&6Monster power&8: &d" + ((int)gm.getMonsterPower(10)) + "&8/&510"));
             sender.sendMessage(CWUtil.integrateColor("&6Shrines&8:" + shrineMsg));
             sender.sendMessage(CWUtil.integrateColor("&6Players&8: &a&l" + dvz.getPM().getPlayers(ClassType.DWARF, true, true).size() + " &2Dwarves &6&lVS &c&l"
                     + dvz.getPM().getPlayers(ClassType.MONSTER, true, true).size() + " &4Zombies &8(&7" + dvz.getServer().getOnlinePlayers().size() + "&8)"));
