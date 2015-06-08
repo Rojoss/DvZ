@@ -141,6 +141,10 @@ public class LobbyEvents implements Listener {
     @EventHandler
     private void inventoryClick(InventoryClickEvent event) {
         //Trigger class selection when clicking on the items in inventory.
+        if (event.getInventory().getName().toLowerCase().contains("switch")) {
+            return;
+        }
+
         String itemName = "";
         if (event.getCurrentItem().hasItemMeta()) {
             ItemMeta meta = event.getCurrentItem().getItemMeta();

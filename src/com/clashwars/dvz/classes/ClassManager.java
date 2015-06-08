@@ -213,10 +213,10 @@ public class ClassManager {
         menu.setTitle(CWUtil.integrateColor("&4&lSwitch to &5&l" + dvzClass.getClassClass().getDisplayName()));
         menu.clear(null);
 
-        menu.setSlot(new CWItem(Material.STAINED_GLASS_PANE, 1, (byte)14).setName("&4&lCANCEL").addLore("&7All items in the menu will be given back.").addLore("&7and you keep the same class."), 0, null);
-        menu.setSlot(new CWItem(Material.BOOK).setName("&5&lSWITCH INFO").addLore("&7All items in this menu will be kept after switching.").addLore("&7Not all items can be kept though.")
-                .addLore("&7Just click on the items in your inventory to add them.").addLore("&7And click on the items in the menu to not keep them.").addLore("&7Armor is kept by default."), 4, null);
-        menu.setSlot(new CWItem(Material.STAINED_GLASS_PANE, 1, (byte)5).setName("&a&lSWITCH").addLore("&7You will switch classes.").addLore("&7All items in your inventory will be destroyed!")
+        menu.setSlot(new CWItem(Material.REDSTONE_BLOCK).setName("&4&lCANCEL").addLore("&7All items in the menu will be given back.").addLore("&7and you keep the same class."), 0, null);
+        menu.setSlot(new CWItem(Material.PAPER).setName("&5&lSWITCH INFO").addLore("&7All items in this menu will be kept after switching.").addLore("&7Not all items can be kept though.")
+                .addLore("&7Just click on the items in your inventory to add them.").addLore("&7And click on the items in the menu to remove them.").addLore("&7Armor is kept by default."), 4, null);
+        menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte)10).setName("&a&lSWITCH").addLore("&7You will switch classes.").addLore("&7All items in your inventory will be destroyed!")
                 .addLore("&cYour workshop will be deleted as well!").addLore("&4Make sure you want to do this!"), 8, null);
 
         menu.show(player);

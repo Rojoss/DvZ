@@ -1,6 +1,8 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWItem;
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.classes.ClassType;
@@ -26,9 +28,9 @@ public class SwitchEvents implements Listener {
 
     @EventHandler
     private void menuClick(final ItemMenu.ItemMenuClickEvent event) {
-        ItemMenu menu = event.getItemMenu();
+        final ItemMenu menu = event.getItemMenu();
         final Player player = (Player) event.getWhoClicked();
-        ItemStack item = event.getCurrentItem();
+        final ItemStack item = event.getCurrentItem();
 
         if (menu.getName().equals("switch")) {
             //Switch menu (check for clicking on classes)
@@ -40,16 +42,18 @@ public class SwitchEvents implements Listener {
             for (final DvzClass dvzClass : dvz.getCM().getClasses(ClassType.DWARF).keySet()) {
                 if (dvzClass.getClassClass().getClassItem().equals(event.getCurrentItem())) {
                     player.closeInventory();
+                    player.sendMessage(CWUtil.integrateColor("&7-----"));
                     player.sendMessage(Util.formatMsg("&6In a few seconds a menu GUI will appear."));
                     player.sendMessage(Util.formatMsg("&6You can then modify which items you want to keep."));
-                    player.sendMessage(Util.formatMsg("&6After you did that click the green button to switch!"));
+                    player.sendMessage(Util.formatMsg("&6After you did that click the &agreen button &6to switch!"));
+                    player.sendMessage(CWUtil.integrateColor("&7-----"));
 
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             dvz.getCM().showSwitchMenu((Player) player, dvzClass);
                         }
-                    }.runTaskLater(dvz, 100);
+                    }.runTaskLater(dvz, 60);
                     return;
                 }
             }
@@ -59,28 +63,21 @@ public class SwitchEvents implements Listener {
 
             event.setCancelled(true);
 
-            CWItem empty = new CWItem(Material.AIR);
-            int rawSlot = event.getRawSlot();
+            final CWItem empty = new CWItem(Material.AIR);
+            final int rawSlot = event.getRawSlot();
             if (rawSlot < menu.getSize()) {
                 //Top menu (Items to keep)
+
+                //Cancel switching
                 if (rawSlot == 0) {
-                    for (int i = 9; i < menu.getSize(); i++) {
-                        if (menu.getItems()[i] != null && menu.getItems()[i].getType() != Material.AIR) {
-                            if (player.getInventory().getItem(i - 9) == null || player.getInventory().getItem(i - 9).getType() == Material.AIR) {
-                                player.getInventory().setItem(i - 9, menu.getItems()[i]);
-                            } else {
-                                player.getInventory().addItem(menu.getItems()[i]);
-                            }
-                            menu.setSlot(empty, i, null);
-                        }
-                    }
                     player.closeInventory();
-                    player.sendMessage(Util.formatMsg("&6You stopped switching to " + DvzClass.fromString(menu.getData())));
-                    player.sendMessage(Util.formatMsg("&7All items placed in the switch menu have been given back."));
                     return;
                 }
+
+                //Switch
                 if (rawSlot == 8) {
                     player.sendMessage(Util.formatMsg("&6You will be switched to " + DvzClass.fromString(menu.getData())));
+                    menu.setPage(10);
                     player.closeInventory();
                     dvz.getPM().getPlayer(player).switchClass(DvzClass.fromString(menu.getData()), menu);
                     return;
@@ -136,6 +133,11 @@ public class SwitchEvents implements Listener {
 
         ItemMenu menu = dvz.getCM().switchMenus.get(player.getUniqueId());
         if (!inv.getTitle().equals(menu.getTitle()) || inv.getSize() != menu.getSize() || !inv.getHolder().equals(player)) {
+            return;
+        }
+
+        if (menu.getPage() == 10) {
+            menu.setPage(0);
             return;
         }
 
