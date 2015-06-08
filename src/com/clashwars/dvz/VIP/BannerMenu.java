@@ -87,6 +87,9 @@ public class BannerMenu implements Listener {
                 tempBanners.put(player.getUniqueId(), tempBanner);
             }
         }
+        if (tempBanner.getBaseColor() == null) {
+            tempBanner.setBaseColor(DyeColor.WHITE);
+        }
 
         //Result banner
         menu.setSlot(new CWItem(Material.BANNER).setBaseColor(tempBanner.getBaseColor()).setPatterns(tempBanner.getPatterns()), 4, player);
