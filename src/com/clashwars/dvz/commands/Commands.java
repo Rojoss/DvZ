@@ -19,6 +19,7 @@ import com.clashwars.dvz.classes.ClassManager;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.maps.ShrineBlock;
+import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.structures.internal.StructureType;
@@ -1011,25 +1012,39 @@ public class Commands {
                 }
             }
 
-            int shrines = 0;
-            for (ShrineBlock shrine : gm.getShrineBlocks()) {
-                if (!shrine.isDestroyed()) {
-                    shrines++;
+            ShrineType[] shrineTypes = new ShrineType[] {ShrineType.WALL, ShrineType.KEEP_1, ShrineType.KEEP_2};
+            String shrineMsg = "";
+            for (ShrineType shrineType : shrineTypes) {
+                shrineMsg += " &5" + shrineType.toString().toLowerCase().replace("_", "") + "&8:";
+                for (ShrineBlock shrine : gm.getShrineBlocks(shrineType)) {
+                    if (shrine.isDestroyed()) {
+                        shrineMsg += "&c|";
+                    } else {
+                        shrineMsg += "&a|";
+                    }
                 }
             }
+
+
             sender.sendMessage(CWUtil.integrateColor("&8========== &4&lDvZ Game Information &8=========="));
             sender.sendMessage(CWUtil.integrateColor("&6Game State&8: &5" + gm.getState().getColor() + gm.getState().getName()));
             sender.sendMessage(CWUtil.integrateColor("&6Current map&8: &5" + dvz.getMM().getActiveMapName()));
             sender.sendMessage(CWUtil.integrateColor("&6Game speed&8: &5" + gm.getSpeed()));
-            sender.sendMessage(CWUtil.integrateColor("&6Shrines remaining&8: &5" + shrines));
+            if (gm.getState() == GameState.DRAGON) {
+                sender.sendMessage(CWUtil.integrateColor("&6Dragon power&8: &d" + gm.getDragonPower() + "&8/&53"));
+            }
+            sender.sendMessage(CWUtil.integrateColor("&6Monster power&8: &d" + gm.getMonsterPower(10) + "&8/&510"));
+            sender.sendMessage(CWUtil.integrateColor("&6Shrines&8:" + shrineMsg));
             sender.sendMessage(CWUtil.integrateColor("&6Players&8: &a&l" + dvz.getPM().getPlayers(ClassType.DWARF, true, true).size() + " &2Dwarves &6&lVS &c&l"
-                    + dvz.getPM().getPlayers(ClassType.MONSTER, true, true).size() + " &4Zombies"));
+                    + dvz.getPM().getPlayers(ClassType.MONSTER, true, true).size() + " &4Zombies &8(&7" + dvz.getServer().getOnlinePlayers().size() + "&8)"));
             if (sender instanceof Player) {
                 Player player = (Player)sender;
                 CWPlayer cwp = dvz.getPM().getPlayer(player);
                 sender.sendMessage(CWUtil.integrateColor("&8============== &4&lPersonal Info &8=============="));
                 sender.sendMessage(CWUtil.integrateColor("&6Class&8: &5" + cwp.getPlayerClass().getClassClass().getDisplayName()));
-                sender.sendMessage(CWUtil.integrateColor("&6Class XP&8: &5" + cwp.getClassExp()));
+                if (cwp.isDwarf()) {
+                    sender.sendMessage(CWUtil.integrateColor("&6Class XP&8: &5" + cwp.getClassExp()));
+                }
             }
             sender.sendMessage(CWUtil.integrateColor("&8======= &4Use &c/dvz help &4for all commands &8======="));
             return true;
