@@ -123,7 +123,7 @@ public class Fletcher extends DwarfClass {
             cwp.addClassExp(1);
         }
         entity.getWorld().dropItem(entity.getLocation(), feathers);
-        ws.spawnAnimal(EntityType.CHICKEN, CWUtil.random(ws.getCuboid().getMaxY() + 10, ws.getCuboid().getMaxY() + 20));
+        ws.spawnAnimal(EntityType.CHICKEN, CWUtil.random(ws.getCuboid().getMaxY() + 5, ws.getCuboid().getMaxY() + 15));
     }
 
 

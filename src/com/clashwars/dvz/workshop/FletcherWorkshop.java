@@ -65,7 +65,7 @@ public class FletcherWorkshop extends WorkShop {
         }
         //Spawn chickens
         for (int i = 0; i < DvzClass.FLETCHER.getClassClass().getIntOption("chicken-amount"); i++) {
-            spawnAnimal(EntityType.CHICKEN, CWUtil.random(cuboid.getMaxY() + 10, cuboid.getMaxY() + 20));
+            spawnAnimal(EntityType.CHICKEN, CWUtil.random(cuboid.getMaxY() + 0, cuboid.getMaxY() + 10));
         }
 
         setCraftBlock();
