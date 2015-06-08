@@ -84,8 +84,8 @@ public class DvZ extends JavaPlugin {
     public GameRunnable gameRunnable;
 
     public Set<UUID> entities = new HashSet<UUID>();
-    private List<Material> destroyableBlocks = Arrays.asList(new Material[] {Material.SMOOTH_BRICK, Material.STONE, Material.GRASS, Material.COBBLESTONE,
-        Material.QUARTZ_BLOCK, Material.WOOD, Material.LOG, Material.LOG_2, Material.BRICK, Material.DIRT});
+    private List<Material> undestroyableBlocks = Arrays.asList(new Material[] {Material.BEDROCK, Material.OBSIDIAN, Material.ENDER_STONE, Material.ENDER_PORTAL_FRAME,
+        Material.WEB, Material.STANDING_BANNER, Material.WALL_BANNER, Material.DRAGON_EGG, Material.BARRIER, Material.REDSTONE_BLOCK});
 
     @Override
     public void onDisable() {
@@ -265,8 +265,8 @@ public class DvZ extends JavaPlugin {
         return permission;
     }
 
-    public List<Material> getDestroyableBlocks() {
-        return destroyableBlocks;
+    public List<Material> getUndestroyableBlocks() {
+        return undestroyableBlocks;
     }
 
 

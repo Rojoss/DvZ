@@ -42,7 +42,7 @@ public class Util {
     }
 
     public static boolean isDestroyable(Material mat) {
-        return DvZ.inst().getDestroyableBlocks().contains(mat);
+        return !DvZ.inst().getUndestroyableBlocks().contains(mat);
     }
 
     public static Vector getDragonMouthPos(Location playerLoc) {

@@ -9,6 +9,7 @@ import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
+import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -52,7 +53,7 @@ public class Hammer extends MobAbility {
 
         //Check if block can be destroyed
         Block block = event.getClickedBlock();
-        if (block.getType() == Material.BEDROCK || block.getType() == Material.OBSIDIAN || block.getType() == Material.ENDER_STONE || block.getType() == Material.DRAGON_EGG) {
+        if (block.getType() != Material.ENDER_PORTAL_FRAME && !Util.isDestroyable(block.getType())) {
             return;
         }
 
