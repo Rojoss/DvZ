@@ -4,6 +4,7 @@ import com.clashwars.cwcore.CooldownManager;
 import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
+import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
@@ -143,6 +144,16 @@ public class BaseAbility implements Listener {
 
     public boolean canCast(Player player) {
         CWPlayer cwp = dvz.getPM().getPlayer(player);
+
+        if (dvz.getGM().getState() == GameState.ENDED) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThe game has ended! &4&l<<"));
+            return false;
+        }
+
+        if (!dvz.getGM().isStarted()) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThe game hasn't started! &4&l<<"));
+            return false;
+        }
 
         //Check if player class has this ability.
         if (!getDvzClasses().contains(cwp.getPlayerClass())) {
