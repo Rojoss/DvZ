@@ -286,14 +286,6 @@ public class CWPlayer {
                 if (forcePrevious) {
                     if (type == ClassType.MONSTER) {
                         DvzClass.ZOMBIE.getClassClass().getClassItem().giveToPlayer(player);
-                        if (getClassOptions() != null && !getClassOptions().contains(DvzClass.ZOMBIE)) {
-                            getClassOptions().add(DvzClass.ZOMBIE);
-                        }
-                    }
-                    for (DvzClass c : getClassOptions()) {
-                        if (dvz.getCM().getClass(c) != null && dvz.getCM().getClass(c).getClassItem() != null) {
-                            dvz.getCM().getClass(c).getClassItem().giveToPlayer(player);
-                        }
                     }
                     return;
                 }
@@ -378,7 +370,7 @@ public class CWPlayer {
         }
 
         //If dwarf and no monsters nearby tp instant and other way around.
-        List<Entity> nearbyPlayers = CWUtil.getNearbyEntities(getPlayer().getLocation(), 20, Arrays.asList(new EntityType[] {EntityType.PLAYER}));
+        List<Entity> nearbyPlayers = CWUtil.getNearbyEntities(getPlayer().getLocation(), 40, Arrays.asList(new EntityType[] {EntityType.PLAYER}));
         boolean nearbyEnemy = false;
         for (Entity e : nearbyPlayers) {
             CWPlayer cwp = dvz.getPM().getPlayer((Player)e);
