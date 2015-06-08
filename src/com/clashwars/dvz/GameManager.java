@@ -165,6 +165,8 @@ public class GameManager {
         title.setTimingsToTicks();
         title.broadcast();
 
+        dvz.getServer().dispatchCommand(dvz.getServer().getConsoleSender(), "hd reload");
+
         //Tp all players to active world.
         for (Player player : dvz.getServer().getOnlinePlayers()) {
             dvz.getPM().getPlayer(player).reset();
@@ -477,6 +479,10 @@ public class GameManager {
             return;
         }
         Player player = dvz.getServer().getPlayer(UUID.fromString(gCfg.GAME__DRAGON_SLAYER));
+
+        if (player == null) {
+            return;
+        }
 
         if (dvz.getPerms() != null) {
             dvz.getPerms().playerRemove(player, "prefix.dragonslayer");
