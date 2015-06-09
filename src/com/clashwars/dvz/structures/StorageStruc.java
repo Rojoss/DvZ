@@ -225,21 +225,21 @@ public class StorageStruc extends Structure {
 
 
     private void populateStorageItems() {
-        items.add(new StorageItem("&bBattle axes", 2, Product.BATTLEAXE.getItem(), DvzClass.MINER, 2));
-        items.add(new StorageItem("&7Greatswords", 3, Product.GREATSWORD.getItem(), DvzClass.MINER, 2));
-        items.add(new StorageItem("&6Fiery flails", 4, Product.FIERY_FLAIL.getItem(), DvzClass.MINER, 2));
+        items.add(new StorageItem("&bBattle axes", 2, Product.BATTLEAXE.getItem(), DvzClass.MINER, 1));
+        items.add(new StorageItem("&7Greatswords", 3, Product.GREATSWORD.getItem(), DvzClass.MINER, 1));
+        items.add(new StorageItem("&6Fiery flails", 4, Product.FIERY_FLAIL.getItem(), DvzClass.MINER, 1));
         items.add(new StorageItem("&8Reinforced Bricks", 6, Product.STONE_BRICK.getItem(), DvzClass.MINER, -1));
 
-        items.add(new StorageItem("&6Bows", 11, Product.BOW.getItem(), DvzClass.FLETCHER, 2));
+        items.add(new StorageItem("&6Bows", 11, Product.BOW.getItem(), DvzClass.FLETCHER, 1));
         items.add(new StorageItem("&7Arrows", 12, Product.ARROW.getItem(), DvzClass.FLETCHER, 256));
 
-        items.add(new StorageItem("&3Helmets", 20, Product.HELMET.getItem(), DvzClass.TAILOR, 2));
-        items.add(new StorageItem("&3Tunics", 21, Product.CHESTPLATE.getItem(), DvzClass.TAILOR, 2));
-        items.add(new StorageItem("&3Greaves", 22, Product.LEGGINGS.getItem(), DvzClass.TAILOR, 2));
-        items.add(new StorageItem("&3Boots", 23, Product.BOOTS.getItem(), DvzClass.TAILOR, 2));
+        items.add(new StorageItem("&3Helmets", 20, Product.HELMET.getItem(), DvzClass.TAILOR, 1));
+        items.add(new StorageItem("&3Tunics", 21, Product.CHESTPLATE.getItem(), DvzClass.TAILOR, 1));
+        items.add(new StorageItem("&3Greaves", 22, Product.LEGGINGS.getItem(), DvzClass.TAILOR, 1));
+        items.add(new StorageItem("&3Boots", 23, Product.BOOTS.getItem(), DvzClass.TAILOR, 1));
 
-        items.add(new StorageItem("&dHealth Potions", 29, Ability.HEAL_POTION.getAbilityClass().getCastItem(), DvzClass.ALCHEMIST, 2));
-        items.add(new StorageItem("&bSpeed Potions", 30, Ability.SPEED_POTION.getAbilityClass().getCastItem(), DvzClass.ALCHEMIST, 2));
+        items.add(new StorageItem("&dHealth Potions", 29, Ability.HEAL_POTION.getAbilityClass().getCastItem(), DvzClass.ALCHEMIST, 1));
+        items.add(new StorageItem("&bSpeed Potions", 30, Ability.SPEED_POTION.getAbilityClass().getCastItem(), DvzClass.ALCHEMIST, 1));
 
         items.add(new StorageItem("&6Bread", 38, Product.BREAD.getItem(), DvzClass.BAKER, 32));
     }
