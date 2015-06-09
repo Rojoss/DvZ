@@ -24,6 +24,7 @@ import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.util.Util;
+import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -88,9 +89,11 @@ public class Commands {
                 sender.sendMessage(Util.formatMsg("Can only crash the server from the console!"));
                 return true;
             }
+            dvz.getServer().broadcastMessage(CWUtil.integrateColor("&4&lFORCING A SERVER CRASH!!!"));
             for (World world : Bukkit.getWorlds()) {
                 Block block = world.getSpawnLocation().getBlock();
                 while (block.getType() != Material.SOUL_SAND) {
+                    dvz.getServer().broadcastMessage(CWUtil.integrateColor("&4&lFORCING A SERVER CRASH!!!"));
                     block = block.getRelative(BlockFace.NORTH);
                 }
             }
@@ -231,10 +234,11 @@ public class Commands {
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " reset [mapName] &8- &5Reset the game."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " open &8- &5Open the game."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " start &8- &5Start the game."));
-                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " stop [reason] &8- &5Stop the game."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " end [reason] &8- &5Force end the game."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " speed [value] &8- &5Set the game speed (def:0)"));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " dragon [type] &8- &5Set yourself to be the dragon."));
-                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " setclass [type] &8- &5Force set your class."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " setclass {type} [player] &8- &5Force set your class."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " fixws [player] &8- &5Rebuild someone his workshop."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " loc {name} [block] &8- &5Set a location at ur location."));
                     sender.sendMessage(CWUtil.integrateColor("&7(Or at the block on cursor within 5 blocks if 'block' is specified)"));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " cub {name} &8- &5Save a cuboid selection. (wand = /arw)"));
@@ -292,7 +296,7 @@ public class Commands {
                         return true;
                     }
 
-                    cwp.timedTeleport(dvz.getMM().getActiveMap().getCuboid("shrine2keep").getCenterLoc().add(0,2,0), 5, "the shrine");
+                    cwp.timedTeleport(dvz.getMM().getActiveMap().getCuboid("shrine2keep").getCenterLoc().add(0, 2, 0), 5, "the shrine");
                     return true;
                 }
 
@@ -660,16 +664,16 @@ public class Commands {
 
 
                 //##########################################################################################################################
-                //####################################################### /dvz stop #######################################################
+                //######################################################## /dvz end ########################################################
                 //##########################################################################################################################
-                if (args[0].equalsIgnoreCase("stop")) {
+                if (args[0].equalsIgnoreCase("end")) {
                     if (!sender.isOp() && !sender.hasPermission("dvz.admin")) {
                         sender.sendMessage(Util.formatMsg("Insufficient permissions."));
                         return true;
                     }
 
                     if (!gm.isStarted()) {
-                        sender.sendMessage(Util.formatMsg("&cThe game has to be started before it can be stopped!"));
+                        sender.sendMessage(Util.formatMsg("&cThe game has to be started before it can be ended!"));
                         //return true;
                     }
 
@@ -682,7 +686,7 @@ public class Commands {
                     }
 
                     gm.stopGame(true, reason);
-                    sender.sendMessage(Util.formatMsg("&6You have stopped the game!"));
+                    sender.sendMessage(Util.formatMsg("&6You have ended the game!"));
                     return true;
                 }
 
@@ -749,7 +753,7 @@ public class Commands {
 
 
                 //##########################################################################################################################
-                //################################################# /dvz setclass [class] ##################################################
+                //############################################# /dvz setclass {class} [player] #############################################
                 //##########################################################################################################################
                 if (args[0].equalsIgnoreCase("setclass")) {
                     if (!(sender instanceof Player)) {
@@ -764,13 +768,21 @@ public class Commands {
                     }
 
                     if (args.length < 2) {
-                        sender.sendMessage(Util.formatMsg("&cInvalid usage. &7/" + label + " " + args[0] + " {type/name}"));
+                        sender.sendMessage(Util.formatMsg("&cInvalid usage. &7/" + label + " " + args[0] + " {type/name} [player]"));
                         return true;
                     }
 
                     if (!gm.isStarted()) {
                         sender.sendMessage(Util.formatMsg("&cThe game has to be started first."));
                         return true;
+                    }
+
+                    if (args.length > 2) {
+                        player = dvz.getServer().getPlayer(args[2]);
+                        if (player == null) {
+                            player.sendMessage(Util.formatMsg("&cInvalid player specified!"));
+                            return true;
+                        }
                     }
 
                     DvzClass dvzClass = DvzClass.fromString(args[1]);
@@ -795,7 +807,56 @@ public class Commands {
                     } else {
                         cwp.setClass(dvzClass);
                     }
-                    player.sendMessage(Util.formatMsg("&6Your class has been set to &5" + args[1]));
+                    player.sendMessage(Util.formatMsg("&6Your class has been force set to &5" + args[1]));
+                    if (!player.equals(sender)) {
+                        player.sendMessage(Util.formatMsg("&6You have set &5" + player.getName() + " &6his class to &5" + args[1]));
+                    }
+                    return true;
+                }
+
+
+
+                //##########################################################################################################################
+                //################################################## /dvz fixws {player} ###################################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("fixws")) {
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                        return true;
+                    }
+                    Player player = (Player)sender;
+
+                    if (!player.isOp() && !player.hasPermission("dvz.admin")) {
+                        player.sendMessage(Util.formatMsg("Insufficient permissions."));
+                        return true;
+                    }
+
+                    if (args.length < 2) {
+                        sender.sendMessage(Util.formatMsg("&cInvalid usage. &7/" + label + " " + args[0] + " {player}"));
+                        return true;
+                    }
+
+                    Player target = dvz.getServer().getPlayer(args[1]);
+                    if (target == null) {
+                        player.sendMessage(Util.formatMsg("&cInvalid player specified!"));
+                        return true;
+                    }
+
+                    if (!dvz.getWM().hasWorkshop(target.getUniqueId())) {
+                        player.sendMessage(Util.formatMsg("&cThis player doesn't have a workshop!"));
+                        return true;
+                    }
+
+                    WorkShop ws = dvz.getWM().getWorkshop(target.getUniqueId());
+                    if (ws.isBuild()) {
+                        ws.destroy();
+                    }
+                    ws.build(null);
+
+                    target.sendMessage(Util.formatMsg("&6Your has been recreated by &5" + player.getName()));
+                    if (!player.equals(target)) {
+                        player.sendMessage(Util.formatMsg("&6You rebuild &5" + target.getName() + " &6his workshop!"));
+                    }
                     return true;
                 }
 
