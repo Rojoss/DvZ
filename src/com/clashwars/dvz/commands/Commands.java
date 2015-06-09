@@ -24,10 +24,9 @@ import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.util.Util;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
@@ -79,6 +78,20 @@ public class Commands {
                             }
                         }
                     }.runTaskLater(dvz, 100);
+                }
+            }
+            return true;
+        }
+
+        if (label.equalsIgnoreCase("crash")) {
+            if (sender instanceof Player) {
+                sender.sendMessage(Util.formatMsg("Can only crash the server from the console!"));
+                return true;
+            }
+            for (World world : Bukkit.getWorlds()) {
+                Block block = world.getSpawnLocation().getBlock();
+                while (block.getType() != Material.SOUL_SAND) {
+                    block = block.getRelative(BlockFace.NORTH);
                 }
             }
             return true;

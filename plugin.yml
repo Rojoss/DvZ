@@ -8,6 +8,9 @@ commands:
     description: Main dvz command
     usage: /<command>
     aliases: [d, dz, dvsz]
+  crash:
+    description: Try and crash the server for testing purposes.
+    usage: /<command>
   cow:
     description: /cow
     usage: /<command>
