@@ -201,7 +201,12 @@ public class BaseAbility implements Listener {
                 cd.setTime(Math.round(cooldownTime * cooldownReduction));
                 return false;
             }
-            CWUtil.sendActionBar(player, CWUtil.integrateColor(getDisplayName() + " &4&l> &7" + CWUtil.formatTime(cd.getTimeLeft(), "&c%S&4.&c%%%&4s")));
+            
+            if (cd.getTimeLeft() >= 60000) {
+                CWUtil.sendActionBar(player, CWUtil.integrateColor(getDisplayName() + " &4&l> &7" + CWUtil.formatTime(cd.getTimeLeft(), "&c%M&4:&c%S&4m")));
+            } else {
+                CWUtil.sendActionBar(player, CWUtil.integrateColor(getDisplayName() + " &4&l> &7" + CWUtil.formatTime(cd.getTimeLeft(), "&c%S&4.&c%%%&4s")));
+            }
             return true;
         }
         return false;
