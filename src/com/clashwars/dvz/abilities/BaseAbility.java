@@ -243,9 +243,6 @@ public class BaseAbility implements Listener {
             return;
         }
 
-        event.setCancelled(true);
-        event.getPlayer().updateInventory();
-
         //Compare the click action with allowed actions.
         if (castActions == null || !castActions.contains(event.getAction())) {
             return;
@@ -255,6 +252,9 @@ public class BaseAbility implements Listener {
         if (!canCast(event.getPlayer())) {
             return;
         }
+
+        event.setCancelled(true);
+        event.getPlayer().updateInventory();
 
         //CAST! (we need to get the actual ability class when casting and not this BaseAbility cast method)
         Location loc = event.getPlayer().getLocation();
