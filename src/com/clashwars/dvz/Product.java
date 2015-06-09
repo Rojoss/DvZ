@@ -48,6 +48,8 @@ public enum Product {
     BREAD(new CWItem(Material.BREAD).setName("&eBread").setLore(new String[] {"&7Delicious bread. (It's still warm!)", "&eRestores &65 hunger and 12 saturation&e!"}), true),
     SEED(new CWItem(Material.SEEDS).setName("&eGrain").setLore(new String[]{"&7Whole grain with lots of proteins!", "&eSow them in the soil to grow wheat!"}), false),
 
+    XP(new CWItem(Material.EXP_BOTTLE).setName("&a&lExperience").setLore(new String[]{"&7Share your experience if you have too much!"}), false),
+
     VIP_BANNER(new CWItem(Material.BANNER).setName("&3&lVIP BANNER").setLore(new String[]{"&7Place it down and click the banner to customize it.", "&eYou only have to customize it once!"}).setBaseColor(DyeColor.GRAY).setPattern(0, new Pattern(DyeColor.RED, PatternType.MOJANG)), true);
 
 
