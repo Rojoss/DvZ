@@ -134,6 +134,8 @@ public class DvZ extends JavaPlugin {
 
         em = new EffectManager(cwcore);
 
+        setupBoard();
+
         cfg = new PluginCfg("plugins/DvZ/DvZ.yml");
         cfg.load();
 
@@ -183,7 +185,6 @@ public class DvZ extends JavaPlugin {
         cmds = new Commands(this);
 
         startRunnables();
-        setupBoard();
 
         log("loaded successfully");
     }

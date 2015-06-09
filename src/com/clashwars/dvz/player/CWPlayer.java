@@ -283,6 +283,30 @@ public class CWPlayer {
     }
 
 
+    public void onClassLoad() {
+        if (getPlayerClass() == null) {
+            return;
+        }
+        Player player = getPlayer();
+        DvzClass dvzClass = getPlayerClass();
+
+        //Team
+        if (dvz.getBoard().hasTeam(dvzClass.getTeam())) {
+            for (Team team : dvz.getBoard().getTeamList()) {
+                if (team.hasPlayer(player)) {
+                    team.removePlayer(player);
+                }
+            }
+            dvz.getBoard().getTeam(dvzClass.getTeam()).addPlayer(player);
+        }
+
+        //Disguise
+        if (dvzClass.getType() == ClassType.MONSTER || dvzClass.getType() == ClassType.DRAGON) {
+            Util.disguisePlayer(player.getName(), dvzClass.getClassClass().getStrOption("disguise"), dvzClass);
+        }
+    }
+
+
     public void giveClassItems(final ClassType type, final boolean forcePrevious, final int amount) {
         new BukkitRunnable() {
             @Override

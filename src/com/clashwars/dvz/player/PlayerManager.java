@@ -30,6 +30,7 @@ public class PlayerManager {
         Map<UUID, PlayerData> cfgPlayers = pcfg.getPlayers();
         for (UUID uuid : cfgPlayers.keySet()) {
             players.put(uuid, new CWPlayer(uuid, cfgPlayers.get(uuid)));
+            players.get(uuid).onClassLoad();
         }
     }
 
