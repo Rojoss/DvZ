@@ -4,6 +4,7 @@ import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.WorkShop;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -48,8 +49,10 @@ public class WorkShopEvents implements Listener {
         if (ws != null && ws.build(event.getBlockPlaced().getLocation())) {
             player.sendMessage(Util.formatMsg("&6Workshop created!"));
             player.playSound(player.getLocation(), Sound.LEVEL_UP, 1.0f, 0.8f);
-            player.teleport(player.getWorld().getHighestBlockAt(player.getLocation()).getLocation());
-            ws.onBuild();
+            Location topLoc = player.getWorld().getHighestBlockAt(player.getLocation()).getLocation();
+            topLoc.setYaw(player.getLocation().getYaw());
+            topLoc.setPitch(player.getLocation().getPitch());
+            player.teleport(topLoc);
         } else {
             event.setCancelled(true);
             player.sendMessage(Util.formatMsg("&4ERROR&8: &cCould not create workshop."));
