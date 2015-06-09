@@ -1,5 +1,6 @@
 package com.clashwars.dvz.classes.dwarves;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.effect.Particle;
 import com.clashwars.cwcore.effect.effects.BoilEffect;
@@ -136,7 +137,7 @@ public class Alchemist extends DwarfClass {
         }
 
         final Location loc = event.getBlockClicked().getRelative(event.getBlockFace()).getLocation();
-        if (!ws.getCuboid().contains(loc)) {
+        if (!ws.getPot().contains(loc)) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cWater has to be placed inside your pot! &4&l<<"));
             return;
         }
