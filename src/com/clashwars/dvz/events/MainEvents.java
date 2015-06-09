@@ -15,6 +15,7 @@ import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.Util;
+import com.clashwars.dvz.workshop.WorkShop;
 import net.minecraft.server.v1_8_R2.PacketPlayInClientCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -76,6 +77,15 @@ public class MainEvents implements Listener {
             titleStr = "&6Welcome back to &6&lDvZ&6!";
             subtitleStr = "&9You have joined dvz as a " + cwp.getPlayerClass().getClassClass().getDisplayName() + "&9!";
             player.sendMessage(Util.formatMsg("&6Welcome back!"));
+
+            //If player has a workshop and it's not build then build it.
+            if (dvz.getWM().hasWorkshop(player.getUniqueId())) {
+                WorkShop ws = dvz.getWM().getWorkshop(player.getUniqueId());
+                if (!ws.isBuild()) {
+                    ws.build(null);
+                }
+            }
+
             spawnLoc = player.getLocation();
         } else {
             //Player joined without a class.

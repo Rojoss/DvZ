@@ -52,7 +52,6 @@ public abstract class WorkShop {
      * @param origin The location to build the workshop at. If this is null it will use the origin from config.
      * @return true if it builded successfully and false if something failed while building it.
      */
-    //TODO: Check how it goes with building workshops if chunks are unloaded.
     public boolean build(Location origin) {
         //Load origin from config if not specified. If it is update data.
         if (origin == null) {
@@ -64,6 +63,12 @@ public abstract class WorkShop {
         //Validate the origin/world
         if (origin == null) {
             dvz.log("Failed at building " + dvz.getServer().getOfflinePlayer(owner).getName() + " his workshop. The origin/world it was in is null now!");
+            return false;
+        }
+
+        //Validate the origin/world
+        if (origin.getChunk() == null || !origin.getChunk().isLoaded()) {
+            dvz.log("Failed at building " + dvz.getServer().getOfflinePlayer(owner).getName() + " his workshop. The chunk isn't loaded!");
             return false;
         }
 
