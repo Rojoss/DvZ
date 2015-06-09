@@ -233,13 +233,16 @@ public class BaseAbility implements Listener {
             return;
         }
 
-        //Compare the click action with allowed actions.
-        if (castActions == null || !castActions.contains(event.getAction())) {
+        //Compare items.
+        if (!isCastItem(event.getItem())) {
             return;
         }
 
-        //Compare items.
-        if (!isCastItem(event.getItem())) {
+        event.setCancelled(true);
+        event.getPlayer().updateInventory();
+
+        //Compare the click action with allowed actions.
+        if (castActions == null || !castActions.contains(event.getAction())) {
             return;
         }
 
