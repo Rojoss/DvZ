@@ -104,6 +104,10 @@ public class VIPEvents implements Listener {
             blockType = Material.IRON_BLOCK;
         }
 
+        if (blockType == Material.STONE) {
+            return;
+        }
+
         final Material blockTypeF = blockType;
         new BukkitRunnable() {
             int i = 0;
