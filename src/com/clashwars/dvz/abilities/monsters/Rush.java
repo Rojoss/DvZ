@@ -29,7 +29,7 @@ public class Rush extends MobAbility {
     @Override
     public void castAbility(final Player player, Location triggerloc) {
 
-        final Player target = CWUtil.getTargetedPlayer(player, getIntOption("range"));
+        final Player target = CWUtil.getTargetedPlayer(player, (int)dvz.getGM().getMonsterPower(20, 50));
 
         if (target == null) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cLook at a dwarf and click to use! &4&l<<"));
@@ -58,7 +58,7 @@ public class Rush extends MobAbility {
                 iterations++;
                 if (iterations >= 4) {
                     iterations = 0;
-                    if (target != CWUtil.getTargetedPlayer(player, getIntOption("range"))) {
+                    if (target != CWUtil.getTargetedPlayer(player, (int)dvz.getGM().getMonsterPower(20, 50))) {
                         player.setWalkSpeed(dvzClass.getClassClass().getSpeed());
                         CWUtil.sendActionBar(player, CWUtil.integrateColor("&8&l>> &7No dwarf in sight anymore! &8&l<<"));
                         cancel();
