@@ -218,7 +218,7 @@ public class CWPlayer {
                     player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));
                 }
                 if (c.getType() == ClassType.DWARF) {
-                    player.sendMessage(CWUtil.integrateColor("&8&l❝&7" + c.getTask() + "&8&l❞"));
+                    player.sendMessage(CWUtil.integrateColor("&7&o" + c.getTask()));
                 }
                 savePlayer();
             }
@@ -277,7 +277,7 @@ public class CWPlayer {
         player.setHealth(c.getHealth());
         player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));
         if (c.getType() == ClassType.DWARF) {
-            player.sendMessage(CWUtil.integrateColor("&8&l❝&7" + c.getTask() + "&8&l❞"));
+            player.sendMessage(CWUtil.integrateColor("&7&o" + c.getTask()));
         }
         savePlayer();
     }

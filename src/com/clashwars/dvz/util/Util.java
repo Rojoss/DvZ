@@ -24,7 +24,7 @@ public class Util {
 
     public static void disguisePlayer(String player, String disguiseStr, DvzClass dvzClass) {
         Bukkit.dispatchCommand(DvZ.inst().getServer().getConsoleSender(), "disguiseplayer " + player + " "
-                + (disguiseStr == null || disguiseStr.isEmpty() ? DvZ.inst().getPM().getPlayer(player).getPlayerClass().toString().toLowerCase() : disguiseStr)
+                + (disguiseStr == null || disguiseStr.isEmpty() ? dvzClass.toString().toLowerCase() : disguiseStr)
                 + " setCustomName &c" + (dvzClass.getType() == ClassType.DRAGON ? dvzClass.getClassClass().getDisplayName() : player)
                 + " setCustomNameVisible true");
     }

@@ -80,7 +80,7 @@ public class BaseAbility implements Listener {
 
     public DvzItem getCastItem() {
         if (castItem != null) {
-            castItem.setLore(new String[]{}).addLore("&aDesc&8: &7" + getDesc().replace(". ", ".|").replace("! ", "!|")).addLore("&aUsage&8: &7" + getUsage().replace(". ", ".|").replace("! ", "!|"));
+            castItem.setLore(new String[]{}).addLore("&aDesc&8: &7&o" + getDesc().replace(". ", ".|&7&o").replace("! ", "!|&7&o")).addLore("&aUsage&8: &7&o" + getUsage().replace(". ", ".|&7&o").replace("! ", "!|&7&o"));
             castItem.setName(getDisplayName());
             castItem.replaceLoreNewLines();
         }
@@ -109,7 +109,7 @@ public class BaseAbility implements Listener {
 
     public String getDesc() {
         if (description == null || description.isEmpty()) {
-            return "&cNo description available.";
+            return "&8&oNo description available.";
         } else {
             return description;
         }
@@ -122,9 +122,9 @@ public class BaseAbility implements Listener {
     public String getUsage() {
         if (usage == null || usage.isEmpty()) {
             if (castItem != null) {
-                return "&7Click while holding this item to use it.";
+                return "&7&oClick while holding this item to use it.";
             } else {
-                return "&cNo info available.";
+                return "&8&oNo info available.";
             }
         }
         return usage;
@@ -201,7 +201,7 @@ public class BaseAbility implements Listener {
                 cd.setTime(Math.round(cooldownTime * cooldownReduction));
                 return false;
             }
-            
+
             if (cd.getTimeLeft() >= 60000) {
                 CWUtil.sendActionBar(player, CWUtil.integrateColor(getDisplayName() + " &4&l> &7" + CWUtil.formatTime(cd.getTimeLeft(), "&c%M&4:&c%S&4m")));
             } else {

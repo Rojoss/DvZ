@@ -107,7 +107,7 @@ public class BaseClass implements Listener {
 
     public String getProduce() {
         if (produce == null || produce.isEmpty()) {
-            return "&cNo info available.";
+            return "&8&oNo info available.";
         } else {
             return produce;
         }
@@ -119,7 +119,7 @@ public class BaseClass implements Listener {
 
     public String getTask() {
         if (task == null || task.isEmpty()) {
-            return "&cNo info available.";
+            return "&8&oNo info available.";
         } else {
             return task;
         }
@@ -133,7 +133,7 @@ public class BaseClass implements Listener {
         if (classItem != null) {
             classItem.setLore(new String[]{}).addLore("&7Click to become a &8" + getDisplayName());
             if (dvzClass != null && dvzClass.getType() == ClassType.DWARF) {
-                classItem.addLore("&aTask&8: &7" + getTask().replace(". ", ".|").replace("! ", "!|")).addLore("&aProduce&8: &7" + getProduce().replace(". ", "|").replace("! ", "|"));
+                classItem.addLore("&aTask&8: &7&o" + getTask().replace(". ", ".|&7&o").replace("! ", "!|&7&o")).addLore("&aProduce&8: &7&o" + getProduce().replace(". ", "|&7&o").replace("! ", "|&7&o"));
             }
             classItem.setName(getDisplayName());
             classItem.replaceLoreNewLines();

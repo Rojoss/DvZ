@@ -552,7 +552,7 @@ public class Commands {
 
                     BaseAbility baseAbility = ability.getAbilityClass();
                     sender.sendMessage(CWUtil.integrateColor("&8========== &4&lABILITY DETAILS &8=========="));
-                    sender.sendMessage(CWUtil.integrateColor("&8&l❝&7" + baseAbility.getDesc() + "&8&l❞"));
+                    sender.sendMessage(CWUtil.integrateColor("&7&o" + baseAbility.getDesc()));
                     sender.sendMessage(CWUtil.integrateColor("&6Ability&8: &5" + baseAbility.getDisplayName()));
                     List<String> dvzClasses = new ArrayList<String>();
                     for (DvzClass dvzClass : DvzClass.values()) {
@@ -584,7 +584,11 @@ public class Commands {
                         if (timeLeft <= 0) {
                             cdPlayer = "&20s";
                         } else {
-                            cdPlayer = CWUtil.formatTime(timeLeft, "&4%S&8.&4%%%&cs");
+                            if (timeLeft > 60000) {
+                                cdPlayer = CWUtil.formatTime(timeLeft, "&4%M&8:&4%S&cm");
+                            } else {
+                                cdPlayer = CWUtil.formatTime(timeLeft, "&4%S&8.&4%%%&cs");
+                            }
                         }
                         sender.sendMessage(CWUtil.integrateColor("&6Cooldown&8: &5" + cdPlayer + "&8/" + CWUtil.formatTime((long)baseAbility.getCooldown(), "&5%S&ds")));
                     }
