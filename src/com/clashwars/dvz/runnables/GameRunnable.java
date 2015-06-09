@@ -7,6 +7,7 @@ import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.classes.ClassType;
+import com.clashwars.dvz.maps.DvzMap;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
@@ -52,6 +53,11 @@ public class GameRunnable extends BukkitRunnable {
         if (ticks % 600 == 0) {
             Bukkit.broadcastMessage(Util.formatMsg("&7Saving all data..."));
             dvz.getPM().savePlayers();
+            dvz.getServer().savePlayers();
+            DvzMap dvzMap = dvz.getMM().getActiveMap();
+            if (dvzMap != null && dvzMap.isActive() && dvzMap.isLoaded() && dvzMap.getWorld() != null) {
+                dvzMap.getWorld().save();
+            }
         }
 
         if (gm.isMonsters()) {

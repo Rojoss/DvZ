@@ -90,10 +90,11 @@ public class Commands {
                 return true;
             }
             dvz.getServer().broadcastMessage(CWUtil.integrateColor("&4&lFORCING A SERVER CRASH!!!"));
+            dvz.getServer().broadcastMessage(CWUtil.integrateColor("&4&lFORCING A SERVER CRASH!!!"));
+            dvz.getServer().broadcastMessage(CWUtil.integrateColor("&4&lFORCING A SERVER CRASH!!!"));
             for (World world : Bukkit.getWorlds()) {
                 Block block = world.getSpawnLocation().getBlock();
                 while (block.getType() != Material.SOUL_SAND) {
-                    dvz.getServer().broadcastMessage(CWUtil.integrateColor("&4&lFORCING A SERVER CRASH!!!"));
                     block = block.getRelative(BlockFace.NORTH);
                 }
             }
