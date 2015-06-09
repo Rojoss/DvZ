@@ -128,9 +128,11 @@ public class BakerWorkshop extends WorkShop {
             mill.remove();
         }
 
-        List<Entity> entities = CWUtil.getNearbyEntities(millLoc, 3, Arrays.asList(new EntityType[] {EntityType.ARMOR_STAND}));
-        for (Entity e : entities) {
-            e.remove();
+        if (millLoc != null) {
+            List<Entity> entities = CWUtil.getNearbyEntities(millLoc, 3, Arrays.asList(new EntityType[] {EntityType.ARMOR_STAND}));
+            for (Entity e : entities) {
+                e.remove();
+            }
         }
 
         mill = null;

@@ -87,6 +87,9 @@ public class FurnaceStruc extends Structure {
             if (event.isShiftClick()) {
                 //Try take all items out of furnace.
                 for (int i = 0; i < menu.getSize() - 9; i++) {
+                    if (menu.getItems()[i] == null) {
+                        continue;
+                    }
                     for (FurnaceItem fItem : furnaceItems) {
                         if (menu.getItems()[i].getType() == fItem.getResult().getType()) {
                             player.getWorld().playSound(player.getLocation(), Sound.FIZZ, 0.5f, 1.3f);

@@ -290,6 +290,10 @@ public class CWPlayer {
         Player player = getPlayer();
         DvzClass dvzClass = getPlayerClass();
 
+        if (player == null || !player.isOnline()) {
+            return;
+        }
+
         //Team
         if (dvz.getBoard().hasTeam(dvzClass.getTeam())) {
             for (Team team : dvz.getBoard().getTeamList()) {

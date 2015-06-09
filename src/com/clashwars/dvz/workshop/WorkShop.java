@@ -181,7 +181,7 @@ public abstract class WorkShop {
             //TODO: Try and put it in a better place (maybe create a custom event)
             //Remove banners for VIP's and give back items.
             BannerData data = dvz.getBannerCfg().getBanner(owner);
-            if (data != null && data.getBannerLocations() != null && data.getBannerLocations().size() > 0) {
+            if (data != null && data.getBannerLocations() != null && data.getBannerLocations().size() > 0 && getOwner() != null) {
                 Product.VIP_BANNER.getItem(data.getBannerLocations().size()).setBaseColor(data.getBaseColor()).setPatterns(data.getPatterns()).giveToPlayer(getOwner());
 
                 for (Vector loc : data.getBannerLocations()) {
