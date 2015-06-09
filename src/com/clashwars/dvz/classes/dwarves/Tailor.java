@@ -8,7 +8,6 @@ import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.workshop.TailorWorkshop;
-import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -49,10 +48,14 @@ public class Tailor extends DwarfClass {
         if (cwp.getPlayerClass() != DvzClass.TAILOR) {
             return;
         }
-        final TailorWorkshop ws = (TailorWorkshop)dvz.getPM().getWorkshop(player);
+
+        if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
+            return;
+        }
+        final TailorWorkshop ws = (TailorWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
 
         CWEntity cwe = null;
-        for (CWEntity sheep : ws.getSheeps()) {
+        for (CWEntity sheep : ws.getSheep()) {
             if (sheep.entity().getUniqueId() == entity.getUniqueId()) {
                 cwe = sheep;
             }
@@ -133,10 +136,15 @@ public class Tailor extends DwarfClass {
             return;
         }
 
-        WorkShop ws = dvz.getPM().getWorkshop(player);
-        if (ws == null || !(ws instanceof TailorWorkshop)) {
+        if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
             return;
         }
+
+        TailorWorkshop ws = (TailorWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
+        if (!ws.isBuild()) {
+            return;
+        }
+
         if (!ws.getCuboid().contains(event.getClickedBlock())) {
             return;
         }
@@ -176,13 +184,13 @@ public class Tailor extends DwarfClass {
                     armorID = 0;
                 }
 
-                ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
+                ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f), 500);
                 player.updateInventory();
 
                 dvz.getPM().getPlayer(player).addClassExp(35);
                 // + 5 per flower broken
                 // + 1 per sheep sheared
-                // = 78
+                // = 60
                 return;
             }
         }

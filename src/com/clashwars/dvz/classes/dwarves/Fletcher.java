@@ -9,7 +9,6 @@ import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.workshop.FletcherWorkshop;
-import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -58,21 +57,23 @@ public class Fletcher extends DwarfClass {
         } else {
             player = (Player)event.getDamager();
         }
-        if (player == null) {
-            return;
-        }
 
         if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.FLETCHER) {
             return;
         }
 
-        final FletcherWorkshop ws = (FletcherWorkshop)dvz.getPM().getWorkshop(player);
         boolean isOwnAnimal = false;
-        for (CWEntity animal : ws.getAnimals()) {
-            if (animal.entity().getUniqueId() == event.getEntity().getUniqueId()) {
-                isOwnAnimal = true;
+        if (dvz.getWM().hasWorkshop(player.getUniqueId())) {
+            final FletcherWorkshop ws = (FletcherWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
+            if (ws.isBuild()) {
+                for (CWEntity animal : ws.getChickens()) {
+                    if (animal.entity().getUniqueId() == event.getEntity().getUniqueId()) {
+                        isOwnAnimal = true;
+                    }
+                }
             }
         }
+
         if (!isOwnAnimal) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your " + event.getEntity().getType().name() + "! &4&l<<"));
             return;
@@ -97,13 +98,17 @@ public class Fletcher extends DwarfClass {
             return;
         }
 
-        final FletcherWorkshop ws = (FletcherWorkshop)dvz.getPM().getWorkshop(entity.getKiller());
-
         //Check for killing animal that belongs to the killer.
         boolean isOwnAnimal = false;
-        for (CWEntity animal : ws.getAnimals()) {
-            if (animal.entity().getUniqueId() == entity.getUniqueId()) {
-                isOwnAnimal = true;
+        FletcherWorkshop ws = null;
+        if (dvz.getWM().hasWorkshop(entity.getKiller().getUniqueId())) {
+            ws = (FletcherWorkshop)dvz.getWM().getWorkshop(entity.getKiller().getUniqueId());
+            if (ws.isBuild()) {
+                for (CWEntity animal : ws.getChickens()) {
+                    if (animal.entity().getUniqueId() == entity.getUniqueId()) {
+                        isOwnAnimal = true;
+                    }
+                }
             }
         }
         if (!isOwnAnimal) {
@@ -116,14 +121,14 @@ public class Fletcher extends DwarfClass {
         feathers.setAmount(1);
         if (loc.getBlockY() > ws.getCuboid().getMinY() + getIntOption("chicken-bonus-height")) {
             feathers.setAmount(2);
-            ParticleEffect.VILLAGER_HAPPY.display(0.5f, 0.5f, 0.5f, 0.0001f, 8, entity.getLocation());
+            ParticleEffect.VILLAGER_HAPPY.display(0.5f, 0.5f, 0.5f, 0.0001f, 8, entity.getLocation(), 500);
             cwp.addClassExp(2);
         } else {
-            ParticleEffect.PORTAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 8, entity.getLocation());
+            ParticleEffect.PORTAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 8, entity.getLocation(), 500);
             cwp.addClassExp(1);
         }
         entity.getWorld().dropItem(entity.getLocation(), feathers);
-        ws.spawnAnimal(EntityType.CHICKEN, CWUtil.random(ws.getCuboid().getMaxY() + 5, ws.getCuboid().getMaxY() + 15));
+        ws.spawnChicken(EntityType.CHICKEN, CWUtil.random(ws.getCuboid().getMaxY() + 5, ws.getCuboid().getMaxY() + 15));
     }
 
 
@@ -141,10 +146,15 @@ public class Fletcher extends DwarfClass {
             return;
         }
 
-        WorkShop ws = dvz.getPM().getWorkshop(player);
-        if (ws == null || !(ws instanceof FletcherWorkshop)) {
+        if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
             return;
         }
+
+        FletcherWorkshop ws = (FletcherWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
+        if (!ws.isBuild()) {
+            return;
+        }
+
         if (!ws.getCuboid().contains(event.getClickedBlock())) {
             return;
         }
@@ -179,16 +189,17 @@ public class Fletcher extends DwarfClass {
                 CWItem arrows = Product.ARROW.getItem();
                 arrows.setAmount(CWUtil.random(getIntOption("min-arrow-amount"), getIntOption("max-arrow-amount")));
                 dropLoc.getWorld().dropItem(dropLoc, arrows);
-                ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
+                ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f), 500);
 
-                dvz.getPM().getPlayer(player).addClassExp(50);
+                dvz.getPM().getPlayer(player).addClassExp(40);
                 // + 1 per gravel
                 // + 1 per chicken
                 // + 2 per chicken in air
-                // ~ 78
+                // ~ 68
                 return;
-    }
-}
+            }
+        }
+
         if (feathers < feathersNeeded) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (feathersNeeded - feathers) + " more FEATHERS to craftl! &4&l<<"));
         } else if (flint < flintNeeded) {

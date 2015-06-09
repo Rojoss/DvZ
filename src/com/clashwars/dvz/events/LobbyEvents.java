@@ -145,6 +145,10 @@ public class LobbyEvents implements Listener {
             return;
         }
 
+        if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) {
+            return;
+        }
+
         String itemName = "";
         if (event.getCurrentItem().hasItemMeta()) {
             ItemMeta meta = event.getCurrentItem().getItemMeta();

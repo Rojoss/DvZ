@@ -40,7 +40,7 @@ public class Builder extends DwarfClass {
             return;
         }
 
-        if (dvz.getPM().locGetWorkShop(block.getLocation()) != null) {
+        if (dvz.getWM().locGetWorkShop(block.getLocation()) != null) {
             return;
         }
 
@@ -77,7 +77,7 @@ public class Builder extends DwarfClass {
             return;
         }
 
-        if (dvz.getPM().locGetWorkShop(block.getLocation()) != null) {
+        if (dvz.getWM().locGetWorkShop(block.getLocation()) != null) {
             return;
         }
 

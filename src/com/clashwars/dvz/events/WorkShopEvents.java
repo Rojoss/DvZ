@@ -42,11 +42,10 @@ public class WorkShopEvents implements Listener {
         }
         
         event.setCancelled(false);
-        WorkShop ws = dvz.getPM().getWorkshop(player);
-        DvzClass playerClass = dvz.getPM().getPlayer(player).getPlayerClass();
-        ws.setType(playerClass);
         event.getBlockPlaced().setType(Material.AIR);
-        if (ws.build(event.getBlockPlaced().getLocation())) {
+
+        WorkShop ws = dvz.getWM().getWorkshop(player.getUniqueId());
+        if (ws != null && ws.build(event.getBlockPlaced().getLocation())) {
             player.sendMessage(Util.formatMsg("&6Workshop created!"));
             player.playSound(player.getLocation(), Sound.LEVEL_UP, 1.0f, 0.8f);
             player.teleport(player.getWorld().getHighestBlockAt(player.getLocation()).getLocation());

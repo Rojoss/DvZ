@@ -329,12 +329,12 @@ public class Commands {
                         return true;
                     }
 
-                    if (!pm.hasWorkshop(player) || pm.getWorkshop(player).getCuboid() == null) {
+                    if (!dvz.getWM().hasWorkshop(player.getUniqueId()) || !dvz.getWM().getWorkshop(player.getUniqueId()).isBuild()) {
                         sender.sendMessage(Util.formatMsg("&cYou have no workshop."));
                         return true;
                     }
 
-                    Location loc = pm.getWorkshop(player).getCuboid().getMinLoc().add(2, 1, -1);
+                    Location loc = dvz.getWM().getWorkshop(player.getUniqueId()).getCuboid().getMinLoc().add(2, 1, -1);
                     cwp.timedTeleport(loc, 5, "your workshop");
                     return true;
                 }
@@ -770,7 +770,10 @@ public class Commands {
 
                     cwp.resetData();
                     cwp.undisguise();
-                    dvz.getPM().removeWorkshop(player);
+                    if (dvz.getWM().hasWorkshop(player.getUniqueId())) {
+                        dvz.getWM().getWorkshop(player.getUniqueId()).destroy();
+                    }
+                    dvz.getWM().removeWorkshop(player.getUniqueId(), true);
 
                     if (dvzClass.getType() == ClassType.DRAGON) {
                         dvz.getGM().setDragonPlayer(player.getUniqueId());

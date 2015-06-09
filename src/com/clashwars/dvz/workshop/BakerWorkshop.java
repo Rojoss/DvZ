@@ -3,6 +3,7 @@ package com.clashwars.dvz.workshop;
 import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWEntity;
 import com.clashwars.cwcore.helpers.CWItem;
+import com.clashwars.cwcore.helpers.EntityTag;
 import com.clashwars.cwcore.helpers.PoseType;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
@@ -30,7 +31,6 @@ public class BakerWorkshop extends WorkShop {
     private Location millLoc;
     private ArmorStand mill;
     private float millRotation = 0;
-    private boolean removed = false;
 
     public BakerWorkshop(UUID owner, WorkShopData wsd) {
         super(owner, wsd);
@@ -48,13 +48,6 @@ public class BakerWorkshop extends WorkShop {
 
     @Override
     public void onBuild() {
-        if (cuboid == null || cuboid.getBlocks() == null || cuboid.getBlocks().size() <= 0) {
-            if (getOrigin() == null) {
-                return;
-            }
-            build(getOrigin());
-        }
-
         for (Block block : cuboid.getBlocks()) {
             if (block.getType() == Material.HOPPER) {
                 hopperBlock = block;
@@ -84,6 +77,7 @@ public class BakerWorkshop extends WorkShop {
                         .setArmorstandGravity(false)
                         .setPose(PoseType.HEAD, new EulerAngle(67.5f, 0, 0))
                         .setHelmet(new CWItem(Material.HAY_BLOCK))
+                        .setTag(EntityTag.MARKER, 1)
                         .entity();
             }
         }
@@ -92,7 +86,7 @@ public class BakerWorkshop extends WorkShop {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (removed) {
+                if (!isBuild()) {
                     cancel();
                     return;
                 }
@@ -116,11 +110,11 @@ public class BakerWorkshop extends WorkShop {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (removed) {
+                if (!isBuild()) {
                     cancel();
                     return;
                 }
-                if (mill != null && mill.isValid()) {
+                if (mill != null) {
                     mill.setHeadPose(new EulerAngle(67.5f, 0, millRotation));
                     millRotation -= 0.05f;
                 }
@@ -129,30 +123,20 @@ public class BakerWorkshop extends WorkShop {
     }
 
     @Override
-    public void onLoad() {
-        if (getOrigin() == null) {
-            return;
-        }
-        build(getOrigin());
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                onBuild();
-            }
-        }.runTaskLater(dvz, 20);
-    }
-
-    @Override
-    public void onRemove() {
-        removed = true;
+    public void onDestroy() {
         if (mill != null) {
             mill.remove();
         }
-        mill = null;
+
         List<Entity> entities = CWUtil.getNearbyEntities(millLoc, 3, Arrays.asList(new EntityType[] {EntityType.ARMOR_STAND}));
         for (Entity e : entities) {
             e.remove();
         }
+
+        mill = null;
+        millLoc = null;
+        wheatBlocks.clear();
+        wheatBlocks = null;
+        hopperBlock = null;
     }
 }

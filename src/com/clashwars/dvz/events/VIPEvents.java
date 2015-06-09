@@ -168,8 +168,8 @@ public class VIPEvents implements Listener {
         Player player = event.getPlayer();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
 
-        WorkShop ws = dvz.getPM().locGetWorkShop(block.getLocation());
-        if (ws != null && !ws.getOwner().getName().equals(player.getName())) {
+        WorkShop ws = dvz.getWM().locGetWorkShop(block.getLocation());
+        if (ws != null && !ws.isOwner(player)) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't place banners in other people their workshop! &4&l<<"));
             return;
         }

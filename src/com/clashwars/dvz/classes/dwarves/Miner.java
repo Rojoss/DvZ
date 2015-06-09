@@ -1,5 +1,6 @@
 package com.clashwars.dvz.classes.dwarves;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.Product;
@@ -35,7 +36,7 @@ public class Miner extends DwarfClass {
         dvzClass = DvzClass.MINER;
         classItem = new DvzItem(Material.DIAMOND_PICKAXE, 1, (byte)0, "&8&lMiner", 20, -1);
 
-        equipment.add(new DvzItem(Material.WORKBENCH, 1, (byte)0, "&8&lWorkshop", new String[] {"&7Place this down on any of the pistons.", "&7Your workshop will be build then."}, 500, -1));
+        equipment.add(new DvzItem(Material.WORKBENCH, 1, (byte) 0, "&8&lWorkshop", new String[]{"&7Place this down on any of the pistons.", "&7Your workshop will be build then."}, 500, -1));
         DvzItem pickaxe = new DvzItem(Material.DIAMOND_PICKAXE, 1, -1, -1);
         pickaxe.addEnchantment(Enchantment.DIG_SPEED, 1);
         equipment.add(pickaxe);
@@ -52,12 +53,17 @@ public class Miner extends DwarfClass {
         if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.MINER) {
             return;
         }
-        WorkShop ws = dvz.getPM().getWorkshop(player);
-        if (ws == null || !(ws instanceof MinerWorkshop)) {
+
+        if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
             return;
         }
-        final MinerWorkshop mws = (MinerWorkshop)ws;
-        if (!mws.getMineableBlocks().contains(block)) {
+
+        final MinerWorkshop ws = (MinerWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
+        if (!ws.isBuild()) {
+            return;
+        }
+
+        if (!ws.getMineableBlocks().contains(block)) {
             return;
         }
 
@@ -67,7 +73,7 @@ public class Miner extends DwarfClass {
         final Material mat = block.getType();
         if (mat == Material.STONE) {
             CWUtil.dropItemStack(block.getLocation(), Product.STONE_BRICK.getItem(getIntOption("stone-drops")), dvz, player);
-            ParticleEffect.SMOKE_NORMAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, block.getLocation().add(0.5f,0.5f,0.5f));
+            ParticleEffect.SMOKE_NORMAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, block.getLocation().add(0.5f, 0.5f, 0.5f));
         } else if (mat == Material.DIAMOND_ORE) {
             dvz.getPM().getPlayer(player).addClassExp(5);
             CWUtil.dropItemStack(block.getLocation(), Product.DIAMOND_ORE.getItem(getIntOption("ore-drops")), dvz, player);
@@ -78,22 +84,23 @@ public class Miner extends DwarfClass {
             ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 15, block.getLocation().add(0.5f,0.5f,0.5f));
         } else if (mat == Material.IRON_ORE) {
             dvz.getPM().getPlayer(player).addClassExp(5);
-            CWUtil.dropItemStack(block.getLocation(), Product.IRON_ORE.getItem(getIntOption("ore-drops")), dvz, player);;
+            CWUtil.dropItemStack(block.getLocation(), Product.IRON_ORE.getItem(getIntOption("ore-drops")), dvz, player);
             ParticleEffect.CRIT.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, block.getLocation().add(0.5f,0.5f,0.5f));
         }
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (dvz.getPM().locGetWorkShop(block.getLocation()) == null || !dvz.getPM().locGetWorkShop(block.getLocation()).getOwner().getName().equalsIgnoreCase(player.getName())) {
+                WorkShop wsLoc = dvz.getWM().locGetWorkShop(block.getLocation());
+                if (wsLoc == null || !wsLoc.isOwner(player) || !wsLoc.isBuild()) {
                     cancel();
                     return;
                 }
 
-                //Get a list of all blocks that are currently air.
+                //Get a list of all blocks that are currently air/stone.
                 List<Block> airBlocks = new ArrayList<Block>();
                 List<Block> stoneblocks = new ArrayList<Block>();
-                for (Block block : mws.getMineableBlocks()) {
+                for (Block block : ws.getMineableBlocks()) {
                     if (block.getType() == Material.AIR) {
                         airBlocks.add(block);
                     } else if (block.getType() == Material.STONE) {
@@ -101,31 +108,21 @@ public class Miner extends DwarfClass {
                     }
                 }
 
-                //If there are only 5 blocks mined swap the block with a stone block randomly.
+                //If there are only 10 blocks mined swap the block with a stone block randomly.
                 //Else miners can just not mine stone at all and the ores will always respawn at same places.
                 Block block = null;
-                if (airBlocks.size() > 10) {
+                if (airBlocks.size() > 10 || mat == Material.STONE) {
+                    //Enough blocks are mined so we we can just regenerate it in a open space.
                     block = CWUtil.random(airBlocks);
+
+                    spawnBlockLowest(mat, block, ws, airBlocks);
                 } else {
                     block = CWUtil.random(stoneblocks);
-                }
+                    Material swapMat = block.getType();
+                    block.setType(mat);
 
-                //Always try place it on the lowest block possible as long as it's in the workshop. (this stops randomly scattered stone)
-                while (block.getRelative(BlockFace.DOWN).getType() == Material.AIR && block.getLocation().getBlockY() > mws.getCuboid().getMinY()) {
-                    block = block.getRelative(BlockFace.DOWN);
-                }
-
-                //Set new block but save the type if we need to swap.
-                Material originalBlock = block.getType();
-                block.setType(mat);
-
-                //Swap blocks functionality
-                if (originalBlock != Material.AIR) {
-                    Block swapBlock = CWUtil.random(airBlocks);
-                    while (swapBlock.getRelative(BlockFace.DOWN).getType() == Material.AIR && swapBlock.getLocation().getBlockY() > mws.getCuboid().getMinY()) {
-                        swapBlock = block.getRelative(BlockFace.DOWN);
-                    }
-                    swapBlock.setType(originalBlock);
+                    block = CWUtil.random(airBlocks);
+                    spawnBlockLowest(swapMat, block, ws, airBlocks);
                 }
             }
         }.runTaskLater(dvz, CWUtil.random(CWUtil.getInt("min-respawn-time"), getIntOption("max-respawn-time")));
@@ -145,64 +142,90 @@ public class Miner extends DwarfClass {
             return;
         }
 
-        WorkShop ws = dvz.getPM().getWorkshop(player);
-        if (ws == null || !(ws instanceof MinerWorkshop)) {
+        if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
             return;
         }
+
+        MinerWorkshop ws = (MinerWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
+        if (!ws.isBuild()) {
+            return;
+        }
+
         if (!ws.getCuboid().contains(event.getClickedBlock())) {
             return;
         }
 
-
-
-        //Custom crafting. (first try crafting with items in hand then go through all items in inv)
-        ItemStack hand = player.getItemInHand();
-        Location dropLoc = event.getClickedBlock().getLocation().add(0.5f, 1f, 0.5f);
-        if (hand.getAmount() > 3) {
-            if (tryCraft(hand, dropLoc)) {
-                CWUtil.removeItemsFromHand(player, 3);
-                ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
-                player.updateInventory();
-                return;
-            }
-        }
-
         Inventory inv = player.getInventory();
-        for (int i = 0; i < inv.getSize(); i++) {
-            if (tryCraft(inv.getItem(i), dropLoc)) {
-                CWUtil.removeItemsFromSlot(inv, i, 3);
-                ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
-                player.updateInventory();
+        Location dropLoc = event.getClickedBlock().getLocation().add(0.5f, 1f, 0.5f);
 
-                dvz.getPM().getPlayer(player).addClassExp(50);
-                // + 5 per ore mined
-                // + 5 per ore smelted
-                // = 70 per craft
-                return;
+        int iron = 0;
+        int gold = 0;
+        int diamond = 0;
+        boolean craft = false;
+        for (int i = 0; i < inv.getSize(); i++) {
+            ItemStack item = inv.getItem(i);
+            if (item == null || item.getType() == Material.AIR) {
+                continue;
+            }
+
+            if (item.getType() == Product.DIAMOND.getItem().getType()) {
+                diamond += item.getAmount();
+            } else if (item.getType() == Product.GOLD_INGOT.getItem().getType()) {
+                gold += item.getAmount();
+            } else if (item.getType() == Product.IRON_INGOT.getItem().getType()) {
+                iron += item.getAmount();
+            }
+
+            if (iron >= 3) {
+                CWUtil.removeItems(inv, Product.IRON_INGOT.getItem(), 3, true);
+                CWUtil.dropItemStack(dropLoc, Product.GREATSWORD.getItem(), dvz, player);
+                craft = true;
+            } else if (gold >= 3) {
+                CWUtil.removeItems(inv, Product.GOLD_INGOT.getItem(), 3, true);
+                CWUtil.dropItemStack(dropLoc, Product.FIERY_FLAIL.getItem(), dvz, player);
+                craft = true;
+            } else if (diamond >= 3) {
+                CWUtil.removeItems(inv, Product.DIAMOND.getItem(), 3, true);
+                CWUtil.dropItemStack(dropLoc, Product.BATTLEAXE.getItem(), dvz, player);
+                craft = true;
+            }
+            if (craft) {
+                break;
             }
         }
-        CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need at least 3 iron, gold or diamond to craft! &4&l<<"));
+        if (craft) {
+            ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
+            player.updateInventory();
+
+            dvz.getPM().getPlayer(player).addClassExp(50);
+            // + 5 per ore mined
+            // + 5 per ore smelted
+            // = 80 per craft
+            return;
+        } else {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need at least 3 iron, gold or diamond to craft! &4&l<<"));
+        }
     }
 
-    //Try craft a item with the given itemstack.
-    private boolean tryCraft(ItemStack item, Location dropLoc) {
-        if (item == null) {
-            return false;
+    //This will spawn a block with the given material at the block location.
+    //It will begin at the bottom of the workshop and then check all the blocks above for air.
+    //If no blocks are found it will just spawn it at a random place.
+    private void spawnBlockLowest(Material mat, Block block, MinerWorkshop ws, List<Block> airBlocks) {
+        int maxY = block.getY();
+        block = block.getWorld().getBlockAt(block.getX(), ws.getCuboid().getMinY(), block.getZ());
+        if (block.getType() != Material.AIR) {
+            while (block.getRelative(BlockFace.UP).getType() != Material.AIR && block.getY() <= maxY) {
+                block = block.getRelative(BlockFace.UP);
+            }
+            if (block.getY() <= maxY) {
+                block = block.getRelative(BlockFace.UP);
+            }
         }
-        if (item.getAmount() < 3) {
-            return false;
+        if (block.getType() != Material.AIR) {
+            Debug.bc("Couldn't spawn lowest... Spawning at random loc.");
+            block = CWUtil.random(airBlocks);
         }
-        if (Product.DIAMOND.getItem().getType() == item.getType()) {
-            dropLoc.getWorld().dropItem(dropLoc, Product.BATTLEAXE.getItem());
-            return true;
-        } else if (Product.GOLD_INGOT.getItem().getType() == item.getType()) {
-            dropLoc.getWorld().dropItem(dropLoc, Product.FIERY_FLAIL.getItem());
-            return true;
-        } else if (Product.IRON_INGOT.getItem().getType() == item.getType()) {
-            dropLoc.getWorld().dropItem(dropLoc, Product.GREATSWORD.getItem());
-            return true;
-        }
-        return false;
+        block.setType(mat);
     }
 
 

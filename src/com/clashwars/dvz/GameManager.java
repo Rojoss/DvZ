@@ -17,6 +17,7 @@ import com.clashwars.dvz.runnables.DragonRunnable;
 import com.clashwars.dvz.structures.StorageStruc;
 import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.util.Util;
+import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -81,7 +82,11 @@ public class GameManager {
         }
         shrineBlocks.clear();
 
-        dvz.getPM().removeWorkshops(true);
+        for (WorkShop ws : dvz.getWM().getWorkShops().values()) {
+            ws.destroy();
+        }
+        dvz.getWM().removeWorkshops(true);
+
         ((StorageStruc)StructureType.STORAGE.getStrucClass()).reset();
         gCfg.STORAGE_PRODUCTS.clear();
 

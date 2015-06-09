@@ -1,6 +1,7 @@
 package com.clashwars.dvz;
 
 import com.clashwars.cwcore.CWCore;
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.scoreboard.CWBoard;
 import com.clashwars.cwcore.utils.CWUtil;
@@ -21,6 +22,7 @@ import com.clashwars.dvz.tips.TipManager;
 import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.SoundMenu;
 import com.clashwars.dvz.workshop.WorkShop;
+import com.clashwars.dvz.workshop.WorkshopManager;
 import com.gmail.filoghost.holograms.api.Hologram;
 import com.gmail.filoghost.holograms.api.HolographicDisplaysAPI;
 import com.google.gson.Gson;
@@ -71,6 +73,7 @@ public class DvZ extends JavaPlugin {
     private MapManager mm;
     private ClassManager cm;
     private PlayerManager pm;
+    private WorkshopManager wm;
     private TipManager tm;
 
     private ArmorMenu armorMenu;
@@ -83,29 +86,22 @@ public class DvZ extends JavaPlugin {
 
     public GameRunnable gameRunnable;
 
-    public Set<UUID> entities = new HashSet<UUID>();
     private List<Material> undestroyableBlocks = Arrays.asList(new Material[] {Material.BEDROCK, Material.OBSIDIAN, Material.ENDER_STONE, Material.ENDER_PORTAL_FRAME,
         Material.WEB, Material.STANDING_BANNER, Material.WALL_BANNER, Material.DRAGON_EGG, Material.BARRIER, Material.REDSTONE_BLOCK});
 
     @Override
     public void onDisable() {
-        //Kill all mobs
-        for (Entity entity : getMM().getActiveMap().getWorld().getEntities()) {
-            if (entities.contains(entity.getUniqueId())) {
-                entity.remove();
-            }
-        }
-
-        em.dispose();
-
+        //Save all player data.
         getPM().savePlayers();
-        for (WorkShop ws : getPM().getWorkShops().values()) {
-            ws.onRemove();
-            ws.remove();
-        }
 
-        abilityCfg.load();
-        abilityCfg.save();
+        //Destroy all workshops but keep them in config. (they will be build again on load)
+        for (WorkShop ws : getWM().getWorkShops().values()) {
+            ws.destroy();
+        }
+        getWM().removeWorkshops(false);
+
+        //Clean up effect stuff.
+        em.dispose();
 
         //Clean up holograms
         for (Hologram hologram : HolographicDisplaysAPI.getHolograms(this)) {
@@ -131,7 +127,9 @@ public class DvZ extends JavaPlugin {
 
         permission = cwcore.getDM().getPermissions();
         if (permission == null) {
-            log("Vault permissions couldn't be loaded. It will still work but certain featured might not work properly.");
+            log("Vault permissions couldn't be loaded.");
+            setEnabled(false);
+            return;
         }
 
         em = new EffectManager(cwcore);
@@ -152,6 +150,7 @@ public class DvZ extends JavaPlugin {
         classesCfg.load();
 
         abilityCfg = new AbilityCfg("plugins/DvZ/Abilities.yml");
+        abilityCfg.load();
 
         playerCfg = new PlayerCfg("plugins/DvZ/data/Players.yml");
         playerCfg.load();
@@ -169,6 +168,7 @@ public class DvZ extends JavaPlugin {
         gm = new GameManager(this);
         cm = new ClassManager(this);
         pm = new PlayerManager(this);
+        wm = new WorkshopManager(this);
         tm = new TipManager();
         gm.calculateMonsterPerc();
 
@@ -329,6 +329,10 @@ public class DvZ extends JavaPlugin {
 
     public PlayerManager getPM() {
         return pm;
+    }
+
+    public WorkshopManager getWM() {
+        return wm;
     }
 
     public TipManager getTM() {

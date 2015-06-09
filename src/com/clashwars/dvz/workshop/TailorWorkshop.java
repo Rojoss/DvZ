@@ -16,30 +16,19 @@ import java.util.UUID;
 
 public class TailorWorkshop extends WorkShop {
 
-    protected List<CWEntity> sheeps = new ArrayList<CWEntity>();
+    protected List<CWEntity> sheep = new ArrayList<CWEntity>();
 
     public TailorWorkshop(UUID owner, WorkShopData wsd) {
         super(owner, wsd);
     }
 
-    public List<CWEntity> getSheeps() {
-        return sheeps;
+    public List<CWEntity> getSheep() {
+        return sheep;
     }
 
 
     @Override
     public void onBuild() {
-        onLoad();
-    }
-
-    @Override
-    public void onLoad() {
-        if (cuboid == null || cuboid.getBlocks() == null || cuboid.getBlocks().size() <= 0) {
-            if (getOrigin() == null) {
-                return;
-            }
-            build(getOrigin());
-        }
         //Spawn sheep
         for (int i = 0; i < DvzClass.TAILOR.getClassClass().getIntOption("sheep-amount"); i++) {
             int y = getOrigin().getBlockY();
@@ -50,8 +39,7 @@ public class TailorWorkshop extends WorkShop {
                     y, CWUtil.random(inside.getMinZ(), inside.getMaxZ()+1)));
             entity.setDyeColor(DyeColor.WHITE);
 
-            sheeps.add(entity);
-            dvz.entities.add(entity.entity().getUniqueId());
+            sheep.add(entity);
 
             ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, entity.entity().getLocation());
             cuboid.getWorld().playSound(entity.entity().getLocation(), Sound.CHICKEN_EGG_POP, 0.5f, 2.0f);
@@ -59,11 +47,11 @@ public class TailorWorkshop extends WorkShop {
     }
 
     @Override
-    public void onRemove() {
-        super.onRemove();
-        for (CWEntity entity : sheeps) {
+    public void onDestroy() {
+        for (CWEntity entity : sheep) {
             entity.entity().remove();
         }
-        sheeps.clear();
+        sheep.clear();
+        sheep = null;
     }
 }

@@ -38,4 +38,9 @@ public class WorkShopCfg extends EasyConfig {
         save();
     }
 
+    public void removeWorkShops() {
+        WORKSHOPS.clear();
+        save();
+    }
+
 }

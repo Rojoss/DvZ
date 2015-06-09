@@ -1,23 +1,20 @@
 package com.clashwars.dvz.classes.dwarves;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.workshop.BakerWorkshop;
-import org.bukkit.Location;
+import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.Hopper;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -49,7 +46,12 @@ public class Baker extends DwarfClass {
             return;
         }
 
-        BakerWorkshop ws = (BakerWorkshop)dvz.getPM().getWorkshop(player);
+        if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your wheat! &4&l<<"));
+            return;
+        }
+
+        BakerWorkshop ws = (BakerWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
         if (!ws.getWheatBlocks().contains(block)) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your wheat! &4&l<<"));
             return;
@@ -76,7 +78,12 @@ public class Baker extends DwarfClass {
             return;
         }
 
-        BakerWorkshop ws = (BakerWorkshop)dvz.getPM().getWorkshop(player);
+        if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your workshop! &4&l<<"));
+            return;
+        }
+
+        BakerWorkshop ws = (BakerWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
         if (!ws.getWheatBlocks().contains(block)) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your workshop! &4&l<<"));
             return;
@@ -112,8 +119,13 @@ public class Baker extends DwarfClass {
             return;
         }
 
+        WorkShop workshop = dvz.getWM().locGetWorkShop(event.getItem().getLocation());
+        if (workshop == null || !(workshop instanceof BakerWorkshop)) {
+            return;
+        }
         event.setCancelled(false);
-        BakerWorkshop ws = (BakerWorkshop)dvz.getPM().locGetWorkShop(event.getItem().getLocation());
+
+        BakerWorkshop ws = (BakerWorkshop)workshop;
         if (!ws.getOwner().getName().equals(player.getName())) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your grinder! &4&l<<"));
             player.getInventory().addItem(event.getItem().getItemStack());

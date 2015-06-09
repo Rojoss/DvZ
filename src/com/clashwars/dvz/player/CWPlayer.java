@@ -16,6 +16,7 @@ import com.clashwars.dvz.config.PlayerCfg;
 import com.clashwars.dvz.runnables.TeleportRunnable;
 import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
+import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -230,7 +231,11 @@ public class CWPlayer {
         final Player player = getPlayer();
 
         player.getInventory().clear();
-        dvz.getPM().removeWorkshop(player);
+
+        if (dvz.getWM().hasWorkshop(player.getUniqueId())) {
+            dvz.getWM().getWorkshop(player.getUniqueId()).destroy();
+        }
+        dvz.getWM().removeWorkshop(player.getUniqueId(), true);
 
         setPlayerClass(dvzClass);
         removeClassOption(dvzClass);

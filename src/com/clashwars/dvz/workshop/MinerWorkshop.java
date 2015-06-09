@@ -25,32 +25,16 @@ public class MinerWorkshop extends WorkShop {
 
     @Override
     public void onBuild() {
-        if (cuboid == null || cuboid.getBlocks() == null || cuboid.getBlocks().size() <= 0) {
-            if (getOrigin() == null) {
-                return;
-            }
-            build(getOrigin());
-        }
         for (Block block : cuboid.getBlocks()) {
             if (((Miner)DvzClass.MINER.getClassClass()).getMineableMaterials().contains(block.getType())) {
                 mineableBlocks.add(block);
             }
         }
-        setCraftBlock();
     }
 
     @Override
-    public void onLoad() {
-        if (getOrigin() == null) {
-            return;
-        }
-        build(getOrigin());
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                onBuild();
-            }
-        }.runTaskLater(dvz, 20);
+    public void onDestroy() {
+        mineableBlocks.clear();
+        mineableBlocks = null;
     }
 }

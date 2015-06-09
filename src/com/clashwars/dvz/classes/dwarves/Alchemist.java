@@ -1,12 +1,15 @@
 package com.clashwars.dvz.classes.dwarves;
 
 import com.clashwars.cwcore.cuboid.Cuboid;
+import com.clashwars.cwcore.effect.Particle;
+import com.clashwars.cwcore.effect.effects.BoilEffect;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.Product;
+import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.DvzItem;
-import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.AlchemistWorkshop;
 import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.Effect;
@@ -50,14 +53,14 @@ public class Alchemist extends DwarfClass {
         if (player.isSneaking()) {
             return;
         }
-        for (WorkShop ws : dvz.getPM().getWorkShops().values()) {
-            if (!(ws instanceof AlchemistWorkshop)) {
-                continue;
-            }
-            AlchemistWorkshop aws = (AlchemistWorkshop)ws;
-            if (aws.getPot().contains(player)) {
-                player.setVelocity(player.getVelocity().setY(1.3f));
-            }
+
+        WorkShop ws = dvz.getWM().locGetWorkShop(player.getLocation());
+        if (ws == null || !(ws instanceof AlchemistWorkshop)) {
+            return;
+        }
+
+        if (((AlchemistWorkshop)ws).getPot().contains(player)) {
+            player.setVelocity(player.getVelocity().setY(1.3f));
         }
     }
 
@@ -77,19 +80,29 @@ public class Alchemist extends DwarfClass {
             return;
         }
 
-        if (!dvz.getPM().getWorkshop(player).getCuboid().contains(block.getLocation())) {
-            if (block.getType() == Material.CAULDRON) {
-                player.sendMessage(Util.formatMsg("&cThis is not your cauldron."));
-            }
+        if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
+            return;
+        }
+
+        AlchemistWorkshop ws = (AlchemistWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
+        if (!ws.isBuild()) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your own workshop! &4&l<<"));
+            return;
+        }
+
+        if (!ws.getCuboid().contains(block.getLocation())) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your " + block.getType().toString().toLowerCase() + "! &4&l<<"));
             return;
         }
 
         event.setCancelled(false);
         if (block.getType() == Material.CAULDRON) {
             if (event.getItem() == null || event.getItem().getType() != Material.BUCKET) {
+                CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cUse a bucket to empty the cauldron! &4&l<<"));
                 return;
             }
             if (block.getData() != 3) {
+                CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis cauldron isn't full yet! &4&l<<"));
                 return;
             }
 
@@ -112,26 +125,34 @@ public class Alchemist extends DwarfClass {
             return;
         }
 
-        final WorkShop ws = dvz.getPM().getWorkshop(player);
-        if (ws != null && ws instanceof AlchemistWorkshop) {
-            final Location loc = event.getBlockClicked().getRelative(event.getBlockFace()).getLocation();
-            if (((AlchemistWorkshop)ws).getPot().contains(loc)) {
-                //Check if pot is filled with water aftter a little delay because of water spread.
-                if (((AlchemistWorkshop)ws).isPotFilled()) {
-                    player.sendMessage(Util.formatMsg("&7Pot is already filled. Add melons or sugar now."));
-                } else {
-                    event.setCancelled(false);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            ((AlchemistWorkshop)ws).checkPotFilled();
-                        }
-                    }.runTaskLater(dvz, 30);
-                }
-            } else {
-                player.sendMessage(Util.formatMsg("&cPlace the water in your pot."));
-            }
+        if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
+            return;
         }
+
+        final AlchemistWorkshop ws = (AlchemistWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
+        if (!ws.isBuild()) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop and place the water in your pot! &4&l<<"));
+            return;
+        }
+
+        final Location loc = event.getBlockClicked().getRelative(event.getBlockFace()).getLocation();
+        if (!ws.getCuboid().contains(loc)) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cWater has to be placed inside your pot! &4&l<<"));
+            return;
+        }
+
+        if (ws.potFilled) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cPot already filled! &7Add melons OR sugar now. &4&l<<"));
+            return;
+        }
+
+        event.setCancelled(false);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                checkPotFilled(ws);
+            }
+        }.runTaskLater(dvz, 30);
     }
 
     @EventHandler (priority = EventPriority.HIGH)
@@ -226,46 +247,161 @@ public class Alchemist extends DwarfClass {
             return;
         }
 
-        final WorkShop ws = dvz.getPM().getWorkshop(player);
-        if (ws != null && ws instanceof AlchemistWorkshop) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (((AlchemistWorkshop) ws).isPotFilled()) {
-                        AlchemistWorkshop aws = (AlchemistWorkshop)ws;
-                        Location loc = item.getLocation();
-                        Cuboid potClone = aws.getPot().clone();
-                        potClone.expand(Cuboid.Dir.UP, 3);
-                        if (potClone.contains(loc)) {
-                            ItemStack itemStack = item.getItemStack();
-                            if (itemStack.getType() == Material.MELON) {
-                                if (aws.getSugar() > 0) {
-                                    aws.wrongIngredientAdded();
-                                    ParticleEffect.VILLAGER_ANGRY.display(0.2f, 0.4f, 0.2f, 0.0001f, 5, item.getLocation());
-                                } else {
-                                    item.remove();
-                                    aws.addMelon(itemStack.getAmount());
-                                    player.playSound(item.getLocation(), Sound.SPLASH2, 0.8f, 1.0f);
-                                    ParticleEffect.SPELL_WITCH.display(0.2f, 0.4f, 0.2f, 0.0001f, 10, item.getLocation());
-                                }
-                            } else if (itemStack.getType() == Material.SUGAR) {
-                                if (aws.getMelons() > 0) {
-                                    aws.wrongIngredientAdded();
-                                    ParticleEffect.VILLAGER_ANGRY.display(0.2f, 0.4f, 0.2f, 0.0001f, 5, item.getLocation());
-                                } else {
-                                    item.remove();
-                                    aws.addSugar(itemStack.getAmount());
-                                    player.playSound(item.getLocation(), Sound.SPLASH2, 0.8f, 1.0f);
-                                    ParticleEffect.SPELL_WITCH.display(0.2f, 0.4f, 0.2f, 0.0001f, 10, item.getLocation());
-                                }
+        if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
+            return;
+        }
+
+        final AlchemistWorkshop ws = (AlchemistWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
+        if (!ws.isBuild()) {
+            return;
+        }
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                Location loc = item.getLocation();
+                Cuboid potClone = ws.getPot().clone();
+                potClone.expand(Cuboid.Dir.UP, 3);
+
+                if (potClone.contains(loc)) {
+                    if (!ws.potFilled) {
+                        CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cFill your pot with water before adding ingredients! &4&l<<"));
+                        return;
+                    }
+
+                    ItemStack itemStack = item.getItemStack();
+                    if (itemStack.getType() == Material.MELON) {
+                        if (ws.sugar > 0) {
+                            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBrewing failed! &7(You can't add both melons and sugar) &4&l<<"));
+                            wrongIngredientAdded(ws);
+                            ParticleEffect.VILLAGER_ANGRY.display(0.2f, 0.4f, 0.2f, 0.0001f, 5, item.getLocation());
+                        } else {
+                            player.playSound(item.getLocation(), Sound.SPLASH2, 0.8f, 1.0f);
+                            ParticleEffect.SPELL_WITCH.display(0.2f, 0.4f, 0.2f, 0.0001f, 10, item.getLocation());
+
+                            item.remove();
+                            ws.melons += itemStack.getAmount();
+                            if (ws.melons >= getIntOption("melons-needed")) {
+                                brew(ws);
                             } else {
-                                aws.wrongIngredientAdded();
-                                ParticleEffect.VILLAGER_ANGRY.display(0.2f, 0.4f, 0.2f, 0.0001f, 5, item.getLocation());
+                                CWUtil.sendActionBar(player, CWUtil.integrateColor("&5&l>> &dMelons added! &8(" + ws.melons + "&7/" + getIntOption("melons-needed") + "&8) &5&l<<"));
                             }
                         }
+                    } else if (itemStack.getType() == Material.SUGAR) {
+                        if (ws.melons > 0) {
+                            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBrewing failed! &7(You can't add both melons and sugar) &4&l<<"));
+                            wrongIngredientAdded(ws);
+                            ParticleEffect.VILLAGER_ANGRY.display(0.2f, 0.4f, 0.2f, 0.0001f, 5, item.getLocation());
+                        } else {
+                            player.playSound(item.getLocation(), Sound.SPLASH2, 0.8f, 1.0f);
+                            ParticleEffect.SPELL_WITCH.display(0.2f, 0.4f, 0.2f, 0.0001f, 10, item.getLocation());
+
+                            item.remove();
+                            ws.sugar += itemStack.getAmount();
+                            if (ws.sugar >= getIntOption("sugar-needed")) {
+                                brew(ws);
+                            } else {
+                                CWUtil.sendActionBar(player, CWUtil.integrateColor("&5&l>> &dSugar added! &8(" + ws.sugar + "&7/" + getIntOption("sugar-needed") + "&8) &5&l<<"));
+                            }
+                        }
+                    } else {
+                        CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBrewing failed! &7(You can't brew potions with" + item.getType().toString().toLowerCase().replace("_", " ") + ") &4&l<<"));
+                        wrongIngredientAdded(ws);
+                        ParticleEffect.VILLAGER_ANGRY.display(0.2f, 0.4f, 0.2f, 0.0001f, 5, item.getLocation());
                     }
                 }
-            }.runTaskLater(dvz, 10);
+            }
+        }.runTaskLater(dvz, 10);
+    }
+
+    private void brew(AlchemistWorkshop ws) {
+        CWUtil.sendActionBar(ws.getOwner(), CWUtil.integrateColor("&5&l>> &dPotion brewed! &5&l<<"));
+
+        //Put item in chest and if chest is full drop it at chest.
+        CWItem item;
+        if (ws.melons > 0) {
+            item = Ability.HEAL_POTION.getAbilityClass().getCastItem();
+        } else {
+            item = Ability.SPEED_POTION.getAbilityClass().getCastItem();
+        }
+        if (item != null) {
+            boolean added = false;
+            for (int i = 0; i < ws.getChest().getSize(); i++) {
+                if (ws.getChest().getItem(i) == null || ws.getChest().getItem(i).getType() == Material.AIR) {
+                    ws.getChest().addItem(item);
+                    added = true;
+                    break;
+                }
+            }
+            if (!added) {
+                CWUtil.dropItemStack(ws.getChestLoc(), item, dvz, ws.getOwner());
+            }
+            ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 30, ws.getChestLoc().add(0.5f, 0.5f, 0.5f));
+        }
+
+        //Reset
+        ws.boilEffect.cancel();
+        ws.boilEffect = null;
+        ws.potFilled = false;
+        ws.melons = 0;
+        ws.sugar = 0;
+
+        dvz.getPM().getPlayer(ws.getOwner()).addClassExp(50);
+        // + 3 per melon broken
+        // + 1 per sugarcane broken
+        // + 1 per bucket filled
+        // = 74
+
+        //Clear water/Effect
+        List<Block> waterBlocks = ws.getPot().getBlocks(new Material[]{Material.STATIONARY_WATER});
+        for (Block block : waterBlocks) {
+            block.setType(Material.AIR);
+            ParticleEffect.SMOKE_NORMAL.display(0.3f, 0.3f, 0.3f, 0.0001f, 5, block.getLocation().add(0.5f, 0.5f, 0.5f));
         }
     }
+
+    private void checkPotFilled(AlchemistWorkshop ws) {
+        List<Block> waterBlocks = ws.getPot().getBlocks(new Material[]{Material.STATIONARY_WATER});
+        if (waterBlocks.size() >= 18) {
+            for (Block block : waterBlocks) {
+                block.setType(Material.STATIONARY_WATER);
+            }
+
+            ws.potFilled = true;
+            CWUtil.sendActionBar(ws.getOwner(), CWUtil.integrateColor("&5&l>> &dPot filled! &7Now add sugar OR melons. &5&l<<"));
+
+            createBoilEffect(ws);
+        }
+    }
+
+    public void wrongIngredientAdded(AlchemistWorkshop ws) {
+        //Reset
+        ws.boilEffect.cancel();
+        ws.boilEffect = null;
+        ws.potFilled = false;
+        ws.melons = 0;
+        ws.sugar = 0;
+
+        //Clear water and Effect/Sound
+        ws.getOwner().playSound(ws.getOwner().getLocation(), Sound.FIZZ, 1.0f, 1.0f);
+        Cuboid potTop = ws.getPot().clone();
+        potTop.contract(Cuboid.Dir.DOWN, 1);
+        List<Block> waterBlocks = potTop.getBlocks(new Material[]{Material.STATIONARY_WATER});
+        for (Block block : waterBlocks) {
+            block.setType(Material.AIR);
+            ParticleEffect.SMOKE_NORMAL.display(0.3f, 0.3f, 0.3f, 0.0001f, 5, block.getLocation().add(0.5f, 0.5f, 0.5f));
+        }
+    }
+
+    private void createBoilEffect(AlchemistWorkshop ws) {
+        ws.boilEffect = new BoilEffect(dvz.getEM());
+        ws.boilEffect.setLocation(ws.getOrigin().add(0,1,0));
+        ws.boilEffect.particleList.add(new Particle(ParticleEffect.WATER_BUBBLE, 1, 0.8f, 1, 0, 40));
+        ws.boilEffect.particleList.add(new Particle(ParticleEffect.SMOKE_LARGE, 1, 1.5f, 1, 0, 4));
+        ws.boilEffect.soundVolume = 0.15f;
+        ws.boilEffect.soundPitch = 1.5f;
+        ws.boilEffect.soundDelay = 10;
+        ws.boilEffect.start();
+    }
+
 }
