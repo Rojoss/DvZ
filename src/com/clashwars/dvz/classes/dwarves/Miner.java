@@ -88,7 +88,8 @@ public class Miner extends DwarfClass {
             ParticleEffect.CRIT.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, block.getLocation().add(0.5f,0.5f,0.5f));
         }
 
-        new BukkitRunnable() {
+
+        ws.runnables.add(new BukkitRunnable() {
             @Override
             public void run() {
                 WorkShop wsLoc = dvz.getWM().locGetWorkShop(block.getLocation());
@@ -108,6 +109,10 @@ public class Miner extends DwarfClass {
                     }
                 }
 
+                if (airBlocks.isEmpty()) {
+                    return;
+                }
+
                 //If there are only 10 blocks mined swap the block with a stone block randomly.
                 //Else miners can just not mine stone at all and the ores will always respawn at same places.
                 Block block = null;
@@ -125,7 +130,7 @@ public class Miner extends DwarfClass {
                     spawnBlockLowest(swapMat, block, ws, airBlocks);
                 }
             }
-        }.runTaskLater(dvz, CWUtil.random(CWUtil.getInt("min-respawn-time"), getIntOption("max-respawn-time")));
+        }.runTaskLater(dvz, CWUtil.random(CWUtil.getInt("min-respawn-time"), getIntOption("max-respawn-time"))));
     }
 
     @EventHandler(priority = EventPriority.HIGH)

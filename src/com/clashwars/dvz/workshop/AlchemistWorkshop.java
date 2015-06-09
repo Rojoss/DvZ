@@ -68,7 +68,7 @@ public class AlchemistWorkshop extends WorkShop {
         pot.setMaxY(pot.getMinY() + 1);
 
         //Cauldron refilling and rain effect.
-        new BukkitRunnable() {
+        runnables.add(new BukkitRunnable() {
             int iterations = 0;
 
             @Override
@@ -114,16 +114,19 @@ public class AlchemistWorkshop extends WorkShop {
                     break;
                 }
             }
-        }.runTaskTimer(dvz, 0, 20);
+        }.runTaskTimer(dvz, 0, 20));
     }
 
     @Override
     public void onDestroy() {
         cauldrons.clear();
-        cauldrons = null;
+        cauldrons = new HashSet<Block>();
         chest = null;
         chestLoc = null;
         pot = null;
+        sugar = 0;
+        melons = 0;
+        potFilled = false;
     }
 
 }

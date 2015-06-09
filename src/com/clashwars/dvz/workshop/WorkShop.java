@@ -20,6 +20,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.io.IOException;
@@ -34,6 +36,8 @@ public abstract class WorkShop {
 
     protected WorkShopData wsData;
     protected UUID owner;
+
+    public List<BukkitTask> runnables = new ArrayList<BukkitTask>();
 
     protected Cuboid cuboid;
 
@@ -150,6 +154,14 @@ public abstract class WorkShop {
         if (cuboid != null && cuboid.getBlocks() != null) {
             //Classes can override this to do stuff before the workshop is destroyed.
             dvz.getWM().getWorkshop(owner).onDestroy();
+
+            //Cancel all runnables.
+            if (runnables != null && !runnables.isEmpty()) {
+                for (BukkitTask runnable : runnables) {
+                    runnable.cancel();
+                }
+            }
+            runnables.clear();
 
             //Delete all blocks and set floor back to wood with a piston.
             Location pistonLoc = getOrigin().add(0,-1,0);

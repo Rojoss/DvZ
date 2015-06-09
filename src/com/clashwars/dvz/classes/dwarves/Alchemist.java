@@ -147,12 +147,12 @@ public class Alchemist extends DwarfClass {
         }
 
         event.setCancelled(false);
-        new BukkitRunnable() {
+        ws.runnables.add(new BukkitRunnable() {
             @Override
             public void run() {
                 checkPotFilled(ws);
             }
-        }.runTaskLater(dvz, 30);
+        }.runTaskLater(dvz, 30));
     }
 
     @EventHandler (priority = EventPriority.HIGH)
@@ -256,7 +256,7 @@ public class Alchemist extends DwarfClass {
             return;
         }
 
-        new BukkitRunnable() {
+        ws.runnables.add(new BukkitRunnable() {
             @Override
             public void run() {
                 Location loc = item.getLocation();
@@ -311,7 +311,7 @@ public class Alchemist extends DwarfClass {
                     }
                 }
             }
-        }.runTaskLater(dvz, 10);
+        }.runTaskLater(dvz, 10));
     }
 
     private void brew(AlchemistWorkshop ws) {

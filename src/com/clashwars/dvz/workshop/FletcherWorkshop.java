@@ -24,7 +24,7 @@ public class FletcherWorkshop extends WorkShop {
 
 
     public void spawnChicken(final EntityType type, final int yOffset) {
-        new BukkitRunnable() {
+        runnables.add(new BukkitRunnable() {
             @Override
             public void run() {
                 if (!isBuild()) {
@@ -41,7 +41,7 @@ public class FletcherWorkshop extends WorkShop {
                 chickens.add(entity);
                 ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, entity.entity().getLocation(), 500);
             }
-        }.runTaskLater(dvz, CWUtil.random(DvzClass.FLETCHER.getClassClass().getIntOption("animal-respawn-time-min"), DvzClass.FLETCHER.getClassClass().getIntOption("animal-respawn-time-max")));
+        }.runTaskLater(dvz, CWUtil.random(DvzClass.FLETCHER.getClassClass().getIntOption("animal-respawn-time-min"), DvzClass.FLETCHER.getClassClass().getIntOption("animal-respawn-time-max"))));
     }
 
     public List<CWEntity> getChickens() {
@@ -63,6 +63,6 @@ public class FletcherWorkshop extends WorkShop {
             entity.entity().remove();
         }
         chickens.clear();
-        chickens = null;
+        chickens = new ArrayList<CWEntity>();
     }
 }

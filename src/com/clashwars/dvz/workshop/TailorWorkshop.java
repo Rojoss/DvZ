@@ -1,5 +1,6 @@
 package com.clashwars.dvz.workshop;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.helpers.CWEntity;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -52,6 +53,6 @@ public class TailorWorkshop extends WorkShop {
             entity.entity().remove();
         }
         sheep.clear();
-        sheep = null;
+        sheep = new ArrayList<CWEntity>();
     }
 }

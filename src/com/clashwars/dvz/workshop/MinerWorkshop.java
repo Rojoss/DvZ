@@ -35,6 +35,6 @@ public class MinerWorkshop extends WorkShop {
     @Override
     public void onDestroy() {
         mineableBlocks.clear();
-        mineableBlocks = null;
+        mineableBlocks = new ArrayList<Block>();
     }
 }

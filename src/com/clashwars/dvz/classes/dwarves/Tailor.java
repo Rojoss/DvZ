@@ -70,14 +70,14 @@ public class Tailor extends DwarfClass {
         dvz.getPM().getPlayer(player).addClassExp(1);
 
         final CWEntity sheep = cwe;
-        new BukkitRunnable() {
+        ws.runnables.add(new BukkitRunnable() {
             @Override
             public void run() {
                 sheep.setSheared(false);
                 ParticleEffect.SNOWBALL.display(0.6f, 0.6f, 0.6f, 0.0001f, 30, entity.getLocation().add(0, 0.5f, 0));
                 entity.getWorld().playSound(entity.getLocation(), Sound.DIG_WOOL, 1.0f, 0.0f);
             }
-        }.runTaskLater(dvz, CWUtil.random(getIntOption("wool-regrow-min"), getIntOption("wool-regrow-max")));
+        }.runTaskLater(dvz, CWUtil.random(getIntOption("wool-regrow-min"), getIntOption("wool-regrow-max"))));
     }
 
 

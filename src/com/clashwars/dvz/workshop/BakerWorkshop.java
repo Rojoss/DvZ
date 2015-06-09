@@ -83,7 +83,7 @@ public class BakerWorkshop extends WorkShop {
         }
 
         //Fast wheat regrowth.
-        new BukkitRunnable() {
+        runnables.add(new BukkitRunnable() {
             @Override
             public void run() {
                 if (!isBuild()) {
@@ -98,16 +98,16 @@ public class BakerWorkshop extends WorkShop {
                         continue;
                     }
                     if (CWUtil.randomFloat() <= 0.2f) {
-                        block.setData((byte)(block.getData() + 1));
+                        block.setData((byte) (block.getData() + 1));
                         ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(block.getType(), block.getData()), 0.5f, 0.5f, 0.5f, 0.01f, 8, block.getLocation().add(0.5f, 0.5f, 0.5f));
                         block.getWorld().playSound(block.getLocation(), Sound.DIG_GRASS, 0.1f, 2.0f);
                     }
                 }
             }
-        }.runTaskTimer(dvz, 10, 10);
+        }.runTaskTimer(dvz, 10, 10));
 
         //Mill rotation
-        new BukkitRunnable() {
+        runnables.add(new BukkitRunnable() {
             @Override
             public void run() {
                 if (!isBuild()) {
@@ -119,7 +119,7 @@ public class BakerWorkshop extends WorkShop {
                     millRotation -= 0.05f;
                 }
             }
-        }.runTaskTimer(dvz, 1, 1);
+        }.runTaskTimer(dvz, 1, 1));
     }
 
     @Override
@@ -136,7 +136,7 @@ public class BakerWorkshop extends WorkShop {
         mill = null;
         millLoc = null;
         wheatBlocks.clear();
-        wheatBlocks = null;
+        wheatBlocks = new ArrayList<Block>();
         hopperBlock = null;
     }
 }
