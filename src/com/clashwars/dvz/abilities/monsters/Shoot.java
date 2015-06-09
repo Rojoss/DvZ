@@ -46,7 +46,7 @@ public class Shoot extends MobAbility {
             }
         }
 
-        player.setVelocity(new Vector(0, dvz.getGM().getMonsterPower(1) + 0.5f, 0));
+        player.setVelocity(new Vector(0, dvz.getGM().getMonsterPower(1.5f) + 0.5f, 0));
         ParticleEffect.FLAME.display(1.2f, 0.2f, 1.2f, 0, 50, player.getLocation());
         ParticleEffect.LAVA.display(1.5f, 0.2f, 1.5f, 0, 20, player.getLocation());
         player.getWorld().playSound(player.getLocation(), Sound.WITHER_SHOOT, 0.5f, 2);
