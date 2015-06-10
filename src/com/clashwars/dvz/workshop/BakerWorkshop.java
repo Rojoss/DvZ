@@ -31,6 +31,7 @@ public class BakerWorkshop extends WorkShop {
     private Location millLoc;
     private ArmorStand mill;
     private float millRotation = 0;
+    private float millSpeed = 0.05f;
 
     public BakerWorkshop(UUID owner, WorkShopData wsd) {
         super(owner, wsd);
@@ -106,6 +107,8 @@ public class BakerWorkshop extends WorkShop {
             }
         }.runTaskTimer(dvz, 10, 10));
 
+        millSpeed = (float)CWUtil.random(3,8) / 100;
+
         //Mill rotation
         runnables.add(new BukkitRunnable() {
             @Override
@@ -116,7 +119,7 @@ public class BakerWorkshop extends WorkShop {
                 }
                 if (mill != null) {
                     mill.setHeadPose(new EulerAngle(67.5f, 0, millRotation));
-                    millRotation -= 0.05f;
+                    millRotation -= millSpeed;
                 }
             }
         }.runTaskTimer(dvz, 1, 1));
