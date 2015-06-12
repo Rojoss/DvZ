@@ -284,6 +284,9 @@ public class MainEvents implements Listener {
                     //Reset player and give class items.
                     cwp.reset();
                     cwp.setPlayerClass(DvzClass.MONSTER);
+                    if (dvz.getBoard().hasTeam(DvzClass.MONSTER.getTeam() + cwp.getTeamSuffix())) {
+                        dvz.getBoard().getTeam(DvzClass.MONSTER.getTeam() + cwp.getTeamSuffix()).addPlayer(player);
+                    }
                     cwp.giveClassItems(ClassType.MONSTER, suicide, -1);
                 }
             }

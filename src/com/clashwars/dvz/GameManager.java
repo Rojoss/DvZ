@@ -471,7 +471,7 @@ public class GameManager {
             dvz.getPerms().playerAdd(player, "prefix.dragonslayer");
         }
 
-        dvz.getBoard().getTeam("dragonslayer").addPlayer(player);
+        dvz.getBoard().getTeam("dragonslayer" + dvz.getPM().getPlayer(player).getTeamSuffix()).addPlayer(player);
 
         Ability.HORN.getAbilityClass().getCastItem().giveToPlayer(player);
 

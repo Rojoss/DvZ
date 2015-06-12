@@ -154,8 +154,8 @@ public class CWPlayer {
                 }
 
                 //Team
-                if (dvz.getBoard().hasTeam(dvzClass.getTeam())) {
-                    dvz.getBoard().getTeam(dvzClass.getTeam()).addPlayer(player);
+                if (dvz.getBoard().hasTeam(dvzClass.getTeam() + getTeamSuffix())) {
+                    dvz.getBoard().getTeam(dvzClass.getTeam() + getTeamSuffix()).addPlayer(player);
                 }
 
                 //Prefix
@@ -241,13 +241,13 @@ public class CWPlayer {
         removeClassOption(dvzClass);
         c.equipItems(player);
 
-        if (dvz.getBoard().hasTeam(dvzClass.getTeam())) {
+        if (dvz.getBoard().hasTeam(dvzClass.getTeam() + getTeamSuffix())) {
             for (Team team : dvz.getBoard().getTeamList()) {
                 if (team.hasPlayer(player)) {
                     team.removePlayer(player);
                 }
             }
-            dvz.getBoard().getTeam(dvzClass.getTeam()).addPlayer(player);
+            dvz.getBoard().getTeam(dvzClass.getTeam() + getTeamSuffix()).addPlayer(player);
         }
 
         for (DvzClass dvzClasss : DvzClass.values()) {
@@ -295,13 +295,13 @@ public class CWPlayer {
         }
 
         //Team
-        if (dvz.getBoard().hasTeam(dvzClass.getTeam())) {
+        if (dvz.getBoard().hasTeam(dvzClass.getTeam() + getTeamSuffix())) {
             for (Team team : dvz.getBoard().getTeamList()) {
                 if (team.hasPlayer(player)) {
                     team.removePlayer(player);
                 }
             }
-            dvz.getBoard().getTeam(dvzClass.getTeam()).addPlayer(player);
+            dvz.getBoard().getTeam(dvzClass.getTeam() + getTeamSuffix()).addPlayer(player);
         }
 
         //Disguise
@@ -475,6 +475,17 @@ public class CWPlayer {
 
     public Color getColor() {
         return color;
+    }
+
+
+    public String getTeamSuffix() {
+        if (getPlayer().hasPermission("team.staff")) {
+            return "_s";
+        }
+        if (getPlayer().hasPermission("team.vip")) {
+            return "_v";
+        }
+        return "";
     }
 
 

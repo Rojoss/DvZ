@@ -226,14 +226,20 @@ public class DvZ extends JavaPlugin {
     private void setupBoard() {
         cwb = CWBoard.get("dvz");
         cwb.init(true);
-        cwb.addTeam("builder", "&9", "", "&eBuilder", true, true, NameTagVisibility.ALWAYS);
-        cwb.addTeam("miner", "&8", "", "&8Minrt", true, true, NameTagVisibility.ALWAYS);
-        cwb.addTeam("tailor", "&3", "", "&3Tailor", true, true, NameTagVisibility.ALWAYS);
-        cwb.addTeam("fletcher", "&2", "", "&2Fletcher", true, true, NameTagVisibility.ALWAYS);
-        cwb.addTeam("alchemist", "&5", "", "&5Alchemist", true, true, NameTagVisibility.ALWAYS);
-        cwb.addTeam("baker", "&6", "", "&5Alchemist", true, true, NameTagVisibility.ALWAYS);
-        cwb.addTeam("monster", "&c", "", "&cMonster", false, true, NameTagVisibility.ALWAYS);
-        cwb.addTeam("dragonslayer", "&d", "", "&dDragon-Slayer", true, true, NameTagVisibility.ALWAYS);
+
+        String[] nameSuffix = new String[] {"", "_v", "_s"};
+        String[] colorFormat = new String[] {"", "&l&o", "&l"};
+        for (int i = 0; i < nameSuffix.length; i++) {
+            cwb.addTeam("builder" + nameSuffix[i], "&9" + colorFormat[i], "", "&e" + colorFormat[i] + "Builder", true, true, NameTagVisibility.ALWAYS);
+            cwb.addTeam("miner" + nameSuffix[i], "&8" + colorFormat[i], "", "&8" + colorFormat[i] + "Miner", true, true, NameTagVisibility.ALWAYS);
+            cwb.addTeam("tailor" + nameSuffix[i], "&3" + colorFormat[i], "", "&3" + colorFormat[i] + "Tailor", true, true, NameTagVisibility.ALWAYS);
+            cwb.addTeam("fletcher" + nameSuffix[i], "&2" + colorFormat[i], "", "&2" + colorFormat[i] + "Fletcher", true, true, NameTagVisibility.ALWAYS);
+            cwb.addTeam("alchemist" + nameSuffix[i], "&5" + colorFormat[i], "", "&5" + colorFormat[i] + "Alchemist", true, true, NameTagVisibility.ALWAYS);
+            cwb.addTeam("baker" + nameSuffix[i], "&6" + colorFormat[i], "", "&5" + colorFormat[i] + "Alchemist", true, true, NameTagVisibility.ALWAYS);
+            cwb.addTeam("monster" + nameSuffix[i], "&c" + colorFormat[i], "", "&c" + colorFormat[i] + "Monster", false, true, NameTagVisibility.ALWAYS);
+            cwb.addTeam("dragonslayer" + nameSuffix[i], "&d" + colorFormat[i], "", "&d" + colorFormat[i] + "Dragon-Slayer", true, true, NameTagVisibility.ALWAYS);
+        }
+
         cwb.show();
     }
 
