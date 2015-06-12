@@ -254,8 +254,8 @@ public class MainEvents implements Listener {
         final CWPlayer cwp = dvz.getPM().getPlayer(player);
 
         //Death during first day. (if dwarf respawn back at keep)
-        if (cwp.isDwarf() && dvz.getGM().getState() == GameState.DAY_ONE) {
-            player.sendMessage(Util.formatMsg("&6You're alive again as Dwarf because it hasn't been night yet."));
+        if (cwp.isDwarf() && dvz.getGM().isDwarves()) {
+            player.sendMessage(Util.formatMsg("&6You're alive again as Dwarf because the dragon hasn't come yet!"));
             event.setRespawnLocation(dvz.getMM().getActiveMap().getLocation("dwarf"));
             return;
         }
