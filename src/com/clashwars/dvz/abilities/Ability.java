@@ -46,6 +46,10 @@ public enum Ability {
     AIRSHIELD(new AirShield(), new String[]{}),
     MORPH(new Morph(), new String[]{}),
     BUFF(new Buff(), new String[]{}),
+    FLY(new Fly(), new String[]{}),
+    EXPLOSIVE_EGG(new ExplosiveEgg(), new String[]{}),
+    LAY_EGG(new LayEgg(), new String[]{}),
+    DROP_EGG(new DropEgg(), new String[]{}),
     HORN(new Horn(), new String[]{});
 
     private BaseAbility abilityClass;

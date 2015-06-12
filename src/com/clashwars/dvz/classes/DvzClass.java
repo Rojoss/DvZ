@@ -30,6 +30,7 @@ public enum DvzClass {
     BLAZE(ClassType.MONSTER, "monster", new Blaze(), new String[]{"blazes"}),
     VILLAGER(ClassType.MONSTER, "monster", new Villager(), new String[]{"villagers", "villager"}),
     WITCH(ClassType.MONSTER, "monster", new Witch(), new String[]{"witches", "witch"}),
+    CHICKEN(ClassType.MONSTER, "monster", new Chicken(), new String[]{"chickens"}),
 
     DRAGON(ClassType.BASE, null, new DragonClass(), new String[]{"dragons"}),
     FIREDRAGON(ClassType.DRAGON, null, new FireDragon(), new String[]{"firedragons", "firedragon", "fire"}),
