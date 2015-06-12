@@ -550,10 +550,10 @@ public class GameManager {
     }
 
     public float getMonsterPower(float scale) {
-        return scale - (float)scale * monsterPerc;
+        return scale - (float)scale * (monsterPerc - 0.2f);
     }
 
-    public float getMonsterPower(float min, float scale) {
-        return min + (scale - (float)scale * monsterPerc);
+    public float getMonsterPower(float base, float scale) {
+        return base + (scale - (float)scale * (monsterPerc - 0.2f));
     }
 }
