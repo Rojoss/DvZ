@@ -47,9 +47,18 @@ public class UtilityEvents implements Listener {
                 armor.setDurability((short) 0);
             }
 
+
+            CWPlayer cwp = dvz.getPM().getPlayer(player);
+
             //Cancel damage if player has no class.
-            if (dvz.getPM().getPlayer(player).getPlayerClass().isBaseClass()) {
+            if (cwp.getPlayerClass().isBaseClass()) {
                 event.setCancelled(true);
+            }
+
+            //Cancel teleport if taking damage.
+            if (cwp.isTeleporting()) {
+                CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cTeleport cancelled because you moved! &4&l<<"));
+                cwp.resetTeleport();
             }
         }
 

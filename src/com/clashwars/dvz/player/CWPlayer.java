@@ -433,7 +433,14 @@ public class CWPlayer {
         return true;
     }
 
+    public boolean isTeleporting() {
+        return teleport != null;
+    }
+
     public void resetTeleport() {
+        if (teleport != null) {
+            teleport.cancel();
+        }
         teleport = null;
     }
 
