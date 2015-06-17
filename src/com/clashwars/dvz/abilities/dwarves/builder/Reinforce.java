@@ -22,8 +22,8 @@ public class Reinforce extends BaseAbility {
         super();
         ability = Ability.REINFORCE;
         displayName = "&fStone Bricks";
-        castItem = new DvzItem(Material.SMOOTH_BRICK, 1, (short) 0, displayName, -1, -1, false);
-        castActions = new ArrayList<Action>(Arrays.asList(Action.LEFT_CLICK_BLOCK));
+        castItem = new DvzItem(Material.INK_SACK, 1, (short) 8, displayName, -1, -1, true);
+        castActions = new ArrayList<Action>(Arrays.asList(Action.LEFT_CLICK_BLOCK, Action.RIGHT_CLICK_BLOCK));
     }
 
     @Override
@@ -38,8 +38,7 @@ public class Reinforce extends BaseAbility {
         }
         triggerLoc.getBlock().setData((byte)0);
         ParticleEffect.SMOKE_NORMAL.display(0.6f, 0.6f, 0.6f, 0.01f, 20, triggerLoc.add(0.5f, 0.5f, 0.5f));
-        triggerLoc.getWorld().playSound(triggerLoc, Sound.DIG_STONE, 0.8f, 1f);
-        CWUtil.removeItemsFromHand(player, 1);
+        triggerLoc.getWorld().playSound(triggerLoc, Sound.SLIME_ATTACK, 0.5f, 1f);
         dvz.getPM().getPlayer(player).addClassExp(1);
         player.updateInventory();
     }

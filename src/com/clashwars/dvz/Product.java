@@ -8,10 +8,7 @@ import org.bukkit.block.banner.PatternType;
 import org.bukkit.inventory.ItemStack;
 
 public enum Product {
-
-    //TODO: Set amounts, data, names, lore etc..
-
-    CRACKED_STONE(new CWItem(Material.SMOOTH_BRICK), false),
+    CRACKED_STONE(new CWItem(Material.SMOOTH_BRICK, 1, (byte)2).setName("&9Cracked Stone").setLore(new String[] {"&7Cracked stone bricks that will break quite fast.", "&7Reinforce with the &9dye &7after you place it to make it stronger.", "&7Or just take reinforced bricks from the storage!"}), false),
 
     DIAMOND_ORE(new CWItem(Material.DIAMOND_ORE).setName("&8Raw Diamond").setLore(new String[]{"&7Raw diamond that needs to be cooked and polished.", "&8Place it in the &7furnace &8to get diamonds."}), false),
     GOLD_ORE(new CWItem(Material.GOLD_ORE).setName("&8Gold Ore").setLore(new String[] {"&7Unrefined gold ore ready to be smelted.", "&8Place it in the &7furnace &8to get gold bars."}), false),

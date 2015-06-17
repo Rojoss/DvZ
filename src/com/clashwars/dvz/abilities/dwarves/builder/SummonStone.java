@@ -2,6 +2,7 @@ package com.clashwars.dvz.abilities.dwarves.builder;
 
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.dvz.Product;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.util.DvzItem;
@@ -40,7 +41,7 @@ public class SummonStone extends BaseAbility {
             @Override
             public void run() {
                 itterations++;
-                player.getInventory().addItem(new CWItem(Material.SMOOTH_BRICK, 8, (byte)2, Ability.REINFORCE.getAbilityClass().getCastItem().getName()));
+                player.getInventory().addItem(Product.CRACKED_STONE.getItem(8));
                 triggerLoc.getWorld().playSound(triggerLoc, Sound.ITEM_PICKUP, 0.5f, 2f);
                 ParticleEffect.FIREWORKS_SPARK.display(0.2f, 0.8f, 0.2f, 0.02f, 5, player.getLocation().add(0,1,0), 20);
                 player.updateInventory();
