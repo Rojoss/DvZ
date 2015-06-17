@@ -60,6 +60,7 @@ public class TipManager {
         addTip("&7You harvest wheat, sow the grain back, grind the wheat in the grinder(hopper) and bake bread from the flour in the furnace.", DvzClass.BAKER, new String[] {"what", "do"});
 
         //Dwarf
+        addTip("&7Block is a custom enchantment that reduces damage even more while blocking with the axe. Per level it reduces 0.5 while blocking and 1.0 while blocking and sneaking. So if you have level 2 block and you sneak and block you take 2 hearts less damage!", DvzClass.DWARF, new String[] {"block|blocking|battleaxe|axe", "enchant|enchantment|enchantments"});
         addTip("&7To break the potion bomb you have to break the bomb (skull) or the block underneath it. If it explodes you get poison and blindness!", DvzClass.DWARF, new String[] {"break|destroy|delete|remove", "potion|bomb|potionbomb|poisonbomb|bombs"});
         addTip("&7To remove the enderman portal you can shoot/hit the egg or kill the enderman!", DvzClass.DWARF, new String[] {"break|destroy|delete|remove", "portal|enderportal|enderman|portals"});
         addTip("&7There are three furnaces in the map. Two in corners outside and one at the bottom of the keep inside.", DvzClass.DWARF, new String[] {"where", "furnace|furnaces"});
