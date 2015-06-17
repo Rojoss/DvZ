@@ -8,6 +8,7 @@ import java.util.Set;
 public class PlayerData {
 
     private DvzClass playerClass = DvzClass.DWARF;
+    private int classLvl = 0;
     private int classExp = 0;
     private boolean parkourCompleted = false;
     private Set<DvzClass> classOptions = new HashSet<DvzClass>();
@@ -19,8 +20,9 @@ public class PlayerData {
         //--
     }
 
-    public PlayerData(DvzClass playerClass, int classExp, Set<DvzClass> classOptions, String workshopData) {
+    public PlayerData(DvzClass playerClass, int classLvl, int classExp, Set<DvzClass> classOptions, String workshopData) {
         this.playerClass = playerClass;
+        this.classLvl = classLvl;
         this.classExp = classExp;
         this.classOptions = classOptions;
     }
@@ -31,6 +33,14 @@ public class PlayerData {
 
     public void setPlayerClass(DvzClass playerClass) {
         this.playerClass = playerClass;
+    }
+
+    public int getClassLvl() {
+        return classLvl;
+    }
+
+    public void setClassLvl(int classLvl) {
+        this.classLvl = classLvl;
     }
 
     public int getClassExp() {

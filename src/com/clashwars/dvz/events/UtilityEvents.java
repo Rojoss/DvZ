@@ -28,7 +28,6 @@ public class UtilityEvents implements Listener {
         this.dvz = dvz;
     }
 
-
     @EventHandler
     private void damage(EntityDamageEvent event) {
         //No durability loss

@@ -41,14 +41,6 @@ public class MainEvents implements Listener {
 
 
     @EventHandler
-    private void levelUp(CWPlayer.ClassLevelupEvent event) {
-        CWPlayer cwp = event.getCWPlayer();
-        cwp.sendMessage(Util.formatMsg("&a&lLEVEL UP! &8[&7Dwarf abilities will be available soon&8]"));
-        //TODO: Give dwarf ability to player.
-    }
-
-
-    @EventHandler
     private void playerQuit(PlayerQuitEvent event) {
         //Save when quiting.
         dvz.getPM().getPlayer(event.getPlayer()).savePlayer();
