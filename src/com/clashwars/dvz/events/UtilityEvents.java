@@ -6,6 +6,7 @@ import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
@@ -75,6 +76,7 @@ public class UtilityEvents implements Listener {
         if (!(event.getEntity() instanceof Player)) {
             return;
         }
+        int dmgModifier = 0;
         Player damaged = (Player) event.getEntity();
 
         //Increase monster base damage based on power
@@ -84,22 +86,28 @@ public class UtilityEvents implements Listener {
             CWPlayer cwDamaged = dvz.getPM().getPlayer(damaged);
 
             if (cwDamager.getPlayerClass().getType() == ClassType.MONSTER && cwDamaged.getPlayerClass().getType() == ClassType.DWARF) {
-                event.setDamage(event.getDamage() + (int)dvz.getGM().getMonsterPower(4));
+                dmgModifier += (int)dvz.getGM().getMonsterPower(4);
             }
         }
 
         if (damaged.isBlocking()) {
             //Custom block enchantment.
             //Per level block 0.5 hearth extra while blocking and 1.0 per level if also sneaking.
-
             if (!damaged.getItemInHand().getEnchantments().containsKey(Enchantment.DURABILITY)) {
+                event.setDamage(event.getDamage() + dmgModifier);
                 return;
             }
 
             int enchantLvl = damaged.getItemInHand().getEnchantmentLevel(Enchantment.DURABILITY);
             boolean sneaking = damaged.isSneaking();
-            event.setDamage(event.getDamage() - enchantLvl * (sneaking ? 2 : 1));
+            int dmgReduction = enchantLvl * (sneaking ? 2 : 1);
+            if (dmgReduction > 0) {
+                dmgModifier -= dmgReduction;
+                damaged.getWorld().playSound(damaged.getLocation(), Sound.ZOMBIE_METAL, 0.3f, 2 / enchantLvl);
+            }
         }
+
+        event.setDamage(event.getDamage() + dmgModifier);
     }
 
 
