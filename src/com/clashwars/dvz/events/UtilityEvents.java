@@ -72,24 +72,34 @@ public class UtilityEvents implements Listener {
 
     @EventHandler
     private void onDamageByEntity(EntityDamageByEntityEvent event) {
-        //Custom block enchantment.
-        //Per level block 0.5 hearth extra while blocking and 1.0 per level if also sneaking.
         if (!(event.getEntity() instanceof Player)) {
             return;
         }
         Player damaged = (Player) event.getEntity();
 
-        if (!damaged.isBlocking()) {
-            return;
+        //Increase monster base damage based on power
+        if (event.getDamager() instanceof Player) {
+            Player damager = (Player)event.getDamager();
+            CWPlayer cwDamager = dvz.getPM().getPlayer(damager);
+            CWPlayer cwDamaged = dvz.getPM().getPlayer(damaged);
+
+            if (cwDamager.getPlayerClass().getType() == ClassType.MONSTER && cwDamaged.getPlayerClass().getType() == ClassType.DWARF) {
+                event.setDamage(event.getDamage() + (int)dvz.getGM().getMonsterPower(4));
+            }
         }
 
-        if (!damaged.getItemInHand().getEnchantments().containsKey(Enchantment.DURABILITY)) {
-            return;
-        }
+        if (damaged.isBlocking()) {
+            //Custom block enchantment.
+            //Per level block 0.5 hearth extra while blocking and 1.0 per level if also sneaking.
 
-        int enchantLvl = damaged.getItemInHand().getEnchantmentLevel(Enchantment.DURABILITY);
-        boolean sneaking = damaged.isSneaking();
-        event.setDamage(event.getDamage() - enchantLvl * (sneaking ? 2 : 1));
+            if (!damaged.getItemInHand().getEnchantments().containsKey(Enchantment.DURABILITY)) {
+                return;
+            }
+
+            int enchantLvl = damaged.getItemInHand().getEnchantmentLevel(Enchantment.DURABILITY);
+            boolean sneaking = damaged.isSneaking();
+            event.setDamage(event.getDamage() - enchantLvl * (sneaking ? 2 : 1));
+        }
     }
 
 
