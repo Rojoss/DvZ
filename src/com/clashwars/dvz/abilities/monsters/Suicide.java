@@ -1,6 +1,7 @@
 package com.clashwars.dvz.abilities.monsters;
 
 import com.clashwars.dvz.abilities.Ability;
+import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
@@ -9,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class Suicide extends MobAbility {
+public class Suicide extends BaseAbility {
 
     public Suicide() {
         super();

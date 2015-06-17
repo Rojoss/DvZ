@@ -3,7 +3,7 @@ package com.clashwars.dvz.runnables;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.abilities.Ability;
-import com.clashwars.dvz.abilities.monsters.Pickup;
+import com.clashwars.dvz.abilities.monsters.enderman.Pickup;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import org.bukkit.entity.Player;

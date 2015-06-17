@@ -1,13 +1,12 @@
 package com.clashwars.dvz.abilities.monsters;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.abilities.Ability;
+import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
-import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
@@ -22,7 +21,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class Hammer extends MobAbility {
+public class Hammer extends BaseAbility {
 
     public Hammer() {
         super();

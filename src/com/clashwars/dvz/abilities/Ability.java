@@ -1,8 +1,42 @@
 package com.clashwars.dvz.abilities;
 
-import com.clashwars.dvz.abilities.dragons.*;
+import com.clashwars.dvz.abilities.dragons.air.AirShield;
+import com.clashwars.dvz.abilities.dragons.air.Wind;
+import com.clashwars.dvz.abilities.dragons.air.WindStorm;
+import com.clashwars.dvz.abilities.dragons.fire.Burn;
+import com.clashwars.dvz.abilities.dragons.fire.FireBreath;
+import com.clashwars.dvz.abilities.dragons.fire.FireFly;
+import com.clashwars.dvz.abilities.dragons.water.Geyser;
+import com.clashwars.dvz.abilities.dragons.water.ToxicRain;
+import com.clashwars.dvz.abilities.dragons.water.WaterBubble;
 import com.clashwars.dvz.abilities.dwarves.*;
+import com.clashwars.dvz.abilities.dwarves.builder.BuildingBlock;
+import com.clashwars.dvz.abilities.dwarves.builder.BuildingBrick;
+import com.clashwars.dvz.abilities.dwarves.builder.Reinforce;
+import com.clashwars.dvz.abilities.dwarves.builder.SummonStone;
+import com.clashwars.dvz.abilities.dwarves.dragonslayer.Horn;
 import com.clashwars.dvz.abilities.monsters.*;
+import com.clashwars.dvz.abilities.monsters.blaze.Blast;
+import com.clashwars.dvz.abilities.monsters.blaze.Fireball;
+import com.clashwars.dvz.abilities.monsters.blaze.Glide;
+import com.clashwars.dvz.abilities.monsters.blaze.Shoot;
+import com.clashwars.dvz.abilities.monsters.chicken.DropEgg;
+import com.clashwars.dvz.abilities.monsters.chicken.ExplosiveEgg;
+import com.clashwars.dvz.abilities.monsters.chicken.Fly;
+import com.clashwars.dvz.abilities.monsters.chicken.LayEgg;
+import com.clashwars.dvz.abilities.monsters.creeper.Explode;
+import com.clashwars.dvz.abilities.monsters.enderman.Blink;
+import com.clashwars.dvz.abilities.monsters.enderman.Pickup;
+import com.clashwars.dvz.abilities.monsters.enderman.Portal;
+import com.clashwars.dvz.abilities.monsters.skeleton.Rapidfire;
+import com.clashwars.dvz.abilities.monsters.spider.Poison;
+import com.clashwars.dvz.abilities.monsters.spider.PoisonAttack;
+import com.clashwars.dvz.abilities.monsters.spider.Web;
+import com.clashwars.dvz.abilities.monsters.witchvillager.Buff;
+import com.clashwars.dvz.abilities.monsters.witchvillager.Morph;
+import com.clashwars.dvz.abilities.monsters.witchvillager.PotionBomb;
+import com.clashwars.dvz.abilities.monsters.zombie.Infect;
+import com.clashwars.dvz.abilities.monsters.zombie.Rush;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +68,6 @@ public enum Ability {
     PICKUP(new Pickup(), new String[]{}),
     BLINK(new Blink(), new String[]{}),
     PORTAL(new Portal(), new String[]{}),
-    TORNADO(new Tornado(), new String[]{}),
     GEYSER(new Geyser(), new String[]{}),
     BURN(new Burn(), new String[]{}),
     WIND(new Wind(), new String[]{}),

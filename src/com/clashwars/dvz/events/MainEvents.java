@@ -1,14 +1,11 @@
 package com.clashwars.dvz.events;
 
-import com.clashwars.cwcore.Debug;
-import com.clashwars.cwcore.hat.Hat;
-import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
-import com.clashwars.dvz.abilities.monsters.Pickup;
+import com.clashwars.dvz.abilities.monsters.enderman.Pickup;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.maps.ShrineBlock;
@@ -19,7 +16,6 @@ import com.clashwars.dvz.workshop.WorkShop;
 import net.minecraft.server.v1_8_R2.PacketPlayInClientCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

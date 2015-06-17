@@ -2,6 +2,7 @@ package com.clashwars.dvz.abilities.dwarves;
 
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.dvz.abilities.Ability;
+import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,7 +13,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class SpeedPotion extends DwarfAbility {
+public class SpeedPotion extends BaseAbility {
 
     public SpeedPotion() {
         super();
