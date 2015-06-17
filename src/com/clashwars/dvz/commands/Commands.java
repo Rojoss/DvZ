@@ -1122,7 +1122,7 @@ public class Commands {
                 sender.sendMessage(CWUtil.integrateColor("&8============== &4&lPersonal Info &8=============="));
                 sender.sendMessage(CWUtil.integrateColor("&6Class&8: &5" + cwp.getPlayerClass().getClassClass().getDisplayName()));
                 if (cwp.isDwarf()) {
-                    sender.sendMessage(CWUtil.integrateColor("&6Class XP&8: &5" + cwp.getClassExp()));
+                    sender.sendMessage(CWUtil.integrateColor("&6Class LVL/XP&8: &a&l" + cwp.getPlayerData().getClassLvl() + "&8[&2" + cwp.getClassExp() + "&8]"));
                 }
             }
             sender.sendMessage(CWUtil.integrateColor("&8======= &4Use &c/dvz help &4for all commands &8======="));
