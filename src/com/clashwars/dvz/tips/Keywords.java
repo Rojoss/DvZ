@@ -1,7 +1,5 @@
 package com.clashwars.dvz.tips;
 
-import com.clashwars.cwcore.Debug;
-
 import java.util.ArrayList;
 import java.util.List;
 

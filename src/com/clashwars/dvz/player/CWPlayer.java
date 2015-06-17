@@ -1,7 +1,6 @@
 package com.clashwars.dvz.player;
 
 import com.clashwars.cwcore.CooldownManager;
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.ExpUtil;
@@ -16,7 +15,6 @@ import com.clashwars.dvz.config.PlayerCfg;
 import com.clashwars.dvz.runnables.TeleportRunnable;
 import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
-import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -24,7 +22,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
 

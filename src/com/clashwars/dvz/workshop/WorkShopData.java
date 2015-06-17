@@ -1,6 +1,5 @@
 package com.clashwars.dvz.workshop;
 
-import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
 import org.bukkit.Location;

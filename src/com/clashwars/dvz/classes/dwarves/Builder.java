@@ -1,6 +1,5 @@
 package com.clashwars.dvz.classes.dwarves;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.DvzClass;

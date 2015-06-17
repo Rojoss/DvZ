@@ -1,8 +1,6 @@
 package com.clashwars.dvz.VIP;
 
-import org.bukkit.Color;
 import org.bukkit.DyeColor;
-import org.bukkit.Location;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.util.Vector;
 

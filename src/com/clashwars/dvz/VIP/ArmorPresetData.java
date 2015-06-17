@@ -1,11 +1,9 @@
 package com.clashwars.dvz.VIP;
 
-import com.clashwars.dvz.DvZ;
-import com.clashwars.dvz.classes.DvzClass;
 import org.bukkit.Color;
-import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ArmorPresetData {
 

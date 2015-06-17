@@ -1,7 +1,6 @@
 package com.clashwars.dvz.abilities;
 
 import com.clashwars.cwcore.CooldownManager;
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameState;

@@ -1,6 +1,5 @@
 package com.clashwars.dvz.workshop;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.helpers.CWEntity;
 import com.clashwars.cwcore.packet.ParticleEffect;

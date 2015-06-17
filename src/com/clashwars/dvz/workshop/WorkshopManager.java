@@ -1,11 +1,9 @@
 package com.clashwars.dvz.workshop;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.WorkShopCfg;
-import com.clashwars.dvz.player.CWPlayer;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 

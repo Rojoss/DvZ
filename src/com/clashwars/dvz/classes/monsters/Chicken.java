@@ -1,8 +1,6 @@
 package com.clashwars.dvz.classes.monsters;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWEntity;
-import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
@@ -12,7 +10,6 @@ import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;

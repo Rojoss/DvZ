@@ -1,6 +1,5 @@
 package com.clashwars.dvz.workshop;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWEntity;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.helpers.EntityTag;
@@ -9,7 +8,6 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Rotation;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
@@ -17,7 +15,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
-import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Arrays;

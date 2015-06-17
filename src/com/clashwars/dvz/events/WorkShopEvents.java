@@ -1,7 +1,6 @@
 package com.clashwars.dvz.events;
 
 import com.clashwars.dvz.DvZ;
-import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.Location;

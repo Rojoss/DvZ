@@ -1,6 +1,5 @@
 package com.clashwars.dvz.abilities.monsters.chicken;
 
-import com.clashwars.cwcore.helpers.CWEntity;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;

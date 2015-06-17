@@ -1,11 +1,9 @@
 package com.clashwars.dvz.VIP;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.util.ItemMenu;
-import org.apache.logging.log4j.core.helpers.KeyValuePair;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;

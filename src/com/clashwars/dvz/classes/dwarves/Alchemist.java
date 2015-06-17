@@ -1,6 +1,5 @@
 package com.clashwars.dvz.classes.dwarves;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.effect.Particle;
 import com.clashwars.cwcore.effect.effects.BoilEffect;

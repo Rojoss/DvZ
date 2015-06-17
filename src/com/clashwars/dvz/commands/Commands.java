@@ -6,7 +6,6 @@ import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.cuboid.SelectionStatus;
 import com.clashwars.cwcore.hat.Hat;
 import com.clashwars.cwcore.hat.HatManager;
-import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;

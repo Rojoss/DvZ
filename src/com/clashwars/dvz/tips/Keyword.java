@@ -1,8 +1,5 @@
 package com.clashwars.dvz.tips;
 
-import com.clashwars.cwcore.Debug;
-import com.clashwars.cwcore.utils.CWUtil;
-
 public class Keyword {
 
     String[] words;

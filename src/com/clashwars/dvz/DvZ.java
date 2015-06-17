@@ -1,18 +1,18 @@
 package com.clashwars.dvz;
 
 import com.clashwars.cwcore.CWCore;
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.effect.EffectManager;
 import com.clashwars.cwcore.scoreboard.CWBoard;
-import com.clashwars.cwcore.utils.CWUtil;
-import com.clashwars.dvz.VIP.*;
+import com.clashwars.dvz.VIP.ArmorMenu;
+import com.clashwars.dvz.VIP.BannerMenu;
+import com.clashwars.dvz.VIP.ColorMenu;
+import com.clashwars.dvz.VIP.PatternMenu;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.ClassManager;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.commands.Commands;
 import com.clashwars.dvz.config.*;
 import com.clashwars.dvz.events.*;
-import com.clashwars.dvz.maps.DvzMap;
 import com.clashwars.dvz.maps.MapManager;
 import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.runnables.AntiCamp;
@@ -29,22 +29,15 @@ import com.google.gson.Gson;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Banner;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.NameTagVisibility;
-import org.bukkit.util.*;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class DvZ extends JavaPlugin {

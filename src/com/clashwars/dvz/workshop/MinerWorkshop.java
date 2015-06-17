@@ -3,7 +3,6 @@ package com.clashwars.dvz.workshop;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.classes.dwarves.Miner;
 import org.bukkit.block.Block;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
