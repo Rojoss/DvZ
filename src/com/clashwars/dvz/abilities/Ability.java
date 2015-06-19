@@ -11,6 +11,7 @@ import com.clashwars.dvz.abilities.dragons.water.ToxicRain;
 import com.clashwars.dvz.abilities.dragons.water.WaterBubble;
 import com.clashwars.dvz.abilities.dwarves.HealPotion;
 import com.clashwars.dvz.abilities.dwarves.SpeedPotion;
+import com.clashwars.dvz.abilities.dwarves.bonus.Landmine;
 import com.clashwars.dvz.abilities.dwarves.bonus.Leap;
 import com.clashwars.dvz.abilities.dwarves.bonus.Torrent;
 import com.clashwars.dvz.abilities.dwarves.builder.BuildingBlock;
@@ -98,7 +99,9 @@ public enum Ability {
 
     //Dwarf bonus abilities
     LEAP(new Leap(), true, new String[] {}),
-    TORRENT(new Torrent(), true, new String[] {});
+    TORRENT(new Torrent(), true, new String[] {}),
+    LAND_MINE(new Landmine(), true, new String[] {});
+
 
     //------------------------------
     //END OF ABILITIES
