@@ -12,6 +12,7 @@ import com.clashwars.dvz.abilities.dragons.water.WaterBubble;
 import com.clashwars.dvz.abilities.dwarves.HealPotion;
 import com.clashwars.dvz.abilities.dwarves.SpeedPotion;
 import com.clashwars.dvz.abilities.dwarves.bonus.Leap;
+import com.clashwars.dvz.abilities.dwarves.bonus.Torrent;
 import com.clashwars.dvz.abilities.dwarves.builder.BuildingBlock;
 import com.clashwars.dvz.abilities.dwarves.builder.BuildingBrick;
 import com.clashwars.dvz.abilities.dwarves.builder.Reinforce;
@@ -96,7 +97,8 @@ public enum Ability {
     AIRSHIELD(new AirShield(), false, new String[]{}),
 
     //Dwarf bonus abilities
-    LEAP(new Leap(), true, new String[] {});
+    LEAP(new Leap(), true, new String[] {}),
+    TORRENT(new Torrent(), true, new String[] {});
 
     //------------------------------
     //END OF ABILITIES
