@@ -10,6 +10,7 @@ import com.clashwars.dvz.VIP.BannerData;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.DyeColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -43,6 +44,9 @@ public class VIPEvents implements Listener {
 
             public void run() {
                 for (Player player : DvZ.inst().getServer().getOnlinePlayers()) {
+                    if (player.getGameMode() == GameMode.SPECTATOR) {
+                        continue;
+                    }
                     if (player.hasPermission("rank.admin")) {
                         ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.REDSTONE_BLOCK, (byte)0), 0.3f, 0.1f, 0.3f, 0, 3, player.getLocation());
                     } else if (player.hasPermission("rank.mod")) {
