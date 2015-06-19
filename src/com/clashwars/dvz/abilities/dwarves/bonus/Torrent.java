@@ -33,10 +33,6 @@ public class Torrent extends BaseAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
-        if (onCooldown(player)) {
-            return;
-        }
-
         //Get the block clicked and validate it.
         List<Block> blocks = player.getLastTwoTargetBlocks((Set<Material>)null, 32);
         Block targetBlock = blocks.get(0);
@@ -52,6 +48,10 @@ public class Torrent extends BaseAbility {
             targetBlock = targetBlock.getRelative(BlockFace.DOWN);
         }
         targetBlock = targetBlock.getRelative(BlockFace.UP);
+
+        if (onCooldown(player)) {
+            return;
+        }
 
         //Launch players up (the water is just for effect)
         List<Entity> entities = CWUtil.getNearbyEntities(targetBlock.getLocation(), 4f, null);
