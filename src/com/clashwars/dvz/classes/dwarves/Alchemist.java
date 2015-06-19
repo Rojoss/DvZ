@@ -346,11 +346,11 @@ public class Alchemist extends DwarfClass {
         ws.melons = 0;
         ws.sugar = 0;
 
-        dvz.getPM().getPlayer(ws.getOwner()).addClassExp(50);
+        dvz.getPM().getPlayer(ws.getOwner()).addClassExp(60);
         // + 3 per melon broken
         // + 1 per sugarcane broken
         // + 1 per bucket filled
-        // = 74
+        // = 84
 
         //Clear water/Effect
         List<Block> waterBlocks = ws.getPot().getBlocks(new Material[]{Material.STATIONARY_WATER});
