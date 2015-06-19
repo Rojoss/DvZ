@@ -64,6 +64,7 @@ public class Camouflage extends BaseAbility {
         Block disguiseBlock = player.getLocation().getBlock();
         blocks.put(player.getUniqueId(), disguiseBlock.getLocation());
         disguiseBlock.setType(block.getType());
+        disguiseBlock.setData(block.getData());
         String blockName = block.getType().toString().toLowerCase().replace("_", " ");
         CWUtil.sendActionBar(player, CWUtil.integrateColor("&2&l>> &aYou turned in to a &6" + (blockName.contains("block") ? blockName : blockName + " block") + "&a! &cDon't move! &2&l<<"));
 
