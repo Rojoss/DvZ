@@ -75,15 +75,15 @@ public class Miner extends DwarfClass {
             CWUtil.dropItemStack(block.getLocation(), Product.STONE_BRICK.getItem(getIntOption("stone-drops")), dvz, player);
             ParticleEffect.SMOKE_NORMAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, block.getLocation().add(0.5f, 0.5f, 0.5f));
         } else if (mat == Material.DIAMOND_ORE) {
-            dvz.getPM().getPlayer(player).addClassExp(5);
+            dvz.getPM().getPlayer(player).addClassExp(10);
             CWUtil.dropItemStack(block.getLocation(), Product.DIAMOND_ORE.getItem(getIntOption("ore-drops")), dvz, player);
             ParticleEffect.CRIT_MAGIC.display(0.5f, 0.5f, 0.5f, 0.0001f, 20, block.getLocation().add(0.5f,0.5f,0.5f));
         } else if (mat == Material.GOLD_ORE) {
-            dvz.getPM().getPlayer(player).addClassExp(5);
+            dvz.getPM().getPlayer(player).addClassExp(10);
             CWUtil.dropItemStack(block.getLocation(), Product.GOLD_ORE.getItem(getIntOption("ore-drops")), dvz, player);
             ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 15, block.getLocation().add(0.5f,0.5f,0.5f));
         } else if (mat == Material.IRON_ORE) {
-            dvz.getPM().getPlayer(player).addClassExp(5);
+            dvz.getPM().getPlayer(player).addClassExp(10);
             CWUtil.dropItemStack(block.getLocation(), Product.IRON_ORE.getItem(getIntOption("ore-drops")), dvz, player);
             ParticleEffect.CRIT.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, block.getLocation().add(0.5f,0.5f,0.5f));
         }

@@ -167,9 +167,9 @@ public class FurnaceStruc extends Structure {
 
 
     private void populateFurnaceItems() {
-        furnaceItems.add(new FurnaceItem(Product.DIAMOND_ORE.getItem(), Product.DIAMOND.getItem(), 600, 5));
-        furnaceItems.add(new FurnaceItem(Product.IRON_ORE.getItem(), Product.IRON_INGOT.getItem(), 500, 5));
-        furnaceItems.add(new FurnaceItem(Product.GOLD_ORE.getItem(), Product.GOLD_INGOT.getItem(), 400, 5));
+        furnaceItems.add(new FurnaceItem(Product.DIAMOND_ORE.getItem(), Product.DIAMOND.getItem(), 600, 8));
+        furnaceItems.add(new FurnaceItem(Product.IRON_ORE.getItem(), Product.IRON_INGOT.getItem(), 500, 8));
+        furnaceItems.add(new FurnaceItem(Product.GOLD_ORE.getItem(), Product.GOLD_INGOT.getItem(), 400, 8));
         furnaceItems.add(new FurnaceItem(Product.FLOUR.getItem(), Product.BREAD.getItem(), 300, 3));
     }
 
