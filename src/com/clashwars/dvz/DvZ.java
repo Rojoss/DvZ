@@ -14,6 +14,8 @@ import com.clashwars.dvz.commands.Commands;
 import com.clashwars.dvz.config.*;
 import com.clashwars.dvz.events.*;
 import com.clashwars.dvz.maps.MapManager;
+import com.clashwars.dvz.mysql.MySQL;
+import com.clashwars.dvz.mysql.SqlPass;
 import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.runnables.AntiCamp;
 import com.clashwars.dvz.runnables.GameRunnable;
@@ -36,6 +38,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.NameTagVisibility;
 
+import java.sql.Connection;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -58,6 +61,9 @@ public class DvZ extends JavaPlugin {
     private WorkShopCfg wsCfg;
     private ArmorPresetsCfg presetCfg;
     private BannerCfg bannerCfg;
+
+    private MySQL sql;
+    private Connection c;
 
     private Commands cmds;
 
@@ -158,6 +164,17 @@ public class DvZ extends JavaPlugin {
 
         bannerCfg = new BannerCfg("plugins/DvZ/data/Banners.yml");
         bannerCfg.load();
+
+        sql = new MySQL(this, "37.26.106.5", "3306", "clashwar_data", "clashwar_main", SqlPass.Pass());
+        try {
+            c = sql.openConnection();
+        } catch(Exception e) {
+            log("##############################################################");
+            log("Unable to connect to MySQL!");
+            log("Stats and all other data won't be synced/stored!");
+            log("The game should still be able to run fine but this message shouldn't be ignored!");
+            log("##############################################################");
+        }
 
         mm = new MapManager(this);
         gm = new GameManager(this);
@@ -308,6 +325,11 @@ public class DvZ extends JavaPlugin {
 
     public BannerCfg getBannerCfg() {
         return bannerCfg;
+    }
+
+
+    public Connection getSql() {
+        return c;
     }
 
 
