@@ -98,41 +98,43 @@ public class LobbyEvents implements Listener {
         }
 
         //Check for class item usage.
-        for (DvzClass dvzClass : DvzClass.values()) {
-            BaseClass c = dvzClass.getClassClass();
-            if (c == null || c.getClassItem() == null || c.getClassItem().getType() != item.getType()) {
-                continue;
-            }
-            if ((c.getClassItem().hasItemMeta() && !item.hasItemMeta()) || (!c.getClassItem().hasItemMeta() && item.hasItemMeta())) {
-                continue;
-            }
-            if (item.hasItemMeta()) {
-                if ((c.getClassItem().getItemMeta().hasDisplayName() && !item.getItemMeta().hasDisplayName()) || (!c.getClassItem().getItemMeta().hasDisplayName() && item.getItemMeta().hasDisplayName())) {
+        if (cwp.getPlayerClass() == null || cwp.getPlayerClass().isBaseClass()) {
+            for (DvzClass dvzClass : DvzClass.values()) {
+                BaseClass c = dvzClass.getClassClass();
+                if (c == null || c.getClassItem() == null || c.getClassItem().getType() != item.getType()) {
                     continue;
                 }
-                if (item.getItemMeta().hasDisplayName()) {
-                    if (!CWUtil.integrateColor(c.getDisplayName()).equalsIgnoreCase(CWUtil.integrateColor(item.getItemMeta().getDisplayName()))) {
+                if ((c.getClassItem().hasItemMeta() && !item.hasItemMeta()) || (!c.getClassItem().hasItemMeta() && item.hasItemMeta())) {
+                    continue;
+                }
+                if (item.hasItemMeta()) {
+                    if ((c.getClassItem().getItemMeta().hasDisplayName() && !item.getItemMeta().hasDisplayName()) || (!c.getClassItem().getItemMeta().hasDisplayName() && item.getItemMeta().hasDisplayName())) {
                         continue;
                     }
+                    if (item.getItemMeta().hasDisplayName()) {
+                        if (!CWUtil.integrateColor(c.getDisplayName()).equalsIgnoreCase(CWUtil.integrateColor(item.getItemMeta().getDisplayName()))) {
+                            continue;
+                        }
+                    }
                 }
-            }
-            if (!dvz.getGM().isStarted()) {
-                player.sendMessage(Util.formatMsg("&cThe game hasn't started yet!"));
-                break;
-            }
-            if (dvzClass.getType() == ClassType.MONSTER && !dvz.getGM().isMonsters()) {
-                player.sendMessage(Util.formatMsg("&cThe monsters haven't been released yet."));
-                player.sendMessage(Util.formatMsg("&cSee &4/dvz &cfor more info."));
-                break;
-            }
+                if (!dvz.getGM().isStarted()) {
+                    player.sendMessage(Util.formatMsg("&cThe game hasn't started yet!"));
+                    break;
+                }
+                if (dvzClass.getType() == ClassType.MONSTER && !dvz.getGM().isMonsters()) {
+                    player.sendMessage(Util.formatMsg("&cThe monsters haven't been released yet."));
+                    player.sendMessage(Util.formatMsg("&cSee &4/dvz &cfor more info."));
+                    break;
+                }
 
-            if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
-                player.getInventory().clear();
-                player.updateInventory();
-                CWUtil.removeItemsFromHand(player, 1);
-                cwp.setClass(dvzClass, true);
-            } else {
-                player.sendMessage(Util.formatMsg("&cLeft click while holding the class item to select it!"));
+                if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
+                    player.getInventory().clear();
+                    player.updateInventory();
+                    CWUtil.removeItemsFromHand(player, 1);
+                    cwp.setClass(dvzClass, true);
+                } else {
+                    player.sendMessage(Util.formatMsg("&cLeft click while holding the class item to select it!"));
+                }
             }
         }
     }
@@ -149,24 +151,29 @@ public class LobbyEvents implements Listener {
             return;
         }
 
-        String itemName = "";
-        if (event.getCurrentItem().hasItemMeta()) {
-            ItemMeta meta = event.getCurrentItem().getItemMeta();
-            if (meta.hasDisplayName()) {
-                itemName = CWUtil.removeColour(meta.getDisplayName());
+        Player player = (Player)event.getWhoClicked();
+        CWPlayer cwp = dvz.getPM().getPlayer(player);
+
+        if (cwp.getPlayerClass() == null || cwp.getPlayerClass().isBaseClass()) {
+            String itemName = "";
+            if (event.getCurrentItem().hasItemMeta()) {
+                ItemMeta meta = event.getCurrentItem().getItemMeta();
+                if (meta.hasDisplayName()) {
+                    itemName = CWUtil.removeColour(meta.getDisplayName());
+                }
             }
-        }
-        for (DvzClass dvzClass : DvzClass.values()) {
-            if (dvzClass == null || dvzClass.getClassClass() == null || dvzClass.getClassClass().getClassItem() == null) {
-                continue;
-            }
-            if (CWUtil.removeColour(dvzClass.getClassClass().getClassItem().getName()).equals(itemName)) {
-                Player player = (Player)event.getWhoClicked();
-                player.getInventory().clear();
-                player.updateInventory();
-                CWUtil.removeItemsFromHand(player, 1);
-                dvz.getPM().getPlayer(player).setClass(dvzClass, true);
-                break;
+            for (DvzClass dvzClass : DvzClass.values()) {
+                if (dvzClass == null || dvzClass.getClassClass() == null || dvzClass.getClassClass().getClassItem() == null) {
+                    continue;
+                }
+                if (CWUtil.removeColour(dvzClass.getClassClass().getClassItem().getName()).equals(itemName)) {
+
+                    player.getInventory().clear();
+                    player.updateInventory();
+                    CWUtil.removeItemsFromHand(player, 1);
+                    dvz.getPM().getPlayer(player).setClass(dvzClass, true);
+                    break;
+                }
             }
         }
     }

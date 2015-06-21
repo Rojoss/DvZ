@@ -1,6 +1,5 @@
 package com.clashwars.dvz.events;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.Enjin;
@@ -29,7 +28,6 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.json.simple.JSONObject;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -37,7 +35,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 public class MainEvents implements Listener {
 
@@ -136,7 +133,7 @@ public class MainEvents implements Listener {
             @Override
             public void run() {
                 player.teleport(spawnLocFinal);
-                player.setResourcePack("http://web.clashwars.com/ResourcePack/CWDvZ.zip");
+                //player.setResourcePack("http://web.clashwars.com/ResourcePack/CWDvZ.zip");
             }
         }.runTaskLater(dvz, 10);
 
