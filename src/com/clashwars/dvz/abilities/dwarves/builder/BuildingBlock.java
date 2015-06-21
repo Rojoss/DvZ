@@ -53,7 +53,8 @@ public class BuildingBlock extends BaseAbility {
 
         Block block = event.getBlock();
         boolean placed = false;
-        for (int x = 0; x < getIntOption("blocks"); x++) {
+        int blockCount = getIntOption("blocks");
+        for (int x = 0; x < blockCount; x++) {
             Block b = block.getRelative(0, x, 0);
 
             if (b.getType() != Material.AIR && b.getType() != Material.BRICK) {

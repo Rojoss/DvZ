@@ -73,9 +73,9 @@ public class Rush extends BaseAbility {
                 player.getWorld().playSound(player.getLocation(), Sound.ZOMBIE_WALK, 0.5f, 2);
                 ParticleEffect.FIREWORKS_SPARK.display(0.2f, 0.8f, 0.2f, 0.01f, 2, player.getLocation());
                 if (distance > initDistance / 2 && player.getWalkSpeed() < dvzClass.getClassClass().getSpeed() + 1.5f) {
-                    player.setWalkSpeed(player.getWalkSpeed() + 0.1f);
+                    player.setWalkSpeed(Math.min(player.getWalkSpeed() + 0.1f, 1));
                 } else if (distance <= initDistance / 2 && player.getWalkSpeed() > dvzClass.getClassClass().getSpeed()) {
-                    player.setWalkSpeed(player.getWalkSpeed() - 0.1f);
+                    player.setWalkSpeed(Math.max(player.getWalkSpeed() - 0.1f, dvzClass.getClassClass().getSpeed()));
                 }
                 if (distance < 2) {
                     player.setWalkSpeed(dvzClass.getClassClass().getSpeed());

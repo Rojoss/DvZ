@@ -69,7 +69,8 @@ public class GameManager {
         }
 
         //Reset data
-        for (Player player : dvz.getServer().getOnlinePlayers()) {
+        Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
+        for (Player player : players) {
             CWPlayer cwp = dvz.getPM().getPlayer(player);
             cwp.undisguise();
             cwp.reset();
@@ -82,7 +83,8 @@ public class GameManager {
         }
         shrineBlocks.clear();
 
-        for (WorkShop ws : dvz.getWM().getWorkShops().values()) {
+        Collection<WorkShop> workshops = new HashMap<UUID, WorkShop>(dvz.getWM().getWorkShops()).values();
+        for (WorkShop ws : workshops) {
             ws.destroy();
         }
         dvz.getWM().removeWorkshops(true);
@@ -95,7 +97,8 @@ public class GameManager {
         resetDragonSlayer();
         setSpeed(0);
 
-        for (Map.Entry<UUID, BannerData> banner : dvz.getBannerCfg().getBanners().entrySet()) {
+        HashMap<UUID, BannerData> banners = new HashMap<UUID, BannerData>(dvz.getBannerCfg().getBanners());
+        for (Map.Entry<UUID, BannerData> banner : banners.entrySet()) {
             banner.getValue().setBannerLocations(null);
             banner.getValue().setGiven(false);
             dvz.getBannerCfg().setBanner(banner.getKey(), banner.getValue());
@@ -106,7 +109,8 @@ public class GameManager {
 
         if (dvz.getMM().getActiveMap() != null) {
             //Tp all players to default world.
-            for (Player player : Bukkit.getOnlinePlayers()) {
+            Collection<Player> onlinePlayers = (Collection<Player>)dvz.getServer().getOnlinePlayers();
+            for (Player player : onlinePlayers) {
                 player.teleport(dvz.getCfg().getDefaultWorld().getSpawnLocation());
             }
 
@@ -173,7 +177,8 @@ public class GameManager {
         dvz.getServer().dispatchCommand(dvz.getServer().getConsoleSender(), "hd reload");
 
         //Tp all players to active world.
-        for (Player player : dvz.getServer().getOnlinePlayers()) {
+        Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
+        for (Player player : players) {
             dvz.getPM().getPlayer(player).reset();
             player.teleport(dvz.getMM().getUsedWorld().getSpawnLocation());
         }
@@ -188,8 +193,9 @@ public class GameManager {
         Title title = new Title("&a&lDvZ has started!", "&7You can now choose a dwarf class!", 10, 50, 30);
         title.setTimingsToTicks();
         title.broadcast();
-
-        for (Player player : dvz.getServer().getOnlinePlayers()) {
+        
+        Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
+        for (Player player : players) {
             dvz.getPM().getPlayer(player).giveClassItems(ClassType.DWARF, false, -1);
         }
 
@@ -204,7 +210,8 @@ public class GameManager {
             if (force) {
                 return;
             }
-            for (Player p : dvz.getServer().getOnlinePlayers()) {
+            Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
+            for (Player p : players) {
                 if (p.isOp() || p.hasPermission("dvz.admin")) {
                     p.sendMessage(Util.formatMsg("&cNo dragon was set up so you have been set as dragon!"));
                     player = p;

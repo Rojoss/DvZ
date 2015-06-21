@@ -16,6 +16,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Collection;
+import java.util.List;
+
 public class Horn extends BaseAbility {
 
     public Horn() {
@@ -34,14 +37,16 @@ public class Horn extends BaseAbility {
             return;
         }
 
-        for (Player p : dvz.getServer().getOnlinePlayers()) {
+        Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
+        for (Player p : players) {
             p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 0);
         }
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (CWPlayer cwp : dvz.getPM().getPlayers(ClassType.DWARF, true, false)) {
+                List<CWPlayer> cwPlayers = dvz.getPM().getPlayers(ClassType.DWARF, true, false);
+                for (CWPlayer cwp : cwPlayers) {
                     ParticleEffect.VILLAGER_ANGRY.display(0.5f, 1f, 0.5f, 0, 30, cwp.getLocation().add(0,1,0));
                     cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, getIntOption("duration"), 0));
                     cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, getIntOption("duration"), 0));

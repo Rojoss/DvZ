@@ -16,6 +16,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.util.List;
+
 public class WindStorm extends BaseAbility {
 
     public WindStorm() {
@@ -37,7 +39,8 @@ public class WindStorm extends BaseAbility {
 
             @Override
             public void run() {
-                for (CWPlayer cwp : dvz.getPM().getPlayers(ClassType.DWARF, true, false)) {
+                List<CWPlayer> cwPlayers = dvz.getPM().getPlayers(ClassType.DWARF, true, false);
+                for (CWPlayer cwp : cwPlayers) {
                     if (cwp.getPlayer() == player) {
                         continue;
                     }

@@ -24,6 +24,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
+
 public class Fletcher extends DwarfClass {
 
     public Fletcher() {
@@ -66,7 +68,8 @@ public class Fletcher extends DwarfClass {
         if (dvz.getWM().hasWorkshop(player.getUniqueId())) {
             final FletcherWorkshop ws = (FletcherWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
             if (ws.isBuild()) {
-                for (CWEntity animal : ws.getChickens()) {
+                List<CWEntity> chickens = ws.getChickens();
+                for (CWEntity animal : chickens) {
                     if (animal.entity().getUniqueId() == event.getEntity().getUniqueId()) {
                         isOwnAnimal = true;
                     }
@@ -104,7 +107,8 @@ public class Fletcher extends DwarfClass {
         if (dvz.getWM().hasWorkshop(entity.getKiller().getUniqueId())) {
             ws = (FletcherWorkshop)dvz.getWM().getWorkshop(entity.getKiller().getUniqueId());
             if (ws.isBuild()) {
-                for (CWEntity animal : ws.getChickens()) {
+                List<CWEntity> chickens = ws.getChickens();
+                for (CWEntity animal : chickens) {
                     if (animal.entity().getUniqueId() == entity.getUniqueId()) {
                         isOwnAnimal = true;
                     }

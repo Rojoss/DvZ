@@ -16,6 +16,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.List;
+
 public class Poison extends BaseAbility {
 
     public Poison() {
@@ -42,7 +44,8 @@ public class Poison extends BaseAbility {
         poisonEffect.setLocation(player.getLocation().add(0, 0.5, 0));
         poisonEffect.start();
 
-        for (Entity ent : player.getNearbyEntities(range, range, range)) {
+        List<Entity> entities = player.getNearbyEntities(range, range, range);
+        for (Entity ent : entities) {
             if (!(ent instanceof Player)) {
                 return;
             }

@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
+import java.util.Set;
 
 public class Explode extends BaseAbility {
 
@@ -139,7 +140,8 @@ public class Explode extends BaseAbility {
         }
 
         //Damage shrine blocks.
-        for (ShrineBlock shrineBlock : dvz.getGM().getShrineBlocks()) {
+        Set<ShrineBlock> shrineBlocks = dvz.getGM().getShrineBlocks();
+        for (ShrineBlock shrineBlock : shrineBlocks) {
             if (shrineBlock != null && !shrineBlock.isDestroyed()) {
                 if (shrineBlock.getLocation().distance(loc) < power) {
                     shrineBlock.damage(Math.round(power * 2));

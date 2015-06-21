@@ -33,13 +33,14 @@ public class Camouflage extends BaseAbility {
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (UUID uuid : blocks.keySet()) {
+                HashMap<UUID, Location> blocksClone = new HashMap<UUID, Location>(blocks);
+                for (UUID uuid : blocksClone.keySet()) {
                     Player player = dvz.getServer().getPlayer(uuid);
                     if (player == null || !player.isOnline() || player.isDead()) {
                         removeBlock(uuid);
                         continue;
                     }
-                    if (player.getLocation().getBlockX() != blocks.get(uuid).getBlockX() || player.getLocation().getBlockZ() != blocks.get(uuid).getBlockZ() || player.getLocation().getBlockY() != blocks.get(uuid).getBlockY()) {
+                    if (player.getLocation().getBlockX() != blocksClone.get(uuid).getBlockX() || player.getLocation().getBlockZ() != blocksClone.get(uuid).getBlockZ() || player.getLocation().getBlockY() != blocksClone.get(uuid).getBlockY()) {
                         removeBlock(uuid);
                         CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou are no longer a block because you moved! &4&l<<"));
                         continue;
@@ -99,7 +100,9 @@ public class Camouflage extends BaseAbility {
         if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
             return;
         }
-        for (Map.Entry<UUID, Location> entry : blocks.entrySet()) {
+
+        HashMap<UUID, Location> blocksClone = new HashMap<UUID, Location>(blocks);
+        for (Map.Entry<UUID, Location> entry : blocksClone.entrySet()) {
             if (entry.getValue().equals(event.getClickedBlock().getLocation())) {
                 Player player = dvz.getServer().getPlayer(entry.getKey());
                 if (player != null && player.isOnline()) {
@@ -119,7 +122,8 @@ public class Camouflage extends BaseAbility {
 
     @EventHandler
     private void pluginUnload(PluginDisableEvent event) {
-        for (UUID uuid : blocks.keySet()) {
+        HashMap<UUID, Location> blocksClone = new HashMap<UUID, Location>(blocks);
+        for (UUID uuid : blocksClone.keySet()) {
             removeBlock(uuid);
         }
     }

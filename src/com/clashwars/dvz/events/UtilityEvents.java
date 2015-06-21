@@ -34,7 +34,8 @@ public class UtilityEvents implements Listener {
         //No durability loss
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            for (ItemStack armor : ((Player) event.getEntity()).getInventory().getArmorContents()) {
+            ItemStack[] armorItems = ((Player) event.getEntity()).getInventory().getArmorContents();
+            for (ItemStack armor : armorItems) {
                 armor.setDurability((short) 0);
             }
 

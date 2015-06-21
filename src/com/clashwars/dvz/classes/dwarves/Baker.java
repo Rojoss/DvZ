@@ -134,7 +134,8 @@ public class Baker extends DwarfClass {
 
         int wheatCount = event.getItem().getItemStack().getAmount();
         if (inv.getContents() != null && inv.getContents().length > 0) {
-            for (ItemStack item : inv.getContents()) {
+            ItemStack[] invContents = inv.getContents();
+            for (ItemStack item : invContents) {
                 if (item != null && item.getType() == Material.WHEAT) {
                     wheatCount += item.getAmount();
                 }

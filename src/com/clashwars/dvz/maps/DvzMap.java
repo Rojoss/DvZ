@@ -30,6 +30,7 @@ public class DvzMap {
 
     //Check if the map is is loaded as bukkit world.
     public boolean isLoaded() {
+        List<World> worlds = dvz.getServer().getWorlds();
         for (World world : dvz.getServer().getWorlds()) {
             if (world.getName().equalsIgnoreCase(mapName)) {
                 return true;

@@ -87,7 +87,8 @@ public class CWPlayer {
             player.setLevel(0);
             player.setExp(0);
 
-            for (PotionEffect pe : player.getActivePotionEffects()) {
+            Collection<PotionEffect> effects = player.getActivePotionEffects();
+            for (PotionEffect pe : effects) {
                 player.removePotionEffect(pe.getType());
             }
         }
@@ -96,7 +97,8 @@ public class CWPlayer {
             teleport.cancel();
             teleport = null;
         }
-        for (Team team : dvz.getBoard().getTeamList()) {
+        List<Team> teams = dvz.getBoard().getTeamList();
+        for (Team team : teams) {
             if (team.hasPlayer(player)) {
                 team.removePlayer(player);
             }
@@ -185,8 +187,8 @@ public class CWPlayer {
                     player.setMaxHealth(c.getHealth());
                     player.setHealth(c.getHealth());
                 }
-                player.setWalkSpeed(c.getSpeed());
-                player.setFlySpeed(c.getSpeed());
+                player.setWalkSpeed(Math.min(Math.max(c.getSpeed(), 0), 1));
+                player.setFlySpeed(Math.min(Math.max(c.getSpeed(), 0), 1));
 
                 //Equip VIP items.
                 if (c.getType() == ClassType.DWARF) {
@@ -242,7 +244,8 @@ public class CWPlayer {
         c.equipItems(player);
 
         if (dvz.getBoard().hasTeam(dvzClass.getTeam() + getTeamSuffix())) {
-            for (Team team : dvz.getBoard().getTeamList()) {
+            List<Team> teams = dvz.getBoard().getTeamList();
+            for (Team team : teams) {
                 if (team.hasPlayer(player)) {
                     team.removePlayer(player);
                 }
@@ -296,7 +299,8 @@ public class CWPlayer {
 
         //Team
         if (dvz.getBoard().hasTeam(dvzClass.getTeam() + getTeamSuffix())) {
-            for (Team team : dvz.getBoard().getTeamList()) {
+            List<Team> teamList = dvz.getBoard().getTeamList();
+            for (Team team : teamList) {
                 if (team.hasPlayer(player)) {
                     team.removePlayer(player);
                 }

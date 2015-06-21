@@ -101,7 +101,8 @@ public class Miner extends DwarfClass {
                 //Get a list of all blocks that are currently air/stone.
                 List<Block> airBlocks = new ArrayList<Block>();
                 List<Block> stoneblocks = new ArrayList<Block>();
-                for (Block block : ws.getMineableBlocks()) {
+                List<Block> mineableBlocks = ws.getMineableBlocks();
+                for (Block block : mineableBlocks) {
                     if (block.getType() == Material.AIR) {
                         airBlocks.add(block);
                     } else if (block.getType() == Material.STONE) {

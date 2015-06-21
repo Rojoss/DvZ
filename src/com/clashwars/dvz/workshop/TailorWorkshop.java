@@ -30,7 +30,8 @@ public class TailorWorkshop extends WorkShop {
     @Override
     public void onBuild() {
         //Spawn sheep
-        for (int i = 0; i < DvzClass.TAILOR.getClassClass().getIntOption("sheep-amount"); i++) {
+        int sheepCount = DvzClass.TAILOR.getClassClass().getIntOption("sheep-amount");
+        for (int i = 0; i < sheepCount; i++) {
             int y = getOrigin().getBlockY();
             Cuboid inside = cuboid.clone();
             inside.inset(2, 0, 2);

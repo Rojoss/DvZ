@@ -172,10 +172,12 @@ public class TipManager {
 
             //Go through all keywords and make sure ALL keywords exist in chat msg.
             boolean keyWordsMatch = true;
-            for (Keyword keyword : tip.getKeywords()) {
+            List<Keyword> keywords = tip.getKeywords();
+            for (Keyword keyword : keywords) {
                 //Keywords can have multiple worlds and at least one of them needs to exist in chat msg.
                 boolean wordMatch = false;
-                for (String word : keyword.getWords()) {
+                String[] words = keyword.getWords();
+                for (String word : words) {
                     if (chatWords.contains(word)) {
                         wordMatch = true;
                         break;

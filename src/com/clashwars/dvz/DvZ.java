@@ -40,7 +40,9 @@ import org.bukkit.scoreboard.NameTagVisibility;
 
 import java.sql.Connection;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class DvZ extends JavaPlugin {
@@ -94,7 +96,8 @@ public class DvZ extends JavaPlugin {
         getPM().savePlayers();
 
         //Destroy all workshops but keep them in config. (they will be build again on load)
-        for (WorkShop ws : getWM().getWorkShops().values()) {
+        HashMap<UUID, WorkShop> workshopsClone = new HashMap<UUID, WorkShop>(getWM().getWorkShops());
+        for (WorkShop ws : workshopsClone.values()) {
             ws.destroy();
         }
         getWM().removeWorkshops(false);
@@ -103,7 +106,8 @@ public class DvZ extends JavaPlugin {
         em.dispose();
 
         //Clean up holograms
-        for (Hologram hologram : HolographicDisplaysAPI.getHolograms(this)) {
+        Hologram[] holograms = HolographicDisplaysAPI.getHolograms(this);
+        for (Hologram hologram : holograms) {
             hologram.delete();
         }
 
@@ -207,13 +211,16 @@ public class DvZ extends JavaPlugin {
         pm.registerEvents(new UtilityEvents(this), this);
         pm.registerEvents(new WorkShopEvents(this), this);
 
-        for (Ability a : Ability.values()) {
+        Ability[] abilities = Ability.values();
+        for (Ability a : abilities) {
             pm.registerEvents(a.getAbilityClass(), this);
         }
-        for (DvzClass c : DvzClass.values()) {
+        DvzClass[] classes = DvzClass.values();
+        for (DvzClass c : classes) {
             pm.registerEvents(c.getClassClass(), this);
         }
-        for (StructureType s : StructureType.values()) {
+        StructureType[] structures = StructureType.values();
+        for (StructureType s : structures) {
             pm.registerEvents(s.getStrucClass(), this);
         }
 
@@ -262,6 +269,14 @@ public class DvZ extends JavaPlugin {
 
     public void log(Object msg) {
         log.info("[DvZ " + getDescription().getVersion() + "] " + msg.toString());
+    }
+
+    public void logError(Object msg) {
+        log.severe("[DvZ " + getDescription().getVersion() + "] " + msg.toString());
+    }
+
+    public void logTimings(Object msg, int startTime) {
+        log.severe("[DvZ Timings] " + msg.toString() + " (" + (System.currentTimeMillis() - startTime) + "ms)");
     }
 
     public static DvZ inst() {

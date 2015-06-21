@@ -50,7 +50,8 @@ public class LobbyEvents implements Listener {
             Block block = event.getClickedBlock();
             if ((block.getType() == Material.SIGN || block.getType() == Material.WALL_SIGN) && block.getState() instanceof Sign) {
                 Sign sign = (Sign) block.getState();
-                for (String str : sign.getLines()) {
+                String[] lines = sign.getLines();
+                for (String str : lines) {
                     if (CWUtil.removeColour(str).equalsIgnoreCase("&9[PARKOUR]")) {
                         event.setCancelled(true);
                         if (cwp.hasCompletedParkour()) {

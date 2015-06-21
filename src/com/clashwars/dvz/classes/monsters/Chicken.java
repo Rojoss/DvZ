@@ -44,7 +44,9 @@ public class Chicken extends MobClass {
 
             @Override
             public void run() {
-                for (Map.Entry<UUID, CWEntity> entry : Chicken.eggs.entrySet()) {
+
+                Map<UUID, CWEntity> eggsClone = new HashMap<UUID, CWEntity>(Chicken.eggs);
+                for (Map.Entry<UUID, CWEntity> entry : eggsClone.entrySet()) {
                     Player owner = Bukkit.getPlayer(entry.getKey());
                     if (entry.getValue() == null || entry.getValue().entity() == null || !entry.getValue().entity().isValid() || entry.getValue().entity().isDead()) {
                         if (entry.getValue() != null && entry.getValue().entity() != null) {

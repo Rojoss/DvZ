@@ -98,7 +98,8 @@ public class Commands {
             dvz.getServer().broadcastMessage(CWUtil.integrateColor("&4&lFORCING A SERVER CRASH!!!"));
             dvz.getServer().broadcastMessage(CWUtil.integrateColor("&4&lFORCING A SERVER CRASH!!!"));
             dvz.getServer().broadcastMessage(CWUtil.integrateColor("&4&lFORCING A SERVER CRASH!!!"));
-            for (World world : Bukkit.getWorlds()) {
+            List<World> worlds = Bukkit.getWorlds();
+            for (World world : worlds) {
                 Block block = world.getSpawnLocation().getBlock();
                 while (block.getType() != Material.SOUL_SAND) {
                     block = block.getRelative(BlockFace.NORTH);
@@ -503,7 +504,8 @@ public class Commands {
                     }
 
                     List<String> abilities = new ArrayList<String>();
-                    for (Ability ability : baseClass.getAbilities()) {
+                    Set<Ability> abilitiesList = baseClass.getAbilities();
+                    for (Ability ability : abilitiesList) {
                         abilities.add(CWUtil.capitalize(ability.toString().toLowerCase()));
                     }
                     sender.sendMessage(CWUtil.integrateColor("&6Abilities&8: &7" + CWUtil.implode(abilities, "&8, &7")));
@@ -533,7 +535,8 @@ public class Commands {
 
                         String name = dvzClass.getType().getColor() + CWUtil.stripAllColor(dvzClass.getClassClass().getDisplayName());
                         String str = "";
-                        for (Ability ability : dvzClass.getClassClass().getAbilities()) {
+                        Set<Ability> abilities = dvzClass.getClassClass().getAbilities();
+                        for (Ability ability : abilities) {
                             String abilityString = ability.getAbilityClass().getDisplayName().isEmpty() ? ability.toString().toLowerCase().replace("_", "") : ability.getAbilityClass().getDisplayName();
                             if (ability.getAbilityClass().getDvzClasses().size() > 1) {
                                 str += "&8&o" + CWUtil.stripAllColor(abilityString) + "&8, ";
@@ -565,7 +568,8 @@ public class Commands {
                         }
 
                         //Check castitem with holding item.
-                        for (Ability a : dvzClass.getClassClass().getAbilities()) {
+                        Set<Ability> abilities = dvzClass.getClassClass().getAbilities();
+                        for (Ability a : abilities) {
                             if (CWUtil.compareItems(player.getItemInHand(), a.getAbilityClass().getCastItem(),true, false)) {
                                 ability = a;
                                 break;
@@ -931,7 +935,8 @@ public class Commands {
                     }
 
                     boolean locMatch = false;
-                    for (String locName : dvz.getMM().getLocationNames()) {
+                    String[] locNames = dvz.getMM().getLocationNames();
+                    for (String locName : locNames) {
                         if (locName.equalsIgnoreCase(args[1])) {
                             locMatch = true;
                             break;
@@ -987,7 +992,8 @@ public class Commands {
                     }
 
                     boolean cubMatch = false;
-                    for (String cubName : dvz.getMM().getCuboidNames()) {
+                    String[] cubNames = dvz.getMM().getCuboidNames();
+                    for (String cubName : cubNames) {
                         if (cubName.equalsIgnoreCase(args[1])) {
                             cubMatch = true;
                             break;
@@ -1032,7 +1038,8 @@ public class Commands {
                         @Override
                         public void run() {
                             particles++;
-                            for (org.bukkit.util.Vector vector : cuboid.getEdgeVectors()) {
+                            List<Vector> edgeVectors = cuboid.getEdgeVectors();
+                            for (Vector vector : edgeVectors) {
                                 ParticleEffect.CLOUD.display(0.3f, 0.3f, 0.3f, 0f, 5, vector.add(halfBlock).toLocation(player.getWorld()), 300);
                             }
                             if (particles > 10) {
@@ -1112,7 +1119,8 @@ public class Commands {
                         return true;
                     }
 
-                    for (int i = 0; i < (args.length > 2 && CWUtil.getInt(args[2]) > 0 ? CWUtil.getInt(args[2]) : 100); i++) {
+                    int count = CWUtil.getInt(args[2]);
+                    for (int i = 0; i < (args.length > 2 && count > 0 ? count : 100); i++) {
                         Map<DvzClass, BaseClass> classes = dvz.getCM().getRandomClasses(player, args.length > 1 && args[1].equalsIgnoreCase("monster") ? ClassType.MONSTER : ClassType.DWARF, -1);
                         for (DvzClass dvzClass : classes.keySet()) {
                             if (dvz.getPM().fakePlayers.containsKey(dvzClass)) {
@@ -1135,7 +1143,8 @@ public class Commands {
             String shrineMsg = "";
             for (ShrineType shrineType : shrineTypes) {
                 shrineMsg += " &5" + shrineType.toString().toLowerCase().replace("_", "") + "&8:";
-                for (ShrineBlock shrine : gm.getShrineBlocks(shrineType)) {
+                Set<ShrineBlock> shrineBlocks = gm.getShrineBlocks(shrineType);
+                for (ShrineBlock shrine : shrineBlocks) {
                     if (shrine.isDestroyed()) {
                         shrineMsg += "&c|";
                     } else {

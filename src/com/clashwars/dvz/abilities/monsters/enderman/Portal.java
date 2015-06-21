@@ -78,7 +78,8 @@ public class Portal extends BaseAbility {
             Cuboid cuboid = new Cuboid(min, cc.getWidth()-1, cc.getHeight()-1, cc.getLength()-1);
 
             portalLoc.getWorld().playSound(portalLoc, Sound.WITHER_SPAWN, 2, 0);
-            for (Block block : cuboid.getBlocks()) {
+            List<Block> blocks = cuboid.getBlocks();
+            for (Block block : blocks) {
                 if (block.getType() != Material.AIR) {
                     ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(block.getType(), (byte)block.getData()), 0.5f, 0.5f, 0.5f, 0.1f, 10, block.getLocation(), 500);
                     ParticleEffect.PORTAL.display(1, 1, 1, 0, 5, block.getLocation().add(0.5f, 0.5f, 0.5f), 500);
@@ -211,9 +212,6 @@ public class Portal extends BaseAbility {
         if (activePortal == null || activePortal.getCuboid() == null) {
             return;
         }
-        if (kill) {
-            activePortal.getOwner().setHealth(0);
-        }
 
         if (activePortal.getEgg() != null) {
             activePortal.getEgg().getBlock().setType(Material.AIR);
@@ -255,6 +253,12 @@ public class Portal extends BaseAbility {
             }
         }.runTaskTimer(dvz, 0, 5);
 
+        Player portalOwner = activePortal.getOwner();
         activePortal = null;
+
+        //Kill owner if needed. (needs to be last because of the check of enderman death will also remove the portal)
+        if (kill) {
+            portalOwner.setHealth(0);
+        }
     }
 }

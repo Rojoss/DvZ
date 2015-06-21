@@ -33,7 +33,9 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 public class PotionBomb extends BaseAbility {
 
@@ -87,7 +89,8 @@ public class PotionBomb extends BaseAbility {
         }
 
         boolean found = false;
-        for (Entity e : CWUtil.getNearbyEntities(bomb, dvz.getGM().getMonsterPower(20, 30), Arrays.asList(new EntityType[]{EntityType.PLAYER}))) {
+        List<Entity> entities = CWUtil.getNearbyEntities(bomb, dvz.getGM().getMonsterPower(20, 30), Arrays.asList(new EntityType[]{EntityType.PLAYER}));
+        for (Entity e : entities) {
             if (dvz.getPM().getPlayer((Player)e).isDwarf()) {
                 found = true;
             }
@@ -140,7 +143,8 @@ public class PotionBomb extends BaseAbility {
                 for(CWPlayer cwp : dvz.getPM().getPlayers(ClassType.DWARF, true, false)) {
                     boolean blindAdded = false;
                     boolean poisonAdded = false;
-                    for (PotionEffect pe : cwp.getPlayer().getActivePotionEffects()) {
+                    Collection<PotionEffect> activeEffects = cwp.getPlayer().getActivePotionEffects();
+                    for (PotionEffect pe : activeEffects) {
                         if(pe.getType().equals(PotionEffectType.BLINDNESS)) {
                             cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int)dvz.getGM().getMonsterPower(80, 140) + pe.getDuration(), 1), true);
                             blindAdded = true;

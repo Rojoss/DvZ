@@ -16,6 +16,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.List;
+
 public class Blast extends BaseAbility {
 
     public Blast() {
@@ -45,7 +47,8 @@ public class Blast extends BaseAbility {
         new BukkitRunnable() {
             @Override
             public void run() {
-                for (Entity e : player.getNearbyEntities(radius, radius, radius)) {
+                List<Entity> entities = player.getNearbyEntities(radius, radius, radius);
+                for (Entity e : entities) {
                     if(e instanceof Player) {
                         CWPlayer cwp = dvz.getPM().getPlayer((Player)e);
                         if (cwp.isDwarf()) {

@@ -17,6 +17,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Set;
+
 public class SwitchEvents implements Listener {
 
     private DvZ dvz;
@@ -38,7 +40,8 @@ public class SwitchEvents implements Listener {
             if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR) {
                 return;
             }
-            for (final DvzClass dvzClass : dvz.getCM().getClasses(ClassType.DWARF).keySet()) {
+            Set<DvzClass> dvzClasses = dvz.getCM().getClasses(ClassType.DWARF).keySet();
+            for (final DvzClass dvzClass : dvzClasses) {
                 if (dvzClass.getClassClass().getClassItem().equals(event.getCurrentItem())) {
                     player.closeInventory();
                     player.sendMessage(CWUtil.integrateColor("&7-----"));

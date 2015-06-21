@@ -14,6 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -32,7 +33,8 @@ public class Geyser extends BaseAbility {
         }
 
         final Map<UUID, Vector> players = new HashMap<UUID, Vector>();
-        for (Entity e : player.getNearbyEntities(getFloatOption("range"), getFloatOption("range"), getFloatOption("range"))) {
+        List<Entity> entities = player.getNearbyEntities(getFloatOption("range"), getFloatOption("range"), getFloatOption("range"));
+        for (Entity e : entities) {
             if (e instanceof Player) {
                 if (!dvz.getPM().getPlayer((Player)e).isDwarf()) {
                     continue;

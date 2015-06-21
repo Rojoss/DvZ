@@ -36,6 +36,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class MainEvents implements Listener {
@@ -359,7 +360,8 @@ public class MainEvents implements Listener {
             public void run() {
                 List<CWPlayer> dwarvesLeft = dvz.getPM().getPlayers(ClassType.DWARF, true, false);
                 if (dwarvesLeft == null || dwarvesLeft.size() == 0) {
-                    for (ShrineBlock shrineBlock : dvz.getGM().getShrineBlocks(shrineTypes[index])) {
+                    Set<ShrineBlock> shrineBlocks = dvz.getGM().getShrineBlocks(shrineTypes[index]);
+                    for (ShrineBlock shrineBlock : shrineBlocks) {
                         if (shrineBlock != null && shrineBlock.isDestroyed() == false) {
                             dvz.getGM().getShrineBlock(shrineBlock.getLocation()).damage(500);
                         }

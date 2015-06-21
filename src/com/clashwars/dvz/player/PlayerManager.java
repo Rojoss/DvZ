@@ -45,7 +45,8 @@ public class PlayerManager {
                 sqlCharacters = statement.executeQuery("SELECT char_id,user_id,uuid FROM Characters;");
 
                 while (sqlCharacters.next()) {
-                    for (Player player : dvz.getServer().getOnlinePlayers()) {
+                    Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
+                    for (Player player : players) {
                         if (player.getUniqueId().toString().equals(sqlCharacters.getString("uuid"))) {
                             //Found player data so set it for the player.
                             UUID uuid = UUID.fromString(sqlCharacters.getString("uuid"));

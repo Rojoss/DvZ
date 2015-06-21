@@ -46,7 +46,8 @@ public class BakerWorkshop extends WorkShop {
 
     @Override
     public void onBuild() {
-        for (Block block : cuboid.getBlocks()) {
+        List<Block> blocks = cuboid.getBlocks();
+        for (Block block : blocks) {
             if (block.getType() == Material.HOPPER) {
                 hopperBlock = block;
             }

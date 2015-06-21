@@ -51,7 +51,8 @@ public class StorageStruc extends Structure {
         menu.setSlot(new CWItem(Material.WHEAT).setName("&6&lBaker Items"), 36, null);
 
         //Load in items from config
-        for (String name : dvz.getGameCfg().STORAGE_PRODUCTS.keySet()) {
+        Set<String> storageNames = dvz.getGameCfg().STORAGE_PRODUCTS.keySet();
+        for (String name : storageNames) {
             StorageItem storageItem = getStorageItem(name);
             if (storageItem != null) {
                 storageItem.setAmt(dvz.getGameCfg().STORAGE_PRODUCTS.get(name));

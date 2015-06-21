@@ -15,6 +15,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.List;
+
 public class ToxicRain extends BaseAbility {
 
     public ToxicRain() {
@@ -57,7 +59,8 @@ public class ToxicRain extends BaseAbility {
                     return;
                 }
                 if (prevLoc != null) {
-                    for (Entity e : CWUtil.getNearbyEntities(prevLoc, 20, null)) {
+                    List<Entity> entities = CWUtil.getNearbyEntities(prevLoc, 20, null);
+                    for (Entity e : entities) {
                         if (e instanceof Player) {
                             Player pl = (Player) e;
                             if (!dvz.getPM().getPlayer(pl).isDwarf()) {

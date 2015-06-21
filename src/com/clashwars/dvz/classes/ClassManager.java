@@ -125,7 +125,8 @@ public class ClassManager {
                 }
 
                 //Add in fake players purely for testing purposes.
-                for (DvzClass dwarfClass : dvz.getPM().fakePlayers.keySet()) {
+                Set<DvzClass> fakePlayers = dvz.getPM().fakePlayers.keySet();
+                for (DvzClass dwarfClass : fakePlayers) {
                     if (dwarfClass != null) {
                         classCounts.put(dwarfClass, dvz.getPM().fakePlayers.get(dwarfClass).doubleValue());
                     }
@@ -196,7 +197,8 @@ public class ClassManager {
                 .addLore("&7You will be able to keep some of your items.").addLore("&7But you should only switch if it's really needed."), 0, null);
         int slot = 2;
         switchOptionsMenu.show(player);
-        for (DvzClass dvzClass : cwp.getClassOptions()) {
+        Set<DvzClass> classOptions = cwp.getClassOptions();
+        for (DvzClass dvzClass : classOptions) {
             switchOptionsMenu.setSlot(dvzClass.getClassClass().getClassItem(), slot, player);
             slot++;
         }

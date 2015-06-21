@@ -203,7 +203,8 @@ public class BaseClass implements Listener {
         }
         //Ability items
         DvzItem castItem;
-        for (Ability ability : getAbilities()) {
+        Set<Ability> abilities = getAbilities();
+        for (Ability ability : abilities) {
             castItem = ability.getAbilityClass().getCastItem();
             if (castItem != null) {
                 ability.getAbilityClass().onCastItemGiven(player);

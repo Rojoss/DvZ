@@ -14,6 +14,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import java.util.List;
+
 public class Burn extends BaseAbility {
 
     public Burn() {
@@ -27,8 +29,9 @@ public class Burn extends BaseAbility {
         if (onCooldown(player)) {
             return;
         }
-        //for (Entity entity : CWUtil.getNearbyEntities(triggerLoc, getFloatOption("distance"), Arrays.asList(new EntityType[]{EntityType.PLAYER}))) {
-        for (Entity entity : CWUtil.getNearbyEntities(triggerLoc, getFloatOption("distance"), null)) {
+
+        List<Entity>  entities = CWUtil.getNearbyEntities(triggerLoc, getFloatOption("distance"), null);
+        for (Entity entity : entities) {
             if (!(entity instanceof Player)) {
                 continue;
             }

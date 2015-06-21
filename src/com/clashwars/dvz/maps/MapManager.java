@@ -79,7 +79,8 @@ public class MapManager {
         }
 
         //Kick all players remaining in the map.
-        for (Player p : getActiveMap().getWorld().getPlayers()) {
+        List<Player> players = getActiveMap().getWorld().getPlayers();
+        for (Player p : players) {
             p.kickPlayer(CWUtil.integrateColor("&4&lYou have been kicked because the map is resetting!\n&cWe couldn't teleport you to the lobby for some reason.\n&cYou can try to log back in to fix it."));
         }
 
@@ -174,13 +175,15 @@ public class MapManager {
         MapData data = map.getData();
         Set<String> missingData = new HashSet<String>();
 
-        for (String locType : getLocationNames()) {
+        String[] locNames = getLocationNames();
+        for (String locType : locNames) {
             if (map.getLocation(locType) == null) {
                 missingData.add("&4loc&7:&c" + locType);
             }
         }
 
-        for (String cubType : getCuboidNames()) {
+        String[] cubNames = getCuboidNames();
+        for (String cubType : cubNames) {
             if (map.getCuboid(cubType) == null) {
                 missingData.add("&4cuboid&7:&c" + cubType);
             }

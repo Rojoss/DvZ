@@ -20,6 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public class BannerMenu implements Listener {
@@ -101,7 +102,8 @@ public class BannerMenu implements Listener {
 
         //Set layers
         int layer = 0;
-        for (Pattern pat : tempBanner.getPatterns()) {
+        List<Pattern> patterns = tempBanner.getPatterns();
+        for (Pattern pat : patterns) {
             if (pat != null) {
                 menu.setSlot(new CWItem(Material.BANNER).setBaseColor(tempBanner.getBaseColor()).setPattern(0, tempBanner.getPattern(layer)), layer + 10, player);
             }
@@ -189,7 +191,8 @@ public class BannerMenu implements Listener {
             player.closeInventory();
 
             //Update all placed banners.
-            for (Vector loc : tempBanner.getBannerLocations()) {
+            List<Vector> bannerLocs = tempBanner.getBannerLocations();
+            for (Vector loc : bannerLocs) {
                 Block block = player.getWorld().getBlockAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
                 if (block.getState() instanceof Banner) {
                     Banner bannerState = (Banner)block.getState();

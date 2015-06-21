@@ -161,7 +161,8 @@ public abstract class WorkShop {
 
             //Delete all blocks and set floor back to wood with a piston.
             Location pistonLoc = getOrigin().add(0,-1,0);
-            for (Block block : cuboid.getBlocks()) {
+            List<Block> blocks = cuboid.getBlocks();
+            for (Block block : blocks) {
                 block.setType(Material.AIR);
                 if (block.getLocation().equals(pistonLoc)) {
                     block.setType(Material.PISTON_BASE);
@@ -180,7 +181,8 @@ public abstract class WorkShop {
             if (data != null && data.getBannerLocations() != null && data.getBannerLocations().size() > 0 && getOwner() != null) {
                 Product.VIP_BANNER.getItem(data.getBannerLocations().size()).setBaseColor(data.getBaseColor()).setPatterns(data.getPatterns()).giveToPlayer(getOwner());
 
-                for (Vector loc : data.getBannerLocations()) {
+                List<Vector> bannerLocs = data.getBannerLocations();
+                for (Vector loc : bannerLocs) {
                     Block block = getOwner().getWorld().getBlockAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
                     if (block.getType() == Material.STANDING_BANNER || block.getType() == Material.WALL_BANNER) {
                         block.setType(Material.AIR);

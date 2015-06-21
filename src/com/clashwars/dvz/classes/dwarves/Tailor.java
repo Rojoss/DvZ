@@ -24,6 +24,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.List;
+
 public class Tailor extends DwarfClass {
 
     private Product[] armorPieces = new Product[] {Product.HELMET, Product.CHESTPLATE, Product.LEGGINGS, Product.BOOTS};
@@ -55,7 +57,8 @@ public class Tailor extends DwarfClass {
         final TailorWorkshop ws = (TailorWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
 
         CWEntity cwe = null;
-        for (CWEntity sheep : ws.getSheep()) {
+        List<CWEntity> entities = ws.getSheep();
+        for (CWEntity sheep : entities) {
             if (sheep.entity().getUniqueId() == entity.getUniqueId()) {
                 cwe = sheep;
             }

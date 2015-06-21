@@ -51,7 +51,8 @@ public class FletcherWorkshop extends WorkShop {
     @Override
     public void onBuild() {
         //Spawn chickens
-        for (int i = 0; i < DvzClass.FLETCHER.getClassClass().getIntOption("chicken-amount"); i++) {
+        int chickenCount = DvzClass.FLETCHER.getClassClass().getIntOption("chicken-amount");
+        for (int i = 0; i < chickenCount; i++) {
             spawnChicken(EntityType.CHICKEN, CWUtil.random(cuboid.getMaxY() + 0, cuboid.getMaxY() + 10));
         }
     }

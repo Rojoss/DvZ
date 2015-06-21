@@ -13,6 +13,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -29,7 +30,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class VIPEvents implements Listener {
@@ -43,7 +46,8 @@ public class VIPEvents implements Listener {
             @Override
 
             public void run() {
-                for (Player player : DvZ.inst().getServer().getOnlinePlayers()) {
+                Collection<Player> players = (Collection<Player>)DvZ.inst().getServer().getOnlinePlayers();
+                for (Player player : players) {
                     if (player.getGameMode() == GameMode.SPECTATOR) {
                         continue;
                     }
@@ -144,7 +148,8 @@ public class VIPEvents implements Listener {
 
         //Clicking on banner to edit it.
         if (block.getType() == Material.WALL_BANNER || block.getType() == Material.STANDING_BANNER) {
-            for (Map.Entry<UUID, BannerData> banner : dvz.getBannerCfg().getBanners().entrySet()) {
+            Set<Map.Entry<UUID, BannerData>> banners = dvz.getBannerCfg().getBanners().entrySet();
+            for (Map.Entry<UUID, BannerData> banner : banners) {
                 if (banner.getValue().getBannerLocations() != null && banner.getValue().getBannerLocations().contains(block.getLocation().toVector())) {
                     if (!banner.getKey().equals(player.getUniqueId())) {
                         CWUtil.sendActionBar(player, CWUtil.integrateColor("&3&l>> &bThis is " + dvz.getServer().getPlayer(banner.getKey()).getDisplayName() + " &bhis banner! &3&l<<"));
@@ -205,7 +210,8 @@ public class VIPEvents implements Listener {
             }
         }
 
-        for (Map.Entry<UUID, BannerData> banner : dvz.getBannerCfg().getBanners().entrySet()) {
+        Set<Map.Entry<UUID, BannerData>> banners = dvz.getBannerCfg().getBanners().entrySet();
+        for (Map.Entry<UUID, BannerData> banner : banners) {
             if (banner.getValue().getBannerLocations() != null && banner.getValue().getBannerLocations().contains(block.getLocation().toVector())) {
                 if (!banner.getKey().equals(player.getUniqueId())) {
                     CWUtil.sendActionBar(player, CWUtil.integrateColor("&3&l>> &bThis is " + dvz.getServer().getPlayer(banner.getKey()).getDisplayName() + " &bhis banner! &3&l<<"));
@@ -236,7 +242,8 @@ public class VIPEvents implements Listener {
 
     @EventHandler
      private void onEnable(PluginEnableEvent event) {
-        for (Player player : dvz.getServer().getOnlinePlayers()) {
+        Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
+        for (Player player : players) {
             equipHat(player);
         }
     }

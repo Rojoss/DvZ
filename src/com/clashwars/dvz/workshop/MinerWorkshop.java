@@ -24,7 +24,8 @@ public class MinerWorkshop extends WorkShop {
 
     @Override
     public void onBuild() {
-        for (Block block : cuboid.getBlocks()) {
+        List<Block> blocks = cuboid.getBlocks();
+        for (Block block : blocks) {
             if (((Miner)DvzClass.MINER.getClassClass()).getMineableMaterials().contains(block.getType())) {
                 mineableBlocks.add(block);
             }

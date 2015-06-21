@@ -12,6 +12,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import java.util.Collection;
+
 public class Util {
 
     public static String formatMsg(String msg) {
@@ -34,7 +36,8 @@ public class Util {
     }
 
     public static void broadcastAdmins(String msg) {
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        Collection<Player> players = (Collection<Player>)Bukkit.getOnlinePlayers();
+        for (Player player : players) {
             if (player.isOp() || player.hasPermission("dvz.admin")) {
                 player.sendMessage(msg);
             }
