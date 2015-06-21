@@ -7,6 +7,9 @@ import com.clashwars.dvz.config.PlayerCfg;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 public class PlayerManager {
@@ -18,6 +21,8 @@ public class PlayerManager {
     public Map<DvzClass, Integer> fakePlayers = new HashMap<DvzClass, Integer>();
 
     public List<UUID> suicidePlayers = new ArrayList<UUID>();
+
+    public ResultSet sqlCharacters;
 
     public PlayerManager(DvZ dvz) {
         this.dvz = dvz;
@@ -31,6 +36,29 @@ public class PlayerManager {
         for (UUID uuid : cfgPlayers.keySet()) {
             players.put(uuid, new CWPlayer(uuid, cfgPlayers.get(uuid)));
             players.get(uuid).onClassLoad();
+        }
+
+        //Try to load SQL data from all online players
+        if (dvz.getSql() != null) {
+            try {
+                Statement statement = dvz.getSql().createStatement();
+                sqlCharacters = statement.executeQuery("SELECT char_id,user_id,uuid FROM Characters;");
+
+                while (sqlCharacters.next()) {
+                    for (Player player : dvz.getServer().getOnlinePlayers()) {
+                        if (player.getUniqueId().toString().equals(sqlCharacters.getString("uuid"))) {
+                            //Found player data so set it for the player.
+                            UUID uuid = UUID.fromString(sqlCharacters.getString("uuid"));
+                            CWPlayer cwp = getPlayer(uuid);
+
+                            cwp.setUserID(sqlCharacters.getInt("user_id"));
+                            cwp.setCharID(sqlCharacters.getInt("char_id"));
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                dvz.log("Failed to load userdata from MySQL database!");
+            }
         }
     }
 
@@ -157,5 +185,13 @@ public class PlayerManager {
             pcfg.PLAYERS.clear();
             pcfg.save();
         }
+    }
+
+    public ResultSet getSqlCharacters() {
+        return sqlCharacters;
+    }
+
+    public void setSqlCharacters(ResultSet sqlCharacters) {
+        this.sqlCharacters = sqlCharacters;
     }
 }

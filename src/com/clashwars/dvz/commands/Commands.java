@@ -2,12 +2,14 @@ package com.clashwars.dvz.commands;
 
 import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.CooldownManager;
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.cuboid.SelectionStatus;
 import com.clashwars.cwcore.hat.Hat;
 import com.clashwars.cwcore.hat.HatManager;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.cwcore.utils.Enjin;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
@@ -33,7 +35,12 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 
 public class Commands {
@@ -99,6 +106,37 @@ public class Commands {
             }
             return true;
         }
+
+        if (label.equalsIgnoreCase("enjinprofile")) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                return true;
+            }
+            Player player = (Player)sender;
+
+            JSONObject users = Enjin.getUsers();
+
+            String userID = Enjin.getUserIdByCharacter(player.getName(), true);
+            if (userID == null) {
+                player.sendMessage(CWUtil.integrateColor("&4&lNOT LINKED&8&l: &4Your character isn't linked with the website."));
+                player.sendMessage(CWUtil.integrateColor("&4This can have one of the following reasons:"));
+                player.sendMessage(CWUtil.integrateColor("&81. &cYou haven't joined the website."));
+                player.sendMessage(CWUtil.integrateColor("    &7Please join the website first: &9http://clashwars.com"));
+                player.sendMessage(CWUtil.integrateColor("&82. &cYou don't have this character added to your profile."));
+                player.sendMessage(CWUtil.integrateColor("    &7Follow this step by step tutorial! &9http://goo.gl/BrckMP"));
+                player.sendMessage(CWUtil.integrateColor("    &7After adding your character also add it to this server!"));
+                player.sendMessage(CWUtil.integrateColor("&83. &cSomething went wrong with syncing your account."));
+                player.sendMessage(CWUtil.integrateColor("    &7Try again later... :D (Or contact a staff member!)"));
+                player.sendMessage(CWUtil.integrateColor("&a&lYou can still play! &7(Some advanced features might be locked)"));
+                return true;
+            } else {
+                player.sendMessage(CWUtil.integrateColor("&3&lLINKED&8&8l: &aYour character is linked to your website profile!"));
+                player.sendMessage(CWUtil.integrateColor("&3Profile&8: &bhttp://clashwars.com/profile/" + userID));
+            }
+
+            return true;
+        }
+
 
         if (label.equalsIgnoreCase("soundtest") || label.equalsIgnoreCase("st")) {
             if (!(sender instanceof Player)) {

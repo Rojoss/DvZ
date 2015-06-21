@@ -34,3 +34,6 @@ commands:
     description: Virtual item disposal.
     usage: /<command> <category>
     aliases: [dispose,clear]
+  enjinprofile:
+    description: Verify your enjin profile link.
+    usage: /<command>

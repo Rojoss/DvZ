@@ -1,7 +1,9 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.cwcore.utils.Enjin;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
@@ -10,6 +12,7 @@ import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
+import com.clashwars.dvz.mysql.MySQL;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.WorkShop;
@@ -26,8 +29,14 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.json.simple.JSONObject;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
+import java.util.UUID;
 
 public class MainEvents implements Listener {
 
@@ -58,7 +67,7 @@ public class MainEvents implements Listener {
     @EventHandler
     private void playerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        CWPlayer cwp = dvz.getPM().getPlayer(player);
+        final CWPlayer cwp = dvz.getPM().getPlayer(player);
         Location spawnLoc = dvz.getGM().getUsedWorld().getSpawnLocation();
 
         String titleStr = "&6Welcome to &6&lDvZ&6!";
@@ -129,6 +138,156 @@ public class MainEvents implements Listener {
                 player.setResourcePack("http://web.clashwars.com/ResourcePack/CWDvZ.zip");
             }
         }.runTaskLater(dvz, 10);
+
+
+        //Sync user/character with database ASYNC
+        if (dvz.getSql() != null) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    try {
+                        //Get the enjin ID with the Enjin API.
+                        //TODO: Need a cooldown on the cache false property. Now when like 50 ppl log in at same time it will load in ALL users 50 times...
+                        String enjinID = Enjin.getUserIdByCharacter(player.getName(), false);
+                        int userID = -1;
+                        int charID = -1;
+                        if (enjinID == null || enjinID.isEmpty()) {
+                            //No website account found (Do nothing but send a message)
+                            player.sendMessage(CWUtil.integrateColor("&4&lNOT LINKED&8&l: &4Your character isn't linked with the website."));
+                            player.sendMessage(CWUtil.integrateColor("&4This can have one of the following reasons:"));
+                            player.sendMessage(CWUtil.integrateColor("&81. &cYou haven't joined the website."));
+                            player.sendMessage(CWUtil.integrateColor("    &7Please join the website first: &9http://clashwars.com"));
+                            player.sendMessage(CWUtil.integrateColor("&82. &cYou don't have this character added to your profile."));
+                            player.sendMessage(CWUtil.integrateColor("    &7Follow this step by step tutorial! &9http://goo.gl/BrckMP"));
+                            player.sendMessage(CWUtil.integrateColor("    &7After adding your character also add it to this server!"));
+                            player.sendMessage(CWUtil.integrateColor("&83. &cSomething went wrong with syncing your account."));
+                            player.sendMessage(CWUtil.integrateColor("    &7Try again later... :D (Or contact a staff member!)"));
+                            player.sendMessage(CWUtil.integrateColor("&a&lYou can still play! &7(Some advanced features might be locked)"));
+                        } else {
+                            //Create/get the User based on enjin ID. (if user has multiple characters and already registered one there will be an user already,
+                            //If the player has one character or multiple and it's the first he joins with it will need to create a new user based on the enjin ID)
+                            try {
+                                Statement selectUserS = dvz.getSql().createStatement();
+                                ResultSet userResult = selectUserS.executeQuery("SELECT user_id FROM Users WHERE enjin_id='" + enjinID + "';");
+
+                                if (!userResult.next()) {
+                                    //New user
+                                    player.sendMessage(CWUtil.integrateColor("&3It seems like this is the first time you join this server!"));
+                                    player.sendMessage(CWUtil.integrateColor("&3We have detected your website account and linked this."));
+                                    player.sendMessage(CWUtil.integrateColor("&3Please go to &bhttp://clashwars.com/profile/" + enjinID));
+                                    player.sendMessage(CWUtil.integrateColor("&3If this isn't your profile please type &b/enjinprofile."));
+
+                                    Statement newUserS = dvz.getSql().createStatement();
+                                    int added = newUserS.executeUpdate("INSERT INTO Users (enjin_id) VALUES ('" + enjinID + "');");
+                                    //Get the new added user ID (don't know a better to get this)
+                                    if (added > 0) {
+                                        userResult = selectUserS.executeQuery("SELECT user_id FROM Users WHERE enjin_id='" + enjinID + "';");
+                                        if (userResult.next()) {
+                                            userID = userResult.getInt("user_id");
+                                        }
+                                    }
+                                } else {
+                                    //Existing user
+                                    userID = userResult.getInt("user_id");
+                                }
+
+                            } catch (SQLException e) {
+                                dvz.log("Failed to retrieve user from database!");
+                                e.printStackTrace();
+                            }
+                        }
+                        cwp.setUserID(userID);
+
+                        //Then we get the character
+                        //If the character isn't added, add it. If it is save the id's in CWPLayer and update name etc if needed.
+                        Statement selectS = dvz.getSql().createStatement();
+                        ResultSet charResult = selectS.executeQuery("SELECT char_id,user_id,username,prev_names FROM Characters WHERE uuid='" + player.getUniqueId().toString() + "';");
+                        if (!charResult.next()) {
+                            //Create new character
+                            try {
+                                Statement newCharS = dvz.getSql().createStatement();
+                                int added = 0;
+                                if (enjinID != null && !enjinID.isEmpty() && userID >= 1) {
+                                    added = newCharS.executeUpdate("INSERT INTO Characters (user_id,uuid,username) VALUES ('" + userID + "','" + player.getUniqueId().toString() + "','" + player.getName() + "');");
+                                } else {
+                                    added = newCharS.executeUpdate("INSERT INTO Characters (uuid,username) VALUES ('" + player.getUniqueId().toString() + "','" + player.getName() + "');");
+                                }
+
+                                if (added > 0) {
+                                    charResult = selectS.executeQuery("SELECT char_id FROM Characters WHERE uuid='" + player.getUniqueId().toString() + "';");
+                                    if (charResult.next()) {
+                                        charID = charResult.getInt("char_id");
+                                        cwp.setCharID(charID);
+                                    }
+                                }
+                            } catch (SQLException e) {
+                                dvz.log("Failed to insert new character in the database!");
+                                e.printStackTrace();
+                            }
+                        } else {
+                            //Existing character
+                            cwp.setCharID(charResult.getInt("char_id"));
+
+                            //Check for username change.
+                            if (!player.getName().equals(charResult.getString("username"))) {
+                                player.sendMessage(Util.formatMsg("&6We have changed your username from &7&l" + charResult.getString("username") + " &6to &a&l" + player.getName() + "&6!"));
+                                String prevNames = charResult.getString("prev_names");
+                                if (prevNames == null || prevNames.isEmpty()) {
+                                    prevNames = charResult.getString("username");
+                                } else {
+                                    prevNames += "," + charResult.getString("username");
+                                }
+
+                                //Update DB with new username.
+                                try {
+                                    if (userID > 0) {
+                                        PreparedStatement updatePS = dvz.getSql().prepareStatement("UPDATE Characters SET last_joined=?,username=?,prev_names=?,user_id=? WHERE char_id=?;");
+                                        updatePS.setTimestamp(1, MySQL.getCurrentTimeStamp());
+                                        updatePS.setString(2, player.getName());
+                                        updatePS.setString(3, prevNames);
+                                        updatePS.setInt(4, userID);
+                                        updatePS.setInt(5, charResult.getInt("char_id"));
+                                        updatePS.executeUpdate();
+                                    } else {
+                                        PreparedStatement updatePS = dvz.getSql().prepareStatement("UPDATE Characters SET last_joined=?,username=?,prev_names=? WHERE char_id=?;");
+                                        updatePS.setTimestamp(1, MySQL.getCurrentTimeStamp());
+                                        updatePS.setString(2, player.getName());
+                                        updatePS.setString(3, prevNames);
+                                        updatePS.setInt(4, charResult.getInt("char_id"));
+                                        updatePS.executeUpdate();
+                                    }
+                                } catch (SQLException e) {
+                                    player.sendMessage(Util.formatMsg("&cFailed at updating your username in the database."));
+                                    player.sendMessage(Util.formatMsg("&cIf this message keeps apearing please contact a staff member!"));
+                                    dvz.log("Failed to update username in change in database!");
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                //Update just the last joined field and user ID if it's set.
+                                try {
+                                    if (userID > 0) {
+                                        PreparedStatement updateDatePS = dvz.getSql().prepareStatement("UPDATE Characters SET last_joined=?, user_id=? WHERE char_id=?;");
+                                        updateDatePS.setTimestamp(1, MySQL.getCurrentTimeStamp());
+                                        updateDatePS.setInt(2, userID);
+                                        updateDatePS.setInt(3, charResult.getInt("char_id"));
+                                        updateDatePS.executeUpdate();
+                                    } else {
+                                        PreparedStatement updateDatePS = dvz.getSql().prepareStatement("UPDATE Characters SET last_joined=? WHERE char_id=?;");
+                                        updateDatePS.setTimestamp(1, MySQL.getCurrentTimeStamp());
+                                        updateDatePS.setInt(2, charResult.getInt("char_id"));
+                                        updateDatePS.executeUpdate();
+                                    }
+                                } catch (SQLException e) {
+                                    dvz.log("Failed to update last joined value for player!");
+                                }
+                            }
+                        }
+                    } catch(SQLException e) {
+                        dvz.log("Failed to sync userdata with MySQL database!");
+                    }
+                }
+            }.runTaskAsynchronously(dvz);
+        }
     }
 
 

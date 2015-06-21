@@ -41,6 +41,9 @@ public class CWPlayer {
     public HashMap<String, Integer> productsTaken = new HashMap<String, Integer>();
     private Color color;
 
+    private int userID = -1;
+    private int charID = -1;
+
     private Material endermanBlock = Material.AIR;
 
 
@@ -476,6 +479,22 @@ public class CWPlayer {
         return color;
     }
 
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public int getCharID() {
+        return charID;
+    }
+
+    public void setCharID(int charID) {
+        this.charID = charID;
+    }
 
     public String getTeamSuffix() {
         if (getPlayer().hasPermission("team.staff")) {
