@@ -1,9 +1,10 @@
 package com.clashwars.dvz.mysql;
+
+import org.bukkit.plugin.Plugin;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
-import org.bukkit.plugin.Plugin;
 
 /**
  * Connects to and uses a MySQL database

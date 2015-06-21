@@ -1,6 +1,5 @@
 package com.clashwars.dvz.abilities.dwarves.builder;
 
-import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.abilities.Ability;

@@ -2,7 +2,6 @@ package com.clashwars.dvz.commands;
 
 import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.CooldownManager;
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.cuboid.SelectionStatus;
 import com.clashwars.cwcore.hat.Hat;
@@ -35,12 +34,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.*;
 
 public class Commands {
