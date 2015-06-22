@@ -27,7 +27,9 @@ public class ToxicRain extends BaseAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
+        Long t = System.currentTimeMillis();
         if (onCooldown(player)) {
+            dvz.logTimings("ToxicRain.castAbility()[cd]", t);
             return;
         }
 
@@ -53,13 +55,14 @@ public class ToxicRain extends BaseAbility {
 
             @Override
             public void run() {
+                Long t = System.currentTimeMillis();
                 iterations++;
                 if (iterations > 3) {
                     cancel();
                     return;
                 }
                 if (prevLoc != null) {
-                    List<Entity> entities = CWUtil.getNearbyEntities(prevLoc, 20, null);
+                    List<Entity> entities = CWUtil.getNearbyEntities(prevLoc, 40, null);
                     for (Entity e : entities) {
                         if (e instanceof Player) {
                             Player pl = (Player) e;
@@ -73,8 +76,10 @@ public class ToxicRain extends BaseAbility {
                     }
                 }
                 prevLoc = player.getLocation();
+                dvz.logTimings("ToxicRain.castAbilityRunnable()", t);
             }
         }.runTaskTimer(dvz, 0, dvz.getGM().getDragonPower() * 20);
+        dvz.logTimings("ToxicRain.castAbility()", t);
     }
 
 

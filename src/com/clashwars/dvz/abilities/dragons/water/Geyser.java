@@ -28,7 +28,9 @@ public class Geyser extends BaseAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
+        Long t = System.currentTimeMillis();
         if (onCooldown(player)) {
+            dvz.logTimings("Geyser.castAbility()[cd]", t);
             return;
         }
 
@@ -56,9 +58,11 @@ public class Geyser extends BaseAbility {
                 tick++;
             }
         }.runTaskTimer(dvz, 8, 1);
+        dvz.logTimings("Geyser.castAbility()", t);
     }
 
     protected boolean onTick(int tick, int geyserHeight, Map<UUID, Vector> players, Player caster) {
+        Long t = System.currentTimeMillis();
         //Completed animation
         if (tick > geyserHeight*2) {
             return true;
@@ -83,6 +87,7 @@ public class Geyser extends BaseAbility {
                 }
             }
         }
+        dvz.logTimings("Geyser.onTick()", t);
         return false;
     }
 

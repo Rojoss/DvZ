@@ -26,7 +26,9 @@ public class Burn extends BaseAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
+        Long t = System.currentTimeMillis();
         if (onCooldown(player)) {
+            dvz.logTimings("Burn.castAbility()[cd]", t);
             return;
         }
 
@@ -51,6 +53,7 @@ public class Burn extends BaseAbility {
             effect.start();
 
         }
+        dvz.logTimings("Burn.castAbility()", t);
     }
 
     @EventHandler

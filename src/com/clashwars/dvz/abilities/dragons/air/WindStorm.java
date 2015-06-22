@@ -28,12 +28,15 @@ public class WindStorm extends BaseAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
+        Long t = System.currentTimeMillis();
         if (onCooldown(player)) {
+            dvz.logTimings("WindStorm.castAbility()[cd]", t);
             return;
         }
 
         //for (Entity entity : CWUtil.getNearbyEntities(triggerLoc, getFloatOption("distance"), Arrays.asList(new EntityType[]{EntityType.PLAYER}))) {
         new BukkitRunnable() {
+            Long t = System.currentTimeMillis();
             int iteration = 0;
             int maxIterations = dvz.getGM().getDragonPower() * 4;
 
@@ -57,12 +60,14 @@ public class WindStorm extends BaseAbility {
                 }
 
                 iteration++;
+                dvz.logTimings("WindStorm.castAbilityRunnable()", t);
                 if (iteration > maxIterations) {
                     cancel();
                     return;
                 }
             }
         }.runTaskTimer(dvz, 9, 9);
+        dvz.logTimings("WindStorm.castAbility()", t);
 
     }
 

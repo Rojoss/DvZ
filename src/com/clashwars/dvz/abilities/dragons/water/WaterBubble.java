@@ -26,7 +26,9 @@ public class WaterBubble extends BaseAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
+        Long t = System.currentTimeMillis();
         if (onCooldown(player)) {
+            dvz.logTimings("WaterBubble.castAbility()[cd]", t);
             return;
         }
 
@@ -41,6 +43,7 @@ public class WaterBubble extends BaseAbility {
 
             @Override
             public void run() {
+                Long t = System.currentTimeMillis();
                 iterations++;
                 if (iterations > 20) {
                     radius += 0.5f;
@@ -59,6 +62,7 @@ public class WaterBubble extends BaseAbility {
                     player.teleport(playerLoc.add(0, 6, 0));
                     player.setFlySpeed(dvz.getPM().getPlayer(player).getPlayerClass().getClassClass().getSpeed());
 
+                    dvz.logTimings("WaterBubble.castAbilityRunnable()[completed]", t);
                     cancel();
                     return;
                 }
@@ -86,11 +90,10 @@ public class WaterBubble extends BaseAbility {
                 }
 
                 ParticleEffect.WATER_BUBBLE.display(5,5,5,0, 300, playerLoc);
+                dvz.logTimings("WaterBubble.castAbilityRunnable()", t);
             }
         }.runTaskTimer(dvz, 0, 5);
-
-
-
+        dvz.logTimings("WaterBubble.castAbility()", t);
     }
 
     @EventHandler

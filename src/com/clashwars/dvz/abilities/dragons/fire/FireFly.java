@@ -27,7 +27,9 @@ public class FireFly extends BaseAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
+        Long t = System.currentTimeMillis();
         if (onCooldown(player)) {
+            dvz.logTimings("FireFly.castAbility()[cd]", t);
             return;
         }
 
@@ -36,6 +38,7 @@ public class FireFly extends BaseAbility {
 
             @Override
             public void run() {
+                Long t = System.currentTimeMillis();
                 iterations++;
                 if (iterations > 20) {
                     cancel();
@@ -82,8 +85,10 @@ public class FireFly extends BaseAbility {
                         }
                     }
                 }
+                dvz.logTimings("FireFly.castAbilityRunnable()", t);
             }
         }.runTaskTimer(dvz, 0, 8);
+        dvz.logTimings("FireFly.castAbility()", t);
     }
 
     @EventHandler

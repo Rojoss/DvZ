@@ -28,7 +28,9 @@ public class Wind extends BaseAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
+        Long t = System.currentTimeMillis();
         if (onCooldown(player)) {
+            dvz.logTimings("Wind.castAbility()[cd]", t);
             return;
         }
 
@@ -40,6 +42,7 @@ public class Wind extends BaseAbility {
 
             @Override
             public void run() {
+                Long t = System.currentTimeMillis();
                 for (int i = 0; i < particles; i++) {
                     Location loc = locs.get(index).toLocation(player.getWorld());
 
@@ -64,8 +67,10 @@ public class Wind extends BaseAbility {
                     }
                 }
                 particles += 4;
+                dvz.logTimings("Wind.castAbilityRunnable()", t);
             }
         }.runTaskTimer(dvz, 1, 1);
+        dvz.logTimings("Wind.castAbility()", t);
     }
 
     @EventHandler

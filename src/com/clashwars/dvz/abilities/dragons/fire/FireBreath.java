@@ -25,7 +25,9 @@ public class FireBreath extends BaseAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
+        Long t = System.currentTimeMillis();
         if (onCooldown(player)) {
+            dvz.logTimings("FireBreath.castAbility()[cd]", t);
             return;
         }
 
@@ -34,6 +36,7 @@ public class FireBreath extends BaseAbility {
 
             @Override
             public void run() {
+                Long t = System.currentTimeMillis();
                 iterations++;
                 if (iterations > dvz.getGM().getDragonPower() * 30 - 20) {
                     cancel();
@@ -44,8 +47,10 @@ public class FireBreath extends BaseAbility {
                 ParticleEffect.FLAME.display(1f, 0.5f, 1f, 0.01f, 2, castLoc, 500);
                 FallingBlock fire = player.getLocation().getWorld().spawnFallingBlock(castLoc, Material.FIRE, (byte)0);
                 fire.setVelocity(player.getLocation().getDirection().add(new Vector((CWUtil.randomFloat() - 0.5f) * 0.5f, (CWUtil.randomFloat() - 0.5f) * 0.5f, (CWUtil.randomFloat() - 0.5f) * 0.5f)));
+                dvz.logTimings("FireBreath.castAbilityRunnable()", t);
             }
         }.runTaskTimer(dvz, 0, 1);
+        dvz.logTimings("FireBreath.castAbility()", t);
 
     }
 

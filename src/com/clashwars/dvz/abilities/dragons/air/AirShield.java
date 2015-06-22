@@ -31,7 +31,9 @@ public class AirShield extends BaseAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
+        Long t = System.currentTimeMillis();
         if (onCooldown(player)) {
+            dvz.logTimings("AirShield.castAbility()[cd]", t);
             return;
         }
 
@@ -55,6 +57,7 @@ public class AirShield extends BaseAbility {
         }
 
         dragonPlayer = player;
+        dvz.logTimings("AirShield.castAbility()", t);
     }
 
     @EventHandler
