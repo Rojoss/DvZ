@@ -9,7 +9,10 @@ import com.clashwars.dvz.maps.DvzMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 
 import java.text.SimpleDateFormat;
@@ -86,6 +89,27 @@ public class Util {
 
     public static String getTimeStamp(String syntax) {
         return new SimpleDateFormat(syntax).format(Calendar.getInstance().getTime());
+    }
+
+
+    public static void damageEntity(Entity target, double damage) {
+        damageEntity(target, damage, EntityDamageEvent.DamageCause.CUSTOM);
+    }
+
+    public static void damageEntity(Entity target, double damage, EntityDamageEvent.DamageCause cause) {
+        EntityDamageEvent event = new EntityDamageEvent(target, cause, damage);
+        target.setLastDamageCause(event);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+    }
+
+    public static void damageEntity(Entity target, Entity damager, double damage) {
+        damageEntity(target, damager, damage, EntityDamageEvent.DamageCause.CUSTOM);
+    }
+
+    public static void damageEntity(Entity target, Entity damager, double damage, EntityDamageEvent.DamageCause cause) {
+        EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(damager, target, cause, damage);
+        target.setLastDamageCause(event);
+        Bukkit.getServer().getPluginManager().callEvent(event);
     }
 
 }

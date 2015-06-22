@@ -1,5 +1,6 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.Enjin;
@@ -300,6 +301,9 @@ public class MainEvents implements Listener {
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         Player killer = player.getKiller();
 
+        Debug.bc(killer);
+        Debug.bc(player.getLastDamageCause());
+
         event.setDroppedExp(0);
 
         //Death message
@@ -377,7 +381,7 @@ public class MainEvents implements Listener {
                     return;
                 }
             }
-        }.runTaskTimerAsynchronously(dvz, 60, 60);
+        }.runTaskTimer(dvz, 60, 60);
 
 
         //Instant respawning.

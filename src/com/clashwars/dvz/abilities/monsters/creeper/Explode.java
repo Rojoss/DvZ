@@ -14,6 +14,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -98,7 +99,7 @@ public class Explode extends BaseAbility {
                 //If player died create small explosion.
                 if (player.isDead()) {
                     player.sendMessage(Util.formatMsg("&cExploded with &4" + minPower + " &cpower because you died!"));
-                    createExplosion(playerLoc, (float)minPower);
+                    createExplosion(player, playerLoc, (float)minPower);
                     this.cancel();
                     return;
                 }
@@ -107,7 +108,7 @@ public class Explode extends BaseAbility {
                 if (!player.isSneaking()) {
                     player.sendMessage(Util.formatMsg("&cExploded with &4" + power + " &cpower!"));
                     player.setHealth(0);
-                    createExplosion(playerLoc, power.floatValue());
+                    createExplosion(player, playerLoc, power.floatValue());
                     this.cancel();
                     return;
                 }
@@ -116,14 +117,14 @@ public class Explode extends BaseAbility {
                 if (ticks > 600) {
                     player.sendMessage(Util.formatMsg("&cOvercharge!"));
                     player.setHealth(0);
-                    createExplosion(playerLoc, power.floatValue());
+                    createExplosion(player, playerLoc, power.floatValue());
                     this.cancel();
                 }
             }
         }.runTaskTimer(dvz, 0, 1);
     }
 
-    private void createExplosion(Location loc, float power) {
+    private void createExplosion(Player caster, Location loc, float power) {
         loc.getWorld().createExplosion(loc, power, false);
 
         if (dvz.getGM().getMonsterPower(3) >= 1) {
@@ -134,7 +135,7 @@ public class Explode extends BaseAbility {
                 }
                 CWPlayer cwp = dvz.getPM().getPlayer((Player)e);
                 if (cwp.isDwarf()) {
-                    ((Player)e).damage(dvz.getGM().getMonsterPower(3));
+                    Util.damageEntity(e, caster, dvz.getGM().getMonsterPower(3), EntityDamageEvent.DamageCause.ENTITY_EXPLOSION);
                 }
             }
         }
