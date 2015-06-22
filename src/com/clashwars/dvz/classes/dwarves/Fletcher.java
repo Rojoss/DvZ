@@ -236,9 +236,9 @@ public class Fletcher extends DwarfClass {
         //Give flint with random chance for breaking gravel.
         event.setCancelled(false);
         if (CWUtil.randomFloat() <= getDoubleOption("flint-chance")) {
+            dvz.getPM().getPlayer(player).addClassExp(1);
             block.getWorld().dropItemNaturally(block.getLocation().add(0.5f, 0.5f, 0.5f), Product.FLINT.getItem());
         }
-        dvz.getPM().getPlayer(player).addClassExp(1);
         dvz.logTimings("Fletcher.blockBreak()", t);
     }
 }
