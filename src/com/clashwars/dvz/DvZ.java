@@ -23,6 +23,8 @@ import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.tips.TipManager;
 import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.SoundMenu;
+import com.clashwars.dvz.util.TimingsLog;
+import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.WorkShop;
 import com.clashwars.dvz.workshop.WorkshopManager;
 import com.gmail.filoghost.holograms.api.Hologram;
@@ -83,6 +85,8 @@ public class DvZ extends JavaPlugin {
     private BannerMenu bannerMenu;
     private PatternMenu patternMenu;
 
+    private TimingsLog timingsLog;
+    boolean timingsEnabled = false;
     private final Logger log = Logger.getLogger("Minecraft");
 
     public GameRunnable gameRunnable;
@@ -279,12 +283,50 @@ public class DvZ extends JavaPlugin {
         log.severe("[DvZ " + getDescription().getVersion() + "] " + msg.toString());
     }
 
-    public void logTimings(Object msg, Long startTime) {
-        log.info("[DvZ Timings] " + (System.currentTimeMillis() - startTime) + "ms >>> " + msg.toString());
-    }
-
     public static DvZ inst() {
         return instance;
+    }
+
+
+    /* Timings */
+    public boolean startTimings () {
+        if (timingsLog == null) {
+            timingsEnabled = true;
+            timingsLog = new TimingsLog(this, Util.getTimeStamp("dd-MM__HH-mm") + ".timings");
+            return true;
+        }
+        return false;
+    }
+
+    public boolean stopTimings() {
+        if (timingsLog != null) {
+            timingsEnabled = false;
+            timingsLog = null;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean pauseTimings() {
+        if (timingsEnabled) {
+            timingsEnabled = false;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean resumeTimings() {
+        if (!timingsEnabled) {
+            timingsEnabled = true;
+            return true;
+        }
+        return false;
+    }
+
+    public void logTimings(Object msg, Long startTime) {
+        if (timingsEnabled && timingsLog != null) {
+            timingsLog.log(msg.toString(), startTime);
+        }
     }
 
 

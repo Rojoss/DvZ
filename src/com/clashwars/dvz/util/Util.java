@@ -12,6 +12,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
 
 public class Util {
@@ -76,6 +78,14 @@ public class Util {
         }
         DvZ.inst().logTimings("Util.isNearShrine()[false]", t);
         return false;
+    }
+
+    public static String getTimeStamp() {
+        return getTimeStamp("[dd-MM HH:mm:ss]");
+    }
+
+    public static String getTimeStamp(String syntax) {
+        return new SimpleDateFormat(syntax).format(Calendar.getInstance().getTime());
     }
 
 }

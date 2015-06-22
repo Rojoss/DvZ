@@ -1130,6 +1130,66 @@ public class Commands {
 
 
                 //##########################################################################################################################
+                //###################################################### /dvz timings ######################################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("timings")) {
+                    if (sender instanceof Player && !sender.isOp()) {
+                        sender.sendMessage(Util.formatMsg("Insufficient permissions."));
+                        return true;
+                    }
+
+                    if (args.length < 2) {
+                        sender.sendMessage(Util.formatMsg("&cInvalid usage. &7/" + label + " " + args[0] + " {start|stop|pause|resume}"));
+                        return true;
+                    }
+
+                    if (args[1].equalsIgnoreCase("start")) {
+                        if (dvz.startTimings()) {
+                            sender.sendMessage(Util.formatMsg("&aTimings are now being logged!"));
+                        } else {
+                            sender.sendMessage(Util.formatMsg("&cTimings already running!  &7(Use: /dvz timings stop)"));
+                        }
+                        dvz.logTimings("Commands.onCommand()[/dvz timings start]", t);
+                        return true;
+                    }
+
+                    if (args[1].equalsIgnoreCase("stop")) {
+                        if (dvz.stopTimings()) {
+                            sender.sendMessage(Util.formatMsg("&aNo longer logging timings!"));
+                        } else {
+                            sender.sendMessage(Util.formatMsg("&cTimings already stopped. &7(Use: /dvz timings start)"));
+                        }
+                        dvz.logTimings("Commands.onCommand()[/dvz timings stop]", t);
+                        return true;
+                    }
+
+                    if (args[1].equalsIgnoreCase("pause")) {
+                        if (dvz.pauseTimings()) {
+                            sender.sendMessage(Util.formatMsg("&aPaused timings logging! &7(When resuming it will log in the same file again)"));
+                        } else {
+                            sender.sendMessage(Util.formatMsg("&cTimings already paused. &7(Use: /dvz timings resume)"));
+                        }
+                        dvz.logTimings("Commands.onCommand()[/dvz timings pause]", t);
+                        return true;
+                    }
+
+                    if (args[1].equalsIgnoreCase("resume")) {
+                        if (dvz.resumeTimings()) {
+                            sender.sendMessage(Util.formatMsg("&aResumed timings logging!"));
+                        } else {
+                            sender.sendMessage(Util.formatMsg("&cTimings already running. &7(Use: /dvz timings pause)"));
+                        }
+                        dvz.logTimings("Commands.onCommand()[/dvz timings resume]", t);
+                        return true;
+                    }
+
+                    sender.sendMessage(Util.formatMsg("&cInvalid usage. &7/" + label + " " + args[0] + " {start|stop|pause|resume}"));
+                    dvz.logTimings("Commands.onCommand()[/dvz timings]", t);
+                    return true;
+                }
+
+
+                //##########################################################################################################################
                 //####################################################### /dvz test ########################################################
                 //##########################################################################################################################
                 if (args[0].equalsIgnoreCase("test")) {
