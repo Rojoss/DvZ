@@ -30,39 +30,47 @@ public class BuildingBrick extends BaseAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
+        Long t = System.currentTimeMillis();
         List<Block> blocks = player.getLastTwoTargetBlocks((Set<Material>)null, getIntOption("range"));
         Block block = blocks.get(0);
 
-        if (block == null || block.getType() != Material.AIR) {
+        if (block == null || (block.getType() != Material.AIR && block.getType() != Material.LONG_GRASS)) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou can't build there! &4&l<<"));
+            dvz.logTimings("BuildingBrick.castAbility()[not air]", t);
             return;
         }
 
         if (blocks.get(1).getType() != Material.SMOOTH_BRICK) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan only build against stone bricks! &4&l<<"));
+            dvz.logTimings("BuildingBrick.castAbility()[not against stone]", t);
             return;
         }
 
         if (dvz.getMM().getActiveMap().getCuboid("keep").contains(blocks.get(0))) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild tools have to be used outside the keep! &4&l<<"));
+            dvz.logTimings("BuildingBrick.castAbility()[inside keep]", t);
             return;
         }
         if (dvz.getMM().getActiveMap().getCuboid("innerwall").contains(blocks.get(0))) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild tools have to be used outside the keep! &4&l<<"));
+            dvz.logTimings("BuildingBrick.castAbility()[inside walls]", t);
             return;
         }
 
         if (Util.isNearShrine(blocks.get(0).getLocation(), 10)) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't build this close to the shrine! &4&l<<"));
+            dvz.logTimings("BuildingBrick.castAbility()[near shrine]", t);
             return;
         }
         if (dvz.getMM().getActiveMap().getLocation("monster").distance(blocks.get(0).getLocation()) < 50f) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't build this close to the monster spawn! &4&l<<"));
+            dvz.logTimings("BuildingBrick.castAbility()[near monster spawn]", t);
             return;
         }
 
         if (CWUtil.getNearbyEntities(block.getLocation(), 1.5f, Arrays.asList(new EntityType[] {EntityType.PLAYER})).size() > 0) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't build where people stand! &4&l<<"));
+            dvz.logTimings("BuildingBrick.castAbility()[person in way]", t);
             return;
         }
 
@@ -70,6 +78,7 @@ public class BuildingBrick extends BaseAbility {
             ItemStack item = player.getInventory().getItem(i);
             if (item != null && item.getType() == Material.SMOOTH_BRICK) {
                 if (onCooldown(player)) {
+                    dvz.logTimings("BuildingBrick.castAbility()[cd]", t);
                     return;
                 }
                 block.setType(item.getType());
@@ -81,10 +90,12 @@ public class BuildingBrick extends BaseAbility {
                 player.updateInventory();
 
                 dvz.getPM().getPlayer(player).addClassExp(1);
+                dvz.logTimings("BuildingBrick.castAbility()[place]", t);
                 return;
             }
         }
         CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cNo more stone in your hotbar! &4&l<<"));
+        dvz.logTimings("BuildingBrick.castAbility()[no more stone]", t);
     }
 
     @EventHandler

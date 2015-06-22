@@ -33,6 +33,7 @@ public class Camouflage extends BaseAbility {
         new BukkitRunnable() {
             @Override
             public void run() {
+                Long t = System.currentTimeMillis();
                 HashMap<UUID, Location> blocksClone = new HashMap<UUID, Location>(blocks);
                 for (UUID uuid : blocksClone.keySet()) {
                     Player player = dvz.getServer().getPlayer(uuid);
@@ -52,13 +53,16 @@ public class Camouflage extends BaseAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
+        Long t = System.currentTimeMillis();
         Block block = triggerLoc.getBlock();
         if (block == null || block.getType() == Material.AIR) {
+            dvz.logTimings("Camouflage.castAbility()[invalid block]", t);
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cClick a valid block to transform in to! &4&l<<"));
             return;
         }
 
         if (onCooldown(player)) {
+            dvz.logTimings("Camouflage.castAbility()[cd]", t);
             return;
         }
 
@@ -74,6 +78,7 @@ public class Camouflage extends BaseAbility {
         if (HatManager.hasHat(player)) {
             HatManager.getHat(player).unequip();
         }
+        dvz.logTimings("Camouflage.castAbility()", t);
     }
 
 

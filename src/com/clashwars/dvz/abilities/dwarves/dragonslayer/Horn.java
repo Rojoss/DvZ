@@ -29,11 +29,14 @@ public class Horn extends BaseAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
-        if (onCooldown(player)) {
+        Long t = System.currentTimeMillis();
+        if (dvz.getGM().getDragonSlayer() != player) {
+            dvz.logTimings("Horn.castAbility()[not dragon slayer]", t);
             return;
         }
 
-        if (dvz.getGM().getDragonSlayer() != player) {
+        if (onCooldown(player)) {
+            dvz.logTimings("Horn.castAbility()[cd]", t);
             return;
         }
 
@@ -42,17 +45,14 @@ public class Horn extends BaseAbility {
             p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 0);
         }
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                List<CWPlayer> cwPlayers = dvz.getPM().getPlayers(ClassType.DWARF, true, false);
-                for (CWPlayer cwp : cwPlayers) {
-                    ParticleEffect.VILLAGER_ANGRY.display(0.5f, 1f, 0.5f, 0, 30, cwp.getLocation().add(0,1,0));
-                    cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, getIntOption("duration"), 0));
-                    cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, getIntOption("duration"), 0));
-                }
-            }
-        }.runTaskLater(dvz, 40);
+
+        List<CWPlayer> cwPlayers = dvz.getPM().getPlayers(ClassType.DWARF, true, false);
+        for (CWPlayer cwp : cwPlayers) {
+            ParticleEffect.VILLAGER_ANGRY.display(0.5f, 1f, 0.5f, 0, 30, cwp.getLocation().add(0,1,0));
+            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, getIntOption("duration"), 0));
+            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, getIntOption("duration"), 0));
+        }
+        dvz.logTimings("Horn.castAbility()", t);
     }
 
     @EventHandler

@@ -32,23 +32,28 @@ public class SummonStone extends BaseAbility {
 
     @Override
     public void castAbility(final Player player, final Location triggerLoc) {
+        Long t = System.currentTimeMillis();
         if (onCooldown(player)) {
+            dvz.logTimings("SummonStone.castAbility()[cd]", t);
             return;
         }
         new BukkitRunnable() {
             int itterations = 0;
             @Override
             public void run() {
+                Long t = System.currentTimeMillis();
                 itterations++;
                 player.getInventory().addItem(Product.CRACKED_STONE.getItem(8));
                 triggerLoc.getWorld().playSound(triggerLoc, Sound.ITEM_PICKUP, 0.5f, 2f);
                 ParticleEffect.FIREWORKS_SPARK.display(0.2f, 0.8f, 0.2f, 0.02f, 5, player.getLocation().add(0,1,0), 20);
                 player.updateInventory();
+                dvz.logTimings("SummonStone.castAbilityRunnable()", t);
                 if (itterations >= 8) {
                     cancel();
                 }
             }
         }.runTaskTimer(dvz, 0, 5);
+        dvz.logTimings("SummonStone.castAbility()", t);
     }
 
     @EventHandler

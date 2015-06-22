@@ -23,7 +23,9 @@ public class SpeedPotion extends BaseAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
+        Long t = System.currentTimeMillis();
         if (onCooldown(player)) {
+            dvz.logTimings("SpeedPotion.castAbility()[cd]", t);
             return;
         }
 
@@ -31,6 +33,7 @@ public class SpeedPotion extends BaseAbility {
         ParticleEffect.SNOW_SHOVEL.display(0.3f, 0.3f, 0.3f, 0.2f, 50, player.getLocation().add(0, 2, 0));
         ParticleEffect.SNOWBALL.display(0.3f, 0.3f, 0.3f, 0.2f, 10, player.getLocation().add(0, 2, 0));
         player.playSound(player.getLocation(), Sound.DRINK, 1, 2f);
+        dvz.logTimings("SpeedPotion.castAbility()", t);
     }
 
     @EventHandler

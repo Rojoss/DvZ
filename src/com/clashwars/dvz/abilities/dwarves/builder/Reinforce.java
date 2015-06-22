@@ -28,12 +28,15 @@ public class Reinforce extends BaseAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
+        Long t = System.currentTimeMillis();
         if (triggerLoc.getBlock().getType() != Material.SMOOTH_BRICK || triggerLoc.getBlock().getData() == 0) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cClick on cracked stone to reinforce it! &4&l<<"));
+            dvz.logTimings("Reinforce.castAbility()[not cracked stone]", t);
             return;
         }
 
         if (onCooldown(player)) {
+            dvz.logTimings("Reinforce.castAbility()[cd]", t);
             return;
         }
         triggerLoc.getBlock().setData((byte)0);
@@ -41,6 +44,7 @@ public class Reinforce extends BaseAbility {
         triggerLoc.getWorld().playSound(triggerLoc, Sound.SLIME_ATTACK, 0.5f, 1f);
         dvz.getPM().getPlayer(player).addClassExp(1);
         player.updateInventory();
+        dvz.logTimings("Reinforce.castAbility()", t);
     }
 
     @EventHandler

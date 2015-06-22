@@ -22,13 +22,16 @@ public class Leap extends BaseAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
+        Long t = System.currentTimeMillis();
         if (onCooldown(player)) {
+            dvz.logTimings("Leap.castAbility()[cd]", t);
             return;
         }
         Vector dir = player.getLocation().getDirection();
         player.setVelocity(player.getVelocity().add(new Vector(dir.getX() * 2.5f, 0.8f, dir.getZ() * 2.5f)));
         player.getWorld().playSound(player.getLocation(), Sound.BAT_TAKEOFF, 0.5f, 1.5f);
         ParticleEffect.CRIT_MAGIC.display(0.8f, 0.2f, 0.8f, 0, 30, player.getLocation());
+        dvz.logTimings("Leap.castAbility()", t);
     }
 
 

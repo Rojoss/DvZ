@@ -23,13 +23,16 @@ public class HealPotion extends BaseAbility {
 
     @Override
     public void castAbility(Player player, Location triggerLoc) {
+        Long t = System.currentTimeMillis();
         if (onCooldown(player)) {
+            dvz.logTimings("HealPotion.castAbility()[cd]", t);
             return;
         }
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 1));
         ParticleEffect.HEART.display(0.3f, 0.3f, 0.3f, 0.1f, 10, player.getLocation().add(0, 2, 0));
         player.playSound(player.getLocation(), Sound.DRINK, 1, 2f);
+        dvz.logTimings("HealPotion.castAbility()", t);
     }
 
     @EventHandler

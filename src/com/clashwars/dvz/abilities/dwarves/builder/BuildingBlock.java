@@ -26,6 +26,7 @@ public class BuildingBlock extends BaseAbility {
 
     @EventHandler
     private void blockPlace(BlockPlaceEvent event) {
+        Long t = System.currentTimeMillis();
         if (!isCastItem(event.getItemInHand())) {
             return;
         }
@@ -38,16 +39,20 @@ public class BuildingBlock extends BaseAbility {
 
         if (dvz.getMM().getActiveMap().getCuboid("keep").contains(event.getBlock())) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild tools have to be used outside the keep! &4&l<<"));
+            dvz.logTimings("BuildingBlock.castAbility()[inside keep]", t);
             return;
         }
         if (dvz.getMM().getActiveMap().getCuboid("innerwall").contains(event.getBlock())) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild tools have to be used outside the keep! &4&l<<"));
+            dvz.logTimings("BuildingBlock.castAbility()[inside walls]", t);
             return;
         }
         if (Util.isNearShrine(event.getBlock().getLocation(), 10)) {
+            dvz.logTimings("BuildingBlock.castAbility()[near shrine]", t);
             return;
         }
         if (dvz.getMM().getActiveMap().getLocation("monster").distance(event.getBlock().getLocation()) < 50f) {
+            dvz.logTimings("BuildingBlock.castAbility()[near monster spawn]", t);
             return;
         }
 
@@ -90,6 +95,7 @@ public class BuildingBlock extends BaseAbility {
         if (placed) {
             dvz.getPM().getPlayer(player).addClassExp(1);
         }
+        dvz.logTimings("BuildingBlock.castAbility()", t);
     }
 
 

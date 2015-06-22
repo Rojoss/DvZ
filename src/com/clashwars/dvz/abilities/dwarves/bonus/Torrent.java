@@ -31,6 +31,7 @@ public class Torrent extends BaseAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
+        Long t = System.currentTimeMillis();
         //Get the block clicked and validate it.
         List<Block> blocks = player.getLastTwoTargetBlocks((Set<Material>)null, 32);
         Block targetBlock = blocks.get(0);
@@ -80,6 +81,7 @@ public class Torrent extends BaseAbility {
 
             @Override
             public void run() {
+                Long t = System.currentTimeMillis();
                 //Cloud around torrent at start
                 if (height == 0 && !goingDown) {
                     for (int x = -5; x < 5; x++) {
@@ -142,8 +144,10 @@ public class Torrent extends BaseAbility {
                     cancel();
                     return;
                 }
+                dvz.logTimings("Torrent.castAbilityRunnable()", t);
             }
         }.runTaskTimer(dvz, 6, 1);
+        dvz.logTimings("Torrent.castAbility()", t);
     }
 
 

@@ -33,12 +33,15 @@ public class Landmine extends BaseAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
+        Long t = System.currentTimeMillis();
         if (triggerLoc.getBlock().getRelative(BlockFace.UP).getType() != Material.AIR) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't place a mine here! &4&l<<"));
+            dvz.logTimings("Landmine.castAbility()[invalid loc]", t);
             return;
         }
 
         if (onCooldown(player)) {
+            dvz.logTimings("Landmine.castAbility()[cd]", t);
             return;
         }
 
@@ -46,16 +49,19 @@ public class Landmine extends BaseAbility {
         ParticleEffect.SMOKE_NORMAL.display(0.3f, 0.3f, 0.3f, 0, 20, triggerLoc.add(0.5f, 0.5f, 0.5f), 500);
         triggerLoc.getWorld().playSound(triggerLoc, Sound.DOOR_OPEN, 1, 2);
         CWUtil.sendActionBar(player, CWUtil.integrateColor("&2&l>> &aMine placed! &2&l<<"));
+        dvz.logTimings("Landmine.castAbility()", t);
     }
 
     @EventHandler
     private void playerMove(PlayerMoveEvent event) {
+        Long t = System.currentTimeMillis();
         if (event.getTo().getBlock().getType() != Material.TRIPWIRE) {
             return;
         }
 
         CWPlayer cwp = dvz.getPM().getPlayer(event.getPlayer());
         if (!cwp.isMonster()) {
+            dvz.logTimings("Landmine.playerMove()[not monster]", t);
             return;
         }
 
@@ -72,6 +78,7 @@ public class Landmine extends BaseAbility {
                 CWUtil.sendActionBar(cwt.getPlayer(), CWUtil.integrateColor("&4&l>> &8Hit by a landmine! &4&l<<"));
             }
         }
+        dvz.logTimings("Landmine.playerMove()", t);
     }
 
 
