@@ -35,6 +35,7 @@ public class Baker extends DwarfClass {
 
     @EventHandler(priority = EventPriority.HIGH)
     private void blockBreak(BlockBreakEvent event) {
+        Long t = System.currentTimeMillis();
         Block block = event.getBlock();
         if (block.getType() != Material.CROPS) {
             return;
@@ -48,12 +49,14 @@ public class Baker extends DwarfClass {
 
         if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your wheat! &4&l<<"));
+            dvz.logTimings("Baker.blockBreak()[no workshop]", t);
             return;
         }
 
         BakerWorkshop ws = (BakerWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
         if (!ws.getWheatBlocks().contains(block)) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your wheat! &4&l<<"));
+            dvz.logTimings("Baker.blockBreak()[other workshop]", t);
             return;
         }
 
@@ -63,10 +66,12 @@ public class Baker extends DwarfClass {
             CWUtil.dropItemStack(block.getLocation(), Product.WHEAT.getItem(), dvz, player);
         }
         CWUtil.dropItemStack(block.getLocation(), Product.SEED.getItem(), dvz, player);
+        dvz.logTimings("Baker.blockBreak()", t);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
      private void blockPlace(BlockPlaceEvent event) {
+        Long t = System.currentTimeMillis();
         Block block = event.getBlock();
         if (block.getType() != Material.CROPS) {
             return;
@@ -80,30 +85,36 @@ public class Baker extends DwarfClass {
 
         if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your workshop! &4&l<<"));
+            dvz.logTimings("Baker.blockPlace()[no workshop]", t);
             return;
         }
 
         BakerWorkshop ws = (BakerWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
         if (!ws.getWheatBlocks().contains(block)) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your workshop! &4&l<<"));
+            dvz.logTimings("Baker.blockPlace()[other workshop]", t);
             return;
         }
 
         dvz.getPM().getPlayer(player).addClassExp(1);
         event.setCancelled(false);
+        dvz.logTimings("Baker.blockPlace()", t);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     private void itemDrop(PlayerDropItemEvent event) {
+        Long t = System.currentTimeMillis();
         if (event.getItemDrop().getItemStack().getType() != Material.WHEAT) {
             return;
         }
         event.getItemDrop().setMetadata("thrower", new FixedMetadataValue(dvz, event.getPlayer().getName()));
+        dvz.logTimings("Baker.itemDrop()", t);
     }
 
 
     @EventHandler(priority = EventPriority.HIGH)
     private void hopperItemTake(InventoryPickupItemEvent event) {
+        Long t = System.currentTimeMillis();
         Inventory inv = event.getInventory();
         if (inv.getType() != InventoryType.HOPPER) {
             return;
@@ -121,6 +132,7 @@ public class Baker extends DwarfClass {
 
         WorkShop workshop = dvz.getWM().locGetWorkShop(event.getItem().getLocation());
         if (workshop == null || !(workshop instanceof BakerWorkshop)) {
+            dvz.logTimings("Baker.hopperItemTake()[not in workshop]", t);
             return;
         }
         event.setCancelled(false);
@@ -129,6 +141,7 @@ public class Baker extends DwarfClass {
         if (!ws.getOwner().getName().equals(player.getName())) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your grinder! &4&l<<"));
             player.getInventory().addItem(event.getItem().getItemStack());
+            dvz.logTimings("Baker.hopperItemTake()[other workshop grinder]", t);
             return;
         }
 
@@ -161,6 +174,7 @@ public class Baker extends DwarfClass {
             CWUtil.dropItemStack(ws.getHopperBlock().getRelative(BlockFace.DOWN).getLocation(), Product.FLOUR.getItem(flourCount), dvz, player);
             dvz.getPM().getPlayer(player).addClassExp(flourCount * 3);
         }
+        dvz.logTimings("Baker.hopperItemTake()", t);
     }
 
 

@@ -43,6 +43,7 @@ public class Tailor extends DwarfClass {
 
     @EventHandler(priority = EventPriority.HIGH)
     private void shear(PlayerShearEntityEvent event) {
+        Long t = System.currentTimeMillis();
         final Entity entity = event.getEntity();
         Player player = event.getPlayer();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
@@ -52,6 +53,7 @@ public class Tailor extends DwarfClass {
         }
 
         if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
+            dvz.logTimings("Tailor.shear()[no workshop]", t);
             return;
         }
         final TailorWorkshop ws = (TailorWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
@@ -64,6 +66,7 @@ public class Tailor extends DwarfClass {
             }
         }
         if (cwe == null) {
+            dvz.logTimings("Tailor.shear()[invalid sheep]", t);
             return;
         }
 
@@ -81,11 +84,13 @@ public class Tailor extends DwarfClass {
                 entity.getWorld().playSound(entity.getLocation(), Sound.DIG_WOOL, 1.0f, 0.0f);
             }
         }.runTaskLater(dvz, CWUtil.random(getIntOption("wool-regrow-min"), getIntOption("wool-regrow-max"))));
+        dvz.logTimings("Tailor.shear()", t);
     }
 
 
     @EventHandler(priority = EventPriority.HIGH)
     private void blockBreak(BlockBreakEvent event) {
+        Long t = System.currentTimeMillis();
         final Block block = event.getBlock();
         if (block.getType() != Material.RED_ROSE) {
             return;
@@ -99,6 +104,7 @@ public class Tailor extends DwarfClass {
 
         Player player = event.getPlayer();
         if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.TAILOR) {
+            dvz.logTimings("Tailor.blockBreak()[not tailor]", t);
             return;
         }
 
@@ -122,11 +128,13 @@ public class Tailor extends DwarfClass {
                 }
             }
         }.runTaskLater(dvz, getIntOption("flower-respawn-time"));
+        dvz.logTimings("Tailor.blockBreak()", t);
     }
 
 
     @EventHandler(priority = EventPriority.HIGH)
     private void interact(PlayerInteractEvent event) {
+        Long t = System.currentTimeMillis();
         if (event.getAction() != Action.LEFT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
@@ -194,6 +202,7 @@ public class Tailor extends DwarfClass {
                 // + 5 per flower broken
                 // + 1 per sheep sheared
                 // = 60
+                dvz.logTimings("Tailor.interact()[craft]", t);
                 return;
             }
         }
@@ -204,6 +213,7 @@ public class Tailor extends DwarfClass {
         } else if(yellowDye < dye2Needed) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (dye2Needed - yellowDye) + " more BLUE DYE to craftl! &4&l<<"));
         }
+        dvz.logTimings("Tailor.interact()", t);
     }
 
 }

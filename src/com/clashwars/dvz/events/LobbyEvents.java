@@ -97,7 +97,6 @@ public class LobbyEvents implements Listener {
         }
 
         if (item == null) {
-            dvz.logTimings("LobbyEvents.interact()[no item]", t);
             return;
         }
 
@@ -140,8 +139,8 @@ public class LobbyEvents implements Listener {
                     player.sendMessage(Util.formatMsg("&cLeft click while holding the class item to select it!"));
                 }
             }
+            dvz.logTimings("LobbyEvents.interact()", t);
         }
-        dvz.logTimings("LobbyEvents.interact()", t);
     }
 
 

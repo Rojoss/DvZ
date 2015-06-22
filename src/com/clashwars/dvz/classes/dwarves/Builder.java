@@ -29,6 +29,7 @@ public class Builder extends DwarfClass {
     @EventHandler
     //Allow block placement within inner walls if it's not inside a workshop and not inside the keep.
     private void blockPlace(BlockPlaceEvent event) {
+        Long t = System.currentTimeMillis();
         Player player = event.getPlayer();
         Block block = event.getBlock();
 
@@ -40,6 +41,7 @@ public class Builder extends DwarfClass {
         }
 
         if (dvz.getWM().locGetWorkShop(block.getLocation()) != null) {
+            dvz.logTimings("Builder.blockPlace()[in workshop]", t);
             return;
         }
 
@@ -47,25 +49,30 @@ public class Builder extends DwarfClass {
         if (activeMap != null && event.getBlock().getLocation().distance(activeMap.getLocation("monster")) < 50f) {
             CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't build this close to the monster spawn! &4&l<<"));
                     event.setCancelled(true);
+            dvz.logTimings("Builder.blockPlace()[monster spawn]", t);
             return;
         }
 
         if (Util.isNearShrine(block.getLocation(), 10)) {
+            dvz.logTimings("Builder.blockPlace()[near shrine]", t);
             return;
         }
 
         if ((block.getWorld().getHighestBlockAt(block.getLocation()).getLocation().getBlockY() -1) <= block.getLocation().getBlockY() && dvz.getMM().getActiveMap().getCuboid("keep").contains(event.getBlock())) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't build in the keep right now! &4&l<<"));
+            dvz.logTimings("Builder.blockPlace()[in keep]", t);
             return;
         }
 
         event.setCancelled(false);
         dvz.getPM().getPlayer(player).addClassExp(2);
+        dvz.logTimings("Builder.blockPlace()", t);
     }
 
     @EventHandler
     //Allow block breaking within inner walls if it's not inside a workshop and not inside the keep.
     private void blockBreak(BlockBreakEvent event) {
+        Long t = System.currentTimeMillis();
         Player player = event.getPlayer();
         Block block = event.getBlock();
 
@@ -77,6 +84,7 @@ public class Builder extends DwarfClass {
         }
 
         if (dvz.getWM().locGetWorkShop(block.getLocation()) != null) {
+            dvz.logTimings("Builder.blockBreak()[in workshop]", t);
             return;
         }
 
@@ -84,19 +92,23 @@ public class Builder extends DwarfClass {
         if (activeMap != null && event.getBlock().getLocation().distance(activeMap.getLocation("monster")) <  50f) {
             CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't break blocks this close to the monster spawn! &4&l<<"));
             event.setCancelled(true);
+            dvz.logTimings("Builder.blockBreak()[monster spawn]", t);
             return;
         }
 
         if (Util.isNearShrine(block.getLocation(), 10)) {
+            dvz.logTimings("Builder.blockBreak()[near shrine]", t);
             return;
         }
 
         if ((block.getWorld().getHighestBlockAt(block.getLocation()).getLocation().getBlockY() -1) <= block.getLocation().getBlockY() && dvz.getMM().getActiveMap().getCuboid("keep").contains(event.getBlock())) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't break blocks in the keep right now! &4&l<<"));
+            dvz.logTimings("Builder.blockBreak()[in keep]", t);
             return;
         }
 
         event.setCancelled(false);
+        dvz.logTimings("Builder.blockBreak()", t);
     }
 
 }

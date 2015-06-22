@@ -44,6 +44,7 @@ public class Chicken extends MobClass {
 
             @Override
             public void run() {
+                Long t = System.currentTimeMillis();
 
                 Map<UUID, CWEntity> eggsClone = new HashMap<UUID, CWEntity>(Chicken.eggs);
                 for (Map.Entry<UUID, CWEntity> entry : eggsClone.entrySet()) {
@@ -66,6 +67,7 @@ public class Chicken extends MobClass {
                     //If egg is lifted move it to player.
                     if (name.contains("lifted")) {
                         entry.getValue().entity().teleport(owner.getLocation().add(0,-0.7f,0));
+                        dvz.logTimings("Chicken.Runnable()[lifted]", t);
                         continue;
                     }
 
@@ -96,6 +98,7 @@ public class Chicken extends MobClass {
                             entry.getValue().entity().remove();
                             Chicken.eggs.remove(entry.getKey());
                         }
+                        dvz.logTimings("Chicken.Runnable()[dropped]", t);
                         continue;
                     }
 
@@ -113,6 +116,7 @@ public class Chicken extends MobClass {
                                 CWEntity.create(EntityType.CHICKEN, entry.getValue().entity().getLocation()).setBaby(true);
                                 entry.getValue().entity().remove();
                                 Chicken.eggs.remove(entry.getKey());
+                                dvz.logTimings("Chicken.Runnable()[hatched too long]", t);
                                 continue;
                             }
                             //Hatch it.
@@ -122,6 +126,7 @@ public class Chicken extends MobClass {
                         } else if (name.contains("grounded") && owner.isSneaking()) {
                             CWUtil.sendActionBar(owner, CWUtil.integrateColor("&4&l>> &cSneak near your dropped egg to hatch it! &4&l<<"));
                         }
+                        dvz.logTimings("Chicken.Runnable()[grouned/hatched]", t);
                     }
                 }
             }

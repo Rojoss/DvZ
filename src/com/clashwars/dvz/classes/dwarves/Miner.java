@@ -44,6 +44,7 @@ public class Miner extends DwarfClass {
 
     @EventHandler(priority = EventPriority.HIGH)
     private void blockBreak(BlockBreakEvent event) {
+        Long t = System.currentTimeMillis();
         final Block block = event.getBlock();
         if (!mineableMaterials.contains(block.getType())) {
             return;
@@ -55,15 +56,18 @@ public class Miner extends DwarfClass {
         }
 
         if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
+            dvz.logTimings("Miner.blockBreak()[no workshop]", t);
             return;
         }
 
         final MinerWorkshop ws = (MinerWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
         if (!ws.isBuild()) {
+            dvz.logTimings("Miner.blockBreak()[ws not build]", t);
             return;
         }
 
         if (!ws.getMineableBlocks().contains(block)) {
+            dvz.logTimings("Miner.blockBreak()[not part of workshop]", t);
             return;
         }
 
@@ -92,8 +96,10 @@ public class Miner extends DwarfClass {
         ws.runnables.add(new BukkitRunnable() {
             @Override
             public void run() {
+                Long t = System.currentTimeMillis();
                 WorkShop wsLoc = dvz.getWM().locGetWorkShop(block.getLocation());
                 if (wsLoc == null || !wsLoc.isOwner(player) || !wsLoc.isBuild()) {
+                    dvz.logTimings("Miner.blockBreakRunnable()[workshop invalid]", t);
                     cancel();
                     return;
                 }
@@ -111,6 +117,7 @@ public class Miner extends DwarfClass {
                 }
 
                 if (airBlocks.isEmpty()) {
+                    dvz.logTimings("Miner.blockBreakRunnable()[no more air available]", t);
                     return;
                 }
 
@@ -130,12 +137,15 @@ public class Miner extends DwarfClass {
                     block = CWUtil.random(airBlocks);
                     spawnBlockLowest(swapMat, block, ws, airBlocks);
                 }
+                dvz.logTimings("Miner.blockBreakRunnable()", t);
             }
         }.runTaskLater(dvz, CWUtil.random(CWUtil.getInt("min-respawn-time"), getIntOption("max-respawn-time"))));
+        dvz.logTimings("Miner.blockBreak()", t);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     private void interact(PlayerInteractEvent event) {
+        Long t = System.currentTimeMillis();
         if (event.getAction() != Action.LEFT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
@@ -207,16 +217,19 @@ public class Miner extends DwarfClass {
             // + 5 per ore mined
             // + 5 per ore smelted
             // = 80 per craft
+            dvz.logTimings("Miner.interact()[craft]", t);
             return;
         } else {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need at least 3 iron, gold or diamond to craft! &4&l<<"));
         }
+        dvz.logTimings("Miner.interact()", t);
     }
 
     //This will spawn a block with the given material at the block location.
     //It will begin at the bottom of the workshop and then check all the blocks above for air.
     //If no blocks are found it will just spawn it at a random place.
     private void spawnBlockLowest(Material mat, Block block, MinerWorkshop ws, List<Block> airBlocks) {
+        Long t = System.currentTimeMillis();
         int maxY = block.getY();
         block = block.getWorld().getBlockAt(block.getX(), ws.getCuboid().getMinY(), block.getZ());
         if (block.getType() != Material.AIR) {
@@ -232,6 +245,7 @@ public class Miner extends DwarfClass {
             block = CWUtil.random(airBlocks);
         }
         block.setType(mat);
+        dvz.logTimings("Miner.spawnBlockLowest()", t);
     }
 
 

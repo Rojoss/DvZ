@@ -49,6 +49,7 @@ public class Alchemist extends DwarfClass {
     //Check for sneaking inside the pot to give player upward velocity to get out.
     @EventHandler
     private void onSneak(PlayerToggleSneakEvent event) {
+        Long t = System.currentTimeMillis();
         Player player = event.getPlayer();
         if (player.isSneaking()) {
             return;
@@ -56,17 +57,20 @@ public class Alchemist extends DwarfClass {
 
         WorkShop ws = dvz.getWM().locGetWorkShop(player.getLocation());
         if (ws == null || !(ws instanceof AlchemistWorkshop)) {
+            dvz.logTimings("Alchemist.onSneak()[not in alch ws]", t);
             return;
         }
 
         if (((AlchemistWorkshop)ws).getPot().contains(player)) {
             player.setVelocity(player.getVelocity().setY(1.3f));
         }
+        dvz.logTimings("Alchemist.onSneak()", t);
     }
 
     //Check for using buckets/bottles on cauldrons.
     @EventHandler(priority = EventPriority.HIGH)
     private void onInteract(PlayerInteractEvent event) {
+        Long t = System.currentTimeMillis();
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
@@ -87,11 +91,13 @@ public class Alchemist extends DwarfClass {
         AlchemistWorkshop ws = (AlchemistWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
         if (!ws.isBuild()) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your own workshop! &4&l<<"));
+            dvz.logTimings("Alchemist.onInteract()[no workshop]", t);
             return;
         }
 
         if (!ws.getCuboid().contains(block.getLocation())) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your " + block.getType().toString().toLowerCase() + "! &4&l<<"));
+            dvz.logTimings("Alchemist.onInteract()[other workshop]", t);
             return;
         }
 
@@ -99,10 +105,12 @@ public class Alchemist extends DwarfClass {
         if (block.getType() == Material.CAULDRON) {
             if (event.getItem() == null || event.getItem().getType() != Material.BUCKET) {
                 CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cUse a bucket to empty the cauldron! &4&l<<"));
+                dvz.logTimings("Alchemist.onInteract()[not holding bucket]", t);
                 return;
             }
             if (block.getData() != 3) {
                 CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis cauldron isn't full yet! &4&l<<"));
+                dvz.logTimings("Alchemist.onInteract()[cauldron not full]", t);
                 return;
             }
 
@@ -111,11 +119,13 @@ public class Alchemist extends DwarfClass {
             block.setData((byte)0);
             dvz.getPM().getPlayer(player).addClassExp(1);
         }
+        dvz.logTimings("Alchemist.onInteract()", t);
     }
 
     //Check for emptying bucket in pot.
     @EventHandler(priority = EventPriority.HIGH)
     private void onBucketEmpty(PlayerBucketEmptyEvent event) {
+        Long t = System.currentTimeMillis();
         if (event.getBucket() != Material.WATER_BUCKET) {
             return;
         }
@@ -126,23 +136,27 @@ public class Alchemist extends DwarfClass {
         }
 
         if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
+            dvz.logTimings("Alchemist.onBucketEmpty()[no workshop]", t);
             return;
         }
 
         final AlchemistWorkshop ws = (AlchemistWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
         if (!ws.isBuild()) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop and place the water in your pot! &4&l<<"));
+            dvz.logTimings("Alchemist.onBucketEmpty()[ws not build]", t);
             return;
         }
 
         final Location loc = event.getBlockClicked().getRelative(event.getBlockFace()).getLocation();
         if (!ws.getPot().contains(loc)) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cWater has to be placed inside your pot! &4&l<<"));
+            dvz.logTimings("Alchemist.onBucketEmpty()[outside pot]", t);
             return;
         }
 
         if (ws.potFilled) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cPot already filled! &7Add melons OR sugar now. &4&l<<"));
+            dvz.logTimings("Alchemist.onBucketEmpty()[already filled]", t);
             return;
         }
 
@@ -153,10 +167,12 @@ public class Alchemist extends DwarfClass {
                 checkPotFilled(ws);
             }
         }.runTaskLater(dvz, 30));
+        dvz.logTimings("Alchemist.onBucketEmpty()", t);
     }
 
     @EventHandler (priority = EventPriority.HIGH)
     private void blockBreak(BlockBreakEvent event) {
+        Long t = System.currentTimeMillis();
         final Block block = event.getBlock();
         if (block.getType() != Material.MELON_BLOCK && block.getType() != Material.SUGAR_CANE_BLOCK) {
             return;
@@ -188,6 +204,7 @@ public class Alchemist extends DwarfClass {
                 }
 
             }.runTaskLater(dvz, getIntOption("melon-respawn-time"));
+            dvz.logTimings("Alchemist.blockBreak()[melon]", t);
         } else if (block.getType() == Material.SUGAR_CANE_BLOCK) {
             event.setCancelled(true);
             Block currentBlock = block;
@@ -233,6 +250,7 @@ public class Alchemist extends DwarfClass {
                     cancel();
                 }
             }.runTaskTimer(dvz, getIntOption("sugarcane-respawn-time"), getIntOption("sugarcane-respawn-time"));
+            dvz.logTimings("Alchemist.blockBreak()[sugarcane]", t);
         }
     }
 
@@ -240,6 +258,7 @@ public class Alchemist extends DwarfClass {
     //Check for dropping ingredients in the pot.
     @EventHandler(priority = EventPriority.HIGH)
     private void onItemDrop(PlayerDropItemEvent event) {
+        final Long t = System.currentTimeMillis();
         final Item item = event.getItemDrop();
 
         final Player player = event.getPlayer();
@@ -248,11 +267,13 @@ public class Alchemist extends DwarfClass {
         }
 
         if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
+            dvz.logTimings("Alchemist.itemDrop()[no workshop]", t);
             return;
         }
 
         final AlchemistWorkshop ws = (AlchemistWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
         if (!ws.isBuild()) {
+            dvz.logTimings("Alchemist.itemDrop()[ws not build]", t);
             return;
         }
 
@@ -266,6 +287,7 @@ public class Alchemist extends DwarfClass {
                 if (potClone.contains(loc)) {
                     if (!ws.potFilled) {
                         CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cFill your pot with water before adding ingredients! &4&l<<"));
+                        dvz.logTimings("Alchemist.itemDrop()[not boiling]", t);
                         return;
                     }
 
@@ -312,9 +334,11 @@ public class Alchemist extends DwarfClass {
                 }
             }
         }.runTaskLater(dvz, 10));
+        dvz.logTimings("Alchemist.itemDrop()", t);
     }
 
     private void brew(AlchemistWorkshop ws) {
+        Long t = System.currentTimeMillis();
         CWUtil.sendActionBar(ws.getOwner(), CWUtil.integrateColor("&5&l>> &dPotion brewed! &5&l<<"));
 
         //Put item in chest and if chest is full drop it at chest.
@@ -358,6 +382,7 @@ public class Alchemist extends DwarfClass {
             block.setType(Material.AIR);
             ParticleEffect.SMOKE_NORMAL.display(0.3f, 0.3f, 0.3f, 0.0001f, 5, block.getLocation().add(0.5f, 0.5f, 0.5f));
         }
+        dvz.logTimings("Alchemist.brew()", t);
     }
 
     private void checkPotFilled(AlchemistWorkshop ws) {
@@ -375,6 +400,7 @@ public class Alchemist extends DwarfClass {
     }
 
     public void wrongIngredientAdded(AlchemistWorkshop ws) {
+        Long t = System.currentTimeMillis();
         //Reset
         ws.boilEffect.cancel();
         ws.boilEffect = null;
@@ -391,6 +417,7 @@ public class Alchemist extends DwarfClass {
             block.setType(Material.AIR);
             ParticleEffect.SMOKE_NORMAL.display(0.3f, 0.3f, 0.3f, 0.0001f, 5, block.getLocation().add(0.5f, 0.5f, 0.5f));
         }
+        dvz.logTimings("Alchemist.wrongIngredientAdded()", t);
     }
 
     private void createBoilEffect(AlchemistWorkshop ws) {

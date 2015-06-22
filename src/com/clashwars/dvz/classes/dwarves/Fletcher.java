@@ -42,6 +42,7 @@ public class Fletcher extends DwarfClass {
 
     @EventHandler
     private void mobDamage(EntityDamageByEntityEvent event) {
+        Long t = System.currentTimeMillis();
         if (!(event.getEntity() instanceof Chicken)) {
             return;
         }
@@ -79,14 +80,17 @@ public class Fletcher extends DwarfClass {
 
         if (!isOwnAnimal) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your " + event.getEntity().getType().name() + "! &4&l<<"));
+            dvz.logTimings("Fletcher.mobDamage()[other animal]", t);
             return;
         }
+        dvz.logTimings("Fletcher.mobDamage()", t);
         event.setCancelled(false);
     }
 
 
     @EventHandler
     private void mobKill(EntityDeathEvent event) {
+        Long t = System.currentTimeMillis();
         if (event.getEntityType() != EntityType.CHICKEN) {
             return;
         }
@@ -116,6 +120,7 @@ public class Fletcher extends DwarfClass {
             }
         }
         if (!isOwnAnimal) {
+            dvz.logTimings("Fletcher.mobKill()[other animal]", t);
             return;
         }
 
@@ -133,11 +138,13 @@ public class Fletcher extends DwarfClass {
         }
         entity.getWorld().dropItem(entity.getLocation(), feathers);
         ws.spawnChicken(EntityType.CHICKEN, CWUtil.random(ws.getCuboid().getMaxY() + 5, ws.getCuboid().getMaxY() + 15));
+        dvz.logTimings("Fletcher.mobKill()", t);
     }
 
 
     @EventHandler(priority = EventPriority.HIGH)
     private void interact(PlayerInteractEvent event) {
+        Long t = System.currentTimeMillis();
         if (event.getAction() != Action.LEFT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
@@ -209,11 +216,13 @@ public class Fletcher extends DwarfClass {
         } else if (flint < flintNeeded) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (flintNeeded - flint) + " more FLINT to craftl! &4&l<<"));
         }
+        dvz.logTimings("Fletcher.interact()", t);
     }
 
 
     @EventHandler(priority = EventPriority.HIGH)
     private void blockBreak(BlockBreakEvent event) {
+        Long t = System.currentTimeMillis();
         Block block = event.getBlock();
         if (block.getType() != Material.GRAVEL) {
             return;
@@ -230,5 +239,6 @@ public class Fletcher extends DwarfClass {
             block.getWorld().dropItemNaturally(block.getLocation().add(0.5f, 0.5f, 0.5f), Product.FLINT.getItem());
         }
         dvz.getPM().getPlayer(player).addClassExp(1);
+        dvz.logTimings("Fletcher.blockBreak()", t);
     }
 }
