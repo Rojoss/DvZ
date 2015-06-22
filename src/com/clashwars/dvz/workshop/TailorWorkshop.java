@@ -29,6 +29,7 @@ public class TailorWorkshop extends WorkShop {
 
     @Override
     public void onBuild() {
+        Long t = System.currentTimeMillis();
         //Spawn sheep
         int sheepCount = DvzClass.TAILOR.getClassClass().getIntOption("sheep-amount");
         for (int i = 0; i < sheepCount; i++) {
@@ -45,6 +46,7 @@ public class TailorWorkshop extends WorkShop {
             ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, entity.entity().getLocation());
             cuboid.getWorld().playSound(entity.entity().getLocation(), Sound.CHICKEN_EGG_POP, 0.5f, 2.0f);
         }
+        dvz.logTimings("TailorWorkshop.onBuild()", t);
     }
 
     @Override

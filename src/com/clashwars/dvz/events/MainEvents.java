@@ -64,6 +64,7 @@ public class MainEvents implements Listener {
 
     @EventHandler
     private void playerJoin(PlayerJoinEvent event) {
+        Long t = System.currentTimeMillis();
         final Player player = event.getPlayer();
         final CWPlayer cwp = dvz.getPM().getPlayer(player);
         Location spawnLoc = dvz.getGM().getUsedWorld().getSpawnLocation();
@@ -143,6 +144,7 @@ public class MainEvents implements Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
+                    Long t = System.currentTimeMillis();
                     try {
                         //Get the enjin ID with the Enjin API.
                         //TODO: Need a cooldown on the cache false property. Now when like 50 ppl log in at same time it will load in ALL users 50 times...
@@ -283,14 +285,17 @@ public class MainEvents implements Listener {
                     } catch(SQLException e) {
                         dvz.log("Failed to sync userdata with MySQL database!");
                     }
+                    dvz.logTimings("MainEvents.playerJoin()[async mysql sync task]", t);
                 }
             }.runTaskAsynchronously(dvz);
         }
+        dvz.logTimings("MainEvents.playerJoin()", t);
     }
 
 
     @EventHandler
     private void death(PlayerDeathEvent event) {
+        Long t = System.currentTimeMillis();
         final Player player = event.getEntity();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         Player killer = player.getKiller();
@@ -348,8 +353,6 @@ public class MainEvents implements Listener {
             dvz.getServer().broadcastMessage(Util.formatMsg("&d&lThe DragonSlayer died!"));
         }
 
-        ClassType playerClass = dvz.getPM().getPlayer(player).getPlayerClass().getType();
-
         final ShrineType[] shrineTypes = new ShrineType[] {ShrineType.WALL, ShrineType.KEEP_1, ShrineType.KEEP_2};
         new BukkitRunnable() {
             int index = 0;
@@ -374,7 +377,7 @@ public class MainEvents implements Listener {
                     return;
                 }
             }
-        }.runTaskTimer(dvz, 60, 60);
+        }.runTaskTimerAsynchronously(dvz, 60, 60);
 
 
         //Instant respawning.
@@ -385,11 +388,13 @@ public class MainEvents implements Listener {
                 }
             }
         });
+        dvz.logTimings("MainEvents.death()", t);
     }
 
 
     @EventHandler
     private void respawn(PlayerRespawnEvent event) {
+        Long t = System.currentTimeMillis();
         final Player player = event.getPlayer();
         //Get the respawn location and get the active map.
         Location spawnLoc = dvz.getGM().getUsedWorld().getSpawnLocation();
@@ -440,5 +445,6 @@ public class MainEvents implements Listener {
                 }
             }
         }.runTaskLater(dvz, 15);
+        dvz.logTimings("MainEvents.respawn()", t);
     }
 }

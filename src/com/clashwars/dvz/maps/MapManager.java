@@ -32,6 +32,7 @@ public class MapManager {
     }
 
     private void populate() {
+        Long t = System.currentTimeMillis();
         //Go through all maps in the maps directory and load their data or create new data if it doesn't exist yet.
         List<File> mapFolders = CWUtil.getDirectories(new File("plugins/DvZ/maps"));
         Map<String, MapData> mapsInConfig = mapCfg.getMaps();
@@ -71,10 +72,13 @@ public class MapManager {
             }
         }
         dvz.log("Active map loaded in successfully!");
+        dvz.logTimings("MapManager.populate()", t);
     }
 
     public boolean removeActiveMap() {
+        Long t = System.currentTimeMillis();
         if (getActiveMap() == null || !getActiveMap().isLoaded()) {
+            dvz.logTimings("MapManager.removeActiveMap()[no map]", t);
             return false;
         }
 
@@ -95,14 +99,17 @@ public class MapManager {
         //Try remove the map.
         if (!CWUtil.deleteFolder(new File(activeName))) {
             dvz.log("Failed to remove the map '" + activeName + "'. The map has been unloaded though so it can be manually deleted.");
+            dvz.logTimings("MapManager.removeActiveMap()[failed]", t);
             return false;
         }
 
+        dvz.logTimings("MapManager.removeActiveMap()", t);
         return true;
     }
 
 
     public boolean loadMap(String name) {
+        Long t = System.currentTimeMillis();
         if (name == null || name.isEmpty()) {
             name = getRandomMapName();
         }
@@ -112,6 +119,7 @@ public class MapManager {
         if (mapName == null || mapName.isEmpty()) {
             Util.broadcastAdmins(Util.formatMsg("&cFailed to load the map '" + mapName + "'"));
             Util.broadcastAdmins(Util.formatMsg("&cYou probably forgot to add maps to '/plugins/dvz/maps'"));
+            dvz.logTimings("MapManager.loadMap()[Invalid map name]", t);
             return false;
         }
 
@@ -120,6 +128,7 @@ public class MapManager {
         if (newMap == null) {
             Util.broadcastAdmins(Util.formatMsg("&cFailed to load the map '" + mapName + "'"));
             Util.broadcastAdmins(Util.formatMsg("&cThis is not a valid DvZ map!"));
+            dvz.logTimings("MapManager.loadMap()[no dvz map]", t);
             return false;
         }
 
@@ -129,6 +138,7 @@ public class MapManager {
             mapCfg.setActiveMap(activeMap);
             Util.broadcastAdmins(Util.formatMsg("&cFailed to load the map '" + mapName + "'"));
             Util.broadcastAdmins(Util.formatMsg("&cMap was already loaded."));
+            dvz.logTimings("MapManager.loadMap()[already loaded]", t);
             return true;
         }
 
@@ -139,6 +149,7 @@ public class MapManager {
             } catch (IOException e) {
                 Util.broadcastAdmins(Util.formatMsg("&cFailed to load the map '" + mapName + "'"));
                 Util.broadcastAdmins(Util.formatMsg("&cCould not copy the map to the root."));
+                dvz.logTimings("MapManager.loadMap()[failed copy new map]", t);
                 return false;
             }
         }
@@ -151,6 +162,7 @@ public class MapManager {
         } else {
             Util.broadcastAdmins(Util.formatMsg("&cFailed to load the map '" + mapName + "'"));
             Util.broadcastAdmins(Util.formatMsg("&cCould not find the map while trying to create the world."));
+            dvz.logTimings("MapManager.loadMap()[failed loading]", t);
             return false;
         }
 
@@ -168,6 +180,7 @@ public class MapManager {
                 mapCfg.setActiveMap(activeMap);
             }
         }.runTaskLater(dvz, 20);
+        dvz.logTimings("MapManager.loadMap()", t);
         return true;
     }
 

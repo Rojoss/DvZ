@@ -51,6 +51,7 @@ public class AlchemistWorkshop extends WorkShop {
 
     @Override
     public void onBuild() {
+        Long t = System.currentTimeMillis();
         //Get all cauldrons and the chest.
         List<Block> blocks = cuboid.getBlocks();
         for (Block block : blocks) {
@@ -115,6 +116,7 @@ public class AlchemistWorkshop extends WorkShop {
                 }
             }
         }.runTaskTimer(dvz, 0, 20));
+        dvz.logTimings("AlchemistWorkshop.onBuild()", t);
     }
 
     @Override

@@ -49,15 +49,18 @@ public class Util {
     }
 
     public static Vector getDragonMouthPos(Location playerLoc) {
+        Long t = System.currentTimeMillis();
         double pitch = Math.PI /2;
         double yaw  = ((playerLoc.getYaw() + 90) * Math.PI) / 180;
         Vector castVec = new org.bukkit.util.Vector(((float)Math.sin(pitch) * Math.cos(yaw)), ((float)Math.cos(pitch)), ((float)Math.sin(pitch) * Math.sin(yaw)));
         castVec.multiply(6);
         castVec.add(playerLoc.toVector());
+        DvZ.inst().logTimings("Util.getDragonMouthPos()", t);
         return castVec;
     }
 
     public static boolean isNearShrine(Location loc, float range) {
+        Long t = System.currentTimeMillis();
         DvzMap activeMap = DvZ.inst().getMM().getActiveMap();
         if (activeMap != null) {
             String[] shrines = new String[] {"shrinewall", "shrine1keep", "shrine2keep"};
@@ -65,11 +68,13 @@ public class Util {
                 Cuboid cub = activeMap.getCuboid(shrineName);
                 if (cub != null && cub.getCenterLoc() != null) {
                     if (cub.getCenterLoc().distance(loc) < 10) {
+                        DvZ.inst().logTimings("Util.isNearShrine()[true]", t);
                         return true;
                     }
                 }
             }
         }
+        DvZ.inst().logTimings("Util.isNearShrine()[false]", t);
         return false;
     }
 

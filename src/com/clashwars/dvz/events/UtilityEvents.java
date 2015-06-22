@@ -31,6 +31,7 @@ public class UtilityEvents implements Listener {
 
     @EventHandler
     private void damage(EntityDamageEvent event) {
+        Long t = System.currentTimeMillis();
         //No durability loss
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
@@ -60,6 +61,7 @@ public class UtilityEvents implements Listener {
                 event.setCancelled(true);
             }
         }
+        dvz.logTimings("UtilityEvents.damage()", t);
     }
 
 
@@ -74,6 +76,7 @@ public class UtilityEvents implements Listener {
 
     @EventHandler
     private void onDamageByEntity(EntityDamageByEntityEvent event) {
+        Long t = System.currentTimeMillis();
         if (!(event.getEntity() instanceof Player)) {
             return;
         }
@@ -96,6 +99,7 @@ public class UtilityEvents implements Listener {
             //Per level block 0.5 hearth extra while blocking and 1.0 per level if also sneaking.
             if (!damaged.getItemInHand().getEnchantments().containsKey(Enchantment.DURABILITY)) {
                 event.setDamage(event.getDamage() + dmgModifier);
+                dvz.logTimings("UtilityEvents.damageByEntity()[no block enchant]", t);
                 return;
             }
 
@@ -109,6 +113,7 @@ public class UtilityEvents implements Listener {
         }
 
         event.setDamage(event.getDamage() + dmgModifier);
+        dvz.logTimings("UtilityEvents.damageByEntity()", t);
     }
 
 

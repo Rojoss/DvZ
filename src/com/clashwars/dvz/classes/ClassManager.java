@@ -60,6 +60,7 @@ public class ClassManager {
     //For monster classes it will try give each class based on weight. (The zombie class is always given)
     //Set amount to -1 to get give class amount based on defaults.
     public Map<DvzClass, BaseClass> getRandomClasses(Player player, ClassType type, int amount) {
+        Long t = System.currentTimeMillis();
         Map<DvzClass, BaseClass> classes = getClasses(type);
         HashMap<DvzClass, BaseClass> randomclasses = new HashMap<DvzClass, BaseClass>();
         BaseClass c;
@@ -185,11 +186,13 @@ public class ClassManager {
                 }
             }
         }
+        dvz.logTimings("ClassManager.getRandomClasses()", t);
         return randomclasses;
     }
 
 
     public void showSwitchOptionsMenu(Player player) {
+        Long t = System.currentTimeMillis();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         switchOptionsMenu.show(player);
         switchOptionsMenu.clear(player);
@@ -202,9 +205,11 @@ public class ClassManager {
             switchOptionsMenu.setSlot(dvzClass.getClassClass().getClassItem(), slot, player);
             slot++;
         }
+        dvz.logTimings("ClassManager.showSwitchOptionsMenu()", t);
     }
 
     public void showSwitchMenu(Player player, DvzClass dvzClass) {
+        Long t = System.currentTimeMillis();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         if (!switchMenus.containsKey(player.getUniqueId())) {
             switchMenus.put(player.getUniqueId(), new ItemMenu("switch-" + player.getUniqueId(), 54, "XXX"));
@@ -248,5 +253,6 @@ public class ClassManager {
             menu.setSlot(new CWItem(player.getInventory().getBoots()), 48, null);
             player.getInventory().setBoots(empty);
         }
+        dvz.logTimings("ClassManager.showSwitchMenu()", t);
     }
 }

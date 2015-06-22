@@ -29,6 +29,7 @@ public class SwitchEvents implements Listener {
 
     @EventHandler
     private void menuClick(final ItemMenu.ItemMenuClickEvent event) {
+        Long t = System.currentTimeMillis();
         final ItemMenu menu = event.getItemMenu();
         final Player player = (Player) event.getWhoClicked();
         final ItemStack item = event.getCurrentItem();
@@ -56,6 +57,7 @@ public class SwitchEvents implements Listener {
                             dvz.getCM().showSwitchMenu((Player) player, dvzClass);
                         }
                     }.runTaskLater(dvz, 60);
+                    dvz.logTimings("SwitchEvents.menuClick()[class selected]", t);
                     return;
                 }
             }
@@ -73,6 +75,7 @@ public class SwitchEvents implements Listener {
                 //Cancel switching
                 if (rawSlot == 0) {
                     player.closeInventory();
+                    dvz.logTimings("SwitchEvents.menuClick()[cancel]", t);
                     return;
                 }
 
@@ -82,6 +85,7 @@ public class SwitchEvents implements Listener {
                     menu.setPage(10);
                     player.closeInventory();
                     dvz.getPM().getPlayer(player).switchClass(DvzClass.fromString(menu.getData()), menu);
+                    dvz.logTimings("SwitchEvents.menuClick()[switch]", t);
                     return;
                 }
 
@@ -101,6 +105,7 @@ public class SwitchEvents implements Listener {
                 }
                 if (!Product.canKeep(item.getType())) {
                     player.sendMessage(Util.formatMsg("&cThis item can't be kept."));
+                    dvz.logTimings("SwitchEvents.menuClick()[can't keep]", t);
                     return;
                 }
 
@@ -108,24 +113,28 @@ public class SwitchEvents implements Listener {
                 if (menu.getItems().length >= event.getSlot() + 9 && (menu.getItems()[event.getSlot() + 9] == null || menu.getItems()[event.getSlot() + 9].getType() == Material.AIR)) {
                     menu.setSlot(new CWItem(item), event.getSlot() + 9, null);
                     player.getInventory().setItem(event.getSlot(), empty);
+                    dvz.logTimings("SwitchEvents.menuClick()[keep item1]", t);
                     return;
                 } else {
                     for (int i = 9; i < menu.getSize() - 9; i++) {
                         if (menu.getItems()[i] == null || menu.getItems()[i].getType() == Material.AIR) {
                             menu.setSlot(new CWItem(item), i, null);
                             player.getInventory().setItem(event.getSlot(), empty);
+                            dvz.logTimings("SwitchEvents.menuClick()[keep item2]", t);
                             return;
                         }
                     }
                 }
                 player.sendMessage(Util.formatMsg("&cCan't store more items."));
             }
+            dvz.logTimings("SwitchEvents.menuClick()", t);
         }
     }
 
 
     @EventHandler
     private void invClose(InventoryCloseEvent event) {
+        Long t = System.currentTimeMillis();
         Player player = (Player) event.getPlayer();
         Inventory inv = event.getInventory();
 
@@ -158,6 +167,7 @@ public class SwitchEvents implements Listener {
         player.sendMessage(Util.formatMsg("&6You stopped switching to " + DvzClass.fromString(menu.getData())));
         player.sendMessage(Util.formatMsg("&7All items placed in the switch menu have been given back."));
         player.sendMessage(Util.formatMsg("&a&lTIP&8: &7Click in your inv to fix invisible items."));
+        dvz.logTimings("SwitchEvents.invClose()", t);
         return;
     }
 

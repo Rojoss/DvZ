@@ -255,7 +255,7 @@ public class ItemMenu implements Listener {
             //Loop through all menus.
             for (ItemMenu menu : menus) {
                 //Check if the clicked inventory is the current menu.
-                if (!inv.getTitle().equals(menu.getTitle()) || inv.getSize() != menu.getSize() || !inv.getHolder().equals(player) || inv.getMaxStackSize() != menu.getID()) {
+                if (inv.getMaxStackSize() != menu.getID() || !inv.getTitle().equals(menu.getTitle()) || inv.getSize() != menu.getSize() || !inv.getHolder().equals(player)) {
                     continue;
                 }
 

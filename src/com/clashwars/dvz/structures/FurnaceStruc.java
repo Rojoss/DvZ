@@ -35,6 +35,7 @@ public class FurnaceStruc extends Structure {
 
     @Override
     public void onUse(Player player) {
+        Long t = System.currentTimeMillis();
         UUID uuid = player.getUniqueId();
 
         //Get or create furnace menu
@@ -51,11 +52,13 @@ public class FurnaceStruc extends Structure {
 
         //Show the furnace menu/gui
         menu.show(player);
+        dvz.logTimings("FurnaceStruc.onUse()", t);
     }
 
 
     @EventHandler
     private void menuClick(ItemMenu.ItemMenuClickEvent event) {
+        Long t = System.currentTimeMillis();
         Player player = (Player)event.getWhoClicked();
         UUID uuid = player.getUniqueId();
         final ItemMenu menu = menus.get(uuid);
@@ -79,6 +82,7 @@ public class FurnaceStruc extends Structure {
 
         final FurnaceItem furnaceItem = getFurnaceItem(item);
         if (furnaceItem == null) {
+            dvz.logTimings("FurnaceStruc.menuClick()[Not furnace item]", t);
             return;
         }
 
@@ -162,6 +166,7 @@ public class FurnaceStruc extends Structure {
                 }
             }
         }
+        dvz.logTimings("FurnaceStruc.menuClick()", t);
     }
 
 

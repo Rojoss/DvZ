@@ -42,6 +42,7 @@ public class ArmorMenu implements Listener {
     }
 
     public void showMenu(final Player player) {
+        Long t = System.currentTimeMillis();
         //Get the allowed amount of presets by permissions
         int presetCount = 0;
         for (int i = 8; i > 0; i--) {
@@ -130,10 +131,12 @@ public class ArmorMenu implements Listener {
                 }
             }
         }.runTaskLater(dvz, 1);
+        dvz.logTimings("ArmorMenu.showMenu()", t);
     }
 
     @EventHandler
     private void menuClick(ItemMenu.ItemMenuClickEvent event) {
+        Long t = System.currentTimeMillis();
         if (menu == null) {
             return;
         }
@@ -179,18 +182,21 @@ public class ArmorMenu implements Listener {
                         //Color applied! deactivate item...
                         player.getWorld().playSound(player.getLocation(), Sound.SWIM, 0.5f, 1.5f);
                         activeSlots.remove(uuid);
+                        dvz.logTimings("ArmorMenu.menuClick()[click preset]", t);
                         return;
                     }
                 }
             }
             //No active item so modify the preset.
             dvz.getColorMenu().showMenu(player, event.getSlot() - 1);
+            dvz.logTimings("ArmorMenu.menuClick()[click preset]", t);
         } else {
             //Clicking on own items.
             if (activeSlots.containsKey(uuid) && activeSlots.get(uuid) == event.getSlot()) {
                 activeSlots.remove(uuid);
                 return;
             }
+            dvz.logTimings("ArmorMenu.menuClick()[click own item]", t);
             activeSlots.put(player.getUniqueId(), event.getSlot());
         }
     }

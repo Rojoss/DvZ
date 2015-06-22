@@ -60,6 +60,7 @@ public class CWPlayer {
     }
 
     public void reset(boolean switchable) {
+        Long t = System.currentTimeMillis();
         Player player = getPlayer();
         if (player == null) {
             return;
@@ -110,6 +111,7 @@ public class CWPlayer {
             }
         }
         player.updateInventory();
+        dvz.logTimings("CWPlayer.reset()", t);
     }
 
     public void undisguise() {
@@ -136,6 +138,7 @@ public class CWPlayer {
     }
 
     public void setClass(final DvzClass dvzClass, final boolean eggUse) {
+        final Long t = System.currentTimeMillis();
         final BaseClass c = dvzClass.getClassClass();
         final Player player = getPlayer();
 
@@ -223,12 +226,14 @@ public class CWPlayer {
                     player.sendMessage(CWUtil.integrateColor("&7&o" + c.getTask()));
                 }
                 savePlayer();
+                dvz.logTimings("CWPlayer.setClass()[runTaskLater:30]", t);
             }
         }.runTaskLater(dvz, 30);
     }
 
 
     public void switchClass(DvzClass dvzClass, final ItemMenu menu) {
+        Long t = System.currentTimeMillis();
         BaseClass c = dvzClass.getClassClass();
         final Player player = getPlayer();
 
@@ -283,10 +288,12 @@ public class CWPlayer {
             player.sendMessage(CWUtil.integrateColor("&7&o" + c.getTask()));
         }
         savePlayer();
+        dvz.logTimings("CWPlayer.switchClass()", t);
     }
 
 
     public void onClassLoad() {
+        Long t = System.currentTimeMillis();
         if (getPlayerClass() == null) {
             return;
         }
@@ -294,6 +301,7 @@ public class CWPlayer {
         DvzClass dvzClass = getPlayerClass();
 
         if (player == null || !player.isOnline()) {
+            dvz.logTimings("CWPlayer.onClassLoad()[invalid player]", t);
             return;
         }
 
@@ -312,6 +320,7 @@ public class CWPlayer {
         if (dvzClass.getType() == ClassType.MONSTER || dvzClass.getType() == ClassType.DRAGON) {
             Util.disguisePlayer(player.getName(), dvzClass.getClassClass().getStrOption("disguise"), dvzClass);
         }
+        dvz.logTimings("CWPlayer.onClassLoad()", t);
     }
 
 
@@ -319,6 +328,7 @@ public class CWPlayer {
         new BukkitRunnable() {
             @Override
             public void run() {
+                Long t = System.currentTimeMillis();
                 Player player = getPlayer();
                 if (forcePrevious) {
                     if (type == ClassType.MONSTER) {
@@ -340,6 +350,7 @@ public class CWPlayer {
                         classOptions.get(c).getClassItem().giveToPlayer(player);
                     }
                 }
+                dvz.logTimings("CWPlayer.giveClassItems()", t);
             }
         }.runTaskLater(dvz, 5);
     }
@@ -402,6 +413,7 @@ public class CWPlayer {
 
 
     public boolean timedTeleport(Location loc, int seconds, String locationMsg) {
+        Long t = System.currentTimeMillis();
         if (teleport != null) {
             return false;
         }
@@ -430,10 +442,12 @@ public class CWPlayer {
                 sendMessage(Util.formatMsg("&6Teleported to &5" + locationMsg));
             }
             getPlayer().teleport(loc);
+            dvz.logTimings("CWPlayer.timedTeleport()[instant]", t);
             return true;
         }
         teleport = new TeleportRunnable(this, seconds, loc, locationMsg);
         getPlayer().sendMessage(Util.formatMsg("&6Teleporting to &5" + locationMsg + "&8(&7Don't move!&8)"));
+        dvz.logTimings("CWPlayer.timedTeleport()", t);
         return true;
     }
 

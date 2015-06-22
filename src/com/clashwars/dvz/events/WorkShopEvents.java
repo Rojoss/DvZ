@@ -23,6 +23,7 @@ public class WorkShopEvents implements Listener {
 
     @EventHandler
     private void blockPlace(BlockPlaceEvent event) {
+        Long t = System.currentTimeMillis();
         if (!dvz.getGM().isStarted()) {
             return;
         }
@@ -38,6 +39,7 @@ public class WorkShopEvents implements Listener {
         if (event.getBlockAgainst().getType() != Material.PISTON_BASE) {
             player.sendMessage(Util.formatMsg("&cCan't create your workshop here."));
             player.sendMessage(Util.formatMsg("&cYou have to place it on one of the pistons."));
+            dvz.logTimings("WorkShopEvents.blockPlace()[not on piston]", t);
             return;
         }
         
@@ -56,6 +58,7 @@ public class WorkShopEvents implements Listener {
             event.setCancelled(true);
             player.sendMessage(Util.formatMsg("&4ERROR&8: &cCould not create workshop."));
         }
+        dvz.logTimings("WorkShopEvents.blockPlace()", t);
     }
 
 }

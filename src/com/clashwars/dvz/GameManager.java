@@ -47,6 +47,7 @@ public class GameManager {
 
 
     public void resetGame(boolean nextGame, String mapName) {
+        Long t = System.currentTimeMillis();
         setState(GameState.SETUP);
         if (!nextGame) {
             Bukkit.broadcastMessage(CWUtil.integrateColor("&7========== &c&lDvZ has ended! &7=========="));
@@ -138,15 +139,18 @@ public class GameManager {
                 Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &4&lFailed at loading new map!"));
             }
         }
+        dvz.logTimings("GameManager.resetGame()", t);
     }
 
     public void openGame() {
+        Long t = System.currentTimeMillis();
         if (dvz.getMM().getActiveMap() == null || !dvz.getMM().getActiveMap().isLoaded()) {
             dvz.getMM().loadMap(null);
         }
 
         if (dvz.getMM().getActiveMap() == null || !dvz.getMM().getActiveMap().isLoaded()) {
             Util.broadcastAdmins(Util.formatMsg("&6The game couldn't be opened because there is no map loaded."));
+            dvz.logTimings("GameManager.openGame()[no map]", t);
             return;
         }
 
@@ -154,6 +158,7 @@ public class GameManager {
         if (!setupOptions.isEmpty()) {
             Util.broadcastAdmins(CWUtil.integrateColor("&cCould not open the game because the map is not set up properly."));
             Util.broadcastAdmins(CWUtil.integrateColor("&4Missing&8: &c" + CWUtil.implode(setupOptions.toArray(new String[dvz.getMM().getMaps().size()]), "&8, &c")));
+            dvz.logTimings("GameManager.openGame()[map invalid]", t);
             return;
         }
 
@@ -161,6 +166,7 @@ public class GameManager {
             Util.broadcastAdmins(CWUtil.integrateColor("&cCould not open the game because the map is not set up properly."));
             Util.broadcastAdmins(CWUtil.integrateColor("&cMissing end portal frames between shrine locations."));
             Util.broadcastAdmins(CWUtil.integrateColor("&cThere has to be at least 1 shrine block for the wall and one for the keep."));
+            dvz.logTimings("GameManager.openGame()[map invalid]", t);
             return;
         }
 
@@ -182,10 +188,12 @@ public class GameManager {
             dvz.getPM().getPlayer(player).reset();
             player.teleport(dvz.getMM().getUsedWorld().getSpawnLocation());
         }
+        dvz.logTimings("GameManager.openGame()", t);
     }
 
 
     public void startGame() {
+        Long t = System.currentTimeMillis();
         Bukkit.broadcastMessage(CWUtil.integrateColor("&7========== &a&lDvZ has started! &7=========="));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7You can now choose a dwarf class!"));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7You get one and a half day to prepare."));
@@ -201,13 +209,16 @@ public class GameManager {
 
         getUsedWorld().setTime(23000);
         setState(GameState.DAY_ONE);
+        dvz.logTimings("GameManager.startGame()", t);
     }
 
 
     public void createDragon(boolean force) {
+        Long t = System.currentTimeMillis();
         Player player = getDragonPlayer();
         if (player == null) {
             if (force) {
+                dvz.logTimings("GameManager.createDragon()[invalid player1]", t);
                 return;
             }
             Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
@@ -223,11 +234,13 @@ public class GameManager {
             }
         }
         if (force && player == null) {
+            dvz.logTimings("GameManager.createDragon()[invalid player2]", t);
             return;
         }
         if (player == null) {
             Bukkit.broadcastMessage(Util.formatMsg("&4&lThere is no staff member to player the dragon. &c&lPlease wait..."));
             Bukkit.broadcastMessage(Util.formatMsg("&7If there has been no dragon when the sun rises again, the monsters will be automatically released. Random dwarves will be killed!"));
+            dvz.logTimings("GameManager.createDragon()[invalid player3]", t);
             return;
         }
         DvzClass dragonType = getDragonType();
@@ -267,10 +280,12 @@ public class GameManager {
             }
         }.runTaskLater(dvz, 60);
         new DragonRunnable(dvz).runTaskTimer(dvz, 20, 20);
+        dvz.logTimings("GameManager.createDragon()", t);
     }
 
 
     public void releaseMonsters(boolean doExecution) {
+        Long t = System.currentTimeMillis();
         if (doExecution) {
             List<CWPlayer> dwarves = dvz.getPM().getPlayers(ClassType.DWARF, false, true);
             List<CWPlayer> monsters = dvz.getPM().getPlayers(ClassType.MONSTER, false, true);
@@ -298,10 +313,12 @@ public class GameManager {
         title.setTimingsToTicks();
         title.broadcast();
         setState(GameState.MONSTERS);
+        dvz.logTimings("GameManager.releaseMonsters()", t);
     }
 
 
     public void captureWall() {
+        Long t = System.currentTimeMillis();
         Bukkit.broadcastMessage(CWUtil.integrateColor("&7===== &a&lThe wall has been captured! &7====="));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Get back to the keep to defend the main shrine!"));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Monsters will now spawn at the wall."));
@@ -335,9 +352,11 @@ public class GameManager {
                 block.setType(Material.NETHER_FENCE);
             }
         }
+        dvz.logTimings("GameManager.captureWall()", t);
     }
 
     public void captureFirstKeepShrine() {
+        Long t = System.currentTimeMillis();
         Bukkit.broadcastMessage(CWUtil.integrateColor("&7===== &a&lThe bottom of the keep has been captured! &7====="));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Defend the shrine at the top!"));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Monsters will now spawn in the keep!"));
@@ -345,10 +364,12 @@ public class GameManager {
         title.setTimingsToTicks();
         title.broadcast();
         setState(GameState.MONSTERS_KEEP);
+        dvz.logTimings("GameManager.captureFirstKeepShrine()", t);
     }
 
 
     public void stopGame(boolean force, String reason) {
+        Long t = System.currentTimeMillis();
         if (force) {
             Bukkit.broadcastMessage(CWUtil.integrateColor("&7===== &4&lThe game has been stopped! &7====="));
             if (reason != null && !reason.isEmpty()) {
@@ -366,16 +387,19 @@ public class GameManager {
         title.setTimingsToTicks();
         title.broadcast();
         setState(GameState.ENDED);
+        dvz.logTimings("GameManager.stopGame()", t);
     }
 
 
     public boolean populateShrines() {
+        Long t = System.currentTimeMillis();
         boolean keep1Shrine = populateShrines("shrinekeep1", ShrineType.KEEP_1);
         boolean keep2Shrine = populateShrines("shrinekeep2", ShrineType.KEEP_2);
         boolean wallShrine = populateShrines("shrinewall", ShrineType.WALL);
         if (keep1Shrine && keep2Shrine && wallShrine) {
             return true;
         }
+        dvz.logTimings("GameManager.populateShrines()", t);
         return false;
     }
 
@@ -471,6 +495,7 @@ public class GameManager {
     }
 
     public void setDragonSlayer(Player player) {
+        Long t = System.currentTimeMillis();
         gCfg.GAME__DRAGON_SLAYER = player.getUniqueId().toString();
         gCfg.save();
 
@@ -487,6 +512,7 @@ public class GameManager {
     }
 
     public void resetDragonSlayer() {
+        Long t = System.currentTimeMillis();
         if (gCfg.GAME__DRAGON_SLAYER == null || gCfg.GAME__DRAGON_SLAYER.isEmpty() || UUID.fromString(gCfg.GAME__DRAGON_SLAYER) == null) {
             return;
         }

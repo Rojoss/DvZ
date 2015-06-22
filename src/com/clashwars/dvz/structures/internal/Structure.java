@@ -1,5 +1,6 @@
 package com.clashwars.dvz.structures.internal;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.dependencies.CWWorldGuard;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
@@ -50,7 +51,7 @@ public class Structure implements Listener {
         Location loc = event.getClickedBlock().getLocation();
         for (StructureType strucType : StructureType.values()) {
             Structure struc = strucType.getStrucClass();
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 3; i++) {
                 ProtectedRegion region = CWWorldGuard.getRegion(loc.getWorld(), struc.getRegion() + i);
                 if (region != null && region.contains(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
                     event.setCancelled(true);

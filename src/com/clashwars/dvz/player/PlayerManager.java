@@ -32,6 +32,7 @@ public class PlayerManager {
 
 
     private void populate() {
+        Long t = System.currentTimeMillis();
         Map<UUID, PlayerData> cfgPlayers = pcfg.getPlayers();
         for (UUID uuid : cfgPlayers.keySet()) {
             players.put(uuid, new CWPlayer(uuid, cfgPlayers.get(uuid)));
@@ -61,6 +62,7 @@ public class PlayerManager {
                 dvz.log("Failed to load userdata from MySQL database!");
             }
         }
+        dvz.logTimings("PlayerManager.Populate()", t);
     }
 
 

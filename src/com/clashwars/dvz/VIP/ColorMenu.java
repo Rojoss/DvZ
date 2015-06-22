@@ -61,6 +61,7 @@ public class ColorMenu implements Listener {
     }
 
     public void showMenu(final Player player, int presetID) {
+        Long t = System.currentTimeMillis();
         UUID uuid = player.getUniqueId();
         presetIds.put(uuid, presetID);
 
@@ -71,6 +72,7 @@ public class ColorMenu implements Listener {
         ArmorPresetData presetData = dvz.getPresetCfg().getPreset(uuid);
         colors.put(uuid, presetData.getPresets().get(presetID));
         updateColor(player);
+        dvz.logTimings("ColorMenu.showMenu()", t);
     }
 
     private void updateColor(Player player) {
@@ -85,6 +87,7 @@ public class ColorMenu implements Listener {
 
     @EventHandler
     private void menuClick(ItemMenu.ItemMenuClickEvent event) {
+        Long t = System.currentTimeMillis();
         if (menu == null) {
             return;
         }
@@ -128,6 +131,7 @@ public class ColorMenu implements Listener {
 
             colors.put(uuid, clr);
             updateColor(player);
+            dvz.logTimings("ColorMenu.menuClick()[update clr]", t);
             return;
         }
 
@@ -136,6 +140,7 @@ public class ColorMenu implements Listener {
             colors.put(uuid, Color.BLACK);
             updateColor(player);
             player.getWorld().playSound(player.getLocation(), Sound.SWIM, 0.5f, 1.5f);
+            dvz.logTimings("ColorMenu.menuClick()[reset clr]", t);
             return;
         }
 
@@ -143,6 +148,7 @@ public class ColorMenu implements Listener {
         if (item.getType() == Material.REDSTONE_BLOCK) {
             player.playSound(player.getLocation(), Sound.ITEM_BREAK, 0.8f, 1);
             dvz.getArmorMenu().showMenu(player);
+            dvz.logTimings("ColorMenu.menuClick()[quit]", t);
             return;
         }
 
@@ -156,8 +162,10 @@ public class ColorMenu implements Listener {
 
             player.playSound(player.getLocation(), Sound.ORB_PICKUP, 0.8f, 2);
             dvz.getArmorMenu().showMenu(player);
+            dvz.logTimings("ColorMenu.menuClick()[save]", t);
             return;
         }
+        dvz.logTimings("ColorMenu.menuClick()", t);
     }
 
 }

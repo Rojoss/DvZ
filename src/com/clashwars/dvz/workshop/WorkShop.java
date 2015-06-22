@@ -53,6 +53,7 @@ public abstract class WorkShop {
      * @return true if it builded successfully and false if something failed while building it.
      */
     public boolean build(Location origin) {
+        Long t = System.currentTimeMillis();
         //Load origin from config if not specified. If it is update data.
         if (origin == null) {
             origin = wsData.getOrigin();
@@ -63,12 +64,14 @@ public abstract class WorkShop {
         //Validate the origin/world
         if (origin == null) {
             dvz.log("Failed at building " + dvz.getServer().getOfflinePlayer(owner).getName() + " his workshop. The origin/world it was in is null now!");
+            dvz.logTimings("Workshop.build()[invalid loc]", t);
             return false;
         }
 
         //Validate the origin/world
         if (origin.getChunk() == null || !origin.getChunk().isLoaded()) {
             dvz.log("Failed at building " + dvz.getServer().getOfflinePlayer(owner).getName() + " his workshop. The chunk isn't loaded!");
+            dvz.logTimings("Workshop.build()[chunk not loaded]", t);
             return false;
         }
 
@@ -100,6 +103,7 @@ public abstract class WorkShop {
 
             if (cuboid == null) {
                 dvz.log("Failed at building " + dvz.getServer().getOfflinePlayer(owner).getName() + " his workshop. Failed at creating the cuboid!");
+                dvz.logTimings("Workshop.build()[invalid cuboid]", t);
                 return false;
             }
 
@@ -126,6 +130,7 @@ public abstract class WorkShop {
                     ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(block.getType(), (byte)block.getData()), 0.5f, 0.5f, 0.5f, 0.1f, 10, block.getLocation());
                 }
             }
+            dvz.logTimings("Workshop.build()", t);
             return true;
         } catch (CommandException e) {
         } catch (FilenameException e) {
@@ -135,6 +140,7 @@ public abstract class WorkShop {
             e.printStackTrace();
         }
         dvz.log("Failed at building " + dvz.getServer().getOfflinePlayer(owner).getName() + " his workshop. Failed at pasting the schematic!");
+        dvz.logTimings("Workshop.build()[paste fail]", t);
         return false;
     }
 
@@ -147,6 +153,7 @@ public abstract class WorkShop {
      * @return true if it destroyed it and false if not. For example if the workshop wasn't build yet it will be false as there is nothing to destroy.
      */
     public boolean destroy() {
+        Long t = System.currentTimeMillis();
         if (cuboid != null && cuboid.getBlocks() != null) {
             //Classes can override this to do stuff before the workshop is destroyed.
             dvz.getWM().getWorkshop(owner).onDestroy();
@@ -194,8 +201,10 @@ public abstract class WorkShop {
             }
 
             cuboid = null;
+            dvz.logTimings("Workshop.destroy()", t);
             return true;
         }
+        dvz.logTimings("Workshop.destroy()[already destroyed]", t);
         return false;
     }
 

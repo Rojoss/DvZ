@@ -176,6 +176,7 @@ public class BaseClass implements Listener {
     }
 
     public void equipItems(Player player) {
+        Long t = System.currentTimeMillis();
         Map<DvzItem, Integer> itemMap = new HashMap<DvzItem, Integer>();
         Map<DvzItem, Integer> itemSlotMap = new HashMap<DvzItem, Integer>();
         //Class items
@@ -230,6 +231,7 @@ public class BaseClass implements Listener {
             item.giveToPlayer(player);
         }
         player.updateInventory();
+        dvz.logTimings("BaseClass.equipItems()", t);
     }
 
     //Called when player gets the class equiped.

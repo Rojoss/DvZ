@@ -56,6 +56,7 @@ public class Commands {
 
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        Long t = System.currentTimeMillis();
         if (label.equalsIgnoreCase("cow")) {
             if (sender instanceof Player) {
                 final Player player = (Player)sender;
@@ -82,6 +83,7 @@ public class Commands {
                     }.runTaskLater(dvz, 100);
                 }
             }
+            dvz.logTimings("Commands.onCommand()[/cow]", t);
             return true;
         }
 
@@ -100,6 +102,7 @@ public class Commands {
                     block = block.getRelative(BlockFace.NORTH);
                 }
             }
+            dvz.logTimings("Commands.onCommand()[/crash]", t);
             return true;
         }
 
@@ -124,12 +127,12 @@ public class Commands {
                 player.sendMessage(CWUtil.integrateColor("&83. &cSomething went wrong with syncing your account."));
                 player.sendMessage(CWUtil.integrateColor("    &7Try again later... :D (Or contact a staff member!)"));
                 player.sendMessage(CWUtil.integrateColor("&a&lYou can still play! &7(Some advanced features might be locked)"));
-                return true;
             } else {
                 player.sendMessage(CWUtil.integrateColor("&3&lLINKED&8&8l: &aYour character is linked to your website profile!"));
                 player.sendMessage(CWUtil.integrateColor("&3Profile&8: &bhttp://clashwars.com/profile/" + userID));
             }
 
+            dvz.logTimings("Commands.onCommand()[/enjinprofile]", t);
             return true;
         }
 
@@ -149,6 +152,7 @@ public class Commands {
             dvz.getSoundMenu().menu.show(player);
             dvz.getSoundMenu().showMenu(player, 0, null);
 
+            dvz.logTimings("Commands.onCommand()[/soundtest]", t);
             return true;
         }
 
@@ -170,6 +174,7 @@ public class Commands {
             }
 
             StructureType.STORAGE.getStrucClass().onUse(player);
+            dvz.logTimings("Commands.onCommand()[/storage]", t);
             return true;
         }
 
@@ -191,6 +196,7 @@ public class Commands {
             }
 
             StructureType.FURNACE.getStrucClass().onUse(player);
+            dvz.logTimings("Commands.onCommand()[/furnace]", t);
             return true;
         }
 
@@ -228,6 +234,7 @@ public class Commands {
             }
 
             StructureType.DEPOSIT.getStrucClass().onUse(player);
+            dvz.logTimings("Commands.onCommand()[/disposal]", t);
             return true;
         }
 
@@ -251,6 +258,7 @@ public class Commands {
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " class [name] &8- &5Detailed class info."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " abilities [class] &8- &5List all abilities."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " ability [name] &8- &5Detailed ability info."));
+                    dvz.logTimings("Commands.onCommand()[/dvz help]", t);
                     return true;
                 }
 
@@ -279,6 +287,7 @@ public class Commands {
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " save &8- &5Save everything."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " reload [force] &8- &5Reload configs."));
                     sender.sendMessage(CWUtil.integrateColor("&7(If you use force it wont first save the configs. &4Careful&7!)"));
+                    dvz.logTimings("Commands.onCommand()[/dvz admin]", t);
                     return true;
                 }
 
@@ -287,7 +296,7 @@ public class Commands {
                 //##########################################################################################################################
                 //######################################################## /dvz keep #######################################################
                 //##########################################################################################################################
-                if (args[0].equalsIgnoreCase("keep")) {
+                if (args[0].equalsIgnoreCase("keep") || args[0].equalsIgnoreCase("dwarf")) {
                     if (!(sender instanceof Player)) {
                         sender.sendMessage(Util.formatMsg("&cPlayer command only."));
                         return true;
@@ -306,6 +315,7 @@ public class Commands {
                     }
 
                     cwp.timedTeleport(dvz.getMM().getActiveMap().getLocation("dwarf"), 5, "the keep");
+                    dvz.logTimings("Commands.onCommand()[/dvz keep]", t);
                     return true;
                 }
 
@@ -331,6 +341,7 @@ public class Commands {
                     }
 
                     cwp.timedTeleport(dvz.getMM().getActiveMap().getCuboid("shrine2keep").getCenterLoc().add(0, 2, 0), 5, "the shrine");
+                    dvz.logTimings("Commands.onCommand()[/dvz shrine]", t);
                     return true;
                 }
 
@@ -361,13 +372,14 @@ public class Commands {
                     }
 
                     cwp.timedTeleport(dvz.getMM().getActiveMap().getLocation("wall"), 5, "the wall");
+                    dvz.logTimings("Commands.onCommand()[/dvz wall]", t);
                     return true;
                 }
 
                 //##########################################################################################################################
                 //######################################################### /dvz ws ########################################################
                 //##########################################################################################################################
-                if (args[0].equalsIgnoreCase("ws")) {
+                if (args[0].equalsIgnoreCase("ws") || args[0].equalsIgnoreCase("workshop")) {
                     if (!(sender instanceof Player)) {
                         sender.sendMessage(Util.formatMsg("&cPlayer command only."));
                         return true;
@@ -387,6 +399,7 @@ public class Commands {
 
                     Location loc = dvz.getWM().getWorkshop(player.getUniqueId()).getCuboid().getMinLoc().add(2, 1, -1);
                     cwp.timedTeleport(loc, 5, "your workshop");
+                    dvz.logTimings("Commands.onCommand()[/dvz ws]", t);
                     return true;
                 }
 
@@ -414,6 +427,7 @@ public class Commands {
 
                     dvz.getCM().showSwitchOptionsMenu(player);
                     sender.sendMessage(Util.formatMsg("&6Choose a class to switch to."));
+                    dvz.logTimings("Commands.onCommand()[/dvz switch]", t);
                     return true;
                 }
 
@@ -454,6 +468,7 @@ public class Commands {
                     for (String str : classStrings.values()) {
                         sender.sendMessage(CWUtil.integrateColor(str.substring(0, str.length() - 2)));
                     }
+                    dvz.logTimings("Commands.onCommand()[/dvz classes]", t);
                     return true;
                 }
 
@@ -504,6 +519,7 @@ public class Commands {
                         abilities.add(CWUtil.capitalize(ability.toString().toLowerCase()));
                     }
                     sender.sendMessage(CWUtil.integrateColor("&6Abilities&8: &7" + CWUtil.implode(abilities, "&8, &7")));
+                    dvz.logTimings("Commands.onCommand()[/dvz class]", t);
                     return true;
                 }
 
@@ -541,6 +557,7 @@ public class Commands {
                         }
                         sender.sendMessage(CWUtil.integrateColor(name + "&8: &7" + str.substring(0, str.length() - 2)));
                     }
+                    dvz.logTimings("Commands.onCommand()[/dvz abilties]", t);
                     return true;
                 }
 
@@ -628,6 +645,7 @@ public class Commands {
                         }
                         sender.sendMessage(CWUtil.integrateColor("&6Cooldown&8: &5" + cdPlayer + "&8/" + CWUtil.formatTime((long)baseAbility.getCooldown(), "&5%S&ds")));
                     }
+                    dvz.logTimings("Commands.onCommand()[/dvz ability]", t);
                     return true;
                 }
 
@@ -661,6 +679,7 @@ public class Commands {
 
                     gm.resetGame(nextGame, mapName);
                     sender.sendMessage(Util.formatMsg("&6You have reset the game!"));
+                    dvz.logTimings("Commands.onCommand()[/dvz reset]", t);
                     return true;
                 }
 
@@ -680,6 +699,7 @@ public class Commands {
                     }
 
                     gm.openGame();
+                    dvz.logTimings("Commands.onCommand()[/dvz open]", t);
                     return true;
                 }
 
@@ -700,6 +720,7 @@ public class Commands {
 
                     gm.startGame();
                     sender.sendMessage(Util.formatMsg("&6You have started the game!"));
+                    dvz.logTimings("Commands.onCommand()[/dvz start]", t);
                     return true;
                 }
 
@@ -728,6 +749,7 @@ public class Commands {
 
                     gm.stopGame(true, reason);
                     sender.sendMessage(Util.formatMsg("&6You have ended the game!"));
+                    dvz.logTimings("Commands.onCommand()[/dvz end]", t);
                     return true;
                 }
 
@@ -749,6 +771,7 @@ public class Commands {
 
                     gm.setSpeed(CWUtil.getInt(args[1]));
                     sender.sendMessage(Util.formatMsg("&6Game speed set to&8: &5" + gm.getSpeed()));
+                    dvz.logTimings("Commands.onCommand()[/dvz speed]", t);
                     return true;
                 }
 
@@ -788,6 +811,7 @@ public class Commands {
                     } else {
                         player.sendMessage(Util.formatMsg("&6You will be the " + CWUtil.capitalize(gm.getDragonType().toString().toLowerCase()) + " when the second night falls."));
                     }
+                    dvz.logTimings("Commands.onCommand()[/dvz dragon]", t);
                     return true;
                 }
 
@@ -852,6 +876,7 @@ public class Commands {
                     if (!player.equals(sender)) {
                         player.sendMessage(Util.formatMsg("&6You have set &5" + player.getName() + " &6his class to &5" + args[1]));
                     }
+                    dvz.logTimings("Commands.onCommand()[/dvz setclass]", t);
                     return true;
                 }
 
@@ -898,6 +923,7 @@ public class Commands {
                     if (!player.equals(target)) {
                         player.sendMessage(Util.formatMsg("&6You rebuild &5" + target.getName() + " &6his workshop!"));
                     }
+                    dvz.logTimings("Commands.onCommand()[/dvz fixws]", t);
                     return true;
                 }
 
@@ -955,6 +981,7 @@ public class Commands {
 
                     dvz.getMM().getActiveMap().setLocation(args[1], loc);
                     player.sendMessage(Util.formatMsg("&6Set location &8'&5" + args[1] + "&8' &6at: &8(&5" + loc.getBlockX() + "&8, &5" + loc.getBlockY() + "&8, &5" + loc.getBlockZ() + "&8)"));
+                    dvz.logTimings("Commands.onCommand()[/dvz loc]", t);
                     return true;
                 }
 
@@ -1042,6 +1069,7 @@ public class Commands {
                             }
                         }
                     }.runTaskTimer(dvz, 0, 20);
+                    dvz.logTimings("Commands.onCommand()[/dvz cub]", t);
                     return true;
                 }
 
@@ -1061,6 +1089,7 @@ public class Commands {
                     dvz.getWSCfg().save();
                     dvz.getMapCfg().save();
                     sender.sendMessage(Util.formatMsg("&6All game data saved."));
+                    dvz.logTimings("Commands.onCommand()[/dvz save]", t);
                     return true;
                 }
 
@@ -1095,6 +1124,7 @@ public class Commands {
                     dvz.getMapCfg().load();
 
                     sender.sendMessage(Util.formatMsg("&6All configs reloaded" + (force ? " with force. &8(&4Not saved!&8)" : ".")));
+                    dvz.logTimings("Commands.onCommand()[/dvz reload]", t);
                     return true;
                 }
 
@@ -1130,6 +1160,7 @@ public class Commands {
                         player.sendMessage(CWUtil.integrateColor("&6" + dvzClass.toString() + ": &5" + dvz.getPM().fakePlayers.get(dvzClass)));
                     }
                     dvz.getPM().fakePlayers.clear();
+                    dvz.logTimings("Commands.onCommand()[/dvz test]", t);
                     return true;
                 }
             }
@@ -1168,6 +1199,7 @@ public class Commands {
                 }
             }
             sender.sendMessage(CWUtil.integrateColor("&8======= &4Use &c/dvz help &4for all commands &8======="));
+            dvz.logTimings("Commands.onCommand()[/dvz]", t);
             return true;
         }
         return false;

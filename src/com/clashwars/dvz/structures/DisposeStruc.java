@@ -43,17 +43,20 @@ public class DisposeStruc extends Structure {
 
     @Override
     public void onUse(Player player) {
+        Long t = System.currentTimeMillis();
         menu.show(player);
         menu.clear(player);
         menu.setSlot(new CWItem(Material.REDSTONE_BLOCK).setName("&4&lWARNING").addLore("&cAll items you add in here will be &4removed&c!")
                 .addLore("&cOnly use it if you want to clear unwanted items."), 0, player);
         player.sendMessage(Util.formatMsg("&c&lAll items you put in this GUI will be &4&ldeleted&c&l!"));
         player.sendMessage(Util.formatMsg("&c&lThere is no way possible to get the items back!"));
+        dvz.logTimings("DisposeStruc.onUse()", t);
     }
 
 
     @EventHandler
     private void menuClick(ItemMenu.ItemMenuClickEvent event) {
+        Long t = System.currentTimeMillis();
         ItemMenu itemMenu = event.getItemMenu();
         if (!itemMenu.getName().equals(menu.getName())) {
             return;
@@ -68,6 +71,7 @@ public class DisposeStruc extends Structure {
             player.sendMessage(Util.formatMsg("&c&lThere is no way possible to get the items back!"));
             event.setCancelled(true);
         }
+        dvz.logTimings("DisposeStruc.menuClick()", t);
     }
 
 

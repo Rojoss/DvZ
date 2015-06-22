@@ -43,6 +43,7 @@ public class PatternMenu implements Listener {
     }
 
     public void showMenu(Player player, int patternIndex, boolean color) {
+        Long t = System.currentTimeMillis();
         player.closeInventory();
 
         patternIndexes.put(player.getUniqueId(), patternIndex);
@@ -52,10 +53,12 @@ public class PatternMenu implements Listener {
         } else {
             menu.show(player);
         }
+        dvz.logTimings("PatternMenu.showMenu()", t);
     }
 
     @EventHandler
     private void menuClick(final ItemMenu.ItemMenuClickEvent event) {
+        Long t = System.currentTimeMillis();
         if (menu == null) {
             return;
         }
@@ -91,6 +94,7 @@ public class PatternMenu implements Listener {
         if (event.getItemMenu().getID() == menu.getID()) {
             if (event.getSlot() == 44) {
                 dvz.getBannerMenu().showMenu(player);
+                dvz.logTimings("PatternMenu.menuClick()[close pattern]", t);
                 return;
             }
             Pattern itemPattern = item.getPattern(0);
@@ -101,6 +105,7 @@ public class PatternMenu implements Listener {
             tempBanner.setPattern(patternIndex, new Pattern(color, item.getPattern(0).getPattern()));
             dvz.getBannerMenu().tempBanners.put(uuid, tempBanner);
             dvz.getBannerMenu().showMenu(player);
+            dvz.logTimings("PatternMenu.menuClick()[pattern]", t);
             return;
         }
 
@@ -108,6 +113,7 @@ public class PatternMenu implements Listener {
         if (event.getItemMenu().getID() == color_menu.getID()) {
             if (event.getSlot() == 17) {
                 dvz.getBannerMenu().showMenu(player);
+                dvz.logTimings("PatternMenu.menuClick()[close color]", t);
                 return;
             }
 
@@ -124,5 +130,6 @@ public class PatternMenu implements Listener {
             dvz.getBannerMenu().tempBanners.put(uuid, tempBanner);
             dvz.getBannerMenu().showMenu(player);
         }
+        dvz.logTimings("PatternMenu.menuClick()", t);
     }
 }

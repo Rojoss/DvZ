@@ -41,6 +41,7 @@ public class EnchantStruc extends Structure {
         new BukkitRunnable() {
             @Override
             public void run() {
+                Long t = System.currentTimeMillis();
                 ItemStack item = player.getItemInHand();
 
                 //Get list of all enchants with the item clicked.
@@ -78,6 +79,7 @@ public class EnchantStruc extends Structure {
                     }
                     slotID++;
                 }
+                dvz.logTimings("EnchantStruc.onUse()", t);
             }
         }.runTaskLater(dvz, 3);
     }
@@ -85,6 +87,7 @@ public class EnchantStruc extends Structure {
 
     @EventHandler
     private void menuClick(ItemMenu.ItemMenuClickEvent event) {
+        Long t = System.currentTimeMillis();
         ItemMenu itemMenu = event.getItemMenu();
         if (!itemMenu.getName().equals(menu.getName())) {
             return;
@@ -104,6 +107,7 @@ public class EnchantStruc extends Structure {
         if (enchant == null) {
             player.sendMessage(Util.formatMsg("&cInvalid enchantment."));
             player.closeInventory();
+            dvz.logTimings("EnchantStruc.menuClick()[can't enchant item]", t);
             return;
         }
 
@@ -112,6 +116,7 @@ public class EnchantStruc extends Structure {
             if (player.getItemInHand().getEnchantmentLevel(enchant.getEnchant()) >= enchant.getLevel()) {
                 player.sendMessage(Util.formatMsg("&cYou already have this enchantment!"));
                 player.closeInventory();
+                dvz.logTimings("EnchantStruc.menuClick()[already enchanted]", t);
                 return;
             }
         }
@@ -127,6 +132,7 @@ public class EnchantStruc extends Structure {
             player.sendMessage(Util.formatMsg("&cGo do your tasks to earn XP."));
             player.closeInventory();
         }
+        dvz.logTimings("EnchantStruc.menuClick()", t);
     }
 
 

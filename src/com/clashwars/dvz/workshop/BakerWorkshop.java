@@ -46,6 +46,7 @@ public class BakerWorkshop extends WorkShop {
 
     @Override
     public void onBuild() {
+        Long t = System.currentTimeMillis();
         List<Block> blocks = cuboid.getBlocks();
         for (Block block : blocks) {
             if (block.getType() == Material.HOPPER) {
@@ -121,6 +122,7 @@ public class BakerWorkshop extends WorkShop {
                 }
             }
         }.runTaskTimer(dvz, 1, 1));
+        dvz.logTimings("BakerWorkshop.onBuild()", t);
     }
 
     @Override

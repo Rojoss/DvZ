@@ -37,6 +37,7 @@ public class ShrineBlock {
     }
 
     public void destroy() {
+        Long t = System.currentTimeMillis();
         hp = 0;
         destroyed = true;
         location.getBlock().setType(Material.AIR);
@@ -112,6 +113,7 @@ public class ShrineBlock {
                 dvz.getGM().stopGame(false, null);
             }
         }
+        dvz.logTimings("ShrineBlock.destroy()", t);
     }
 
     public void remove() {
@@ -127,9 +129,11 @@ public class ShrineBlock {
     }
 
     public void damage(int amount) {
+        Long t = System.currentTimeMillis();
         this.hp -= amount;
         if (this.hp <= 0) {
             destroy();
+            dvz.logTimings("ShrineBlock.damage()[no more hp]", t);
             return;
         }
         if (this.hp % 10 == 0) {
@@ -138,6 +142,7 @@ public class ShrineBlock {
                 hologram.addLine(CWUtil.integrateColor(getHpPercString()));
             }
         }
+        dvz.logTimings("ShrineBlock.damage()", t);
     }
 
 

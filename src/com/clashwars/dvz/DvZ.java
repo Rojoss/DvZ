@@ -92,6 +92,7 @@ public class DvZ extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        Long t = System.currentTimeMillis();
         //Save all player data.
         getPM().savePlayers();
 
@@ -114,10 +115,12 @@ public class DvZ extends JavaPlugin {
         Bukkit.getScheduler().cancelTasks(this);
 
         log("disabled");
+        logTimings("Dvz.onDisable()", t);
     }
 
     @Override
     public void onEnable() {
+        Long t = System.currentTimeMillis();
         instance = this;
 
         Plugin plugin = getServer().getPluginManager().getPlugin("CWCore");
@@ -201,6 +204,7 @@ public class DvZ extends JavaPlugin {
         startRunnables();
 
         log("loaded successfully");
+        logTimings("Dvz.onEnable()", t);
     }
 
     private void registerEvents() {
@@ -275,8 +279,8 @@ public class DvZ extends JavaPlugin {
         log.severe("[DvZ " + getDescription().getVersion() + "] " + msg.toString());
     }
 
-    public void logTimings(Object msg, int startTime) {
-        log.severe("[DvZ Timings] " + msg.toString() + " (" + (System.currentTimeMillis() - startTime) + "ms)");
+    public void logTimings(Object msg, Long startTime) {
+        log.info("[DvZ Timings] " + (System.currentTimeMillis() - startTime) + "ms >>> " + msg.toString());
     }
 
     public static DvZ inst() {

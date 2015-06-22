@@ -146,6 +146,7 @@ public class TipManager {
     }
 
     public String getTipFromChat(String chatMsg, CWPlayer cwp) {
+        Long t = System.currentTimeMillis();
         List<String> chatWords = Arrays.asList(chatMsg.toLowerCase().split(" "));
         if (chatWords.size() < 1) {
             return "";
@@ -189,9 +190,11 @@ public class TipManager {
                 }
             }
             if (keyWordsMatch) {
+                DvZ.inst().logTimings("TipManager.getTipFromChat()[found]", t);
                 return tip.getTip();
             }
         }
+        DvZ.inst().logTimings("TipManager.getTipFromChat()", t);
         return "";
     }
 

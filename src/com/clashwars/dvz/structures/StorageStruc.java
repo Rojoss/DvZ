@@ -64,10 +64,12 @@ public class StorageStruc extends Structure {
         new BukkitRunnable() {
             @Override
             public void run() {
+                Long t = System.currentTimeMillis();
                 for (StorageItem storageItem : items) {
                     dvz.getGameCfg().STORAGE_PRODUCTS.put(storageItem.getName(), storageItem.getAmt());
                 }
                 dvz.getGameCfg().save();
+                dvz.logTimings("StorageStruc.StorageStruc[saving items]", t);
             }
         }.runTaskTimer(dvz, 600, 600);
     }
@@ -82,6 +84,7 @@ public class StorageStruc extends Structure {
 
     @Override
     public void onUse(final Player player) {
+        Long t = System.currentTimeMillis();
         if (player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.STAINED_GLASS) {
             //Xp draining.
             if (!expDrainRunnables.containsKey(player.getUniqueId())) {
@@ -115,10 +118,12 @@ public class StorageStruc extends Structure {
         } else {
             menu.show(player);
         }
+        dvz.logTimings("StorageStruc.onUse()", t);
     }
 
     @EventHandler
     private void menuClick(ItemMenu.ItemMenuClickEvent event) {
+        Long t = System.currentTimeMillis();
         if (menu == null) {
             return;
         }
@@ -141,15 +146,18 @@ public class StorageStruc extends Structure {
         if (event.getRawSlot() < menu.getSize()) {
             //Top inventory (Storage)
             if (!item.hasItemMeta() || !item.getItemMeta().hasDisplayName()) {
+                dvz.logTimings("StorageStruc.menuclick()[not storage item]", t);
                 return;
             }
             StorageItem storageItem = getStorageItem(CWUtil.removeColour(item.getItemMeta().getDisplayName()));
             if (storageItem == null) {
+                dvz.logTimings("StorageStruc.menuclick()[storageitem null]", t);
                 return;
             }
 
             if (storageItem.getAmt() <= 0) {
                 player.sendMessage(Util.formatMsg("&cThere are no more " + storageItem.getName() + " &cavailable."));
+                dvz.logTimings("StorageStruc.menuclick()[out of stock]", t);
                 return;
             }
 
@@ -175,6 +183,7 @@ public class StorageStruc extends Structure {
                 cwp.productsTaken.put(storageItem.getName(), storageItem.getLimit());
             } else {
                 player.sendMessage(Util.formatMsg("&cYou can not take more of this item."));
+                dvz.logTimings("StorageStruc.menuclick()[limit reached]", t);
                 return;
             }
 
@@ -199,6 +208,7 @@ public class StorageStruc extends Structure {
         } else {
             if (item.getEnchantments().size() > 0) {
                 player.sendMessage(Util.formatMsg("&cCan't store enchanted items."));
+                dvz.logTimings("StorageStruc.menuclick()[enchanted]", t);
                 return;
             }
 
@@ -212,6 +222,7 @@ public class StorageStruc extends Structure {
             }
             if (storageItem == null) {
                 player.sendMessage(Util.formatMsg("&cThis item can't be stored."));
+                dvz.logTimings("StorageStruc.menuclick()[not storable]", t);
                 return;
             }
 
@@ -239,6 +250,7 @@ public class StorageStruc extends Structure {
             CWUtil.removeItemsFromSlot(player.getInventory(), event.getSlot(), amtToAdd);
             player.playSound(player.getLocation(), Sound.ORB_PICKUP, 0.8f, 1.6f);
         }
+        dvz.logTimings("StorageStruc.menuclick()", t);
     }
 
 

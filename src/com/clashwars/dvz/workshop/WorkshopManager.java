@@ -40,11 +40,13 @@ public class WorkshopManager {
      * And it will try to build the workshop.
      */
     public void loadWorkshops() {
+        Long t = System.currentTimeMillis();
         Map<UUID, WorkShopData> cfgWorkshops = wsCfg.getWorkShops();
 
         //Check if there are workshops in config.
         if (cfgWorkshops == null || cfgWorkshops.size() < 1) {
             dvz.log("No workshops loaded from config.");
+            dvz.logTimings("WorkshopManager.loadWorkshops()[none]", t);
             return;
         }
 
@@ -52,6 +54,7 @@ public class WorkshopManager {
         for (UUID uuid : cfgWorkshops.keySet()) {
             loadWorkshop(uuid);
         }
+        dvz.logTimings("WorkshopManager.loadWorkshops()", t);
     }
 
 
@@ -61,14 +64,17 @@ public class WorkshopManager {
      * @param uuid The uuid of the owner of the workshop.
      */
     public boolean loadWorkshop(UUID uuid) {
+        Long t = System.currentTimeMillis();
         WorkShopData wsData = wsCfg.getWorkShops().get(uuid);
         if (wsData == null) {
             dvz.log("Failed at loading the workshop for player: " + dvz.getServer().getOfflinePlayer(uuid).getName() + " Invalid data!");
+            dvz.logTimings("WorkshopManager.loadWorkshop()[invalid data]", t);
             return false;
         }
 
         if (wsData.getType() == null) {
             dvz.log("Failed at loading the workshop for player: " + dvz.getServer().getOfflinePlayer(uuid).getName() + " Invalid type!");
+            dvz.logTimings("WorkshopManager.loadWorkshop()[invalid type]", t);
             return false;
         }
 
@@ -95,6 +101,7 @@ public class WorkshopManager {
         //Check if it created the workshop.
         if (ws == null || ws.getType() != wsData.getType()) {
             dvz.log("Failed at loading the " + wsData.getType() + " workshop for player: " + dvz.getServer().getOfflinePlayer(uuid).getName());
+            dvz.logTimings("WorkshopManager.loadWorkshop()[invalid]", t);
             return false;
         }
 
@@ -104,6 +111,7 @@ public class WorkshopManager {
         }
 
         workshops.put(uuid, ws);
+        dvz.logTimings("WorkshopManager.loadWorkshop()", t);
         return true;
     }
 

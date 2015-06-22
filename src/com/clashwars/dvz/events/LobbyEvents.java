@@ -41,6 +41,7 @@ public class LobbyEvents implements Listener {
 
     @EventHandler
     private void interact(PlayerInteractEvent event) {
+        Long t = System.currentTimeMillis();
         final Player player = event.getPlayer();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         ItemStack item = event.getItem();
@@ -81,12 +82,14 @@ public class LobbyEvents implements Listener {
                                     Set<DvzClass> classOptions = cwp.getClassOptions();
                                     if (classOptions.size() >= dvz.getCM().getClasses(ClassType.DWARF).size()) {
                                         player.sendMessage(Util.formatMsg("&cYou already received all classes. (No reward)"));
+                                        dvz.logTimings("LobbyEvents.interact()[already all classes]", t);
                                         return;
                                     }
                                     cwp.giveClassItems(ClassType.DWARF, false, 1);
                                 }
                             }
                         }
+                        dvz.logTimings("LobbyEvents.interact()[parkour sign]", t);
                         return;
                     }
                 }
@@ -94,6 +97,7 @@ public class LobbyEvents implements Listener {
         }
 
         if (item == null) {
+            dvz.logTimings("LobbyEvents.interact()[no item]", t);
             return;
         }
 
@@ -137,11 +141,13 @@ public class LobbyEvents implements Listener {
                 }
             }
         }
+        dvz.logTimings("LobbyEvents.interact()", t);
     }
 
 
     @EventHandler
     private void inventoryClick(InventoryClickEvent event) {
+        Long t = System.currentTimeMillis();
         //Trigger class selection when clicking on the items in inventory.
         if (event.getInventory().getName().toLowerCase().contains("switch")) {
             return;
@@ -176,6 +182,7 @@ public class LobbyEvents implements Listener {
                 }
             }
         }
+        dvz.logTimings("LobbyEvents.inventoryClick()", t);
     }
 
 
@@ -207,6 +214,7 @@ public class LobbyEvents implements Listener {
     }
 
     private boolean showNpcInformation(Player player, String name) {
+        Long t = System.currentTimeMillis();
         if (name == null || name.isEmpty()) {
             return false;
         }
@@ -215,6 +223,7 @@ public class LobbyEvents implements Listener {
         for (DvzClass dvzClass : DvzClass.values()) {
             if (dvzClass.toString().toLowerCase().equalsIgnoreCase(name)) {
                 player.performCommand("dvz class " + name);
+                dvz.logTimings("LobbyEvents.showNpcInformation()", t);
                 return true;
             }
         }
@@ -223,6 +232,7 @@ public class LobbyEvents implements Listener {
 
     @EventHandler
     private void serverPing(ServerListPingEvent event) {
+        Long t = System.currentTimeMillis();
         GameState state = dvz.getGM().getState();
         if (state == GameState.CLOSED) {
             event.setMotd(CWUtil.integrateColor("&4&lClashWars &6&lDwarves &2&lVS &c&lZombies\n&cNo DvZ right now!"));
@@ -260,6 +270,7 @@ public class LobbyEvents implements Listener {
         if (state == GameState.ENDED) {
             event.setMotd(CWUtil.integrateColor("&4&lClashWars &6&lDwarves &2&lVS &c&lZombies\n&cEnded! &8(&7There might be another round!&8)"));
         }
+        dvz.logTimings("LobbyEvents.serverPing()", t);
     }
 
 }
