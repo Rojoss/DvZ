@@ -4,6 +4,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.stats.StatType;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
@@ -93,6 +94,7 @@ public class BuildingBlock extends BaseAbility {
             }
         }
         if (placed) {
+            dvz.getSM().changeLocalStatVal(player, StatType.BUILDER_BLOCK_USED, 1);
             dvz.getPM().getPlayer(player).addClassExp(1);
         }
         dvz.logTimings("BuildingBlock.castAbility()", t);

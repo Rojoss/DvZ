@@ -4,6 +4,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.stats.StatType;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -39,6 +40,10 @@ public class Reinforce extends BaseAbility {
             dvz.logTimings("Reinforce.castAbility()[cd]", t);
             return;
         }
+
+
+        dvz.getSM().changeLocalStatVal(player, StatType.BUILDER_STONE_REINFORCED, 1);
+
         triggerLoc.getBlock().setData((byte)0);
         ParticleEffect.SMOKE_NORMAL.display(0.6f, 0.6f, 0.6f, 0.01f, 20, triggerLoc.add(0.5f, 0.5f, 0.5f));
         triggerLoc.getWorld().playSound(triggerLoc, Sound.SLIME_ATTACK, 0.5f, 1f);

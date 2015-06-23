@@ -4,6 +4,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.stats.StatType;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -53,6 +54,7 @@ public class SummonStone extends BaseAbility {
                 }
             }
         }.runTaskTimer(dvz, 0, 5);
+        dvz.getSM().changeLocalStatVal(player, StatType.BUILDER_STONE_SUMMONED, 32);
         dvz.logTimings("SummonStone.castAbility()", t);
     }
 
