@@ -20,20 +20,23 @@ commands:
     aliases: [st]
   storage:
     description: Virtual storage for VIP members.
-    usage: /<command> <category>
+    usage: /<command>
     aliases: [chests, chest]
   furnace:
     description: Virtual furnace for VIP members.
-    usage: /<command> <category>
+    usage: /<command>
     aliases: [furnaces, smelt, cook]
   enchant:
     description: Virtual enchanting for VIP members.
-    usage: /<command> <category>
+    usage: /<command>
     aliases: [enchanting]
   disposal:
     description: Virtual item disposal.
-    usage: /<command> <category>
+    usage: /<command>
     aliases: [dispose,clear]
   enjinprofile:
     description: Verify your enjin profile link.
     usage: /<command>
+  localstats:
+    description: View your local game stats.
+    usage: /<command> <category> [player]

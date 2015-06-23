@@ -143,7 +143,7 @@ public class CWPlayer {
         final BaseClass c = dvzClass.getClassClass();
         final Player player = getPlayer();
 
-        if (eggUse) {
+        if (eggUse && dvzClass.getPickStat() != null) {
             dvz.getSM().changeLocalStatVal(player, dvzClass.getPickStat(), 1);
         }
 
