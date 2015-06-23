@@ -7,6 +7,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.stats.StatType;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.workshop.FletcherWorkshop;
 import org.bukkit.Location;
@@ -132,9 +133,11 @@ public class Fletcher extends DwarfClass {
             feathers.setAmount(2);
             ParticleEffect.VILLAGER_HAPPY.display(0.5f, 0.5f, 0.5f, 0.0001f, 8, entity.getLocation(), 500);
             cwp.addClassExp(2);
+            dvz.getSM().changeLocalStatVal(cwp.getUUID(), StatType.FLETCHER_FEATHERS_COLLECTED, 2);
         } else {
             ParticleEffect.PORTAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 8, entity.getLocation(), 500);
             cwp.addClassExp(1);
+            dvz.getSM().changeLocalStatVal(cwp.getUUID(), StatType.FLETCHER_FEATHERS_COLLECTED, 1);
         }
         entity.getWorld().dropItem(entity.getLocation(), feathers);
         ws.spawnChicken(EntityType.CHICKEN, CWUtil.random(ws.getCuboid().getMaxY() + 5, ws.getCuboid().getMaxY() + 15));
@@ -195,12 +198,15 @@ public class Fletcher extends DwarfClass {
                 //Random chance to get a bow.
                 if (CWUtil.randomFloat() <= getDoubleOption("bow-product-chance")) {
                     dropLoc.getWorld().dropItem(dropLoc, Product.BOW.getItem());
+                    dvz.getSM().changeLocalStatVal(player, StatType.FLETCHER_BOWS_CRAFTED, 1);
                 }
                 //Random amount of arrows.
                 CWItem arrows = Product.ARROW.getItem();
                 arrows.setAmount(CWUtil.random(getIntOption("min-arrow-amount"), getIntOption("max-arrow-amount")));
                 dropLoc.getWorld().dropItem(dropLoc, arrows);
                 ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f), 500);
+
+                dvz.getSM().changeLocalStatVal(player, StatType.FLETCHER_ARROWS_CRAFTED, arrows.getAmount());
 
                 dvz.getPM().getPlayer(player).addClassExp(40);
                 // + 1 per gravel
@@ -234,8 +240,10 @@ public class Fletcher extends DwarfClass {
         }
 
         //Give flint with random chance for breaking gravel.
+        dvz.getSM().changeLocalStatVal(event.getPlayer(), StatType.FLETCHER_GRAVEL_DUG, 1);
         event.setCancelled(false);
         if (CWUtil.randomFloat() <= getDoubleOption("flint-chance")) {
+            dvz.getSM().changeLocalStatVal(event.getPlayer(), StatType.FLETCHER_FLINT_COLLECTED, 1);
             dvz.getPM().getPlayer(player).addClassExp(1);
             block.getWorld().dropItemNaturally(block.getLocation().add(0.5f, 0.5f, 0.5f), Product.FLINT.getItem());
         }
