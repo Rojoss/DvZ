@@ -1,9 +1,8 @@
 package com.clashwars.dvz.config;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.config.internal.EasyConfig;
 import com.clashwars.dvz.DvZ;
-import com.clashwars.dvz.stats.StatsData;
+import com.clashwars.dvz.stats.internal.StatsData;
 
 import java.util.HashMap;
 import java.util.Map;

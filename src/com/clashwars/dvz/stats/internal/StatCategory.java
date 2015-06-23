@@ -1,4 +1,4 @@
-package com.clashwars.dvz.stats;
+package com.clashwars.dvz.stats.internal;
 
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;

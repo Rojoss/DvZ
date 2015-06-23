@@ -5,7 +5,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.classes.DvzClass;
-import com.clashwars.dvz.stats.StatType;
+import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.workshop.MinerWorkshop;
 import com.clashwars.dvz.workshop.WorkShop;

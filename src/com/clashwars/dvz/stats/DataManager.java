@@ -1,6 +1,9 @@
 package com.clashwars.dvz.stats;
 
 import com.clashwars.dvz.DvZ;
+import com.clashwars.dvz.stats.internal.Game;
+import com.clashwars.dvz.stats.internal.Stat;
+import com.clashwars.dvz.stats.internal.StatCategory;
 
 import java.sql.*;
 import java.util.ArrayList;

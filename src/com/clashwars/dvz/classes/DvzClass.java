@@ -6,7 +6,7 @@ import com.clashwars.dvz.classes.dragons.FireDragon;
 import com.clashwars.dvz.classes.dragons.WaterDragon;
 import com.clashwars.dvz.classes.dwarves.*;
 import com.clashwars.dvz.classes.monsters.*;
-import com.clashwars.dvz.stats.StatType;
+import com.clashwars.dvz.stats.internal.StatType;
 
 import java.util.ArrayList;
 import java.util.Arrays;

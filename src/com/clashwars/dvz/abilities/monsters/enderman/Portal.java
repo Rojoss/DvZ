@@ -8,7 +8,7 @@ import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
-import com.clashwars.dvz.stats.StatType;
+import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import com.sk89q.minecraft.util.commands.CommandException;

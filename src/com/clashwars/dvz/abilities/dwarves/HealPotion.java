@@ -3,7 +3,7 @@ package com.clashwars.dvz.abilities.dwarves;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
-import com.clashwars.dvz.stats.StatType;
+import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;

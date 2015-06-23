@@ -3,6 +3,8 @@ package com.clashwars.dvz.stats;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.mysql.MySQL;
+import com.clashwars.dvz.stats.internal.StatType;
+import com.clashwars.dvz.stats.internal.StatsData;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

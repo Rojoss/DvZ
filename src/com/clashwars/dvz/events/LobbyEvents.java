@@ -8,7 +8,7 @@ import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
-import com.clashwars.dvz.stats.StatType;
+import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Material;
 import org.bukkit.Sound;

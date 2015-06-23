@@ -4,7 +4,7 @@ import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.Product;
-import com.clashwars.dvz.stats.StatType;
+import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.structures.data.FurnaceData;
 import com.clashwars.dvz.structures.extra.FurnaceItem;
 import com.clashwars.dvz.structures.internal.Structure;

@@ -6,7 +6,7 @@ import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.player.CWPlayer;
-import com.clashwars.dvz.stats.StatType;
+import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Material;

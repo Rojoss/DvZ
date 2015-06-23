@@ -1,4 +1,4 @@
-package com.clashwars.dvz.stats;
+package com.clashwars.dvz.stats.internal;
 
 public enum StatType {
     GENERAL_TIME_PLAYED(1), //NOT ADDED
