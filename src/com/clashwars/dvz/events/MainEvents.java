@@ -14,6 +14,7 @@ import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.mysql.MySQL;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.stats.StatType;
 import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.WorkShop;
 import net.minecraft.server.v1_8_R2.PacketPlayInClientCommand;
@@ -301,9 +302,6 @@ public class MainEvents implements Listener {
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         Player killer = player.getKiller();
 
-        Debug.bc(killer);
-        Debug.bc(player.getLastDamageCause());
-
         event.setDroppedExp(0);
 
         //Death message
@@ -315,14 +313,22 @@ public class MainEvents implements Listener {
                 prefix = "&c";
             }
         }
+
         if (killer != null) {
             if (dvz.getGM().getState() == GameState.DRAGON && dvz.getGM().getDragonPlayer().getName().equalsIgnoreCase(killer.getName())) {
                 event.setDeathMessage(CWUtil.integrateColor(prefix + player.getName() + " &7was killed by the dragon!"));
+                dvz.getSM().changeLocalStatVal(player, StatType.GENERAL_DEATHS_BY_DRAGON, 1);
             } else {
                 event.setDeathMessage(CWUtil.integrateColor(prefix + player.getName() + " &7was killed by " + killer.getName() + "!"));
             }
         } else {
             event.setDeathMessage(CWUtil.integrateColor(prefix + player.getName() + " &7died!"));
+        }
+
+        if (cwp.getPlayerClass().getType() == ClassType.MONSTER) {
+            dvz.getSM().changeLocalStatVal(player, StatType.GENERAL_DEATHS_AS_MONSTER, 1);
+        } else if (cwp.getPlayerClass().getType() == ClassType.DWARF) {
+            dvz.getSM().changeLocalStatVal(player, StatType.GENERAL_DEATHS_AS_DWARF, 1);
         }
 
         //Enderman died. (Drop picked up player)
@@ -357,6 +363,7 @@ public class MainEvents implements Listener {
             dvz.getServer().broadcastMessage(Util.formatMsg("&d&lThe DragonSlayer died!"));
         }
 
+        //Destroy shrines if not any dwarves left.
         final ShrineType[] shrineTypes = new ShrineType[] {ShrineType.WALL, ShrineType.KEEP_1, ShrineType.KEEP_2};
         new BukkitRunnable() {
             int index = 0;

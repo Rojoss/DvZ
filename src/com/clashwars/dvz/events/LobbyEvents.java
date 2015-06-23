@@ -8,6 +8,7 @@ import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.stats.StatType;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -60,6 +61,7 @@ public class LobbyEvents implements Listener {
                         } else {
                             dvz.getServer().broadcastMessage(Util.formatMsg("&5&l" + player.getName() + " &6completed the parkour!"));
                             cwp.setParkourCompleted(true);
+                            dvz.getSM().changeLocalStatVal(player, StatType.GENERAL_TIMES_COMPLETED_PARKOUR, 1);
 
                             block.getWorld().playSound(block.getLocation(), Sound.ORB_PICKUP, 100.0f, 0.5f);
 

@@ -13,6 +13,7 @@ import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.PlayerCfg;
 import com.clashwars.dvz.runnables.TeleportRunnable;
+import com.clashwars.dvz.stats.StatType;
 import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.*;
@@ -237,6 +238,8 @@ public class CWPlayer {
         BaseClass c = dvzClass.getClassClass();
         final Player player = getPlayer();
 
+        dvz.getSM().changeLocalStatVal(player, StatType.GENERAL_TIMES_SWITCHED, 1);
+
         player.getInventory().clear();
 
         if (dvz.getWM().hasWorkshop(player.getUniqueId())) {
@@ -417,6 +420,8 @@ public class CWPlayer {
         if (teleport != null) {
             return false;
         }
+
+        dvz.getSM().changeLocalStatVal(uuid, StatType.GENERAL_TIMES_TELEPORTED, 1);
 
         //If dwarf and no monsters nearby tp instant and other way around.
         List<Entity> nearbyPlayers = CWUtil.getNearbyEntities(getPlayer().getLocation(), 40, Arrays.asList(new EntityType[] {EntityType.PLAYER}));
