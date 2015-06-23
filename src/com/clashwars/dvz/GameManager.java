@@ -13,6 +13,7 @@ import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.runnables.DragonRunnable;
+import com.clashwars.dvz.stats.StatType;
 import com.clashwars.dvz.structures.StorageStruc;
 import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.util.Util;
@@ -400,7 +401,7 @@ public class GameManager {
         title.broadcast();
         setState(GameState.ENDED);
 
-        dvz.getSM().changeLocalStatVal("Game time", ((int)(System.currentTimeMillis() - startTime)));
+        dvz.getSM().changeLocalStatVal(StatType.GENERAL_GAME_TIME, ((int)(System.currentTimeMillis() - startTime)));
 
         //Save local statistics to database and create a new game record
         dvz.getSM().uploadLocalStats();

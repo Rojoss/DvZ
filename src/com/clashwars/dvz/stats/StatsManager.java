@@ -137,12 +137,12 @@ public class StatsManager {
         return getLocalStatVal(player.getUniqueId(), statID);
     }
 
-    public float getLocalStatVal(Player player, String statName) {
-        return getLocalStatVal(player.getUniqueId(), dvz.getDM().getStatID(statName));
+    public float getLocalStatVal(Player player, StatType statType) {
+        return getLocalStatVal(player.getUniqueId(), statType.id);
     }
 
-    public float getLocalStatVal(UUID player, String statName) {
-        return getLocalStatVal(player, dvz.getDM().getStatID(statName));
+    public float getLocalStatVal(UUID player, StatType statType) {
+        return getLocalStatVal(player, statType.id);
     }
 
     public float getLocalStatVal(UUID player, int statID) {
@@ -160,12 +160,12 @@ public class StatsManager {
         changeLocalStatVal(player.getUniqueId(), statID, amount);
     }
 
-    public void changeLocalStatVal(Player player, String statName, float amount) {
-        changeLocalStatVal(player.getUniqueId(), dvz.getDM().getStatID(statName), amount);
+    public void changeLocalStatVal(Player player, StatType statType, float amount) {
+        changeLocalStatVal(player.getUniqueId(), statType.id, amount);
     }
 
-    public void changeLocalStatVal(UUID player, String statName, float amount) {
-        changeLocalStatVal(player, dvz.getDM().getStatID(statName), amount);
+    public void changeLocalStatVal(UUID player, StatType statType, float amount) {
+        changeLocalStatVal(player, statType.id, amount);
     }
 
     public void changeLocalStatVal(UUID player, int statID, float amount) {
@@ -182,8 +182,8 @@ public class StatsManager {
         }
     }
 
-    public void changeLocalStatVal(String statName, float amount) {
-        changeLocalStatVal(dvz.getDM().getStatID(statName), amount);
+    public void changeLocalStatVal(StatType statType, float amount) {
+        changeLocalStatVal(statType.id, amount);
     }
 
     public void changeLocalStatVal(int statID, float amount) {
