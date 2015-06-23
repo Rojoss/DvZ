@@ -1,5 +1,6 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.ClassType;
@@ -119,6 +120,9 @@ public class UtilityEvents implements Listener {
 
     @EventHandler
     private void chat(final AsyncPlayerChatEvent event) {
+        //dvz.getSM().changeLocalStatVal(event.getPlayer(), "test stat", 1);
+        //Debug.bc(dvz.getSM().getLocalStatVal(event.getPlayer(), "test stat"));
+
         //Tips based on keywords
         final String tip = dvz.getTM().getTipFromChat(event.getMessage().replaceAll("[^a-zA-Z ]", ""), dvz.getPM().getPlayer(event.getPlayer()));
         if (event.getMessage().startsWith("!") || event.getMessage().startsWith("?") && event.getMessage().length() > 3) {
