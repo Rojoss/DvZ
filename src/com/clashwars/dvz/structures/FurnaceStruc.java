@@ -4,6 +4,7 @@ import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.Product;
+import com.clashwars.dvz.stats.StatType;
 import com.clashwars.dvz.structures.data.FurnaceData;
 import com.clashwars.dvz.structures.extra.FurnaceItem;
 import com.clashwars.dvz.structures.internal.Structure;
@@ -94,14 +95,22 @@ public class FurnaceStruc extends Structure {
                     if (menu.getItems()[i] == null) {
                         continue;
                     }
+                    int count = 0;
                     for (FurnaceItem fItem : furnaceItems) {
                         if (menu.getItems()[i].getType() == fItem.getResult().getType()) {
-                            player.getWorld().playSound(player.getLocation(), Sound.FIZZ, 0.5f, 1.3f);
-                            ParticleEffect.SMOKE_NORMAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 15, player.getLocation());
-                            ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 5, player.getLocation());
+                            if (count < 5) {
+                                player.getWorld().playSound(player.getLocation(), Sound.FIZZ, 0.5f, 1.3f);
+                                ParticleEffect.SMOKE_NORMAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 15, player.getLocation());
+                                ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 5, player.getLocation());
+                            }
                             menu.setSlot(new CWItem(Material.AIR), i, null);
                             fItem.getResult().giveToPlayer(player);
                             dvz.getPM().getPlayer(player).addClassExp(fItem.getXP());
+
+                            if (fItem.getResult().getType() == Material.BREAD) {
+                                dvz.getSM().changeLocalStatVal(player, StatType.BAKER_BREAD_BAKED, 1);
+                            }
+                            count++;
                         }
                     }
                 }
@@ -114,6 +123,10 @@ public class FurnaceStruc extends Structure {
                     menu.setSlot(new CWItem(Material.AIR), event.getSlot(), null);
                     furnaceItem.getResult().giveToPlayer(player);
                     dvz.getPM().getPlayer(player).addClassExp(furnaceItem.getXP());
+
+                    if (furnaceItem.getResult().getType() == Material.BREAD) {
+                        dvz.getSM().changeLocalStatVal(player, StatType.BAKER_BREAD_BAKED, 1);
+                    }
                 } else {
                     player.sendMessage(Util.formatMsg("&cThis item isn't done yet."));
                 }

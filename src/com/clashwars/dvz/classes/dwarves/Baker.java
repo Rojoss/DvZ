@@ -4,6 +4,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.stats.StatType;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.workshop.BakerWorkshop;
 import com.clashwars.dvz.workshop.WorkShop;
@@ -64,6 +65,7 @@ public class Baker extends DwarfClass {
         if (block.getData() == 7) {
             dvz.getPM().getPlayer(player).addClassExp(1);
             CWUtil.dropItemStack(block.getLocation(), Product.WHEAT.getItem(), dvz, player);
+            dvz.getSM().changeLocalStatVal(player, StatType.BAKER_WHEAT_HARVESTED, 1);
         }
         CWUtil.dropItemStack(block.getLocation(), Product.SEED.getItem(), dvz, player);
         dvz.logTimings("Baker.blockBreak()", t);
@@ -173,6 +175,7 @@ public class Baker extends DwarfClass {
         if (flourCount > 0) {
             CWUtil.dropItemStack(ws.getHopperBlock().getRelative(BlockFace.DOWN).getLocation(), Product.FLOUR.getItem(flourCount), dvz, player);
             dvz.getPM().getPlayer(player).addClassExp(flourCount * 3);
+            dvz.getSM().changeLocalStatVal(player, StatType.BAKER_FLOUR_GRINDED, flourCount);
         }
         dvz.logTimings("Baker.hopperItemTake()", t);
     }
