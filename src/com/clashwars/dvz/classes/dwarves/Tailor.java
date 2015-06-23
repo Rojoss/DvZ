@@ -6,6 +6,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.stats.StatType;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.workshop.TailorWorkshop;
 import org.bukkit.Location;
@@ -74,6 +75,7 @@ public class Tailor extends DwarfClass {
         entity.getWorld().dropItemNaturally(entity.getLocation(), Product.WOOL.getItem(getIntOption("wool-drop-amount")));
         player.playSound(entity.getLocation(), Sound.SHEEP_SHEAR, 1.0f, 1.0f);
         dvz.getPM().getPlayer(player).addClassExp(1);
+        dvz.getSM().changeLocalStatVal(player, StatType.TAILOR_SHEEP_SHEARED, 1);
 
         final CWEntity sheep = cwe;
         ws.runnables.add(new BukkitRunnable() {
@@ -111,8 +113,10 @@ public class Tailor extends DwarfClass {
         event.setCancelled(false);
         if (block.getData() == 3) {
             block.getWorld().dropItem(block.getLocation(), Product.DYE_1.getItem());
+            dvz.getSM().changeLocalStatVal(player, StatType.TAILOR_WHITE_FLOWERS_COLLECTED, 1);
         } else if (block.getData() == 1) {
             block.getWorld().dropItem(block.getLocation(), Product.DYE_2.getItem());
+            dvz.getSM().changeLocalStatVal(player, StatType.TAILOR_BLUE_FLOWERS_COLLECTED, 1);
         }
         dvz.getPM().getPlayer(player).addClassExp(5);
         block.setType(Material.AIR);
@@ -197,6 +201,8 @@ public class Tailor extends DwarfClass {
 
                 ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f), 500);
                 player.updateInventory();
+
+                dvz.getSM().changeLocalStatVal(player, StatType.TAILOR_ARMOR_CRAFTED, 1);
 
                 dvz.getPM().getPlayer(player).addClassExp(35);
                 // + 5 per flower broken
