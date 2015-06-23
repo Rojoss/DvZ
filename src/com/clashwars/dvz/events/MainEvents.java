@@ -326,9 +326,9 @@ public class MainEvents implements Listener {
         }
 
         if (cwp.getPlayerClass().getType() == ClassType.MONSTER) {
-            dvz.getSM().changeLocalStatVal(player, StatType.GENERAL_DEATHS_AS_MONSTER, 1);
+            dvz.getSM().changeLocalStatVal(player, StatType.MONSTER_DEATHS, 1);
         } else if (cwp.getPlayerClass().getType() == ClassType.DWARF) {
-            dvz.getSM().changeLocalStatVal(player, StatType.GENERAL_DEATHS_AS_DWARF, 1);
+            dvz.getSM().changeLocalStatVal(player, StatType.DWARF_DEATHS, 1);
         }
 
         //Enderman died. (Drop picked up player)
