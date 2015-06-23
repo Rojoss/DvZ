@@ -19,6 +19,8 @@ import com.clashwars.dvz.mysql.SqlPass;
 import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.runnables.AntiCamp;
 import com.clashwars.dvz.runnables.GameRunnable;
+import com.clashwars.dvz.stats.DataManager;
+import com.clashwars.dvz.stats.StatsManager;
 import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.tips.TipManager;
 import com.clashwars.dvz.util.ItemMenu;
@@ -65,6 +67,7 @@ public class DvZ extends JavaPlugin {
     private WorkShopCfg wsCfg;
     private ArmorPresetsCfg presetCfg;
     private BannerCfg bannerCfg;
+    private StatsCfg statsCfg;
 
     private MySQL sql;
     private Connection c;
@@ -78,6 +81,8 @@ public class DvZ extends JavaPlugin {
     private PlayerManager pm;
     private WorkshopManager wm;
     private TipManager tm;
+    private DataManager dm;
+    private StatsManager sm;
 
     private ArmorMenu armorMenu;
     private ColorMenu colorMenu;
@@ -176,6 +181,9 @@ public class DvZ extends JavaPlugin {
         bannerCfg = new BannerCfg("plugins/DvZ/data/Banners.yml");
         bannerCfg.load();
 
+        statsCfg = new StatsCfg("plugins/DvZ/data/Stats.yml");
+        statsCfg.load();
+
         sql = new MySQL(this, "37.26.106.5", "3306", "clashwar_data", "clashwar_main", SqlPass.Pass());
         try {
             c = sql.openConnection();
@@ -193,6 +201,8 @@ public class DvZ extends JavaPlugin {
         pm = new PlayerManager(this);
         wm = new WorkshopManager(this);
         tm = new TipManager();
+        dm = new DataManager(this);
+        sm = new StatsManager(this);
         gm.calculateMonsterPerc();
 
         soundMenu = new SoundMenu(this);
@@ -388,6 +398,10 @@ public class DvZ extends JavaPlugin {
         return bannerCfg;
     }
 
+    public StatsCfg getStatsCfg() {
+        return statsCfg;
+    }
+
 
     public Connection getSql() {
         return c;
@@ -420,6 +434,14 @@ public class DvZ extends JavaPlugin {
 
     public TipManager getTM() {
         return tm;
+    }
+
+    public DataManager getDM() {
+        return dm;
+    }
+
+    public StatsManager getSM() {
+        return sm;
     }
 
     public ArmorMenu getArmorMenu() {

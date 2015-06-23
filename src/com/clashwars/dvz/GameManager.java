@@ -182,6 +182,10 @@ public class GameManager {
 
         dvz.getServer().dispatchCommand(dvz.getServer().getConsoleSender(), "hd reload");
 
+        if (dvz.getSql() != null) {
+            dvz.getSM().clearLocalStats();
+        }
+
         //Tp all players to active world.
         Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
         for (Player player : players) {
@@ -357,7 +361,7 @@ public class GameManager {
 
     public void captureFirstKeepShrine() {
         Long t = System.currentTimeMillis();
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&7===== &a&lThe bottom of the keep has been captured! &7====="));
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&7== &a&lThe bottom of the keep has been captured! &7=="));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Defend the shrine at the top!"));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Monsters will now spawn in the keep!"));
         Title title = new Title("&c&lKeep captured!", "&7Get to the top of the keep to defend the final shrine!", 10, 50, 30);
@@ -387,6 +391,10 @@ public class GameManager {
         title.setTimingsToTicks();
         title.broadcast();
         setState(GameState.ENDED);
+
+        //Save local statistics to database and create a new game record
+        dvz.getSM().uploadLocalStats();
+
         dvz.logTimings("GameManager.stopGame()", t);
     }
 
