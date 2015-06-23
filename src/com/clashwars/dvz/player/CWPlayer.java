@@ -477,10 +477,12 @@ public class CWPlayer {
 
 
     public void addClassExp(int exp) {
+        dvz.getSM().changeLocalStatVal(uuid, StatType.DWARF_XP_EARNED, exp);
         if (getClassExp() + exp >= dvz.getCfg().XP_NEEDED_TO_LVL) {
             data.setClassExp(0);
             data.setClassLvl(data.getClassLvl() + 1);
             savePlayer();
+            dvz.getSM().changeLocalStatVal(uuid, StatType.DWARF_LEVELS_EARNED, 1);
             Bukkit.getServer().getPluginManager().callEvent(new ClassLevelupEvent(this));
         } else {
             data.setClassExp(getClassExp() + exp);

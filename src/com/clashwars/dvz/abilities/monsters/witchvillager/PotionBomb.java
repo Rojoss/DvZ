@@ -7,6 +7,7 @@ import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.stats.StatType;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import com.sk89q.minecraft.util.commands.CommandException;
@@ -128,6 +129,8 @@ public class PotionBomb extends BaseAbility {
             ((Skull)state).update();
         }
 
+        dvz.getSM().changeLocalStatVal(player, StatType.MONSTER_BOMBS_PLACED, 1);
+
         int fuseTime = 1000 - (int)dvz.getGM().getMonsterPower(800);
         BukkitTask bt = new BukkitRunnable() {
             @Override
@@ -212,6 +215,8 @@ public class PotionBomb extends BaseAbility {
         if(!dvz.getPM().getPlayer(event.getPlayer()).isDwarf()) {
             return;
         }
+
+        dvz.getSM().changeLocalStatVal(event.getPlayer(), StatType.DWARF_BOMBS_DESTROYED, 1);
 
         fixGround(bomb);
 

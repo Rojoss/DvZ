@@ -8,6 +8,7 @@ import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.stats.StatType;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import com.sk89q.minecraft.util.commands.CommandException;
@@ -90,6 +91,7 @@ public class Portal extends BaseAbility {
 
             player.teleport(portalLoc);
             CWUtil.removeItemsFromHand(player, 1);
+            dvz.getSM().changeLocalStatVal(player, StatType.MONSTER_PORTALS_CREATED, 1);
 
             dvz.getServer().broadcastMessage(Util.formatMsg("&dPortal created by &5" + player.getName() + "&d!"));
             dvz.getServer().broadcastMessage(Util.formatMsg("&7Monsters can &dtp &7to it by using the &dportal block&7."));
@@ -133,6 +135,7 @@ public class Portal extends BaseAbility {
         Player portalOwner = activePortal.getOwner();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         if (cwp.isDwarf()) {
+            dvz.getSM().changeLocalStatVal(player, StatType.DWARF_PORTALS_DESTROYED, 1);
             dvz.getServer().broadcastMessage(Util.formatMsg("&cThe portal has been destroyed by &4" + player.getName()));
             portalOwner.sendMessage(Util.formatMsg("&cYou have been killed because your portal was destroyed!"));
             destroyPortal(true);
@@ -153,7 +156,7 @@ public class Portal extends BaseAbility {
                 activePortal.downvotes.add(player.getUniqueId());
                 cwp.getWorld().playSound(event.getClickedBlock().getLocation(), Sound.ANVIL_LAND, 1, 2);
                 ParticleEffect.SMOKE_LARGE.display(0.5f, 0.5f, 0.5f, 0, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
-                Bukkit.broadcastMessage(Util.formatMsg("&6Downvote for portal deactivation &aadded&6. &8[&a" + activePortal.downvotes.size() + "&7/&25&8]"));
+                player.sendMessage(Util.formatMsg("&6Downvote for portal deactivation &aadded&6. &8[&a" + activePortal.downvotes.size() + "&7/&25&8]"));
 
                 //Enough votes so remove the portal.
                 if (activePortal.downvotes.size() >= 5) {
@@ -190,6 +193,7 @@ public class Portal extends BaseAbility {
             }
             CWPlayer cwp = dvz.getPM().getPlayer(player);
             if (cwp.isDwarf()) {
+                dvz.getSM().changeLocalStatVal(player, StatType.DWARF_PORTALS_DESTROYED, 1);
                 dvz.getServer().broadcastMessage(Util.formatMsg("&cThe portal has been destroyed by &4" + player.getName()));
                 activePortal.getOwner().sendMessage("&cYou have been killed because your portal was shot!");
                 destroyPortal(true);
@@ -203,6 +207,11 @@ public class Portal extends BaseAbility {
             if (activePortal == null || !activePortal.getOwner().equals(event.getEntity())) {
                 return;
             }
+
+            if (event.getEntity().getKiller() != null) {
+                dvz.getSM().changeLocalStatVal(event.getEntity().getKiller(), StatType.DWARF_PORTALS_DESTROYED, 1);
+            }
+
             dvz.getServer().broadcastMessage(Util.formatMsg("&cThe portal has been destroyed!"));
             destroyPortal(false);
         }

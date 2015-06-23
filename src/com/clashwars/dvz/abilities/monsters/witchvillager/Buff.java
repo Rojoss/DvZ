@@ -6,6 +6,7 @@ import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.stats.StatType;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Material;
@@ -69,6 +70,8 @@ public class Buff extends BaseAbility {
         cwt.getPlayerData().setBuffed(true);
         dvz.getPM().getPlayer(event.getPlayer()).getPlayerData().setBuffUsed(true);
         CWUtil.removeItemsFromHand(event.getPlayer(), 1);
+
+        dvz.getSM().changeLocalStatVal(target, StatType.MONSTER_TIMES_BUFFED, 1);
 
         target.getWorld().playSound(target.getLocation(), Sound.ORB_PICKUP, 1, 0);
         target.getWorld().playSound(target.getLocation(), Sound.VILLAGER_YES, 0.8f, 1);

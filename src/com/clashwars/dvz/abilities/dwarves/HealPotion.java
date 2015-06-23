@@ -3,6 +3,7 @@ package com.clashwars.dvz.abilities.dwarves;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.stats.StatType;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,6 +29,8 @@ public class HealPotion extends BaseAbility {
             dvz.logTimings("HealPotion.castAbility()[cd]", t);
             return;
         }
+
+        dvz.getSM().changeLocalStatVal(player, StatType.DWARF_HEALTH_POTS_USED, 1);
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 100, 1));
         ParticleEffect.HEART.display(0.3f, 0.3f, 0.3f, 0.1f, 10, player.getLocation().add(0, 2, 0));

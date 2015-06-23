@@ -181,6 +181,7 @@ public class UtilityEvents implements Listener {
         if (event.getItem().getType() == Material.BREAD) {
             event.getPlayer().setSaturation(event.getPlayer().getSaturation() + 6);
             event.getPlayer().setFoodLevel(event.getPlayer().getFoodLevel() + 5);
+            dvz.getSM().changeLocalStatVal(event.getPlayer(), StatType.DWARF_BREAD_EATEN, 1);
         }
 
         //Cancel potion drinking.

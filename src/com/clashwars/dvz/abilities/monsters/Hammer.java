@@ -7,6 +7,7 @@ import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
+import com.clashwars.dvz.stats.StatType;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
@@ -64,6 +65,8 @@ public class Hammer extends BaseAbility {
             if (!damageShrine(block.getLocation(), player)) {
                 return;
             }
+
+            dvz.getSM().changeLocalStatVal(player, StatType.MONSTER_SHRINE_DAMAGE, dvz.getCfg().SHRINE__DAMAGE_PER_HIT);
             effect = ParticleEffect.SPELL_WITCH;
             effectAmt = 8;
         }
@@ -130,6 +133,8 @@ public class Hammer extends BaseAbility {
         if (onCooldown(damager)) {
             return;
         }
+
+        dvz.getSM().changeLocalStatVal(damager, StatType.MONSTER_SHRINE_DAMAGE, dvz.getCfg().SHRINE__DAMAGE_PER_HIT);
 
         ParticleEffect.SPELL_WITCH.display(0.2f, 0.0f, 0.2f, 0.00001f, 8, block.getLocation().add(0.5f, 1, 0.5f));
         damager.getWorld().playSound(block.getLocation(), Sound.ZOMBIE_WOOD, 0.1f, 2.2f - CWUtil.randomFloat());
