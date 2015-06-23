@@ -5,6 +5,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.stats.StatType;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.workshop.MinerWorkshop;
 import com.clashwars.dvz.workshop.WorkShop;
@@ -78,18 +79,22 @@ public class Miner extends DwarfClass {
         if (mat == Material.STONE) {
             CWUtil.dropItemStack(block.getLocation(), Product.STONE_BRICK.getItem(getIntOption("stone-drops")), dvz, player);
             ParticleEffect.SMOKE_NORMAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, block.getLocation().add(0.5f, 0.5f, 0.5f));
+            dvz.getSM().changeLocalStatVal(player, StatType.MINER_STONE_MINED, 1);
         } else if (mat == Material.DIAMOND_ORE) {
             dvz.getPM().getPlayer(player).addClassExp(10);
             CWUtil.dropItemStack(block.getLocation(), Product.DIAMOND_ORE.getItem(getIntOption("ore-drops")), dvz, player);
             ParticleEffect.CRIT_MAGIC.display(0.5f, 0.5f, 0.5f, 0.0001f, 20, block.getLocation().add(0.5f,0.5f,0.5f));
+            dvz.getSM().changeLocalStatVal(player, StatType.MINER_DIAMONDS_MINED, 1);
         } else if (mat == Material.GOLD_ORE) {
             dvz.getPM().getPlayer(player).addClassExp(10);
             CWUtil.dropItemStack(block.getLocation(), Product.GOLD_ORE.getItem(getIntOption("ore-drops")), dvz, player);
             ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 15, block.getLocation().add(0.5f,0.5f,0.5f));
+            dvz.getSM().changeLocalStatVal(player, StatType.MINER_GOLD_MINED, 1);
         } else if (mat == Material.IRON_ORE) {
             dvz.getPM().getPlayer(player).addClassExp(10);
             CWUtil.dropItemStack(block.getLocation(), Product.IRON_ORE.getItem(getIntOption("ore-drops")), dvz, player);
             ParticleEffect.CRIT.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, block.getLocation().add(0.5f,0.5f,0.5f));
+            dvz.getSM().changeLocalStatVal(player, StatType.MINER_IRON_MINED, 1);
         }
 
 
@@ -212,6 +217,8 @@ public class Miner extends DwarfClass {
         if (craft) {
             ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f));
             player.updateInventory();
+
+            dvz.getSM().changeLocalStatVal(player, StatType.MINER_WEAPONS_CRAFTED, 1);
 
             dvz.getPM().getPlayer(player).addClassExp(50);
             // + 5 per ore mined
