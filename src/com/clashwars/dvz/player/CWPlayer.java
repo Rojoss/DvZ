@@ -143,6 +143,10 @@ public class CWPlayer {
         final BaseClass c = dvzClass.getClassClass();
         final Player player = getPlayer();
 
+        if (eggUse) {
+            dvz.getSM().changeLocalStatVal(player, dvzClass.getPickStat(), 1);
+        }
+
         //Reset
         reset(c.isSwitchable());
 
