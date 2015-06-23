@@ -9,6 +9,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.stats.StatType;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.workshop.AlchemistWorkshop;
 import com.clashwars.dvz.workshop.WorkShop;
@@ -118,6 +119,7 @@ public class Alchemist extends DwarfClass {
             player.getItemInHand().setType(Material.WATER_BUCKET);
             block.setData((byte)0);
             dvz.getPM().getPlayer(player).addClassExp(1);
+            dvz.getSM().changeLocalStatVal(player, StatType.ALCHEMIST_CAULDRONS_EMPTIED, 1);
         }
         dvz.logTimings("Alchemist.onInteract()", t);
     }
@@ -193,6 +195,8 @@ public class Alchemist extends DwarfClass {
             block.getWorld().dropItem(block.getLocation(), Product.MELON.getItem());
             dvz.getPM().getPlayer(player).addClassExp(3);
 
+            dvz.getSM().changeLocalStatVal(player, StatType.ALCHEMIST_MELONS_COLLECTED, 1);
+
             new BukkitRunnable() {
                 @Override
                 public void run()   {
@@ -220,6 +224,8 @@ public class Alchemist extends DwarfClass {
             sugar.setAmount(sugarcane.size());
             block.getWorld().dropItem(block.getLocation(), sugar);
             dvz.getPM().getPlayer(player).addClassExp(sugarcane.size());
+
+            dvz.getSM().changeLocalStatVal(player, StatType.ALCHEMIST_SUGAR_COLLECTED, sugarcane.size());
 
             for (Block sugarcaneBlock : sugarcane) {
                 sugarcaneBlock.setType(Material.AIR);
@@ -345,8 +351,10 @@ public class Alchemist extends DwarfClass {
         CWItem item;
         if (ws.melons > 0) {
             item = Ability.HEAL_POTION.getAbilityClass().getCastItem();
+            dvz.getSM().changeLocalStatVal(ws.getOwner(), StatType.ALCHEMIST_HEALTH_POTS, 1);
         } else {
             item = Ability.SPEED_POTION.getAbilityClass().getCastItem();
+            dvz.getSM().changeLocalStatVal(ws.getOwner(), StatType.ALCHEMIST_SPEED_POTS, 1);
         }
         if (item != null) {
             boolean added = false;
