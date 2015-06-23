@@ -34,6 +34,7 @@ public class GameManager {
     private Set<ShrineBlock> shrineBlocks = new HashSet<ShrineBlock>();
     private int dragonPower = 1;
     private float monsterPerc = 0;
+    Long startTime;
 
     public GameManager(DvZ dvz) {
         this.dvz = dvz;
@@ -42,6 +43,10 @@ public class GameManager {
         //Load shrines if server crashed/restarted during game.
         if (dvz.getMM().getActiveMap() != null && (isStarted() || getState() == GameState.OPENED)) {
             populateShrines();
+        }
+
+        if (gCfg.GAME__START_TIME != null && gCfg.GAME__START_TIME > 0) {
+            startTime = gCfg.GAME__START_TIME;
         }
     }
 
@@ -205,6 +210,9 @@ public class GameManager {
         Title title = new Title("&a&lDvZ has started!", "&7You can now choose a dwarf class!", 10, 50, 30);
         title.setTimingsToTicks();
         title.broadcast();
+
+        gCfg.GAME__START_TIME = System.currentTimeMillis();
+        startTime = System.currentTimeMillis();
         
         Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
         for (Player player : players) {
@@ -391,6 +399,8 @@ public class GameManager {
         title.setTimingsToTicks();
         title.broadcast();
         setState(GameState.ENDED);
+
+        dvz.getSM().changeLocalStatVal("Game time", ((int)(System.currentTimeMillis() - startTime)));
 
         //Save local statistics to database and create a new game record
         dvz.getSM().uploadLocalStats();

@@ -1,6 +1,5 @@
 package com.clashwars.dvz.stats;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.mysql.MySQL;
@@ -33,7 +32,7 @@ public class StatsManager {
 
     /* Local stat management */
     public void clearLocalStats() {
-        dvz.getStatsCfg().removePlayerStats();
+        dvz.getStatsCfg().removeStats();
     }
 
     public void uploadLocalStats() {
@@ -43,7 +42,7 @@ public class StatsManager {
                 boolean statsSaved = false;
                 if (dvz.getSql() != null) {
                     Connection connection = dvz.getSql();
-                    if (dvz.getStatsCfg().STATS != null && dvz.getStatsCfg().STATS.size() > 0) {
+                    if ((dvz.getStatsCfg().STATS != null && dvz.getStatsCfg().STATS.size() > 0) || (dvz.getStatsCfg().SERVER_STATS != null && !dvz.getStatsCfg().SERVER_STATS.isEmpty())) {
                         try {
                             //Create a new game record
                             PreparedStatement createGamePS = connection.prepareStatement("INSERT INTO Games(game_type,date) VALUES(?,?);");
@@ -58,29 +57,45 @@ public class StatsManager {
                                 getGamePS.setTimestamp(1, timestamp);
                                 ResultSet gameIdResult = getGamePS.executeQuery();
                                 if (gameIdResult.next()) {
-                                    int gameID = gameIdResult.getInt("game_id");
                                     //Game inserted and we retrieved the game ID.
-
-                                    //Insert all stats for all players.
+                                    //Now insert all the server and player stats for the game.
+                                    int gameID = gameIdResult.getInt("game_id");
                                     PreparedStatement statement = dvz.getSql().prepareStatement("INSERT INTO StatData(game_id,player_id,stat_id,value) VALUES(?, ?, ?, ?);");
-
                                     int i = 0;
-                                    Map<UUID, StatsData> statDataMap = dvz.getStatsCfg().getStats();
-                                    for (Map.Entry<UUID, StatsData> entry : statDataMap.entrySet()) {
-                                        int playerID = dvz.getPM().getPlayer(entry.getKey()).getCharID();
 
-                                        HashMap<Integer, Float> statsMap = entry.getValue().getData();
-                                        for (Map.Entry<Integer, Float> stat : statsMap.entrySet()) {
+                                    //Server stats
+                                    if (dvz.getStatsCfg().SERVER_STATS != null && !dvz.getStatsCfg().SERVER_STATS.isEmpty()) {
+                                        HashMap<Integer, Float> serverStats = dvz.getStatsCfg().getServerStats().getData();
+                                        for (Map.Entry<Integer, Float> stat : serverStats.entrySet()) {
                                             statement.setInt(1, gameID);
-                                            statement.setInt(2, playerID);
+                                            statement.setInt(2, 1);
                                             statement.setInt(3, stat.getKey());
                                             statement.setFloat(4, stat.getValue());
 
                                             statement.addBatch();
                                             i++;
+                                        }
+                                    }
 
-                                            if (i % 1000 == 0) {
-                                                statement.executeBatch();
+                                    //Player stats
+                                    if (dvz.getStatsCfg().STATS != null && dvz.getStatsCfg().STATS.size() > 0) {
+                                        Map<UUID, StatsData> statDataMap = dvz.getStatsCfg().getStats();
+                                        for (Map.Entry<UUID, StatsData> entry : statDataMap.entrySet()) {
+                                            int playerID = dvz.getPM().getPlayer(entry.getKey()).getCharID();
+
+                                            HashMap<Integer, Float> statsMap = entry.getValue().getData();
+                                            for (Map.Entry<Integer, Float> stat : statsMap.entrySet()) {
+                                                statement.setInt(1, gameID);
+                                                statement.setInt(2, playerID);
+                                                statement.setInt(3, stat.getKey());
+                                                statement.setFloat(4, stat.getValue());
+
+                                                statement.addBatch();
+                                                i++;
+
+                                                if (i % 1000 == 0) {
+                                                    statement.executeBatch();
+                                                }
                                             }
                                         }
                                     }
@@ -98,6 +113,7 @@ public class StatsManager {
                         }
                     } else {
                         //No stats to save
+                        dvz.log("No stats were saved!");
                         cancel();
                         return;
                     }
@@ -140,19 +156,19 @@ public class StatsManager {
     }
 
 
-    public void changeLocalStatVal(Player player, int statID, int amount) {
+    public void changeLocalStatVal(Player player, int statID, float amount) {
         changeLocalStatVal(player.getUniqueId(), statID, amount);
     }
 
-    public void changeLocalStatVal(Player player, String statName, int amount) {
+    public void changeLocalStatVal(Player player, String statName, float amount) {
         changeLocalStatVal(player.getUniqueId(), dvz.getDM().getStatID(statName), amount);
     }
 
-    public void changeLocalStatVal(UUID player, String statName, int amount) {
+    public void changeLocalStatVal(UUID player, String statName, float amount) {
         changeLocalStatVal(player, dvz.getDM().getStatID(statName), amount);
     }
 
-    public void changeLocalStatVal(UUID player, int statID, int amount) {
+    public void changeLocalStatVal(UUID player, int statID, float amount) {
         if (statID > 0) {
             if (dvz.getStatsCfg().STATS.containsKey(player.toString())) {
                 StatsData sData = dvz.getStatsCfg().getPlayerStats(player);
@@ -166,7 +182,23 @@ public class StatsManager {
         }
     }
 
+    public void changeLocalStatVal(String statName, float amount) {
+        changeLocalStatVal(dvz.getDM().getStatID(statName), amount);
+    }
 
+    public void changeLocalStatVal(int statID, float amount) {
+        if (statID > 0) {
+            if (!dvz.getStatsCfg().SERVER_STATS.isEmpty()) {
+                StatsData sData = dvz.getStatsCfg().getServerStats();
+                sData.change(statID, amount);
+                dvz.getStatsCfg().setServerStats(sData);
+            } else {
+                StatsData sData = new StatsData();
+                sData.set(statID, amount);
+                dvz.getStatsCfg().setServerStats(sData);
+            }
+        }
+    }
 
 
 }

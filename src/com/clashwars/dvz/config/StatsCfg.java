@@ -12,6 +12,7 @@ import java.util.UUID;
 public class StatsCfg extends EasyConfig {
 
     public HashMap<String, String> STATS = new HashMap<String, String>();
+    public String SERVER_STATS = "";
 
     public StatsCfg(String fileName) {
         this.setFile(fileName);
@@ -37,7 +38,19 @@ public class StatsCfg extends EasyConfig {
         STATS.remove(uuid.toString());
     }
 
-    public void removePlayerStats() {
+    public StatsData getServerStats() {
+        return DvZ.inst().getGson().fromJson(SERVER_STATS, StatsData.class);
+    }
+
+    public void setServerStats(StatsData sd) {
+        SERVER_STATS = DvZ.inst().getGson().toJson(sd, StatsData.class);
+    }
+
+    public void removeServerStats() {
+        SERVER_STATS = "";
+    }
+
+    public void removeStats() {
         STATS.clear();
         save();
     }

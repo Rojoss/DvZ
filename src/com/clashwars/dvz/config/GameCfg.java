@@ -11,6 +11,7 @@ public class GameCfg extends EasyConfig {
     public String GAME__DRAGON_PLAYER = "";
     public String GAME__DRAGON_TYPE = "";
     public String GAME__DRAGON_SLAYER = "";
+    public Long GAME__START_TIME;
     public HashMap<String, Integer> STORAGE_PRODUCTS = new HashMap<String, Integer>();
 
     public GameCfg(String fileName) {
