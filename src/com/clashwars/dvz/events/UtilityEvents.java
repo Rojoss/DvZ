@@ -21,6 +21,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class UtilityEvents implements Listener {
@@ -79,9 +80,21 @@ public class UtilityEvents implements Listener {
     @EventHandler
     private void onDamageByEntity(EntityDamageByEntityEvent event) {
         Long t = System.currentTimeMillis();
+
+        //Register arrow hits
+        if (event.getDamager() instanceof Arrow) {
+            if (event.getDamager().hasMetadata("shooter")) {
+                Player shooter = dvz.getServer().getPlayer(event.getDamager().getMetadata("shooter").get(0).asString());
+                if (shooter != null) {
+                    dvz.getSM().changeLocalStatVal(shooter, StatType.GENERAL_ARROWS_HIT, 1);
+                }
+            }
+        }
+
         if (!(event.getEntity() instanceof Player)) {
             return;
         }
+
         int dmgModifier = 0;
         Player damaged = (Player) event.getEntity();
 
@@ -200,14 +213,32 @@ public class UtilityEvents implements Listener {
     }
 
     @EventHandler
-    public void onArrowHit(final ProjectileHitEvent event){
-        if(event.getEntity() instanceof Arrow){
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    event.getEntity().remove();
-                }
-            }.runTaskLater(dvz, 5);
+    public void shootArrow(EntityShootBowEvent event) {
+        if (!(event.getEntity() instanceof Player)) {
+            return;
         }
+        if (event.getProjectile() == null || !(event.getProjectile() instanceof Arrow)) {
+            return;
+        }
+        Player shooter = (Player)event.getEntity();
+        event.getProjectile().setMetadata("shooter", new FixedMetadataValue(dvz, shooter.getName()));
+        dvz.getSM().changeLocalStatVal(shooter, StatType.GENERAL_ARROWS_SHOT, 1);
+    }
+
+    @EventHandler
+    public void onArrowHit(final ProjectileHitEvent event){
+        if(!(event.getEntity() instanceof Arrow)) {
+            return;
+        }
+        //Ignore player shot arrows
+        if (event.getEntity().hasMetadata("shooter")) {
+            return;
+        }
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                event.getEntity().remove();
+            }
+        }.runTaskLater(dvz, 5);
     }
 }
