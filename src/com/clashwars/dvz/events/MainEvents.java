@@ -1,6 +1,5 @@
 package com.clashwars.dvz.events;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.Enjin;
@@ -14,7 +13,7 @@ import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.mysql.MySQL;
 import com.clashwars.dvz.player.CWPlayer;
-import com.clashwars.dvz.stats.StatType;
+import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.WorkShop;
 import net.minecraft.server.v1_8_R2.PacketPlayInClientCommand;
@@ -149,22 +148,23 @@ public class MainEvents implements Listener {
                     Long t = System.currentTimeMillis();
                     try {
                         //Get the enjin ID with the Enjin API.
-                        //TODO: Need a cooldown on the cache false property. Now when like 50 ppl log in at same time it will load in ALL users 50 times...
                         String enjinID = Enjin.getUserIdByCharacter(player.getName(), false);
                         int userID = -1;
                         int charID = -1;
                         if (enjinID == null || enjinID.isEmpty()) {
                             //No website account found (Do nothing but send a message)
-                            player.sendMessage(CWUtil.integrateColor("&4&lNOT LINKED&8&l: &4Your character isn't linked with the website."));
-                            player.sendMessage(CWUtil.integrateColor("&4This can have one of the following reasons:"));
-                            player.sendMessage(CWUtil.integrateColor("&81. &cYou haven't joined the website."));
-                            player.sendMessage(CWUtil.integrateColor("    &7Please join the website first: &9http://clashwars.com"));
-                            player.sendMessage(CWUtil.integrateColor("&82. &cYou don't have this character added to your profile."));
-                            player.sendMessage(CWUtil.integrateColor("    &7Follow this step by step tutorial! &9http://goo.gl/BrckMP"));
-                            player.sendMessage(CWUtil.integrateColor("    &7After adding your character also add it to this server!"));
-                            player.sendMessage(CWUtil.integrateColor("&83. &cSomething went wrong with syncing your account."));
-                            player.sendMessage(CWUtil.integrateColor("    &7Try again later... :D (Or contact a staff member!)"));
-                            player.sendMessage(CWUtil.integrateColor("&a&lYou can still play! &7(Some advanced features might be locked)"));
+                            if (dvz.getSettingsCfg().getSettings(player.getUniqueId()).enjinWarning) {
+                                player.sendMessage(CWUtil.integrateColor("&4&lNOT LINKED&8&l: &4Your character isn't linked with the website."));
+                                player.sendMessage(CWUtil.integrateColor("&4This can have one of the following reasons:"));
+                                player.sendMessage(CWUtil.integrateColor("&81. &cYou haven't joined the website."));
+                                player.sendMessage(CWUtil.integrateColor("    &7Please join the website first: &9http://clashwars.com"));
+                                player.sendMessage(CWUtil.integrateColor("&82. &cYou don't have this character added to your profile."));
+                                player.sendMessage(CWUtil.integrateColor("    &7Follow this step by step tutorial! &9http://goo.gl/BrckMP"));
+                                player.sendMessage(CWUtil.integrateColor("    &7After adding your character also add it to this server!"));
+                                player.sendMessage(CWUtil.integrateColor("&83. &cSomething went wrong with syncing your account."));
+                                player.sendMessage(CWUtil.integrateColor("    &7Try again later... :D (Or contact a staff member!)"));
+                                player.sendMessage(CWUtil.integrateColor("&a&lYou can still play! &7(Some advanced features might be locked)"));
+                            }
                         } else {
                             //Create/get the User based on enjin ID. (if user has multiple characters and already registered one there will be an user already,
                             //If the player has one character or multiple and it's the first he joins with it will need to create a new user based on the enjin ID)

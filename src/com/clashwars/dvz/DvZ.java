@@ -68,6 +68,7 @@ public class DvZ extends JavaPlugin {
     private ArmorPresetsCfg presetCfg;
     private BannerCfg bannerCfg;
     private StatsCfg statsCfg;
+    private PlayerSettingsCfg settingsCfg;
 
     private MySQL sql;
     private Connection c;
@@ -89,6 +90,7 @@ public class DvZ extends JavaPlugin {
     private SoundMenu soundMenu;
     private BannerMenu bannerMenu;
     private PatternMenu patternMenu;
+    private SettingsMenu settingsMenu;
 
     private TimingsLog timingsLog;
     boolean timingsEnabled = false;
@@ -156,33 +158,26 @@ public class DvZ extends JavaPlugin {
 
         gameCfg = new GameCfg("plugins/DvZ/data/Game.yml");
         gameCfg.load();
-
         mapCfg = new MapCfg("plugins/DvZ/maps/Maps.yml");
         mapCfg.load();
-
         strucCfg = new StructureCfg("plugins/DvZ/Structures.yml");
         strucCfg.load();
-
         classesCfg = new ClassesCfg("plugins/DvZ/Classes.yml");
         classesCfg.load();
-
         abilityCfg = new AbilityCfg("plugins/DvZ/Abilities.yml");
         abilityCfg.load();
-
         playerCfg = new PlayerCfg("plugins/DvZ/data/Players.yml");
         playerCfg.load();
-
         wsCfg = new WorkShopCfg("plugins/DvZ/data/Workshops.yml");
         wsCfg.load();
-
         presetCfg = new ArmorPresetsCfg("plugins/DvZ/data/ArmorPresets.yml");
         presetCfg.load();
-
         bannerCfg = new BannerCfg("plugins/DvZ/data/Banners.yml");
         bannerCfg.load();
-
         statsCfg = new StatsCfg("plugins/DvZ/data/Stats.yml");
         statsCfg.load();
+        settingsCfg = new PlayerSettingsCfg("plugins/DvZ/PlayerSettings.yml");
+        settingsCfg.load();
 
         sql = new MySQL(this, "37.26.106.5", "3306", "clashwar_data", "clashwar_main", SqlPass.Pass());
         try {
@@ -210,6 +205,7 @@ public class DvZ extends JavaPlugin {
         colorMenu = new ColorMenu(this);
         bannerMenu = new BannerMenu(this);
         patternMenu = new PatternMenu(this);
+        settingsMenu = new SettingsMenu(this);
 
         registerEvents();
 
@@ -250,6 +246,7 @@ public class DvZ extends JavaPlugin {
         pm.registerEvents(soundMenu, this);
         pm.registerEvents(bannerMenu, this);
         pm.registerEvents(patternMenu, this);
+        pm.registerEvents(settingsMenu, this);
     }
 
     private void startRunnables() {
@@ -402,6 +399,9 @@ public class DvZ extends JavaPlugin {
         return statsCfg;
     }
 
+    public PlayerSettingsCfg getSettingsCfg() {
+        return settingsCfg;
+    }
 
     public Connection getSql() {
         return c;
@@ -462,6 +462,10 @@ public class DvZ extends JavaPlugin {
 
     public PatternMenu getPatternMenu() {
         return patternMenu;
+    }
+
+    public SettingsMenu getSettingsMenu() {
+        return settingsMenu;
     }
 
 }

@@ -22,10 +22,10 @@ import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.player.PlayerManager;
-import com.clashwars.dvz.stats.Stat;
-import com.clashwars.dvz.stats.StatCategory;
-import com.clashwars.dvz.stats.StatType;
-import com.clashwars.dvz.stats.StatsData;
+import com.clashwars.dvz.stats.internal.Stat;
+import com.clashwars.dvz.stats.internal.StatCategory;
+import com.clashwars.dvz.stats.internal.StatType;
+import com.clashwars.dvz.stats.internal.StatsData;
 import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.WorkShop;
@@ -107,6 +107,16 @@ public class Commands {
                 }
             }
             dvz.logTimings("Commands.onCommand()[/crash]", t);
+            return true;
+        }
+
+        if (label.equalsIgnoreCase("settings") || label.equalsIgnoreCase("prefs")) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                return true;
+            }
+
+            dvz.getSettingsMenu().showMenu((Player)sender);
             return true;
         }
 

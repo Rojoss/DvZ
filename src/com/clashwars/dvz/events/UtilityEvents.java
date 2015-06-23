@@ -5,7 +5,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.player.CWPlayer;
-import com.clashwars.dvz.stats.StatType;
+import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -138,20 +138,24 @@ public class UtilityEvents implements Listener {
 
         //Tips based on keywords
         final String tip = dvz.getTM().getTipFromChat(event.getMessage().replaceAll("[^a-zA-Z ]", ""), dvz.getPM().getPlayer(event.getPlayer()));
+        boolean force = false;
         if (event.getMessage().startsWith("!") || event.getMessage().startsWith("?") && event.getMessage().length() > 3) {
             event.setCancelled(true);
+            force = true;
             if (tip == null || tip.isEmpty()) {
                 event.getPlayer().sendMessage(Util.formatMsg("&cNo answer to this question. (Remove the ! or ? from the start of your message to chat normally)"));
             }
         }
         if (tip != null && !tip.isEmpty()) {
-            event.setMessage(event.getMessage() + "*");
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    event.getPlayer().sendMessage(CWUtil.integrateColor("&2&lINFO&8&l: &7" + tip));
-                }
-            }.runTaskLater(dvz, 5);
+            if (force || dvz.getSettingsCfg().getSettings(event.getPlayer().getUniqueId()).tips) {
+                event.setMessage(event.getMessage() + "*");
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        event.getPlayer().sendMessage(CWUtil.integrateColor("&2&lINFO&8&l: &7" + tip));
+                    }
+                }.runTaskLater(dvz, 5);
+            }
         }
     }
 

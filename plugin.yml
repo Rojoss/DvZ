@@ -40,3 +40,7 @@ commands:
   localstats:
     description: View your local game stats.
     usage: /<command> <category> [player]
+  settings:
+    description: View and manage settings.
+    usage: /<command>
+    aliases: [prefs]
