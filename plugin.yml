@@ -37,10 +37,11 @@ commands:
   enjinprofile:
     description: Verify your enjin profile link.
     usage: /<command>
-  localstats:
-    description: View your local game stats.
-    usage: /<command> <category> [player]
   settings:
     description: View and manage settings.
     usage: /<command>
     aliases: [prefs]
+  stats:
+    description: View statistics.
+    usage: /<command>
+    aliases: [statistics,stat]

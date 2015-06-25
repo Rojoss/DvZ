@@ -563,12 +563,16 @@ public class CWPlayer {
         return Bukkit.getPlayer(uuid);
     }
 
+    public OfflinePlayer getOfflinePlayer() {
+        return Bukkit.getOfflinePlayer(uuid);
+    }
+
     public void sendMessage(String msg) {
         getPlayer().sendMessage(msg);
     }
 
     public String getName() {
-        return getPlayer().getName();
+        return getOfflinePlayer().getName();
     }
 
     public Location getLocation() {

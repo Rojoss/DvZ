@@ -247,6 +247,9 @@ public class DvZ extends JavaPlugin {
         pm.registerEvents(bannerMenu, this);
         pm.registerEvents(patternMenu, this);
         pm.registerEvents(settingsMenu, this);
+        pm.registerEvents(getSM().filterMenu, this);
+        pm.registerEvents(getSM().statsMenu, this);
+        pm.registerEvents(getSM().playerMenu, this);
     }
 
     private void startRunnables() {

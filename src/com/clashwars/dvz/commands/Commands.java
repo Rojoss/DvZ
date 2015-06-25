@@ -22,6 +22,7 @@ import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.player.PlayerManager;
+import com.clashwars.dvz.player.PlayerSettings;
 import com.clashwars.dvz.stats.internal.Stat;
 import com.clashwars.dvz.stats.internal.StatCategory;
 import com.clashwars.dvz.stats.internal.StatType;
@@ -40,6 +41,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.json.simple.JSONObject;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 public class Commands {
@@ -116,7 +118,18 @@ public class Commands {
                 return true;
             }
 
-            dvz.getSettingsMenu().showMenu((Player)sender);
+            dvz.getSettingsMenu().showMenu((Player) sender);
+            return true;
+        }
+
+        if (label.equalsIgnoreCase("stats") || label.equalsIgnoreCase("stat") || label.equalsIgnoreCase("statistics")) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                return true;
+            }
+            Player player = (Player)sender;
+
+            dvz.getSM().filterMenu.showMenu(player);
             return true;
         }
 
@@ -147,64 +160,6 @@ public class Commands {
             }
 
             dvz.logTimings("Commands.onCommand()[/enjinprofile]", t);
-            return true;
-        }
-
-
-        if (label.equalsIgnoreCase("localstats")) {
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(Util.formatMsg("&cPlayer command only."));
-                return true;
-            }
-            Player player = (Player)sender;
-
-            if (args.length < 1 || dvz.getDM().getCatByName(args[0]) == null) {
-                sender.sendMessage(Util.formatMsg("&cInvalid usage. &7/" + label + " {category} [player]"));
-                String statCats = "&7";
-                for (StatCategory statCat : dvz.getDM().getCats()) {
-                    statCats += statCat.name + "&8, &7";
-                }
-                sender.sendMessage(Util.formatMsg("&4Stat categories&8: &7" + statCats));
-                return true;
-            }
-
-            if (args.length > 1) {
-                player = dvz.getServer().getPlayer(args[1]);
-                if (player == null) {
-                    sender.sendMessage(Util.formatMsg("&cInvalid player specified!"));
-                    return true;
-                }
-            }
-
-            UUID uuid = player.getUniqueId();
-            StatsData statsData = dvz.getStatsCfg().getPlayerStats(uuid);
-            if (statsData == null || statsData.getData().isEmpty()) {
-                sender.sendMessage(Util.formatMsg("&cNo local stats found."));
-                return true;
-            }
-
-            StatCategory statCat = dvz.getDM().getCatByName(args[0]);
-            HashMap<Integer, Float> stats = statsData.getData();
-
-            sender.sendMessage(CWUtil.integrateColor("&8===== &6&l" + statCat.name + " Stats &8====="));
-
-            for (StatType statType : StatType.values()) {
-                Stat stat = dvz.getDM().getStat(statType.id);
-                if (stat.category_id != statCat.category_id) {
-                    continue;
-                }
-                if (stats.containsKey(stat.stat_id)) {
-                    if (stats.get(stat.stat_id) % 1 == 0) {
-                        sender.sendMessage(CWUtil.integrateColor("&7" + stat.name + "&8: &a" + stats.get(stat.stat_id).intValue()));
-                    } else {
-                        sender.sendMessage(CWUtil.integrateColor("&7" + stat.name + "&8: &a" + stats.get(stat.stat_id)));
-                    }
-                } else {
-                    sender.sendMessage(CWUtil.integrateColor("&7" + stat.name + "&8: &c0"));
-                }
-            }
-
-            dvz.logTimings("Commands.onCommand()[/localstats]", t);
             return true;
         }
 

@@ -1,5 +1,6 @@
 package com.clashwars.dvz.player;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
@@ -46,16 +47,12 @@ public class PlayerManager {
                 sqlCharacters = statement.executeQuery("SELECT char_id,user_id,uuid FROM Characters;");
 
                 while (sqlCharacters.next()) {
-                    Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
-                    for (Player player : players) {
-                        if (player.getUniqueId().toString().equals(sqlCharacters.getString("uuid"))) {
-                            //Found player data so set it for the player.
-                            UUID uuid = UUID.fromString(sqlCharacters.getString("uuid"));
-                            CWPlayer cwp = getPlayer(uuid);
+                    if (sqlCharacters.getString("uuid").contains("-")) {
+                        UUID uuid = UUID.fromString(sqlCharacters.getString("uuid"));
+                        CWPlayer cwp = getPlayer(uuid);
 
-                            cwp.setUserID(sqlCharacters.getInt("user_id"));
-                            cwp.setCharID(sqlCharacters.getInt("char_id"));
-                        }
+                        cwp.setUserID(sqlCharacters.getInt("user_id"));
+                        cwp.setCharID(sqlCharacters.getInt("char_id"));
                     }
                 }
             } catch (SQLException e) {
@@ -77,7 +74,7 @@ public class PlayerManager {
     public CWPlayer getPlayer(UUID uuid) {
         if (players.containsKey(uuid)) {
             return players.get(uuid);
-        } else if (pcfg.PLAYERS.containsKey(uuid.toString())) {
+        } else if (pcfg.PLAYERS.containsKey(uuid.toString())) {;
             CWPlayer cwp = new CWPlayer(uuid, pcfg.getPlayer(uuid));
             players.put(uuid, cwp);
             return cwp;

@@ -1,6 +1,5 @@
 package com.clashwars.dvz.events;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.ClassType;
@@ -86,7 +85,7 @@ public class UtilityEvents implements Listener {
             if (event.getDamager().hasMetadata("shooter")) {
                 Player shooter = dvz.getServer().getPlayer(event.getDamager().getMetadata("shooter").get(0).asString());
                 if (shooter != null) {
-                    dvz.getSM().changeLocalStatVal(shooter, StatType.GENERAL_ARROWS_HIT, 1);
+                    dvz.getSM().changeLocalStatVal(shooter, StatType.COMBAT_ARROWS_HIT, 1);
                 }
             }
         }
@@ -227,7 +226,7 @@ public class UtilityEvents implements Listener {
         }
         Player shooter = (Player)event.getEntity();
         event.getProjectile().setMetadata("shooter", new FixedMetadataValue(dvz, shooter.getName()));
-        dvz.getSM().changeLocalStatVal(shooter, StatType.GENERAL_ARROWS_SHOT, 1);
+        dvz.getSM().changeLocalStatVal(shooter, StatType.COMBAT_ARROWS_SHOT, 1);
     }
 
     @EventHandler

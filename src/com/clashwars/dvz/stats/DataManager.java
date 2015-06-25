@@ -1,5 +1,6 @@
 package com.clashwars.dvz.stats;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.stats.internal.Game;
 import com.clashwars.dvz.stats.internal.Stat;
@@ -111,33 +112,38 @@ public class DataManager {
         return null;
     }
 
-    public List<Game> getGamesBetween(Timestamp startTimeStamp, Timestamp endTimeStamp) {
+    public List<Integer> getGamesBetween(Timestamp startTimeStamp, Timestamp endTimeStamp) {
         if (startTimeStamp.after(endTimeStamp)) {
             final Timestamp endStamp = endTimeStamp;
             endTimeStamp = startTimeStamp;
             startTimeStamp = endStamp;
         }
 
-        List<Game> gamesList = new ArrayList<Game>();
+        List<Integer> gamesList = new ArrayList<Integer>();
         for (Game game : games.values()) {
-            if (game.date.after(startTimeStamp) && game.date.before(endTimeStamp)) {
-                gamesList.add(game);
+            if ((game.date.equals(startTimeStamp) && game.date.equals(endTimeStamp)) || (game.date.after(startTimeStamp) && game.date.before(endTimeStamp))) {
+                gamesList.add(game.game_id);
             }
         }
+
         return gamesList;
     }
 
-    public Game getClosestGame(Date date) {
+    public Game getClosestGame(Timestamp timestamp) {
         int closestDiff = -1;
         Game closest = null;
         for (Game game : games.values()) {
-            int difference = Math.abs(game.date.compareTo(date));
+            int difference = Math.abs(game.date.compareTo(timestamp));
             if (closestDiff == -1 || difference <= closestDiff) {
                 closestDiff = difference;
                 closest = game;
             }
         }
         return closest;
+    }
+
+    public List<Integer> getGameIds() {
+        return Arrays.asList(games.keySet().toArray(new Integer[]{}));
     }
 
     public Game[] getGames() {
@@ -194,6 +200,16 @@ public class DataManager {
 
     public List<Stat> getStatsList() {
         return Arrays.asList(getStats());
+    }
+
+    public List<Stat> getStats(int category_id) {
+        List<Stat> statsList = new ArrayList<Stat>();
+        for (Stat stat : stats.values()) {
+            if (stat.category_id == category_id) {
+                statsList.add(stat);
+            }
+        }
+        return statsList;
     }
 
 

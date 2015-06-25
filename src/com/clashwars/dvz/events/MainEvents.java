@@ -317,7 +317,7 @@ public class MainEvents implements Listener {
         if (killer != null) {
             if (dvz.getGM().getState() == GameState.DRAGON && dvz.getGM().getDragonPlayer().getName().equalsIgnoreCase(killer.getName())) {
                 event.setDeathMessage(CWUtil.integrateColor(prefix + player.getName() + " &7was killed by the dragon!"));
-                dvz.getSM().changeLocalStatVal(player, StatType.GENERAL_DEATHS_BY_DRAGON, 1);
+                dvz.getSM().changeLocalStatVal(player, StatType.COMBAT_DEATHS_BY_DRAGON, 1);
             } else {
                 event.setDeathMessage(CWUtil.integrateColor(prefix + player.getName() + " &7was killed by " + killer.getName() + "!"));
             }
@@ -326,9 +326,9 @@ public class MainEvents implements Listener {
         }
 
         if (cwp.getPlayerClass().getType() == ClassType.MONSTER) {
-            dvz.getSM().changeLocalStatVal(player, StatType.MONSTER_DEATHS, 1);
+            dvz.getSM().changeLocalStatVal(player, StatType.COMBAT_MONSTER_DEATHS, 1);
         } else if (cwp.getPlayerClass().getType() == ClassType.DWARF) {
-            dvz.getSM().changeLocalStatVal(player, StatType.DWARF_DEATHS, 1);
+            dvz.getSM().changeLocalStatVal(player, StatType.COMBAT_DWARF_DEATHS, 1);
         }
 
         //Enderman died. (Drop picked up player)

@@ -15,6 +15,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
@@ -89,6 +90,10 @@ public class Util {
 
     public static String getTimeStamp(String syntax) {
         return new SimpleDateFormat(syntax).format(Calendar.getInstance().getTime());
+    }
+
+    public static String timeStampToDateString(Timestamp timestamp) {
+        return new SimpleDateFormat("dd MMM yyyy").format(timestamp);
     }
 
 
