@@ -1,7 +1,8 @@
-package com.clashwars.dvz;
+package com.clashwars.dvz.player;
 
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.player.PlayerSettings;
 import com.clashwars.dvz.util.ItemMenu;
 import org.bukkit.Material;

@@ -17,6 +17,7 @@ import com.clashwars.dvz.maps.MapManager;
 import com.clashwars.dvz.mysql.MySQL;
 import com.clashwars.dvz.mysql.SqlPass;
 import com.clashwars.dvz.player.PlayerManager;
+import com.clashwars.dvz.player.SettingsMenu;
 import com.clashwars.dvz.runnables.AntiCamp;
 import com.clashwars.dvz.runnables.GameRunnable;
 import com.clashwars.dvz.stats.DataManager;
