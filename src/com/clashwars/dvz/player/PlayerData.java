@@ -20,13 +20,6 @@ public class PlayerData {
         //--
     }
 
-    public PlayerData(DvzClass playerClass, int classLvl, int classExp, Set<DvzClass> classOptions, String workshopData) {
-        this.playerClass = playerClass;
-        this.classLvl = classLvl;
-        this.classExp = classExp;
-        this.classOptions = classOptions;
-    }
-
     public DvzClass getPlayerClass() {
         return playerClass;
     }
@@ -94,7 +87,5 @@ public class PlayerData {
     public void setBuffed(boolean buffed) {
         this.isBuffed = buffed;
     }
-
-
 
 }

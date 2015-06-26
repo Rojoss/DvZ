@@ -37,6 +37,7 @@ public class CWPlayer {
     private UUID uuid;
     private PlayerData data;
     private long lastSave = System.currentTimeMillis();
+    private long lastAutoSave = System.currentTimeMillis();
 
     private CooldownManager cdm = new CooldownManager();
     private BukkitRunnable teleport;
@@ -555,6 +556,18 @@ public class CWPlayer {
 
 
     public void savePlayer() {
+        //Time played stat
+        if (dvz.getGM().isStarted()) {
+            if (lastAutoSave <= 0) {
+                lastAutoSave = System.currentTimeMillis() - 30000;
+            }
+            if (getPlayer() != null && getPlayer().isOnline()) {
+                dvz.getSM().changeLocalStatVal(uuid, StatType.GENERAL_TIME_PLAYED, (float)System.currentTimeMillis() - (float)lastAutoSave);
+            }
+            dvz.getSM().changeLocalStatVal(uuid, StatType.GENERAL_GAME_TIME, (float)System.currentTimeMillis() - (float)lastAutoSave);
+            lastAutoSave = System.currentTimeMillis();
+        }
+
         pcfg.setPlayer(uuid, data);
     }
 

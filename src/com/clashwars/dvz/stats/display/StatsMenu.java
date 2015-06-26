@@ -186,21 +186,25 @@ public class StatsMenu implements Listener {
             }
 
             String valueStr = "";
-            if (statValue > statValueCompare) {
-                if (settings.stat_comparePlayer != null) {
-                    valueStr += "&a&l" + valueToStr(statValue) + " &7<> &c" + valueToStr(statValueCompare);
-                    item.makeGlowing();
-                } else {
-                    valueStr += "&a&l" + valueToStr(statValue);
-                }
-            } else if (statValue == statValueCompare) {
-                if (settings.stat_comparePlayer != null) {
-                    valueStr += "&6&l" + valueToStr(statValue) + " &7<> &6&l" + valueToStr(statValueCompare);
-                } else {
-                    valueStr += "&6&l" + valueToStr(statValue);
-                }
+            if (stat.name.toLowerCase().contains("[server stat]")) {
+                valueStr += "&a&l" + valueToStr(stat.stat_id, statValue);
             } else {
-                valueStr += "&c" + valueToStr(statValue) + " &7<> &a&l" + valueToStr(statValueCompare);
+                if (statValue > statValueCompare) {
+                    if (settings.stat_comparePlayer != null) {
+                        valueStr += "&a&l" + valueToStr(stat.stat_id, statValue) + " &7<> &c" + valueToStr(stat.stat_id, statValueCompare);
+                        item.makeGlowing();
+                    } else {
+                        valueStr += "&a&l" + valueToStr(stat.stat_id, statValue);
+                    }
+                } else if (statValue == statValueCompare) {
+                    if (settings.stat_comparePlayer != null) {
+                        valueStr += "&6&l" + valueToStr(stat.stat_id, statValue) + " &7<> &6&l" + valueToStr(stat.stat_id, statValueCompare);
+                    } else {
+                        valueStr += "&6&l" + valueToStr(stat.stat_id, statValue);
+                    }
+                } else {
+                    valueStr += "&c" + valueToStr(stat.stat_id, statValue) + " &7<> &a&l" + valueToStr(stat.stat_id, statValueCompare);
+                }
             }
 
             item.addLore("&8Value&7: &a&l" + valueStr);
@@ -274,8 +278,12 @@ public class StatsMenu implements Listener {
         }
     }
 
-    private String valueToStr(Float value) {
-        if (value == null || value == -1) {
+    private String valueToStr(int statID, Float value) {
+        //Format times
+        if (statID == 1 || statID == 78) {
+            return CWUtil.formatTime(value.longValue(), "%Dd %H:%M:%S", true);
+        }
+        if (value == null || value == -1 || value.isInfinite() ||value.isNaN()) {
             return "-";
         }
         if (value % 1 == 0) {

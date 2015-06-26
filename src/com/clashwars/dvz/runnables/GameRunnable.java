@@ -10,6 +10,7 @@ import com.clashwars.dvz.maps.DvzMap;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -29,6 +30,7 @@ public class GameRunnable extends BukkitRunnable {
     private DvZ dvz;
     private GameManager gm;
     private int ticks = 0;
+    private long lastSave = 0;
 
 
     public GameRunnable(DvZ dvz) {
@@ -56,6 +58,15 @@ public class GameRunnable extends BukkitRunnable {
             DvzMap dvzMap = dvz.getMM().getActiveMap();
             if (dvzMap != null && dvzMap.isActive() && dvzMap.isLoaded() && dvzMap.getWorld() != null) {
                 dvzMap.getWorld().save();
+            }
+
+            //Game saving
+            if (dvz.getGM().isStarted()) {
+                if (lastSave <= 0) {
+                    lastSave = System.currentTimeMillis() - 30000;
+                }
+                dvz.getSM().changeLocalStatVal(StatType.GENERAL_GAME_TIME, System.currentTimeMillis() - lastSave);
+                lastSave = System.currentTimeMillis();
             }
         }
 

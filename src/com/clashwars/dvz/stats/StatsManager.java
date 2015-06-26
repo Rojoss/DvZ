@@ -286,7 +286,6 @@ public class StatsManager {
                 if (calc.equalsIgnoreCase("SPECIAL")) {
                     //MANUALLY CALCULATED STATS GO HERE!
 
-
                     continue;
                 }
 
