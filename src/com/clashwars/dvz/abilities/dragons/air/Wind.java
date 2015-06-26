@@ -5,6 +5,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.VectorUtils;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
@@ -46,16 +47,16 @@ public class Wind extends BaseAbility {
                 for (int i = 0; i < particles; i++) {
                     Location loc = locs.get(index).toLocation(player.getWorld());
 
-                    List<Entity> entities = CWUtil.getNearbyEntities(loc, 1f, null);
-                    for (Entity e : entities) {
-                        if (!(e instanceof Player) || e == player) {
+                    List<Player> players = CWUtil.getNearbyPlayers(loc, 1f);
+                    for (Player p : players) {
+                        if (p.equals(player)) {
                             continue;
                         }
-                        if (!dvz.getPM().getPlayer((Player)e).isDwarf()) {
+                        if (!dvz.getPM().getPlayer(p).isDwarf()) {
                             continue;
                         }
-                        ((Player)e).damage(dvz.getGM().getDragonPower() * 2 - 1);
-                        e.setVelocity(e.getVelocity().add( player.getLocation().getDirection().multiply(dvz.getGM().getDragonPower() * 0.6f) ));
+                        new AbilityDmg(p, dvz.getGM().getDragonPower() * 3 - 2, ability, player);
+                        p.setVelocity(p.getVelocity().add( player.getLocation().getDirection().multiply(dvz.getGM().getDragonPower() * 0.6f) ));
                     }
 
                     ParticleEffect.CLOUD.display(0.1f, 0.1f, 0.1f, 0.1f, 1, loc, 500);

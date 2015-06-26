@@ -4,6 +4,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
@@ -100,15 +101,11 @@ public class Fireball extends BaseAbility {
             }
         }
 
-        List<Entity> entities = CWUtil.getNearbyEntities(l, radius + 2, null);
-        for (Entity e : entities) {
-            if (!(e instanceof Player)) {
-                return;
-            }
-            CWPlayer cwp = dvz.getPM().getPlayer((Player)e);
-            if (cwp.isDwarf()) {
-                cwp.getPlayer().damage((int)dvz.getGM().getMonsterPower(1, 3));
-                cwp.getPlayer().setFireTicks((int)dvz.getGM().getMonsterPower(20, 60));
+        List<Player> players = CWUtil.getNearbyPlayers(l, radius + 2);
+        for (Player p : players) {
+            if (dvz.getPM().getPlayer((Player)p).isDwarf()) {
+                new AbilityDmg(p, dvz.getGM().getMonsterPower(1, 3), ability, player);
+                player.setFireTicks((int) dvz.getGM().getMonsterPower(20, 60));
             }
         }
 

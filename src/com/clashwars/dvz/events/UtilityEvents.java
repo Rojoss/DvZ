@@ -200,6 +200,11 @@ public class UtilityEvents implements Listener {
         if (!(event.getEntity() instanceof FallingBlock)) {
             return;
         }
+
+        if (event.getEntity().hasMetadata("break-on-land")) {
+            event.getBlock().setType(Material.AIR);
+        }
+
         if (event.getTo() != Material.FIRE) {
             return;
         }

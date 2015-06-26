@@ -6,6 +6,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -32,21 +33,19 @@ public class Burn extends BaseAbility {
             return;
         }
 
-        List<Entity>  entities = CWUtil.getNearbyEntities(triggerLoc, getFloatOption("distance"), null);
-        for (Entity entity : entities) {
-            if (!(entity instanceof Player)) {
+        List<Player> players = CWUtil.getNearbyPlayers(triggerLoc, getFloatOption("distance"));
+        for (Player p : players) {
+            if (p == player) {
                 continue;
             }
-            if (entity == player) {
+            if (!dvz.getPM().getPlayer(p).isDwarf()) {
                 continue;
             }
-            if (!dvz.getPM().getPlayer((Player)entity).isDwarf()) {
-                continue;
-            }
-            entity.setFireTicks(dvz.getGM().getDragonPower() * 60 - 40);
+            new AbilityDmg(p, 1, ability, player);
+            p.setFireTicks(dvz.getGM().getDragonPower() * 60 - 40);
             LineEffect effect = new LineEffect(dvz.getEM());
             effect.setLocation(player.getLocation());
-            effect.setTargetEntity(entity);
+            effect.setTargetEntity(p);
             effect.visibleRange = 300;
             effect.particles = 20;
             effect.particleList.add(new Particle(ParticleEffect.FLAME, 0.2f, 0.2f, 0.2f, 0, 1));

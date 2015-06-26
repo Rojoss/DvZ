@@ -154,7 +154,7 @@ public class EnchantStruc extends Structure {
         enchants.add(new CustomEnchant(Enchantment.ARROW_KNOCKBACK, "Punch 2", 2, 200, new Material[] {Material.BOW}));
 
         //Weapons
-        enchants.add(new CustomEnchant(Enchantment.DAMAGE_ALL, "Sharpness 1", 1, 200, new Material[] {Material.IRON_SWORD, Material.GOLD_SWORD}));
+        enchants.add(new CustomEnchant(Enchantment.DAMAGE_ALL, "Sharpness 1", 1, 200, new Material[] {Material.IRON_SWORD}));
         enchants.add(new CustomEnchant(Enchantment.DAMAGE_ALL, "Sharpness 2", 2, 300, new Material[] {Material.IRON_SWORD}));
 
         enchants.add(new CustomEnchant(Enchantment.DURABILITY, "Block 1 (custom)", 1, 200, new Material[] {Material.DIAMOND_SWORD}));
@@ -169,10 +169,6 @@ public class EnchantStruc extends Structure {
         enchants.add(new CustomEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, "Protection 2", 2, 75, new Material[] {Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS}));
         enchants.add(new CustomEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, "Protection 3", 3, 100, new Material[] {Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS}));
         enchants.add(new CustomEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, "Protection 4", 4, 150, new Material[] {Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS}));
-
-        enchants.add(new CustomEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, "Arrow Protection 1", 1, 100, new Material[] {Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS}));
-        enchants.add(new CustomEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, "Arrow Protection 2", 2, 200, new Material[] {Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS}));
-        enchants.add(new CustomEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, "Arrow Protection 3", 3, 300, new Material[] {Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS}));
 
         enchants.add(new CustomEnchant(Enchantment.PROTECTION_FALL, "Feather Falling 1", 1, 200, new Material[] {Material.LEATHER_BOOTS}));
         enchants.add(new CustomEnchant(Enchantment.PROTECTION_FALL, "Feather Falling 2", 2, 400, new Material[] {Material.LEATHER_BOOTS}));

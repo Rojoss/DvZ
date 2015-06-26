@@ -275,9 +275,16 @@ public class StatsMenu implements Listener {
     }
 
     private String valueToStr(Float value) {
+        if (value == null || value == -1) {
+            return "-";
+        }
         if (value % 1 == 0) {
             return "" + value.intValue();
         }
-        return "" + CWUtil.round(value, 4);
+        if (value > 0) {
+            return "" + CWUtil.round(value, 4);
+        } else {
+            return "" + 0;
+        }
     }
 }

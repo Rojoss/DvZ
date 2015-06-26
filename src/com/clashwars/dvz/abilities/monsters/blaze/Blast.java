@@ -3,8 +3,10 @@ package com.clashwars.dvz.abilities.monsters.blaze;
 import com.clashwars.cwcore.effect.Particle;
 import com.clashwars.cwcore.effect.effects.ExpandingCircleEffect;
 import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
@@ -47,15 +49,13 @@ public class Blast extends BaseAbility {
         new BukkitRunnable() {
             @Override
             public void run() {
-                List<Entity> entities = player.getNearbyEntities(radius, radius, radius);
-                for (Entity e : entities) {
-                    if(e instanceof Player) {
-                        CWPlayer cwp = dvz.getPM().getPlayer((Player)e);
-                        if (cwp.isDwarf()) {
-                            cwp.getPlayer().setFireTicks((int)dvz.getGM().getMonsterPower(80) + 40);
-                            player.getWorld().playSound(e.getLocation(), Sound.BLAZE_HIT, 0.5f, 0);
-                            ParticleEffect.FLAME.display(0.5f, 0.2f, 0.5f, 0, 10, player.getLocation());
-                        }
+                List<Player> players = CWUtil.getNearbyPlayers(player.getLocation(), radius);
+                for (Player p : players) {
+                    if (dvz.getPM().getPlayer((Player)p).isDwarf()) {
+                        new AbilityDmg(p, 1, ability, player);
+                        p.setFireTicks((int) dvz.getGM().getMonsterPower(80) + 40);
+                        player.getWorld().playSound(p.getLocation(), Sound.BLAZE_HIT, 0.5f, 0);
+                        ParticleEffect.FLAME.display(0.5f, 0.2f, 0.5f, 0, 10, player.getLocation());
                     }
                 }
             }

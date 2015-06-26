@@ -1,10 +1,13 @@
 package com.clashwars.dvz.abilities.monsters.spider;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.effect.Particle;
 import com.clashwars.cwcore.effect.effects.ExpandingCircleEffect;
 import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -29,7 +32,7 @@ public class Poison extends BaseAbility {
     @Override
     public void castAbility(Player player, Location triggerLoc) {
         if (onCooldown(player)) {
-            return;
+            //return;
         }
 
         double range = 4;
@@ -44,17 +47,15 @@ public class Poison extends BaseAbility {
         poisonEffect.setLocation(player.getLocation().add(0, 0.5, 0));
         poisonEffect.start();
 
-        List<Entity> entities = player.getNearbyEntities(range, range, range);
-        for (Entity ent : entities) {
-            if (!(ent instanceof Player)) {
-                return;
-            }
-
-            final Player p = (Player) ent;
-
+        List<Player> players = CWUtil.getNearbyPlayers(player.getLocation(), (float)range * 1.5f);
+        Debug.bc(players.size());
+        for (Player p : players) {
+            Debug.bc(p.getName());
             if(dvz.getPM().getPlayer(p).isDwarf()) {
+                Debug.bc("Dwarf");
                 p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(100) + 40, 2));
                 ParticleEffect.CRIT.display(1, 0.5f, 1, 0.01f, 10, p.getLocation());
+                new AbilityDmg(p, 0, ability, player);
             }
         }
     }

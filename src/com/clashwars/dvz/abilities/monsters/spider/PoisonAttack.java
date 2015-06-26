@@ -4,6 +4,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.damage.types.AbilityDmg;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,6 +43,9 @@ public class PoisonAttack extends BaseAbility {
                 return;
             }
 
+            event.setCancelled(true);
+
+            new AbilityDmg(damaged, 1, ability, damager);
             damaged.addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(50) + 20, 1));
             damaged.getWorld().playSound(damaged.getLocation(), Sound.SPIDER_IDLE, 1, 2);
             for (int i = 0; i < 20; i++) {

@@ -2,8 +2,10 @@ package com.clashwars.dvz.abilities.dwarves.bonus;
 
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
@@ -31,6 +33,10 @@ public class Torrent extends BaseAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
+        if (dvz.getGM().getState() == GameState.DRAGON) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThe dragon his powers are blocking you from using this right now! &4&l<<"));
+            return;
+        }
         Long t = System.currentTimeMillis();
         //Get the block clicked and validate it.
         List<Block> blocks = player.getLastTwoTargetBlocks((Set<Material>)null, 32);
@@ -48,27 +54,35 @@ public class Torrent extends BaseAbility {
         }
         targetBlock = targetBlock.getRelative(BlockFace.UP);
 
+        if (!dvz.getGM().isMonsters() && dvz.getMM().getActiveMap().getCuboid("keep").contains(targetBlock)) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cTorrent can't be used inside the keep right now &4&l<<"));
+            return;
+        }
+        if (!dvz.getGM().isMonsters() && dvz.getMM().getActiveMap().getCuboid("innerwall").contains(targetBlock)) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cTorrent can't be used inside the keep right now &4&l<<"));
+            return;
+        }
+
         if (onCooldown(player)) {
             return;
         }
 
         //Launch players up (the water is just for effect)
-        List<Entity> entities = CWUtil.getNearbyEntities(targetBlock.getLocation(), 4f, null);
-        for (Entity e : entities) {
-            if (!(e instanceof  Player)) {
+        List<Player> players = CWUtil.getNearbyPlayers(targetBlock.getLocation(), 4f);
+        for (Player p : players) {
+            if (dvz.getPM().getPlayer((Player)p).isDwarf()) {
                 continue;
             }
-            CWPlayer cwp = dvz.getPM().getPlayer((Player)e);
-            if (cwp.isDwarf()) {
-                continue;
-            }
+
+            new AbilityDmg(p, 0, ability, player);
+
             //The closer to target the further up. (If on the edge push away instead of up)
-            double distance = e.getLocation().distance(targetBlock.getLocation());
+            double distance = p.getLocation().distance(targetBlock.getLocation());
             if (distance < 2.8f) {
-                e.setVelocity(e.getVelocity().add(new Vector(0, 2f - distance / 6, 0)));
+                p.setVelocity(p.getVelocity().add(new Vector(0, 2f - distance / 6, 0)));
             } else {
-                Vector dir = e.getLocation().toVector().subtract(targetBlock.getLocation().toVector());
-                e.setVelocity(e.getVelocity().add(new Vector(dir.getX() / 1.5f, 1f, dir.getY() / 1.5f)));
+                Vector dir = p.getLocation().toVector().subtract(targetBlock.getLocation().toVector());
+                p.setVelocity(p.getVelocity().add(new Vector(dir.getX() / 1.5f, 1f, dir.getY() / 1.5f)));
             }
         }
 

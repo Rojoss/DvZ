@@ -3,6 +3,7 @@ package com.clashwars.dvz.runnables;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
+import com.clashwars.dvz.damage.types.CustomDmg;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
@@ -47,18 +48,14 @@ public class AntiCamp extends BukkitRunnable {
             }
             return;
         }
-        List<Entity> entities = CWUtil.getNearbyEntities(monsterLoc, warnRange, Arrays.asList(new EntityType[] {EntityType.PLAYER}));
-        for (Entity e : entities) {
-            if (e instanceof Player) {
-                Player player = (Player)e;
-                CWPlayer cwp = dvz.getPM().getPlayer(player);
-                if (cwp.isDwarf()) {
-                    if (player.getLocation().distance(monsterLoc) <= range) {
-                        player.damage(2);
-                        ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(Material.REDSTONE_BLOCK, (byte) 0), 0.4f, 1.0f, 0.4f, 0.01f, 20, player.getLocation());
-                    } else {
-                        player.sendMessage(Util.formatMsg("&4&lDon't camp the monsters!"));
-                    }
+        List<Player> players = CWUtil.getNearbyPlayers(monsterLoc, warnRange);
+        for (Player p : players) {
+            if (dvz.getPM().getPlayer(p).isDwarf()) {
+                if (p.getLocation().distance(monsterLoc) <= range) {
+                    new CustomDmg(p, 2, "{0} died from camping the monsters!");
+                    ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(Material.REDSTONE_BLOCK, (byte) 0), 0.4f, 1.0f, 0.4f, 0.01f, 20, p.getLocation());
+                } else {
+                    p.sendMessage(Util.formatMsg("&4&lDon't camp the monsters!"));
                 }
             }
         }

@@ -4,21 +4,23 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.damage.types.AbilityDmg;
+import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.Chicken;
-import org.bukkit.entity.Egg;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import org.bukkit.block.Block;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.List;
 
@@ -46,17 +48,56 @@ public class ExplosiveEgg extends BaseAbility {
         if (!(event.getEntity() instanceof Egg)) {
             return;
         }
-        event.getEntity().getWorld().playSound(event.getEntity().getLocation(), Sound.EXPLODE, 1, 1.5f);
-        ParticleEffect.EXPLOSION_LARGE.display(dvz.getGM().getMonsterPower(0.5f, 2f), dvz.getGM().getMonsterPower(0.5f, 2f), dvz.getGM().getMonsterPower(0.5f, 2f), 0, 10, event.getEntity().getLocation(), 500);
-        ParticleEffect.SMOKE_LARGE.display(dvz.getGM().getMonsterPower(0.5f, 2f), dvz.getGM().getMonsterPower(0.5f, 2f), dvz.getGM().getMonsterPower(0.5f, 2f), 0, 150, event.getEntity().getLocation(), 500);
-        List<Entity> entities = CWUtil.getNearbyEntities(event.getEntity().getLocation(), (int)dvz.getGM().getMonsterPower(1, 2), null);
-        for (Entity e : entities) {
-            if (e instanceof Player) {
-                CWPlayer cwp = dvz.getPM().getPlayer((Player)e);
-                if (cwp.isDwarf()) {
-                    cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int) dvz.getGM().getMonsterPower(20, 80), 1));
-                    cwp.getPlayer().damage(dvz.getGM().getMonsterPower(1,5));
-                    ParticleEffect.SMOKE_LARGE.display(0.5f, 0.5f, 0.5f, 0, 50, cwp.getLocation());
+        Egg egg = (Egg)event.getEntity();
+        if (egg.getShooter() == null || !(egg.getShooter() instanceof Player)) {
+            return;
+        }
+        if (dvz.getPM().getPlayer((Player)egg.getShooter()).getPlayerClass() != DvzClass.CHICKEN) {
+            return;
+        }
+
+        egg.getWorld().playSound(event.getEntity().getLocation(), Sound.EXPLODE, 1, 1.5f);
+        ParticleEffect.EXPLOSION_LARGE.display(dvz.getGM().getMonsterPower(0.5f, 2f), dvz.getGM().getMonsterPower(0.5f, 2f), dvz.getGM().getMonsterPower(0.5f, 2f), 0, 10, egg.getLocation(), 500);
+        ParticleEffect.SMOKE_LARGE.display(dvz.getGM().getMonsterPower(0.5f, 2f), dvz.getGM().getMonsterPower(0.5f, 2f), dvz.getGM().getMonsterPower(0.5f, 2f), 0, 150, egg.getLocation(), 500);
+        List<Player> players = CWUtil.getNearbyPlayers(egg.getLocation(), (int)dvz.getGM().getMonsterPower(1, 2));
+        for (Player p : players) {
+            if (dvz.getPM().getPlayer((Player)p).isDwarf()) {
+                new AbilityDmg(p, dvz.getGM().getMonsterPower(1,5), ability, (Player)egg.getShooter());
+                p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int) dvz.getGM().getMonsterPower(20, 80), 1));
+                ParticleEffect.SMOKE_LARGE.display(0.5f, 0.5f, 0.5f, 0, 50, p.getLocation());
+            }
+        }
+
+
+        Location blockCenter = egg.getLocation().getBlock().getLocation().add(0.5f, 0.5f, 0.5f);
+        int radius = 3;
+        List<Material> undestroyableBlocks = dvz.getUndestroyableBlocks();
+        for (double x = blockCenter.getBlockX() - radius; x < blockCenter.getBlockX() + radius; x++) {
+            for (double y = blockCenter.getBlockY() - radius; y < blockCenter.getBlockY() + radius; y++) {
+                for (double z = blockCenter.getBlockZ() - radius; z < blockCenter.getBlockZ() + radius; z++) {
+                    Block block = blockCenter.getWorld().getBlockAt((int)x, (int)y, (int)z);
+                    if (undestroyableBlocks.contains(block.getType())) {
+                        if (block.getType() == Material.ENDER_PORTAL_FRAME) {
+                            ShrineBlock shrineBlock = dvz.getGM().getShrineBlock(block.getLocation());
+                            if (shrineBlock != null && !shrineBlock.isDestroyed()) {
+                                shrineBlock.damage(3);
+                            }
+                        }
+                        continue;
+                    }
+                    double distance = block.getLocation().distance(blockCenter);
+                    if (distance > radius) {
+                        continue;
+                    }
+                    if (distance > radius-1  && CWUtil.randomFloat() > 0.5f) {
+                        continue;
+                    }
+
+                    FallingBlock fallingBlock = blockCenter.getWorld().spawnFallingBlock(block.getLocation(), block.getType(), block.getData());
+                    Vector dir = block.getLocation().toVector().subtract(blockCenter.toVector()).normalize();
+                    fallingBlock.setVelocity(dir.multiply(0.5f));
+
+                    block.setType(Material.AIR);
                 }
             }
         }

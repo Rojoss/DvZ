@@ -4,6 +4,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -62,17 +63,13 @@ public class ToxicRain extends BaseAbility {
                     return;
                 }
                 if (prevLoc != null) {
-                    List<Entity> entities = CWUtil.getNearbyEntities(prevLoc, 40, null);
-                    for (Entity e : entities) {
-                        if (e instanceof Player) {
-                            Player pl = (Player) e;
-                            if (!dvz.getPM().getPlayer(pl).isDwarf()) {
-                                continue;
-                            }
-                            if (dvz.getPM().getPlayer(pl).isDwarf()) {
-                                pl.addPotionEffect(new PotionEffect(PotionEffectType.POISON, dvz.getGM().getDragonPower() * 20, dvz.getGM().getDragonPower() - 1));
-                            }
+                    List<Player> players = CWUtil.getNearbyPlayers(prevLoc, 40);
+                    for (Player p : players) {
+                        if (!dvz.getPM().getPlayer(p).isDwarf()) {
+                            continue;
                         }
+                        new AbilityDmg(p, 0, ability, player);
+                        p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, dvz.getGM().getDragonPower() * 30, dvz.getGM().getDragonPower() - 1));
                     }
                 }
                 prevLoc = player.getLocation();

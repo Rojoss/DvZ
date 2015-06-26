@@ -5,6 +5,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.runnables.PickupRunnable;
 import com.clashwars.dvz.util.DvzItem;
@@ -94,6 +95,8 @@ public class Pickup extends BaseAbility {
         runnable.runTaskTimer(dvz, 1, 1);
         pickupRunnables.put(player.getUniqueId(), runnable);
         Util.disguisePlayer(player.getName(), (DvzClass.ENDERMAN.getClassClass().getDisguise() + " setAggressive true"));
+
+        new AbilityDmg(target, 0, ability, player);
 
         player.getWorld().playSound(player.getLocation(), Sound.BAT_TAKEOFF, 0.8f, 0);
         player.getWorld().playSound(player.getLocation(), Sound.ENDERMAN_HIT, 1f, 0);

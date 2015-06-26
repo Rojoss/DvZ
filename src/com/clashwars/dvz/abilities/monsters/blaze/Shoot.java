@@ -4,6 +4,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
@@ -36,14 +37,11 @@ public class Shoot extends BaseAbility {
             return;
         }
 
-        List<Entity> entities = CWUtil.getNearbyEntities(player.getLocation(), 3, null);
-        for (Entity e : entities) {
-            if (!(e instanceof Player)) {
-                continue;
-            }
-            CWPlayer cwp = dvz.getPM().getPlayer((Player)e);
-            if (cwp.isDwarf()) {
-                cwp.getPlayer().setFireTicks((int)dvz.getGM().getMonsterPower(20, 40));
+        List<Player> players = CWUtil.getNearbyPlayers(player.getLocation(), 3);
+        for (Player p : players) {
+            if (dvz.getPM().getPlayer(p).isDwarf()) {
+                new AbilityDmg(p, 1, ability, player);
+                p.setFireTicks((int)dvz.getGM().getMonsterPower(20, 40));
             }
         }
 

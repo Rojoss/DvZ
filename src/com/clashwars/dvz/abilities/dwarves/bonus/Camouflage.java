@@ -2,6 +2,7 @@ package com.clashwars.dvz.abilities.dwarves.bonus;
 
 import com.clashwars.cwcore.hat.HatManager;
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.util.DvzItem;
@@ -53,6 +54,10 @@ public class Camouflage extends BaseAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
+        if (dvz.getGM().getState() == GameState.DRAGON) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThe dragon his powers are blocking you from using this right now! &4&l<<"));
+            return;
+        }
         Long t = System.currentTimeMillis();
         Block block = triggerLoc.getBlock();
         if (block == null || block.getType() == Material.AIR) {

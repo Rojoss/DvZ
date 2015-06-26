@@ -6,6 +6,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.classes.ClassType;
+import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.util.DvzItem;
@@ -64,7 +65,7 @@ public class PotionBomb extends BaseAbility {
             return;
         }
 
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
         if (!canCast(player)) {
             return;
         }
@@ -90,9 +91,9 @@ public class PotionBomb extends BaseAbility {
         }
 
         boolean found = false;
-        List<Entity> entities = CWUtil.getNearbyEntities(bomb, dvz.getGM().getMonsterPower(20, 30), Arrays.asList(new EntityType[]{EntityType.PLAYER}));
-        for (Entity e : entities) {
-            if (dvz.getPM().getPlayer((Player)e).isDwarf()) {
+        List<Player> players = CWUtil.getNearbyPlayers(bomb, dvz.getGM().getMonsterPower(20, 30));
+        for (Player p : players) {
+            if (dvz.getPM().getPlayer(p).isDwarf()) {
                 found = true;
             }
         }
@@ -163,6 +164,8 @@ public class PotionBomb extends BaseAbility {
                     if (!poisonAdded) {
                         cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(200, 400), 1));
                     }
+
+                    new AbilityDmg(cwp.getPlayer(), 0, ability, player);
                     cwp.playSound(cwp.getLocation(), Sound.ZOMBIE_REMEDY, 1, 0);
                 }
             }

@@ -1,5 +1,6 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.Enjin;
@@ -292,114 +293,6 @@ public class MainEvents implements Listener {
             }.runTaskAsynchronously(dvz);
         }
         dvz.logTimings("MainEvents.playerJoin()", t);
-    }
-
-
-    @EventHandler
-    private void death(PlayerDeathEvent event) {
-        Long t = System.currentTimeMillis();
-        final Player player = event.getEntity();
-        CWPlayer cwp = dvz.getPM().getPlayer(player);
-        Player killer = player.getKiller();
-
-        event.setDroppedExp(0);
-
-        //Death message
-        String prefix = "&8";
-        if (cwp.getPlayerClass() != null) {
-            if (cwp.getPlayerClass().getType() == ClassType.DWARF) {
-                prefix = "&6";
-            } else {
-                prefix = "&c";
-            }
-        }
-
-        if (killer != null) {
-            if (dvz.getGM().getState() == GameState.DRAGON && dvz.getGM().getDragonPlayer().getName().equalsIgnoreCase(killer.getName())) {
-                event.setDeathMessage(CWUtil.integrateColor(prefix + player.getName() + " &7was killed by the dragon!"));
-                dvz.getSM().changeLocalStatVal(player, StatType.COMBAT_DEATHS_BY_DRAGON, 1);
-            } else {
-                event.setDeathMessage(CWUtil.integrateColor(prefix + player.getName() + " &7was killed by " + killer.getName() + "!"));
-            }
-        } else {
-            event.setDeathMessage(CWUtil.integrateColor(prefix + player.getName() + " &7died!"));
-        }
-
-        if (cwp.getPlayerClass().getType() == ClassType.MONSTER) {
-            dvz.getSM().changeLocalStatVal(player, StatType.COMBAT_MONSTER_DEATHS, 1);
-        } else if (cwp.getPlayerClass().getType() == ClassType.DWARF) {
-            dvz.getSM().changeLocalStatVal(player, StatType.COMBAT_DWARF_DEATHS, 1);
-        }
-
-        //Enderman died. (Drop picked up player)
-        if (cwp.getPlayerClass() == DvzClass.ENDERMAN) {
-            if (Pickup.pickupRunnables.containsKey(cwp.getUUID())) {
-                Pickup.pickupRunnables.get(cwp.getUUID()).died = true;
-            }
-        }
-
-        //Reset witch/villager data
-        if (cwp.getPlayerClass() != null && (cwp.getPlayerClass() == DvzClass.WITCH || cwp.getPlayerClass() == DvzClass.VILLAGER)) {
-            cwp.getPlayerData().setbombUsed(false);
-            cwp.getPlayerData().setBuffUsed(false);
-        }
-
-        //Dragon died.
-        if (dvz.getGM().getState() == GameState.DRAGON && dvz.getGM().getDragonPlayer().getName().equalsIgnoreCase(player.getName())) {
-
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&7======= &a&lThe dragon has been killed! &7======="));
-            if (killer != null) {
-                Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &3" + killer.getName() + " &7is the &bDragonSlayer&7!"));
-                gm.setDragonSlayer(killer);
-            } else {
-                Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Couldn't find the killer so there is no DragonSlayer."));
-            }
-            dvz.getGM().releaseMonsters(false);
-        }
-
-        //DragonSlayer died.
-        if (dvz.getGM().getDragonSlayer() != null && dvz.getGM().getDragonSlayer().getName().equalsIgnoreCase(player.getName())) {
-            dvz.getGM().resetDragonSlayer();
-            dvz.getServer().broadcastMessage(Util.formatMsg("&d&lThe DragonSlayer died!"));
-        }
-
-        //Destroy shrines if not any dwarves left.
-        final ShrineType[] shrineTypes = new ShrineType[] {ShrineType.WALL, ShrineType.KEEP_1, ShrineType.KEEP_2};
-        new BukkitRunnable() {
-            int index = 0;
-            @Override
-            public void run() {
-                List<CWPlayer> dwarvesLeft = dvz.getPM().getPlayers(ClassType.DWARF, true, false);
-                if (dwarvesLeft == null || dwarvesLeft.size() == 0) {
-                    Set<ShrineBlock> shrineBlocks = dvz.getGM().getShrineBlocks(shrineTypes[index]);
-                    for (ShrineBlock shrineBlock : shrineBlocks) {
-                        if (shrineBlock != null && shrineBlock.isDestroyed() == false) {
-                            dvz.getGM().getShrineBlock(shrineBlock.getLocation()).damage(500);
-                        }
-                    }
-
-                    index++;
-                    if (index >= 3) {
-                        cancel();
-                        return;
-                    }
-                } else {
-                    cancel();
-                    return;
-                }
-            }
-        }.runTaskTimer(dvz, 60, 60);
-
-
-        //Instant respawning.
-        dvz.getServer().getScheduler().scheduleSyncDelayedTask(dvz, new Runnable() {
-            public void run() {
-                if (player.isDead()) {
-                    ((CraftPlayer) player).getHandle().playerConnection.a(new PacketPlayInClientCommand(PacketPlayInClientCommand.EnumClientCommand.PERFORM_RESPAWN));
-                }
-            }
-        });
-        dvz.logTimings("MainEvents.death()", t);
     }
 
 

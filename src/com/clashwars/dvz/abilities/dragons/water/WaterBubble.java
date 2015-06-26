@@ -4,6 +4,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -32,9 +33,6 @@ public class WaterBubble extends BaseAbility {
             return;
         }
 
-        player.setFlySpeed(0);
-        player.setVelocity(new Vector(0,0,0));
-
         new BukkitRunnable() {
             int iterations = 0;
             float radius = 0.5f;
@@ -49,18 +47,14 @@ public class WaterBubble extends BaseAbility {
                     radius += 0.5f;
                     CWUtil.createSphere(playerLoc, Material.STAINED_GLASS, (byte) 11, radius, false, false);
 
-                    List<Entity> entities = CWUtil.getNearbyEntities(playerLoc, 5f, null);
-                    for (Entity e : entities) {
-                        if (e instanceof Player) {
-                            if (!dvz.getPM().getPlayer((Player)e).isDwarf()) {
-                                continue;
-                            }
-                            ((Player)e).setRemainingAir(160 - dvz.getGM().getDragonPower() * 40);
+                    List<Player> players = CWUtil.getNearbyPlayers(playerLoc, 5);
+                    for (Player p : players) {
+                        if (!dvz.getPM().getPlayer(p).isDwarf()) {
+                            continue;
                         }
+                        p.setRemainingAir(150 - dvz.getGM().getDragonPower() * 40);
+                        new AbilityDmg(p, 0, ability, player);
                     }
-
-                    player.teleport(playerLoc.add(0, 6, 0));
-                    player.setFlySpeed(dvz.getPM().getPlayer(player).getPlayerClass().getClassClass().getSpeed());
 
                     dvz.logTimings("WaterBubble.castAbilityRunnable()[completed]", t);
                     cancel();
@@ -72,20 +66,20 @@ public class WaterBubble extends BaseAbility {
                     radius += 0.5f;
                 }
 
-                List<Entity> entities = CWUtil.getNearbyEntities(playerLoc, 30f, null);
-                for (Entity e : entities) {
-                    if (!(e instanceof Player)) {
+                List<Player> players = CWUtil.getNearbyPlayers(playerLoc, 30f);
+                for (Player p : players) {
+                    if (!(p instanceof Player)) {
                         continue;
                     }
-                    if (!dvz.getPM().getPlayer((Player)e).isDwarf()) {
+                    if (!dvz.getPM().getPlayer(p).isDwarf()) {
                         continue;
                     }
-                    double distance = e.getLocation().distance(playerLoc);
+                    double distance = p.getLocation().distance(playerLoc);
                     if (distance > 1) {
-                        Vector dir = playerLoc.toVector().subtract(e.getLocation().toVector());
+                        Vector dir = playerLoc.toVector().subtract(p.getLocation().toVector());
                         Vector v = CWUtil.lerp(dir.multiply(0.1f), dir, distance / 30);
-                        e.setVelocity(v);
-                        ParticleEffect.WATER_SPLASH.display(1,1,1,0,10,e.getLocation());
+                        p.setVelocity(v);
+                        ParticleEffect.WATER_SPLASH.display(1,1,1,0,10,p.getLocation());
                     }
                 }
 

@@ -12,6 +12,7 @@ import com.clashwars.dvz.classes.ClassManager;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.commands.Commands;
 import com.clashwars.dvz.config.*;
+import com.clashwars.dvz.damage.DamageHandler;
 import com.clashwars.dvz.events.*;
 import com.clashwars.dvz.maps.MapManager;
 import com.clashwars.dvz.mysql.MySQL;
@@ -85,6 +86,7 @@ public class DvZ extends JavaPlugin {
     private TipManager tm;
     private DataManager dm;
     private StatsManager sm;
+    private DamageHandler dmgH;
 
     private ArmorMenu armorMenu;
     private ColorMenu colorMenu;
@@ -201,6 +203,8 @@ public class DvZ extends JavaPlugin {
         sm = new StatsManager(this);
         gm.calculateMonsterPerc();
 
+        dmgH = new DamageHandler(this);
+
         soundMenu = new SoundMenu(this);
         armorMenu = new ArmorMenu(this);
         colorMenu = new ColorMenu(this);
@@ -251,6 +255,7 @@ public class DvZ extends JavaPlugin {
         pm.registerEvents(getSM().filterMenu, this);
         pm.registerEvents(getSM().statsMenu, this);
         pm.registerEvents(getSM().playerMenu, this);
+        pm.registerEvents(dmgH, this);
     }
 
     private void startRunnables() {
@@ -407,8 +412,13 @@ public class DvZ extends JavaPlugin {
         return settingsCfg;
     }
 
+
     public Connection getSql() {
         return c;
+    }
+
+    public DamageHandler getDmgH() {
+        return dmgH;
     }
 
 

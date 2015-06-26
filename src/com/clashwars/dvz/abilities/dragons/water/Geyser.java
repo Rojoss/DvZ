@@ -1,7 +1,9 @@
 package com.clashwars.dvz.abilities.dragons.water;
 
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -35,16 +37,14 @@ public class Geyser extends BaseAbility {
         }
 
         final Map<UUID, Vector> players = new HashMap<UUID, Vector>();
-        List<Entity> entities = player.getNearbyEntities(getFloatOption("range"), getFloatOption("range"), getFloatOption("range"));
-        for (Entity e : entities) {
-            if (e instanceof Player) {
-                if (!dvz.getPM().getPlayer((Player)e).isDwarf()) {
-                    continue;
-                }
-                players.put(((Player)e).getUniqueId(), ((Player)e).getLocation().toVector());
-                e.setVelocity(new Vector(0, getFloatOption("force"), 0));
-                ((Player) e).damage(dvz.getGM().getDragonPower() * 3 - 3);
+        List<Player> nearbyPlayers = CWUtil.getNearbyPlayers(player.getLocation(), getFloatOption("range"));
+        for (Player p : nearbyPlayers) {
+            if (!dvz.getPM().getPlayer((Player)p).isDwarf()) {
+                continue;
             }
+            players.put(p.getUniqueId(), p.getLocation().toVector());
+            p.setVelocity(new Vector(0, getFloatOption("force"), 0));
+            new AbilityDmg(p, dvz.getGM().getDragonPower() * 3 - 3, ability, player);
         }
 
         new BukkitRunnable() {

@@ -5,6 +5,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Bukkit;
@@ -83,15 +84,12 @@ public class Chicken extends MobClass {
                                 power = Integer.parseInt(split[1]);
                             }
 
-                            List<Entity> entities = CWUtil.getNearbyEntities(entry.getValue().entity().getLocation(), (int)dvz.getGM().getMonsterPower(2, 8), null);
-                            for (Entity e : entities) {
-                                if (e instanceof Player) {
-                                    CWPlayer cwp = dvz.getPM().getPlayer((Player)e);
-                                    if (cwp.isDwarf()) {
-                                        cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, power / 2, 1));
-                                        cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, power * 2, 1));
-                                        cwp.getPlayer().damage(dvz.getGM().getMonsterPower(1, 5));
-                                    }
+                            List<Player> players = CWUtil.getNearbyPlayers(entry.getValue().entity().getLocation(), (int)dvz.getGM().getMonsterPower(2, 8));
+                            for (Player p : players) {
+                                if (dvz.getPM().getPlayer(p).isDwarf()) {
+                                    p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, power / 2, 1));
+                                    p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, power * 2, 1));
+                                    new AbilityDmg(p, dvz.getGM().getMonsterPower(1, 5), Ability.DROP_EGG, owner);
                                 }
                             }
 

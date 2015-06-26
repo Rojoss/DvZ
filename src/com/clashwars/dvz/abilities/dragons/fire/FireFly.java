@@ -4,6 +4,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -52,9 +53,9 @@ public class FireFly extends BaseAbility {
                             continue;
                         }
                         if (dvz.getGM().getDragonPower() == 1) {
-                            ((LivingEntity) e).damage(1);
+                            new AbilityDmg((Player)e, 1, ability, player);
                         } else {
-                            ((LivingEntity) e).damage(dvz.getGM().getDragonPower() * 2);
+                            new AbilityDmg((Player)e, dvz.getGM().getDragonPower() * 3, ability, player);
                         }
                     }
                 }

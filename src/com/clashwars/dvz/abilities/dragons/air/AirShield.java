@@ -5,6 +5,7 @@ import com.clashwars.cwcore.effect.effects.SphereEffect;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -88,7 +89,7 @@ public class AirShield extends BaseAbility {
         new BukkitRunnable() {
             @Override
             public void run() {
-                shooter.damage(event.getDamage());
+                new AbilityDmg(shooter, event.getDamage(), ability, dragonPlayer);
             }
         }.runTaskLater(dvz, 20);
     }

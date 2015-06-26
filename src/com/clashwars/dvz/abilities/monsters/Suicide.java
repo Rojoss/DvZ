@@ -1,7 +1,9 @@
 package com.clashwars.dvz.abilities.monsters;
 
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
@@ -25,8 +27,8 @@ public class Suicide extends BaseAbility {
         if (onCooldown(player)) {
             return;
         }
-        player.setHealth(0);
-        player.sendMessage(Util.formatMsg("&cSuicided!"));
+        new AbilityDmg(player, 500, ability);
+        //player.sendMessage(Util.formatMsg("&cSuicided!"));
         dvz.getPM().suicidePlayers.add(player.getUniqueId());
     }
 

@@ -50,59 +50,59 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum Ability {
-    BASE(new BaseAbility(), false, new String[]{}),
+    BASE(new BaseAbility(), false, ""),
 
     //Dwarf abilities
-    HEAL_POTION(new HealPotion(), false, new String[]{}),
-    SPEED_POTION(new SpeedPotion(), false, new String[]{}),
-    BUILDING_BRICK(new BuildingBrick(), false, new String[]{}),
-    BUILDING_BLOCK(new BuildingBlock(), false, new String[]{}),
-    REINFORCE(new Reinforce(), false, new String[]{}),
-    SUMMON_STONE(new SummonStone(), false, new String[]{}),
-    HORN(new Horn(), false, new String[]{}),
+    HEAL_POTION(new HealPotion(), false, ""),
+    SPEED_POTION(new SpeedPotion(), false, ""),
+    BUILDING_BRICK(new BuildingBrick(), false, ""),
+    BUILDING_BLOCK(new BuildingBlock(), false, ""),
+    REINFORCE(new Reinforce(), false, ""),
+    SUMMON_STONE(new SummonStone(), false, ""),
+    HORN(new Horn(), false, ""),
 
     //Monster abilities
-    SUICIDE(new Suicide(), false, new String[]{}),
-    HAMMER(new Hammer(), false, new String[]{}),
-    TELEPORT_PORTAL(new TeleportPortal(), false, new String[]{}),
-    INFECT(new Infect(), false, new String[]{}),
-    RUSH(new Rush(), false, new String[]{}),
-    RAPIDFIRE(new Rapidfire(), false, new String[]{}),
-    POISON_ATTACK(new PoisonAttack(), false, new String[]{}),
-    POISON(new Poison(), false, new String[]{}),
-    WEB(new Web(), false, new String[]{}),
-    EXPLODE(new Explode(), false, new String[]{}),
-    SHOOT(new Shoot(), false, new String[]{}),
-    GLIDE(new Glide(), false, new String[]{}),
-    BLAST(new Blast(), false, new String[]{}),
-    FIREBALL(new Fireball(), false, new String[]{}),
-    PICKUP(new Pickup(), false, new String[]{}),
-    BLINK(new Blink(), false, new String[]{}),
-    PORTAL(new Portal(), false, new String[]{}),
-    MORPH(new Morph(), false, new String[]{}),
-    POTION_BOMB(new PotionBomb(), false, new String[]{}),
-    BUFF(new Buff(), false, new String[]{}),
-    FLY(new Fly(), false, new String[]{}),
-    EXPLOSIVE_EGG(new ExplosiveEgg(), false, new String[]{}),
-    LAY_EGG(new LayEgg(), false, new String[]{}),
-    DROP_EGG(new DropEgg(), false, new String[]{}),
+    SUICIDE(new Suicide(), false, "{0} committed suicide"),
+    HAMMER(new Hammer(), false, ""),
+    TELEPORT_PORTAL(new TeleportPortal(), false, ""),
+    INFECT(new Infect(), false, ""),
+    RUSH(new Rush(), false, ""),
+    RAPIDFIRE(new Rapidfire(), false, ""),
+    POISON_ATTACK(new PoisonAttack(), false, "{0} died from {1}'s poison attack"),
+    POISON(new Poison(), false, "{0} died from {1}'s poison cloud"),
+    WEB(new Web(), false, ""),
+    EXPLODE(new Explode(), false, "{0} died from {1}'s creeper explosion"),
+    SHOOT(new Shoot(), false, "{0} burned to death by {1}'s shoot"),
+    GLIDE(new Glide(), false, ""),
+    BLAST(new Blast(), false, "{0} burned to death by {1}'s blast"),
+    FIREBALL(new Fireball(), false, "{0} died from {1}'s fireball"),
+    PICKUP(new Pickup(), false, "{0} died from being picked up by {1}"),
+    BLINK(new Blink(), false, ""),
+    PORTAL(new Portal(), false, ""),
+    MORPH(new Morph(), false, ""),
+    POTION_BOMB(new PotionBomb(), false, "{0} died from {1}'s potionbomb"),
+    BUFF(new Buff(), false, ""),
+    FLY(new Fly(), false, ""),
+    EXPLOSIVE_EGG(new ExplosiveEgg(), false, "{0} exploded by {1}'s explosive egg"),
+    LAY_EGG(new LayEgg(), false, ""),
+    DROP_EGG(new DropEgg(), false, "{0} died from {1}'s rotten egg"),
 
     //Dragon abilities
-    BURN(new Burn(), false, new String[]{}),
-    FIREFLY(new FireFly(), false, new String[]{}),
-    FIRE_BREATH(new FireBreath(), false, new String[]{}),
-    GEYSER(new Geyser(), false, new String[]{}),
-    TOXIC_RAIN(new ToxicRain(), false, new String[]{}),
-    WATER_BUBBLE(new WaterBubble(), false, new String[]{}),
-    WIND(new Wind(), false, new String[]{}),
-    WINDSTORM(new WindStorm(), false, new String[]{}),
-    AIRSHIELD(new AirShield(), false, new String[]{}),
+    BURN(new Burn(), false, "{0} burned to death from the dragons heat"),
+    FIREFLY(new FireFly(), false, "{0} burned to death while the dragon flew by"),
+    FIRE_BREATH(new FireBreath(), false, "{0} burned to death by the dragons fire breath"),
+    GEYSER(new Geyser(), false, "{0} died from a hot geyser"),
+    TOXIC_RAIN(new ToxicRain(), false, "{0} didn't survive the toxic rain"),
+    WATER_BUBBLE(new WaterBubble(), false,"{0} drowned in a water bubble"),
+    WIND(new Wind(), false, "{0} was blown away by wind and died"),
+    WINDSTORM(new WindStorm(), false, "{0} died during a wind storm"),
+    AIRSHIELD(new AirShield(), false, "{0} died from a reflected arrow by the dragon"),
 
     //Dwarf bonus abilities
-    LEAP(new Leap(), true, new String[] {}),
-    TORRENT(new Torrent(), true, new String[] {}),
-    LAND_MINE(new Landmine(), true, new String[] {}),
-    CAMOUFLAGE(new Camouflage(), true, new String[] {});
+    LEAP(new Leap(), true, "{0} died while trying to leap away"),
+    TORRENT(new Torrent(), true, "{0} died from {1}'s water torrent"),
+    LAND_MINE(new Landmine(), true, "{0} was blown to pieces by {1}'s mine"),
+    CAMOUFLAGE(new Camouflage(), true, "");
 
 
     //------------------------------
@@ -111,26 +111,26 @@ public enum Ability {
 
 
     private BaseAbility abilityClass;
-    private List<String> aliases = new ArrayList<String>();
     private boolean dwarfBonus = false;
+    private String deathMsg;
 
-    Ability(BaseAbility abilityClass, boolean dwarfBonus, String[] aliases) {
+    Ability(BaseAbility abilityClass, boolean dwarfBonus, String deathMsg) {
         this.abilityClass = abilityClass;
         abilityClass.setAbility(this);
-        this.aliases = Arrays.asList(aliases);
         this.dwarfBonus = dwarfBonus;
+        this.deathMsg = deathMsg;
     }
 
     public BaseAbility getAbilityClass() {
         return abilityClass;
     }
 
-    public List<String> getAliases() {
-        return aliases;
-    }
-
     public boolean isDwarfBonus() {
         return dwarfBonus;
+    }
+
+    public String getDeathMsg() {
+        return deathMsg;
     }
 
     //Get class by name or alias and return null if no class was found.
@@ -138,14 +138,6 @@ public enum Ability {
         //First check by name.
         for (Ability c : values()) {
             if (c.toString().equalsIgnoreCase(name)) {
-                return c;
-            }
-        }
-
-        //Check by alias
-        name = name.toLowerCase();
-        for (Ability c : values()) {
-            if (c.getAliases().contains(name)) {
                 return c;
             }
         }

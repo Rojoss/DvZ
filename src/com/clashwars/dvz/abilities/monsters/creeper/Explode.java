@@ -1,9 +1,13 @@
 package com.clashwars.dvz.abilities.monsters.creeper;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.cwcore.utils.RandomUtils;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.damage.types.AbilityDmg;
+import com.clashwars.dvz.damage.types.CustomDmg;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
@@ -11,13 +15,18 @@ import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
+import javax.security.auth.Destroyable;
 import java.util.List;
 import java.util.Set;
 
@@ -68,7 +77,7 @@ public class Explode extends BaseAbility {
         final double powerPerSec = dvz.getGM().getMonsterPower(2) + 0.5f;
 
         new BukkitRunnable() {
-            int minPower = 1;
+            int minPower = 3;
             int maxPower = (int)dvz.getGM().getMonsterPower(3, 12);
             int ticks = 0;
             Double power = (double)minPower;
@@ -89,7 +98,7 @@ public class Explode extends BaseAbility {
                     //Increase the power by powerpersec value and clamp it between min/max value.
                     double prevPower = power;
                     power = Math.min(Math.max((ticks / 20) * powerPerSec, minPower), maxPower);
-                    CWUtil.sendActionBar(player, CWUtil.integrateColor("&9&l>> &3Charge power&8: &6&l" + power + "&7&l/&8&l" + maxPower + " &9&l<<"));
+                    CWUtil.sendActionBar(player, CWUtil.integrateColor("&9&l>> &3Charge power&8: &6&l" + CWUtil.round(power.floatValue(), 1) + "&7&l/&8&l" + maxPower + " &9&l<<"));
                     if (power != prevPower) {
                         player.getWorld().playSound(playerLoc, Sound.FUSE, 1, 2);
                         ParticleEffect.FIREWORKS_SPARK.display(0.5f, 1f, 0.5f, 0, 10, playerLoc.clone().add(0,1,0));
@@ -125,30 +134,53 @@ public class Explode extends BaseAbility {
     }
 
     private void createExplosion(Player caster, Location loc, float power) {
-        loc.getWorld().createExplosion(loc, power, false);
+        ParticleEffect.EXPLOSION_HUGE.display(0.5f, 0.5f, 0.5f, 0, Math.round(power), loc, 500);
+        loc.getWorld().playSound(loc, Sound.EXPLODE, 2, 1 - (float)CWUtil.lerp(0, 1, power));
 
         if (dvz.getGM().getMonsterPower(3) >= 1) {
-            List<Entity> entities = CWUtil.getNearbyEntities(loc, power * 0.75f, null);
-            for (Entity e : entities) {
-                if (!(e instanceof Player)) {
-                    continue;
-                }
-                CWPlayer cwp = dvz.getPM().getPlayer((Player)e);
-                if (cwp.isDwarf()) {
-                    Util.damageEntity(e, caster, dvz.getGM().getMonsterPower(3), EntityDamageEvent.DamageCause.ENTITY_EXPLOSION);
+            List<Player> players = CWUtil.getNearbyPlayers(loc, power * 0.75f);
+            for (Player p : players) {
+                if (dvz.getPM().getPlayer(p).isDwarf()) {
+                    new AbilityDmg(p, 0.5f * power, ability, caster);
+                    Vector dir = p.getLocation().toVector().subtract(loc.toVector()).normalize();
+                    p.setVelocity(p.getVelocity().add(dir.multiply(2.5f)));
                 }
             }
         }
 
-        //Damage shrine blocks.
-        Set<ShrineBlock> shrineBlocks = dvz.getGM().getShrineBlocks();
-        for (ShrineBlock shrineBlock : shrineBlocks) {
-            if (shrineBlock != null && !shrineBlock.isDestroyed()) {
-                if (shrineBlock.getLocation().distance(loc) < power) {
-                    shrineBlock.damage(Math.round(power * 2));
+        Location blockCenter = loc.getBlock().getLocation().add(0.5f, 0.5f, 0.5f);
+        int powerR = (int)Math.ceil(power / 2);
+        List<Material> undestroyableBlocks = dvz.getUndestroyableBlocks();
+        for (double x = blockCenter.getBlockX() - powerR; x < blockCenter.getBlockX() + powerR; x++) {
+            for (double y = blockCenter.getBlockY() - powerR; y < blockCenter.getBlockY() + powerR; y++) {
+                for (double z = blockCenter.getBlockZ() - powerR; z < blockCenter.getBlockZ() + powerR; z++) {
+                    Block block = loc.getWorld().getBlockAt((int)x, (int)y, (int)z);
+                    if (undestroyableBlocks.contains(block.getType())) {
+                        if (block.getType() == Material.ENDER_PORTAL_FRAME) {
+                            ShrineBlock shrineBlock = dvz.getGM().getShrineBlock(block.getLocation());
+                            if (shrineBlock != null && !shrineBlock.isDestroyed()) {
+                                shrineBlock.damage(Math.round(power));
+                            }
+                        }
+                        continue;
+                    }
+                    double distance = block.getLocation().distance(blockCenter);
+                    if (distance > power+1 / 2) {
+                        continue;
+                    }
+                    if (distance > power / 2  && CWUtil.randomFloat() > 0.5f) {
+                        continue;
+                    }
+
+                    FallingBlock fallingBlock = loc.getWorld().spawnFallingBlock(block.getLocation(), block.getType(), block.getData());
+                    Vector dir = block.getLocation().toVector().subtract(blockCenter.toVector()).normalize();
+                    fallingBlock.setVelocity(dir.multiply(0.5f));
+
+                    block.setType(Material.AIR);
                 }
             }
         }
 
+        new CustomDmg(caster, 500, "{0} exploded");
     }
 }

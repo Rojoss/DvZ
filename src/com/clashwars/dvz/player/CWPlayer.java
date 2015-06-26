@@ -12,6 +12,7 @@ import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.PlayerCfg;
+import com.clashwars.dvz.damage.log.DamageLog;
 import com.clashwars.dvz.runnables.TeleportRunnable;
 import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.util.ItemMenu;
@@ -40,6 +41,7 @@ public class CWPlayer {
     private CooldownManager cdm = new CooldownManager();
     private BukkitRunnable teleport;
     public HashMap<String, Integer> productsTaken = new HashMap<String, Integer>();
+    public List<DamageLog> damageLogs = new ArrayList<DamageLog>();
     private Color color;
 
     private int userID = -1;
@@ -54,6 +56,8 @@ public class CWPlayer {
         this.dvz = DvZ.inst();
         this.pcfg = dvz.getPlayerCfg();
         color = CWUtil.getRandomColor();
+
+        damageLogs.add(new DamageLog(uuid));
     }
 
     public void reset() {
@@ -428,10 +432,10 @@ public class CWPlayer {
         dvz.getSM().changeLocalStatVal(uuid, StatType.GENERAL_TIMES_TELEPORTED, 1);
 
         //If dwarf and no monsters nearby tp instant and other way around.
-        List<Entity> nearbyPlayers = CWUtil.getNearbyEntities(getPlayer().getLocation(), 40, Arrays.asList(new EntityType[] {EntityType.PLAYER}));
+        List<Player> nearbyPlayers = CWUtil.getNearbyPlayers(getPlayer().getLocation(), 40);
         boolean nearbyEnemy = false;
-        for (Entity e : nearbyPlayers) {
-            CWPlayer cwp = dvz.getPM().getPlayer((Player)e);
+        for (Player p : nearbyPlayers) {
+            CWPlayer cwp = dvz.getPM().getPlayer(p);
             if (cwp.getPlayerClass().getType() == ClassType.DWARF) {
                 if (getPlayerClass().getType() == ClassType.MONSTER) {
                     nearbyEnemy = true;

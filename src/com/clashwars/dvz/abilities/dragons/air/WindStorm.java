@@ -6,6 +6,7 @@ import com.clashwars.cwcore.utils.RandomUtils;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.classes.ClassType;
+import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
@@ -34,7 +35,6 @@ public class WindStorm extends BaseAbility {
             return;
         }
 
-        //for (Entity entity : CWUtil.getNearbyEntities(triggerLoc, getFloatOption("distance"), Arrays.asList(new EntityType[]{EntityType.PLAYER}))) {
         new BukkitRunnable() {
             Long t = System.currentTimeMillis();
             int iteration = 0;
@@ -53,10 +53,11 @@ public class WindStorm extends BaseAbility {
                     if (iteration > (Math.round(maxIterations / 2) + 2)) {
                         y = CWUtil.randomFloat() - 1;
                     } else {
-                        y = CWUtil.randomFloat();
+                        y = CWUtil.randomFloat() + 0.1f;
                     }
                     ParticleEffect.CLOUD.display(0.5f, 0.5f, 0.5f, 0f, 10, cwp.getLocation());
                     cwp.getPlayer().setVelocity(new Vector(v.getX() * 0.8f, y, v.getZ() * 0.8f));
+                    new AbilityDmg(cwp.getPlayer(), 0, ability, player);
                 }
 
                 iteration++;

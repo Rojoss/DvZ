@@ -69,7 +69,7 @@ public class BuildingBrick extends BaseAbility {
             return;
         }
 
-        if (CWUtil.getNearbyEntities(block.getLocation(), 1.5f, Arrays.asList(new EntityType[] {EntityType.PLAYER})).size() > 0) {
+        if (CWUtil.getNearbyPlayers(block.getLocation(), 1.5f).size() > 0) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't build where people stand! &4&l<<"));
             dvz.logTimings("BuildingBrick.castAbility()[person in way]", t);
             return;

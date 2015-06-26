@@ -46,6 +46,7 @@ public class Rapidfire extends BaseAbility {
             public void run() {
                 for (int i = 0; i < amt; i++) {
                     Arrow arrow = player.launchProjectile(Arrow.class);
+                    arrow.setShooter(player);
                     arrow.setVelocity(arrow.getVelocity().add(new Vector((CWUtil.randomFloat() - 0.5f) * randomoffset, (CWUtil.randomFloat() - 0.5f) * randomoffset, (CWUtil.randomFloat() - 0.5f) * randomoffset)));
 
                     ParticleEffect.CRIT.display(0.5f, 0.5f, 0.5f, 0.001f, 1, arrow.getLocation());
