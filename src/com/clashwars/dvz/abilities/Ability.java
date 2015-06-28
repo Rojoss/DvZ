@@ -11,10 +11,7 @@ import com.clashwars.dvz.abilities.dragons.water.ToxicRain;
 import com.clashwars.dvz.abilities.dragons.water.WaterBubble;
 import com.clashwars.dvz.abilities.dwarves.HealPotion;
 import com.clashwars.dvz.abilities.dwarves.SpeedPotion;
-import com.clashwars.dvz.abilities.dwarves.bonus.Camouflage;
-import com.clashwars.dvz.abilities.dwarves.bonus.Landmine;
-import com.clashwars.dvz.abilities.dwarves.bonus.Leap;
-import com.clashwars.dvz.abilities.dwarves.bonus.Torrent;
+import com.clashwars.dvz.abilities.dwarves.bonus.*;
 import com.clashwars.dvz.abilities.dwarves.builder.BuildingBlock;
 import com.clashwars.dvz.abilities.dwarves.builder.BuildingBrick;
 import com.clashwars.dvz.abilities.dwarves.builder.Reinforce;
@@ -102,6 +99,7 @@ public enum Ability {
     LEAP(new Leap(), true, "{0} died while trying to leap away"),
     TORRENT(new Torrent(), true, "{0} died from {1}'s water torrent"),
     LAND_MINE(new Landmine(), true, "{0} was blown to pieces by {1}'s mine"),
+    NET(new Net(), true, ""),
     CAMOUFLAGE(new Camouflage(), true, "");
 
 

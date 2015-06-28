@@ -16,6 +16,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -44,7 +45,8 @@ public class Web extends BaseAbility {
         CWUtil.removeItemsFromHand(player, 1);
         final FallingBlock web = player.getLocation().getWorld().spawnFallingBlock(player.getLocation().add(0, 1.5f, 0), Material.WEB, (byte)0);
         web.setDropItem(false);
-        web.setVelocity(player.getLocation().add(0,1.5f,0).getDirection().multiply(0.8f));
+        web.setVelocity(player.getLocation().add(0, 1.5f, 0).getDirection().multiply(0.8f));
+        web.setMetadata("web", new FixedMetadataValue(dvz, true));
     }
 
     @EventHandler
@@ -85,6 +87,9 @@ public class Web extends BaseAbility {
             return;
         }
         if (event.getTo() != Material.WEB) {
+            return;
+        }
+        if (!event.getEntity().hasMetadata("web")) {
             return;
         }
 
