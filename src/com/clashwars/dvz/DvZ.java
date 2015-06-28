@@ -260,6 +260,7 @@ public class DvZ extends JavaPlugin {
         pm.registerEvents(getSM().statsMenu, this);
         pm.registerEvents(getSM().playerMenu, this);
         pm.registerEvents(dmgH, this);
+        pm.registerEvents(new WeaponHandler(this), this);
     }
 
     private void startRunnables() {

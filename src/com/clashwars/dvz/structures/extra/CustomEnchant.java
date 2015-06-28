@@ -11,13 +11,15 @@ public class CustomEnchant {
 
     private Enchantment enchant;
     private String name;
+    private String[] description;
     private int level;
     private int xpNeeded;
     private List<Material> items = new ArrayList<Material>();
 
-    public CustomEnchant(Enchantment enchant, String name, int level, int xpNeeded, Material[] items) {
+    public CustomEnchant(Enchantment enchant, String name, String[] description, int level, int xpNeeded, Material[] items) {
         this.enchant = enchant;
         this.name = name;
+        this.description = description;
         this.level = level;
         this.xpNeeded = xpNeeded;
         this.items = Arrays.asList(items);
@@ -30,6 +32,10 @@ public class CustomEnchant {
 
     public String getName() {
         return name;
+    }
+
+    public String[] getDesc() {
+        return description;
     }
 
     public int getLevel() {
