@@ -86,7 +86,7 @@ public class Hammer extends BaseAbility {
         }
         player.getWorld().playSound(event.getClickedBlock().getLocation(), Sound.ZOMBIE_WOOD, 0.1f, 2.2f - CWUtil.randomFloat());
         if (effect == ParticleEffect.SMOKE_NORMAL) {
-            if (CWUtil.randomFloat() < dvz.getGM().getMonsterPower(0.2f) + 0.02f) {
+            if (CWUtil.randomFloat() < dvz.getGM().getMonsterPower(0.08f) + 0.01f) {
                 if (event.getClickedBlock().getType() == Material.SMOOTH_BRICK && event.getClickedBlock().getData() == 0) {
                     event.getClickedBlock().setData((byte)(2));
                 } else {

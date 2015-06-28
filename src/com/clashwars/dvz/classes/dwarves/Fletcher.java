@@ -136,8 +136,8 @@ public class Fletcher extends DwarfClass {
             dvz.getSM().changeLocalStatVal(cwp.getUUID(), StatType.FLETCHER_FEATHERS_COLLECTED, 2);
         } else {
             ParticleEffect.PORTAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 8, entity.getLocation(), 500);
-            cwp.addClassExp(1);
             dvz.getSM().changeLocalStatVal(cwp.getUUID(), StatType.FLETCHER_FEATHERS_COLLECTED, 1);
+            cwp.addClassExp(1);
         }
         entity.getWorld().dropItem(entity.getLocation(), feathers);
         ws.spawnChicken(EntityType.CHICKEN, CWUtil.random(ws.getCuboid().getMaxY() + 5, ws.getCuboid().getMaxY() + 15));
@@ -209,10 +209,10 @@ public class Fletcher extends DwarfClass {
                 dvz.getSM().changeLocalStatVal(player, StatType.FLETCHER_ARROWS_CRAFTED, arrows.getAmount());
 
                 dvz.getPM().getPlayer(player).addClassExp(40);
-                // + 1 per gravel
+                // + 1 per flint
                 // + 1 per chicken
                 // + 2 per chicken in air
-                // ~ 68
+                // ~ 63
                 return;
             }
         }
