@@ -45,16 +45,23 @@ public class Baker extends DwarfClass {
         Player player = event.getPlayer();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         if (cwp.getPlayerClass() != DvzClass.BAKER) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need to be a baker to harvest wheat! &4&l<<"));
             return;
         }
 
         if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
-            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your wheat! &4&l<<"));
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop by placing your workbench on one of the pistons! &4&l<<"));
             dvz.logTimings("Baker.blockBreak()[no workshop]", t);
             return;
         }
 
         BakerWorkshop ws = (BakerWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
+        if (!ws.isBuild()) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop by placing your workbench on one of the pistons! &4&l<<"));
+            dvz.logTimings("Baker.blockBreak()[no workshop build]", t);
+            return;
+        }
+
         if (!ws.getWheatBlocks().contains(block)) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your wheat! &4&l<<"));
             dvz.logTimings("Baker.blockBreak()[other workshop]", t);
@@ -82,18 +89,25 @@ public class Baker extends DwarfClass {
         Player player = event.getPlayer();
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         if (cwp.getPlayerClass() != DvzClass.BAKER) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need to be a baker to sow grain! &4&l<<"));
             return;
         }
 
         if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
-            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your workshop! &4&l<<"));
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop by placing your workbench on one of the pistons! &4&l<<"));
             dvz.logTimings("Baker.blockPlace()[no workshop]", t);
             return;
         }
 
         BakerWorkshop ws = (BakerWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
+        if (!ws.isBuild()) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop by placing your workbench on one of the pistons! &4&l<<"));
+            dvz.logTimings("Baker.blockPlace()[no workshop build]", t);
+            return;
+        }
+
         if (!ws.getWheatBlocks().contains(block)) {
-            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your workshop! &4&l<<"));
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your soil! &4&l<<"));
             dvz.logTimings("Baker.blockPlace()[other workshop]", t);
             return;
         }
@@ -173,9 +187,13 @@ public class Baker extends DwarfClass {
         }
 
         if (flourCount > 0) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&6&l>> &eGrinded your wheat in to " + flourCount + " flour! &7(Bake the flour in the furnace) &6&l<<"));
             CWUtil.dropItemStack(ws.getHopperBlock().getRelative(BlockFace.DOWN).getLocation(), Product.FLOUR.getItem(flourCount), dvz, player);
             dvz.getPM().getPlayer(player).addClassExp(flourCount * 3);
             dvz.getSM().changeLocalStatVal(player, StatType.BAKER_FLOUR_GRINDED, flourCount);
+        } else {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&6&l>> &eWheat added in the grinder! &8[&e" + wheatCount
+                    + "&8/&6" + getIntOption("wheat-per-flour") + "&8]  &6&l<<"));
         }
         dvz.logTimings("Baker.hopperItemTake()", t);
     }
