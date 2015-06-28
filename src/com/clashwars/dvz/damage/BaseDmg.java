@@ -24,6 +24,10 @@ public class BaseDmg {
         return player.getName() + " died";
     }
 
+    public String getDmgMsg(boolean damageTaken) {
+        return "unknown damage";
+    }
+
     public OfflinePlayer getPlayer() {
         return player;
     }

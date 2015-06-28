@@ -11,22 +11,25 @@ public class CustomDmg extends BaseDmg {
 
     private OfflinePlayer damageSource;
     private String deathMsg;
+    private String dmgMsg;
 
-    public CustomDmg(Player player, double damage, String deathMessage) {
+    public CustomDmg(Player player, double damage, String deathMessage, String dmgMsg) {
         super(player, damage);
 
         type = DmgType.CUSTOM;
         deathMsg = deathMessage;
+        this.dmgMsg = dmgMsg;
         damage();
     }
 
-    public CustomDmg(OfflinePlayer player, double damage, String deathMessage, OfflinePlayer damageSource) {
+    public CustomDmg(OfflinePlayer player, double damage, String deathMessage, String dmgMsg, OfflinePlayer damageSource) {
         super(player, damage);
 
         this.damageSource = damageSource;
 
         type = DmgType.CUSTOM;
         deathMsg = deathMessage;
+        this.dmgMsg = dmgMsg;
         damage();
     }
 
@@ -49,6 +52,14 @@ public class CustomDmg extends BaseDmg {
             msg = msg.replace("{1}", damageSource.getName());
         }
         return msg;
+    }
+
+    @Override
+    public String getDmgMsg(boolean damageTaken) {
+        if (damageSource != null) {
+            return dmgMsg.replace("{1}", damageSource.getName());
+        }
+        return dmgMsg;
     }
 
     public OfflinePlayer getDamageSource() {

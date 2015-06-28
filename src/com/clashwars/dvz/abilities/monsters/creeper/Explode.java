@@ -140,6 +140,9 @@ public class Explode extends BaseAbility {
         if (dvz.getGM().getMonsterPower(3) >= 1) {
             List<Player> players = CWUtil.getNearbyPlayers(loc, power * 0.75f);
             for (Player p : players) {
+                if (p.getUniqueId().equals(caster.getUniqueId())) {
+                    continue;
+                }
                 if (dvz.getPM().getPlayer(p).isDwarf()) {
                     new AbilityDmg(p, 0.5f * power, ability, caster);
                     Vector dir = p.getLocation().toVector().subtract(loc.toVector()).normalize();
@@ -181,6 +184,6 @@ public class Explode extends BaseAbility {
             }
         }
 
-        new CustomDmg(caster, 500, "{0} exploded");
+        new CustomDmg(caster, 500, "{0} exploded", "explode");
     }
 }

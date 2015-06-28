@@ -247,7 +247,7 @@ public class FilterMenu implements Listener {
         }
 
         if (event.getRawSlot() > menu.getSize()) {
-
+            return;
         }
 
         event.setCancelled(true);

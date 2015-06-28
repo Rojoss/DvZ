@@ -48,6 +48,14 @@ public class RangedDmg extends BaseDmg {
         return deathMsg.replace("{0}", player.getName()).replace("{1}", shooter.getName()).replace("{2}", projectileType.toString().toLowerCase().replace("_", " "));
     }
 
+    @Override
+    public String getDmgMsg(boolean damageTaken) {
+        if (damageTaken) {
+            return "shot by " + shooter.getName() + "'s " + projectileType.toString().toLowerCase().replace("_", " ");
+        }
+        return "shot " + player.getName() + " with an " + projectileType.toString().toLowerCase().replace("_", " ");
+    }
+
     public OfflinePlayer getShooter() {
         return shooter;
     }

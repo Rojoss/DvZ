@@ -82,6 +82,25 @@ public class EnvironmentDmg extends BaseDmg {
         return deathMsg.replace("{0}", player.getName()).replace("{1}", cause.toString().toLowerCase().replace("_"," "));
     }
 
+    @Override
+    public String getDmgMsg(boolean damageTaken) {
+        String dmgMsg = cause.toString().toLowerCase().replace("_", " ");
+        if (cause == EntityDamageEvent.DamageCause.CONTACT) {
+            dmgMsg = "cactus";
+        } else if (cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+            dmgMsg = "mob attack";
+        } else if (cause == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
+            dmgMsg = "creeper explosion";
+        } else if (cause == EntityDamageEvent.DamageCause.FALLING_BLOCK) {
+            dmgMsg = "falling anvil";
+        } else if (cause == EntityDamageEvent.DamageCause.FIRE) {
+            dmgMsg = "walk in fire";
+        } else if (cause == EntityDamageEvent.DamageCause.FIRE_TICK) {
+            dmgMsg = "fire";
+        }
+        return dmgMsg;
+    }
+
     public EntityDamageEvent.DamageCause getCause() {
         return cause;
     }

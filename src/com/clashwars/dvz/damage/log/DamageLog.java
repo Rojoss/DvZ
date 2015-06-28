@@ -1,6 +1,8 @@
 package com.clashwars.dvz.damage.log;
 
 import com.clashwars.cwcore.Debug;
+import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.damage.CustomDamageEvent;
 import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.damage.types.MeleeDmg;
@@ -12,6 +14,8 @@ public class DamageLog {
 
     public UUID logOwner;
     public String deathMsg;
+    public DvzClass deathClass;
+    public Long deathTime;
     public List<DamageLogEntry> log = new ArrayList<DamageLogEntry>();
 
     public DamageLog(UUID logOwner) {
@@ -43,16 +47,21 @@ public class DamageLog {
         }
     }
 
-    public Set<String> getDmgMessages() {
-        Set<String> logMessages = new HashSet<String>();
+    public List<String> getDmgMessages() {
+        List<String> logMessages = new ArrayList<String>();
         for (DamageLogEntry logEntry : log) {
+            if (logEntry.dmgClass.getDmg() == 0) {
+                continue;
+            }
             if (logEntry.dmgTaken) {
-                logMessages.add("&c" + "&8[&c" + logEntry.health + "&4>&c" + (logEntry.health - logEntry.dmgClass.getDmg()) + "&8]");
+                logMessages.add("&4&l-" + CWUtil.round((float)logEntry.dmgClass.getDmg(), 2) + " &c" + logEntry.dmgClass.getDmgMsg(logEntry.dmgTaken) + " &8[&6" +
+                        CWUtil.round((float)logEntry.health, 2) + "&7>&e" + CWUtil.round((float)(logEntry.health - logEntry.dmgClass.getDmg()), 2) + "&8]");
             } else {
-                logMessages.add("&a" + "&8[&a" + logEntry.health + "&2>&a" + (logEntry.health - logEntry.dmgClass.getDmg()) + "&8]");
+                logMessages.add("&4&l-" + CWUtil.round((float)logEntry.dmgClass.getDmg(), 2) + " &a" + logEntry.dmgClass.getDmgMsg(logEntry.dmgTaken).replace(" by", "") + " &8[&6" +
+                        CWUtil.round((float)logEntry.health, 2) + "&7>&e" + CWUtil.round((float)(logEntry.health - logEntry.dmgClass.getDmg()), 2) + "&8]");
             }
         }
-        return null;
+        return logMessages;
     }
 
 }

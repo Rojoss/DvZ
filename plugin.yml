@@ -45,3 +45,7 @@ commands:
     description: View statistics.
     usage: /<command>
     aliases: [statistics,stat]
+  damagelog:
+    description: View your damage log
+    usage: /<command>
+    aliases: [dmglog,dlog,damage,dmg]

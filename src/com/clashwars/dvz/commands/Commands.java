@@ -122,6 +122,16 @@ public class Commands {
             return true;
         }
 
+        if (label.equalsIgnoreCase("dmglog") || label.equalsIgnoreCase("dmg") || label.equalsIgnoreCase("damagelog") || label.equalsIgnoreCase("dlog") || label.equalsIgnoreCase("damage")) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                return true;
+            }
+
+            dvz.getDamageLogMenu().showMenu((Player) sender);
+            return true;
+        }
+
         if (label.equalsIgnoreCase("stats") || label.equalsIgnoreCase("stat") || label.equalsIgnoreCase("statistics")) {
             if (!(sender instanceof Player)) {
                 sender.sendMessage(Util.formatMsg("&cPlayer command only."));

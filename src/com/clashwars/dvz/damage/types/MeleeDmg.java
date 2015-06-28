@@ -37,6 +37,14 @@ public class MeleeDmg extends BaseDmg {
         return deathMsg.replace("{0}", player.getName()).replace("{1}", attacker.getName());
     }
 
+    @Override
+    public String getDmgMsg(boolean damageTaken) {
+        if (damageTaken) {
+            return "hit by " + attacker.getName();
+        }
+        return "hit " + player.getName();
+    }
+
     public OfflinePlayer getAttacker() {
         return attacker;
     }

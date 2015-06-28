@@ -13,6 +13,7 @@ import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.commands.Commands;
 import com.clashwars.dvz.config.*;
 import com.clashwars.dvz.damage.DamageHandler;
+import com.clashwars.dvz.damage.log.LogMenu;
 import com.clashwars.dvz.events.*;
 import com.clashwars.dvz.maps.MapManager;
 import com.clashwars.dvz.mysql.MySQL;
@@ -94,6 +95,7 @@ public class DvZ extends JavaPlugin {
     private BannerMenu bannerMenu;
     private PatternMenu patternMenu;
     private SettingsMenu settingsMenu;
+    private LogMenu logMenu;
 
     private TimingsLog timingsLog;
     boolean timingsEnabled = false;
@@ -211,6 +213,7 @@ public class DvZ extends JavaPlugin {
         bannerMenu = new BannerMenu(this);
         patternMenu = new PatternMenu(this);
         settingsMenu = new SettingsMenu(this);
+        logMenu = new LogMenu(this);
 
         registerEvents();
 
@@ -252,6 +255,7 @@ public class DvZ extends JavaPlugin {
         pm.registerEvents(bannerMenu, this);
         pm.registerEvents(patternMenu, this);
         pm.registerEvents(settingsMenu, this);
+        pm.registerEvents(logMenu, this);
         pm.registerEvents(getSM().filterMenu, this);
         pm.registerEvents(getSM().statsMenu, this);
         pm.registerEvents(getSM().playerMenu, this);
@@ -480,6 +484,10 @@ public class DvZ extends JavaPlugin {
 
     public SettingsMenu getSettingsMenu() {
         return settingsMenu;
+    }
+
+    public LogMenu getDamageLogMenu() {
+        return logMenu;
     }
 
 }

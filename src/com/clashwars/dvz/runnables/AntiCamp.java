@@ -52,7 +52,7 @@ public class AntiCamp extends BukkitRunnable {
         for (Player p : players) {
             if (dvz.getPM().getPlayer(p).isDwarf()) {
                 if (p.getLocation().distance(monsterLoc) <= range) {
-                    new CustomDmg(p, 2, "{0} died from camping the monsters!");
+                    new CustomDmg(p, 2, "{0} died from camping the monsters!", "monster camping");
                     ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(Material.REDSTONE_BLOCK, (byte) 0), 0.4f, 1.0f, 0.4f, 0.01f, 20, p.getLocation());
                 } else {
                     p.sendMessage(Util.formatMsg("&4&lDon't camp the monsters!"));

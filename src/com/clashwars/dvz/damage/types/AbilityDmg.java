@@ -1,6 +1,7 @@
 package com.clashwars.dvz.damage.types;
 
 import com.clashwars.cwcore.Debug;
+import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.damage.BaseDmg;
 import com.clashwars.dvz.damage.CustomDamageEvent;
@@ -56,6 +57,17 @@ public class AbilityDmg extends BaseDmg {
             deathMsg = deathMsg.replace("{1}", caster.getName());
         }
         return deathMsg;
+    }
+
+    @Override
+    public String getDmgMsg(boolean damageTaken) {
+        if (damageTaken) {
+            if (caster != null) {
+                return caster.getName() + "'s " + CWUtil.stripAllColor(ability.getAbilityClass().getDisplayName()).toLowerCase();
+            }
+            return CWUtil.stripAllColor(ability.getAbilityClass().getDisplayName()).toLowerCase();
+        }
+        return CWUtil.stripAllColor(ability.getAbilityClass().getDisplayName()).toLowerCase() + " hit " + player.getName();
     }
 
     public Ability getAbility() {

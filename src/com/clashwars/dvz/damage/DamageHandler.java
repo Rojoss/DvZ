@@ -72,6 +72,12 @@ public class DamageHandler implements Listener {
         }
 
         if (damager != null) {
+            List<DamageLog> dmgLogsDmger = dvz.getPM().getPlayer(damager).damageLogs;
+            if (dmgLogsDmger == null || dmgLogsDmger.size() < 1) {
+                dvz.getPM().getPlayer(damager).damageLogs.add(new DamageLog(damager.getUniqueId()));
+            }
+            dmgLogsDmger.get(dmgLogsDmger.size() -1).updateLog(event);
+
             if (cwp.isMonster()) {
                 dvz.getSM().changeLocalStatVal(damager.getUniqueId(), StatType.COMBAT_DWARF_DAMAGE_DEALT, (float) event.getDamage());
             } else if (cwp.isDwarf()) {
@@ -128,11 +134,6 @@ public class DamageHandler implements Listener {
         } else {
             new EnvironmentDmg(player, dmg, event.getCause());
         }
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    private void damageTakeByEntity(EntityDamageByEntityEvent event) {
-        //event.setCancelled(true);
     }
 
     @EventHandler
@@ -301,7 +302,11 @@ public class DamageHandler implements Listener {
         */
 
 
-        //New damage log.
+        //Save damage log and create new one.
+        dmgLog.deathMsg = deathMsg;
+        dmgLog.deathClass = cwp.getPlayerClass();
+        dmgLog.deathTime = System.currentTimeMillis();
+        cwp.damageLogs.set(cwp.damageLogs.size()-1, dmgLog);
         dvz.getPM().getPlayer(event.getEntity()).damageLogs.add(new DamageLog(event.getEntity().getUniqueId()));
 
         //Instant respawning.
