@@ -1,6 +1,7 @@
 package com.clashwars.dvz.classes.dwarves;
 
 import com.clashwars.cwcore.Debug;
+import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.Product;
@@ -11,6 +12,7 @@ import com.clashwars.dvz.workshop.MinerWorkshop;
 import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
@@ -41,17 +43,45 @@ public class Miner extends DwarfClass {
         DvzItem pickaxe = new DvzItem(Material.DIAMOND_PICKAXE, 1, -1, -1);
         pickaxe.addEnchantment(Enchantment.DIG_SPEED, 1);
         equipment.add(pickaxe);
+        equipment.add(new DvzItem(Material.STONE_AXE, 1, -1, -1));
     }
 
     @EventHandler(priority = EventPriority.HIGH)
     private void blockBreak(BlockBreakEvent event) {
         Long t = System.currentTimeMillis();
         final Block block = event.getBlock();
+        final Player player = event.getPlayer();
+
+        if (block.getType() == Material.LOG || block.getType() == Material.LOG_2) {
+            if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.MINER) {
+                return;
+            }
+
+            CWUtil.dropItemStack(block.getLocation(), Product.MINER_STICK.getItem(), dvz, player);
+            dvz.getPM().getPlayer(player).addClassExp(1);
+            dvz.getSM().changeLocalStatVal(player, StatType.MINER_WOOD_CHOPPED, 1);
+
+            final Material originalType = block.getType();
+            final byte originalData = block.getData();
+            new BukkitRunnable() {
+                @Override
+                public void run()   {
+                    if (block.getType() == Material.AIR) {
+                        block.setType(originalType);
+                        block.setData(originalData);
+                        ParticleEffect.CRIT.display(0.7f, 0.7f, 0.7f, 0.0001f, 5, block.getLocation().add(0.5f, 0.5f, 0.5f));
+                        block.getWorld().playSound(block.getLocation(), Sound.DIG_WOOD, 1.0f, 1.3f);
+                    }
+                }
+
+            }.runTaskLater(dvz, getIntOption("wood-respawn-time"));
+            dvz.logTimings("Miner.blockBreak()[wood]", t);
+        }
+
         if (!mineableMaterials.contains(block.getType())) {
             return;
         }
 
-        final Player player = event.getPlayer();
         if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.MINER) {
             return;
         }
@@ -188,6 +218,8 @@ public class Miner extends DwarfClass {
         int iron = 0;
         int gold = 0;
         int diamond = 0;
+        int sticks = 0;
+        int sticksNeeded = getIntOption("sticks-needed");
         boolean craft = false;
         for (int i = 0; i < inv.getSize(); i++) {
             ItemStack item = inv.getItem(i);
@@ -201,20 +233,27 @@ public class Miner extends DwarfClass {
                 gold += item.getAmount();
             } else if (item.getType() == Product.IRON_INGOT.getItem().getType()) {
                 iron += item.getAmount();
+            } else if (item.getType() == Product.MINER_STICK.getItem().getType()) {
+                sticks += item.getAmount();
             }
 
-            if (iron >= 3) {
-                CWUtil.removeItems(inv, Product.IRON_INGOT.getItem(), 3, true);
-                CWUtil.dropItemStack(dropLoc, Product.GREATSWORD.getItem(), dvz, player);
-                craft = true;
-            } else if (gold >= 3) {
-                CWUtil.removeItems(inv, Product.GOLD_INGOT.getItem(), 3, true);
-                CWUtil.dropItemStack(dropLoc, Product.FIERY_FLAIL.getItem(), dvz, player);
-                craft = true;
-            } else if (diamond >= 3) {
-                CWUtil.removeItems(inv, Product.DIAMOND.getItem(), 3, true);
-                CWUtil.dropItemStack(dropLoc, Product.BATTLEAXE.getItem(), dvz, player);
-                craft = true;
+            if (sticks >= sticksNeeded) {
+                if (iron >= 3) {
+                    CWUtil.removeItems(inv, Product.MINER_STICK.getItem(), sticksNeeded, true);
+                    CWUtil.removeItems(inv, Product.IRON_INGOT.getItem(), 3, true);
+                    CWUtil.dropItemStack(dropLoc, Product.GREATSWORD.getItem(), dvz, player);
+                    craft = true;
+                } else if (gold >= 3) {
+                    CWUtil.removeItems(inv, Product.MINER_STICK.getItem(), sticksNeeded, true);
+                    CWUtil.removeItems(inv, Product.GOLD_INGOT.getItem(), 3, true);
+                    CWUtil.dropItemStack(dropLoc, Product.FIERY_FLAIL.getItem(), dvz, player);
+                    craft = true;
+                } else if (diamond >= 3) {
+                    CWUtil.removeItems(inv, Product.MINER_STICK.getItem(), sticksNeeded, true);
+                    CWUtil.removeItems(inv, Product.DIAMOND.getItem(), 3, true);
+                    CWUtil.dropItemStack(dropLoc, Product.BATTLEAXE.getItem(), dvz, player);
+                    craft = true;
+                }
             }
             if (craft) {
                 break;
@@ -233,7 +272,11 @@ public class Miner extends DwarfClass {
             dvz.logTimings("Miner.interact()[craft]", t);
             return;
         } else {
-            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need at least 3 iron, gold or diamond to craft! &4&l<<"));
+            if (sticks < sticksNeeded) {
+                CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (sticksNeeded - sticks) + " more STICKS to craft weapons! &4&l<<"));
+            } else {
+                CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need at least 3 iron, gold or diamond to craft! &4&l<<"));
+            }
         }
         dvz.logTimings("Miner.interact()", t);
     }

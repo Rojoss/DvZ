@@ -12,6 +12,7 @@ import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.workshop.FletcherWorkshop;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -24,6 +25,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
@@ -39,6 +41,7 @@ public class Fletcher extends DwarfClass {
         DvzItem spade = new DvzItem(Material.STONE_SPADE, 1, -1, -1);
         spade.addEnchantment(Enchantment.DIG_SPEED, 1);
         equipment.add(spade);
+        equipment.add(new DvzItem(Material.STONE_AXE, 1, -1, -1));
     }
 
     @EventHandler
@@ -181,24 +184,29 @@ public class Fletcher extends DwarfClass {
         Location dropLoc = event.getClickedBlock().getLocation().add(0.5f, 1f, 0.5f);
         int flint = 0;
         int feathers = 0;
+        int sticks = 0;
         int flintNeeded = getIntOption("flint-needed");
         int feathersNeeded = getIntOption("feathers-needed");
-        //Find all feathers/flint in inventory.
+        int sticksNeeded = getIntOption("sticks-needed");
+        //Find all feathers/flint/sticks in inventory.
         for (int i = 0; i < inv.getSize(); i++) {
             ItemStack item = inv.getItem(i);
             if (item == null || item.getType() == Material.AIR) {
                 continue;
             }
-            //Increase flint/feathers amt if the current item is flint/feather.
+            //Increase flint/feathers/sticks amt if the current item is flint/feather.
             if (item.getType() == Product.FLINT.getItem().getType()) {
                 flint += item.getAmount();
             } else if (item.getType() == Product.FEATHER.getItem().getType()) {
                 feathers += item.getAmount();
+            } else if (item.getType() == Product.FLETCHER_STICK.getItem().getType()) {
+                sticks += item.getAmount();
             }
-            //if enough feathers and flint then craft.
-            if (feathers >= feathersNeeded && flint >= flintNeeded) {
+            //if enough feathers, flint and sticks then craft.
+            if (feathers >= feathersNeeded && flint >= flintNeeded && sticks >= sticksNeeded) {
                 CWUtil.removeItems(inv, Product.FLINT.getItem(), flintNeeded, true);
                 CWUtil.removeItems(inv, Product.FEATHER.getItem(), feathersNeeded, true);
+                CWUtil.removeItems(inv, Product.FLETCHER_STICK.getItem(), sticksNeeded, true);
                 //Random chance to get a bow.
                 if (CWUtil.randomFloat() <= getDoubleOption("bow-product-chance")) {
                     dropLoc.getWorld().dropItem(dropLoc, Product.BOW.getItem());
@@ -212,10 +220,11 @@ public class Fletcher extends DwarfClass {
 
                 dvz.getSM().changeLocalStatVal(player, StatType.FLETCHER_ARROWS_CRAFTED, arrows.getAmount());
 
-                dvz.getPM().getPlayer(player).addClassExp(40);
+                dvz.getPM().getPlayer(player).addClassExp(35);
                 // + 1 per flint
                 // + 1 per chicken
                 // + 2 per chicken in air
+                // + 1 per stick
                 // ~ 63
                 return;
             }
@@ -225,6 +234,8 @@ public class Fletcher extends DwarfClass {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (feathersNeeded - feathers) + " more FEATHERS to craftl! &4&l<<"));
         } else if (flint < flintNeeded) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (flintNeeded - flint) + " more FLINT to craftl! &4&l<<"));
+        } else if (sticks < sticksNeeded) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (sticksNeeded - sticks) + " more STICKS to craftl! &4&l<<"));
         }
         dvz.logTimings("Fletcher.interact()", t);
     }
@@ -233,12 +244,39 @@ public class Fletcher extends DwarfClass {
     @EventHandler(priority = EventPriority.HIGH)
     private void blockBreak(BlockBreakEvent event) {
         Long t = System.currentTimeMillis();
-        Block block = event.getBlock();
+        final Block block = event.getBlock();
+
+        Player player = event.getPlayer();
+        if (block.getType() == Material.LOG || block.getType() == Material.LOG_2) {
+            if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.FLETCHER) {
+                return;
+            }
+
+            CWUtil.dropItemStack(block.getLocation(), Product.FLETCHER_STICK.getItem(), dvz, player);
+            dvz.getPM().getPlayer(player).addClassExp(1);
+            dvz.getSM().changeLocalStatVal(player, StatType.MINER_WOOD_CHOPPED, 1);
+
+            final Material originalType = block.getType();
+            final byte originalData = block.getData();
+            new BukkitRunnable() {
+                @Override
+                public void run()   {
+                    if (block.getType() == Material.AIR) {
+                        block.setType(originalType);
+                        block.setData(originalData);
+                        ParticleEffect.CRIT.display(0.7f, 0.7f, 0.7f, 0.0001f, 5, block.getLocation().add(0.5f, 0.5f, 0.5f));
+                        block.getWorld().playSound(block.getLocation(), Sound.DIG_WOOD, 1.0f, 1.3f);
+                    }
+                }
+
+            }.runTaskLater(dvz, getIntOption("wood-respawn-time"));
+            dvz.logTimings("Fletcher.blockBreak()[wood]", t);
+        }
+
         if (block.getType() != Material.GRAVEL) {
             return;
         }
 
-        Player player = event.getPlayer();
         if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.FLETCHER) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need to be a fletcher to collect flint! &4&l<<"));
             return;

@@ -63,6 +63,8 @@ public class ClassesCfg extends EasyConfig {
                 classData = loadDefault(classData, "ore-drops", "1");
                 classData = loadDefault(classData, "min-respawn-time", "200");
                 classData = loadDefault(classData, "max-respawn-time", "800");
+                classData = loadDefault(classData, "wood-respawn-time", "600");
+                classData = loadDefault(classData, "sticks-needed", "1");
                 break;
             case FLETCHER:
                 classData = loadDefault(classData, "workshop-types", "1");
@@ -78,6 +80,8 @@ public class ClassesCfg extends EasyConfig {
                 classData = loadDefault(classData, "animal-respawn-time-max", "300");
                 classData = loadDefault(classData, "chicken-amount", "4");
                 classData = loadDefault(classData, "pig-amount", "2");
+                classData = loadDefault(classData, "wood-respawn-time", "600");
+                classData = loadDefault(classData, "sticks-needed", "1");
                 break;
             case TAILOR:
                 classData = loadDefault(classData, "workshop-types", "1");
