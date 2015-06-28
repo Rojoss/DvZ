@@ -14,6 +14,10 @@ public class PlayerSettings {
     //If this is true it will open the stats display with the last known settings
     public boolean statsDirect = false;
 
+    //Sets the amount of death messages to display.
+    public int dwarfDeathMessages = 1; //0=none, 1=all, 2=personal, 3=personal/assists
+    public int monsterDeathMessages = 1; //0=none, 1=all, 2=personal, 3=personal/assists
+
     //These settings are stored for players for statistics.
     public int stat_categorySelected = 1;
     public int stat_statSelected = 1;

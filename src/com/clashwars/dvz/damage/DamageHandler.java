@@ -13,6 +13,7 @@ import com.clashwars.dvz.damage.types.*;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.player.PlayerSettings;
 import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.util.Util;
 import net.minecraft.server.v1_8_R2.PacketPlayInClientCommand;
@@ -29,6 +30,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -90,7 +92,7 @@ public class DamageHandler implements Listener {
             return;
         }
 
-        event.setDamage(EntityDamageEvent.DamageModifier.MAGIC, event.getDamage(EntityDamageEvent.DamageModifier.MAGIC) / 4);
+        event.setDamage(EntityDamageEvent.DamageModifier.MAGIC, event.getDamage(EntityDamageEvent.DamageModifier.MAGIC) / 100 * 75);
 
         double dmg = event.getDamage();
         double finalDmg = event.getFinalDamage();
@@ -206,7 +208,7 @@ public class DamageHandler implements Listener {
         }
 
         if (cwp.isMonster()) {
-            dvz.getServer().broadcastMessage(CWUtil.integrateColor("&4>> &7&o" + deathMsg + " &4<<"));
+            broadcastDeathMessage(ClassType.MONSTER, CWUtil.integrateColor("&4>> &7&o" + deathMsg + " &4<<"));
             dvz.getSM().changeLocalStatVal(player, StatType.COMBAT_MONSTER_DEATHS, 1);
 
             if (killer != null) {
@@ -231,7 +233,7 @@ public class DamageHandler implements Listener {
                 }
             }
         } else if (cwp.isDwarf()) {
-            dvz.getServer().broadcastMessage(CWUtil.integrateColor("&6>> &7&o" + deathMsg + " &6<<"));
+            broadcastDeathMessage(ClassType.DWARF, CWUtil.integrateColor("&6>> &7&o" + deathMsg + " &6<<"));
             dvz.getSM().changeLocalStatVal(player, StatType.COMBAT_DWARF_DEATHS, 1);
 
             if (killer != null && dvz.getGM().getDragonPlayer().getName().equals(killer.getName())) {
@@ -251,7 +253,7 @@ public class DamageHandler implements Listener {
                 dvz.getServer().broadcastMessage(Util.formatMsg("&d&lThe DragonSlayer died!"));
             }
         } else if (cwp.getPlayerClass().getType() == ClassType.DRAGON) {
-            dvz.getServer().broadcastMessage(CWUtil.integrateColor("&5>> &7&o" + deathMsg + " &5<<"));
+            broadcastDeathMessage(ClassType.DRAGON, CWUtil.integrateColor("&5>> &7&o" + deathMsg + " &5<<"));
 
             //First dragon death
             if (dvz.getGM().getState() == GameState.DRAGON && dvz.getGM().getDragonPlayer().getName().equalsIgnoreCase(player.getName())) {
@@ -312,6 +314,22 @@ public class DamageHandler implements Listener {
                 }
             }
         });
+    }
+
+    private void broadcastDeathMessage(ClassType classType, String deathMsg) {
+        Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
+        for (Player player : players) {
+            PlayerSettings settings = dvz.getSettingsCfg().getSettings(player.getUniqueId());
+            if (settings != null) {
+                if (settings.dwarfDeathMessages == 0 && classType == ClassType.DWARF) {
+                    continue;
+                }
+                if (settings.monsterDeathMessages == 0 && classType == ClassType.MONSTER) {
+                    continue;
+                }
+                player.sendMessage(CWUtil.integrateColor(deathMsg));
+            }
+        }
     }
 
 

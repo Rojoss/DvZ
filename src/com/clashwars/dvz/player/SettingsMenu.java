@@ -25,6 +25,8 @@ public class SettingsMenu implements Listener {
         menu.setSlot(new CWItem(Material.PAPER).setName("&6&lAutomatic Help").setLore(new String[]{"&7Toggle automatic help messages &aon&7/&coff&7.", "&7When enabled and you ask something in chat,", "&7you might receive an answer to your question."}), 0, null);
         menu.setSlot(new CWItem(Material.PAPER).setName("&6&lWebsite Account Warning").setLore(new String[] {"&7Toggle the website login warning &aon&7/&coff&7.", "&7When disabled you will no longer get a", "&7warning if your acount isn't synced with the website."}), 1, null);
         menu.setSlot(new CWItem(Material.PAPER).setName("&6&l/stats Menu").setLore(new String[] {"&7Choose what menu you want to display with /stats&7.", "&7By default it will open the main filter menu.", "&7But you can also set the stat menu as default.", "&7When you do this, your last filter settings will be used."}), 2, null);
+        menu.setSlot(new CWItem(Material.PAPER).setName("&6&lDwarf death messages").setLore(new String[] {"&7Choose what dwarf death message you want to see.", "&7By default you will see all dwarf deaths.", "&7Options are: all, none, personal, personal/assists."}), 3, null);
+        menu.setSlot(new CWItem(Material.PAPER).setName("&6&lMonster death messages").setLore(new String[] {"&7Choose what monster death message you want to see.", "&7By default you will see all monster deaths.", "&7Options are: all, none, personal, personal/assists."}), 4, null);
     }
 
 
@@ -35,6 +37,8 @@ public class SettingsMenu implements Listener {
         updateTips(player, false);
         updateEnjinWarnings(player, false);
         updateStatsMode(player, false);
+        updateDwarfDeathMessages(player , false);
+        updateMonsterDeathMessages(player, false);
     }
 
 
@@ -80,6 +84,48 @@ public class SettingsMenu implements Listener {
         }
     }
 
+    public void updateDwarfDeathMessages(Player player, boolean toggle) {
+        PlayerSettings settings = dvz.getSettingsCfg().getSettings(player.getUniqueId());
+        if (toggle) {
+            settings.dwarfDeathMessages++;
+            if (settings.dwarfDeathMessages > 3) {
+                settings.dwarfDeathMessages = 0;
+            }
+            dvz.getSettingsCfg().setSettings(player.getUniqueId(), settings);
+        }
+
+        if (settings.dwarfDeathMessages == 0) {
+            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte)8).setName("&4&lNone").setLore(new String[]{"&7"}), 12, player);
+        } else if (settings.dwarfDeathMessages == 1) {
+            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte) 10).setName("&a&lAll").setLore(new String[]{"&7"}), 12, player);
+        } else if (settings.dwarfDeathMessages == 2) {
+            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte) 5).setName("&a&lPersonal kills/deaths and assists").setLore(new String[]{"&7"}), 12, player);
+        } else if (settings.dwarfDeathMessages == 3) {
+            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte) 13).setName("&a&lPersonal kills/deaths").setLore(new String[]{"&7"}), 12, player);
+        }
+    }
+
+    public void updateMonsterDeathMessages(Player player, boolean toggle) {
+        PlayerSettings settings = dvz.getSettingsCfg().getSettings(player.getUniqueId());
+        if (toggle) {
+            settings.monsterDeathMessages++;
+            if (settings.monsterDeathMessages > 3) {
+                settings.monsterDeathMessages = 0;
+            }
+            dvz.getSettingsCfg().setSettings(player.getUniqueId(), settings);
+        }
+
+        if (settings.monsterDeathMessages == 0) {
+            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte)8).setName("&4&lNone").setLore(new String[]{"&7"}), 13, player);
+        } else if (settings.monsterDeathMessages == 1) {
+            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte) 10).setName("&a&lAll").setLore(new String[]{"&7"}), 13, player);
+        } else if (settings.monsterDeathMessages == 2) {
+            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte) 5).setName("&a&lPersonal kills/deaths and assists").setLore(new String[]{"&7"}), 13, player);
+        } else if (settings.monsterDeathMessages == 3) {
+            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte) 13).setName("&a&lPersonal kills/deaths").setLore(new String[]{"&7"}), 13, player);
+        }
+    }
+
 
 
     @EventHandler
@@ -112,6 +158,12 @@ public class SettingsMenu implements Listener {
             player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 2);
         } else if (slot == 11) {
             updateStatsMode(player, true);
+            player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 2);
+        } else if (slot == 12) {
+            updateDwarfDeathMessages(player, true);
+            player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 2);
+        } else if (slot == 13) {
+            updateMonsterDeathMessages(player, true);
             player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 2);
         }
     }

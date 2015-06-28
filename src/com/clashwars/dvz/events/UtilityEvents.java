@@ -98,6 +98,7 @@ public class UtilityEvents implements Listener {
         Player damaged = (Player) event.getEntity();
 
         //Increase monster base damage based on power
+        /*
         if (event.getDamager() instanceof Player) {
             Player damager = (Player)event.getDamager();
             CWPlayer cwDamager = dvz.getPM().getPlayer(damager);
@@ -107,6 +108,7 @@ public class UtilityEvents implements Listener {
                 dmgModifier += (int)dvz.getGM().getMonsterPower(4);
             }
         }
+        */
 
         if (damaged.isBlocking()) {
             //Custom block enchantment.

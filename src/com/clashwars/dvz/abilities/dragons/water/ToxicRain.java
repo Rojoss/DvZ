@@ -69,7 +69,7 @@ public class ToxicRain extends BaseAbility {
                             continue;
                         }
                         new AbilityDmg(p, 0, ability, player);
-                        p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, dvz.getGM().getDragonPower() * 30, dvz.getGM().getDragonPower() - 1));
+                        p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, dvz.getGM().getDragonPower() * 20, dvz.getGM().getDragonPower() - 1));
                     }
                 }
                 prevLoc = player.getLocation();

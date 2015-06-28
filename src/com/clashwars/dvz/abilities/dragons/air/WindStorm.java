@@ -53,7 +53,7 @@ public class WindStorm extends BaseAbility {
                     if (iteration > (Math.round(maxIterations / 2) + 2)) {
                         y = CWUtil.randomFloat() - 1;
                     } else {
-                        y = CWUtil.randomFloat() + 0.1f;
+                        y = CWUtil.randomFloat();
                     }
                     ParticleEffect.CLOUD.display(0.5f, 0.5f, 0.5f, 0f, 10, cwp.getLocation());
                     cwp.getPlayer().setVelocity(new Vector(v.getX() * 0.8f, y, v.getZ() * 0.8f));

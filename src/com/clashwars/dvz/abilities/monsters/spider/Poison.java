@@ -32,7 +32,7 @@ public class Poison extends BaseAbility {
     @Override
     public void castAbility(Player player, Location triggerLoc) {
         if (onCooldown(player)) {
-            //return;
+            return;
         }
 
         double range = 4;
@@ -48,11 +48,8 @@ public class Poison extends BaseAbility {
         poisonEffect.start();
 
         List<Player> players = CWUtil.getNearbyPlayers(player.getLocation(), (float)range * 1.5f);
-        Debug.bc(players.size());
         for (Player p : players) {
-            Debug.bc(p.getName());
             if(dvz.getPM().getPlayer(p).isDwarf()) {
-                Debug.bc("Dwarf");
                 p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(100) + 40, 2));
                 ParticleEffect.CRIT.display(1, 0.5f, 1, 0.01f, 10, p.getLocation());
                 new AbilityDmg(p, 0, ability, player);

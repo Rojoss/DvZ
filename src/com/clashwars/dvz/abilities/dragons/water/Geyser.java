@@ -44,7 +44,7 @@ public class Geyser extends BaseAbility {
             }
             players.put(p.getUniqueId(), p.getLocation().toVector());
             p.setVelocity(new Vector(0, getFloatOption("force"), 0));
-            new AbilityDmg(p, dvz.getGM().getDragonPower() * 3 - 3, ability, player);
+            new AbilityDmg(p, dvz.getGM().getDragonPower() * 2 - 1, ability, player);
         }
 
         new BukkitRunnable() {
