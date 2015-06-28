@@ -10,7 +10,8 @@ import java.util.*;
 
 public class DamageLog {
 
-    private UUID logOwner;
+    public UUID logOwner;
+    public String deathMsg;
     public List<DamageLogEntry> log = new ArrayList<DamageLogEntry>();
 
     public DamageLog(UUID logOwner) {

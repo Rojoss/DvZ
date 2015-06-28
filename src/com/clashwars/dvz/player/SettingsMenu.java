@@ -95,13 +95,15 @@ public class SettingsMenu implements Listener {
         }
 
         if (settings.dwarfDeathMessages == 0) {
-            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte)8).setName("&4&lNone").setLore(new String[]{"&7"}), 12, player);
+            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte)8).setName("&4&lNone").setLore(new String[]{"&7You won't see any dwarf death messages."}), 12, player);
         } else if (settings.dwarfDeathMessages == 1) {
-            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte) 10).setName("&a&lAll").setLore(new String[]{"&7"}), 12, player);
+            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte) 10).setName("&a&lAll").setLore(new String[]{"&7You will see all dwarf death messages."}), 12, player);
         } else if (settings.dwarfDeathMessages == 2) {
-            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte) 5).setName("&a&lPersonal kills/deaths and assists").setLore(new String[]{"&7"}), 12, player);
+            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte) 5).setName("&a&lPersonal kills/deaths and assists").setLore(new String[]{"&7You will only see dwarf death messages",
+                    "&7in which you were killed or where you got a kill.", "&7It will also show death messages of kills you assisted with."}), 12, player);
         } else if (settings.dwarfDeathMessages == 3) {
-            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte) 13).setName("&a&lPersonal kills/deaths").setLore(new String[]{"&7"}), 12, player);
+            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte) 13).setName("&a&lPersonal kills/deaths").setLore(new String[]{"&7You will only see dwarf death messages",
+                    "&7in which you were killed or where you got a kill."}), 12, player);
         }
     }
 
@@ -116,13 +118,15 @@ public class SettingsMenu implements Listener {
         }
 
         if (settings.monsterDeathMessages == 0) {
-            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte)8).setName("&4&lNone").setLore(new String[]{"&7"}), 13, player);
+            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte)8).setName("&4&lNone").setLore(new String[]{"&7You won't see any monster death messages."}), 13, player);
         } else if (settings.monsterDeathMessages == 1) {
-            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte) 10).setName("&a&lAll").setLore(new String[]{"&7"}), 13, player);
+            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte) 10).setName("&a&lAll").setLore(new String[]{"&7You will see all monster death messages."}), 13, player);
         } else if (settings.monsterDeathMessages == 2) {
-            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte) 5).setName("&a&lPersonal kills/deaths and assists").setLore(new String[]{"&7"}), 13, player);
+            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte) 5).setName("&a&lPersonal kills/deaths and assists").setLore(new String[]{"&7You will only see monster death messages",
+                    "&7in which you were killed or where you got a kill.", "&7It will also show death messages of kills you assisted with."}), 13, player);
         } else if (settings.monsterDeathMessages == 3) {
-            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte) 13).setName("&a&lPersonal kills/deaths").setLore(new String[]{"&7"}), 13, player);
+            menu.setSlot(new CWItem(Material.INK_SACK, 1, (byte) 13).setName("&a&lPersonal kills/deaths").setLore(new String[]{"&7You will only see monster death messages",
+                    "&7in which you were killed or where you got a kill."}), 13, player);
         }
     }
 

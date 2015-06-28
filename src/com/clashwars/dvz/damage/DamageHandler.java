@@ -30,9 +30,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class DamageHandler implements Listener {
 
@@ -208,7 +206,7 @@ public class DamageHandler implements Listener {
         }
 
         if (cwp.isMonster()) {
-            broadcastDeathMessage(ClassType.MONSTER, CWUtil.integrateColor("&4>> &7&o" + deathMsg + " &4<<"));
+            broadcastDeathMessage(dmgLog, killer, ClassType.MONSTER, CWUtil.integrateColor("&4>> &7&o" + deathMsg + " &4<<"));
             dvz.getSM().changeLocalStatVal(player, StatType.COMBAT_MONSTER_DEATHS, 1);
 
             if (killer != null) {
@@ -233,7 +231,7 @@ public class DamageHandler implements Listener {
                 }
             }
         } else if (cwp.isDwarf()) {
-            broadcastDeathMessage(ClassType.DWARF, CWUtil.integrateColor("&6>> &7&o" + deathMsg + " &6<<"));
+            broadcastDeathMessage(dmgLog, killer, ClassType.DWARF, CWUtil.integrateColor("&6>> &7&o" + deathMsg + " &6<<"));
             dvz.getSM().changeLocalStatVal(player, StatType.COMBAT_DWARF_DEATHS, 1);
 
             if (killer != null && dvz.getGM().getDragonPlayer().getName().equals(killer.getName())) {
@@ -253,7 +251,7 @@ public class DamageHandler implements Listener {
                 dvz.getServer().broadcastMessage(Util.formatMsg("&d&lThe DragonSlayer died!"));
             }
         } else if (cwp.getPlayerClass().getType() == ClassType.DRAGON) {
-            broadcastDeathMessage(ClassType.DRAGON, CWUtil.integrateColor("&5>> &7&o" + deathMsg + " &5<<"));
+            broadcastDeathMessage(dmgLog, killer, ClassType.DRAGON, CWUtil.integrateColor("&5>> &7&o" + deathMsg + " &5<<"));
 
             //First dragon death
             if (dvz.getGM().getState() == GameState.DRAGON && dvz.getGM().getDragonPlayer().getName().equalsIgnoreCase(player.getName())) {
@@ -316,17 +314,83 @@ public class DamageHandler implements Listener {
         });
     }
 
-    private void broadcastDeathMessage(ClassType classType, String deathMsg) {
+    private void broadcastDeathMessage(DamageLog dmgLog, OfflinePlayer killer, ClassType classType, String deathMsg) {
+        if (dmgLog == null || dmgLog.logOwner == null) {
+            dvz.getServer().broadcastMessage(CWUtil.integrateColor(deathMsg));
+            return;
+        }
+
+        //Dragon messages for everyone
+        if (classType == ClassType.DRAGON) {
+            dvz.getServer().broadcastMessage(CWUtil.integrateColor(deathMsg));
+            return;
+        }
+
+        //Get all damagers for assists.
+        List<UUID> damagers = new ArrayList<UUID>();
+        for (DamageLogEntry entry : dmgLog.log) {
+            if (entry.dmgClass instanceof MeleeDmg) {
+                damagers.add(((MeleeDmg) entry.dmgClass).getAttacker().getUniqueId());
+                break;
+            }
+            if (entry.dmgClass instanceof RangedDmg) {
+                damagers.add(((RangedDmg)entry.dmgClass).getShooter().getUniqueId());
+                break;
+            }
+            if (entry.dmgClass instanceof AbilityDmg) {
+                if (((AbilityDmg)entry.dmgClass).hasCaster()) {
+                    damagers.add(((AbilityDmg)entry.dmgClass).getCaster().getUniqueId());
+                    break;
+                }
+            }
+        }
+
         Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
         for (Player player : players) {
             PlayerSettings settings = dvz.getSettingsCfg().getSettings(player.getUniqueId());
             if (settings != null) {
+                //No messages at all
                 if (settings.dwarfDeathMessages == 0 && classType == ClassType.DWARF) {
                     continue;
                 }
                 if (settings.monsterDeathMessages == 0 && classType == ClassType.MONSTER) {
                     continue;
                 }
+
+                //All messages
+                if (settings.dwarfDeathMessages == 1 && classType == ClassType.DWARF) {
+                    player.sendMessage(CWUtil.integrateColor(deathMsg));
+                    continue;
+                }
+                if (settings.monsterDeathMessages == 1 && classType == ClassType.MONSTER) {
+                    player.sendMessage(CWUtil.integrateColor(deathMsg));
+                    continue;
+                }
+
+                //Personal kills/deaths/assists only
+                if (settings.dwarfDeathMessages == 2 && classType == ClassType.DWARF
+                        && ((killer != null && player.getUniqueId().equals(killer.getUniqueId())) || player.getUniqueId().equals(dmgLog.logOwner) || damagers.contains(player.getUniqueId()))) {
+                    player.sendMessage(CWUtil.integrateColor(deathMsg));
+                    continue;
+                }
+                if (settings.monsterDeathMessages == 2 && classType == ClassType.MONSTER
+                        && ((killer != null && player.getUniqueId().equals(killer.getUniqueId())) || player.getUniqueId().equals(dmgLog.logOwner) || damagers.contains(player.getUniqueId()))) {
+                    player.sendMessage(CWUtil.integrateColor(deathMsg));
+                    continue;
+                }
+
+                //Personal kills/deaths only
+                if (settings.dwarfDeathMessages == 3 && classType == ClassType.DWARF
+                        && ((killer != null && player.getUniqueId().equals(killer.getUniqueId())) || player.getUniqueId().equals(dmgLog.logOwner))) {
+                    player.sendMessage(CWUtil.integrateColor(deathMsg));
+                    continue;
+                }
+                if (settings.monsterDeathMessages == 3 && classType == ClassType.MONSTER
+                        && ((killer != null && player.getUniqueId().equals(killer.getUniqueId())) || player.getUniqueId().equals(dmgLog.logOwner))) {
+                    player.sendMessage(CWUtil.integrateColor(deathMsg));
+                    continue;
+                }
+            } else {
                 player.sendMessage(CWUtil.integrateColor(deathMsg));
             }
         }
