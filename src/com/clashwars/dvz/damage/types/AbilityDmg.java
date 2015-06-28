@@ -34,6 +34,7 @@ public class AbilityDmg extends BaseDmg {
         damage();
     }
 
+    /*
     @Override
     public void damage() {
         if (player != null && player.isOnline()) {
@@ -44,6 +45,7 @@ public class AbilityDmg extends BaseDmg {
             }
         }
     }
+    */
 
     @Override
     public String getDeathMsg() {

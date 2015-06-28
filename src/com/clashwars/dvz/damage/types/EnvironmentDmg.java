@@ -23,6 +23,7 @@ public class EnvironmentDmg extends BaseDmg {
         damage();
     }
 
+    /*
     @Override
     public void damage() {
         if (player != null && player.isOnline()) {
@@ -33,6 +34,7 @@ public class EnvironmentDmg extends BaseDmg {
             }
         }
     }
+    */
 
     @Override
     public String getDeathMsg() {

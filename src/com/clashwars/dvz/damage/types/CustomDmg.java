@@ -33,6 +33,7 @@ public class CustomDmg extends BaseDmg {
         damage();
     }
 
+    /*
     @Override
     public void damage() {
         if (player != null && player.isOnline()) {
@@ -43,6 +44,7 @@ public class CustomDmg extends BaseDmg {
             }
         }
     }
+    */
 
     @Override
     public String getDeathMsg() {

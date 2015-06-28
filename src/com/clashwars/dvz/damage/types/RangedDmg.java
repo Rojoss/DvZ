@@ -31,6 +31,7 @@ public class RangedDmg extends BaseDmg {
         damage();
     }
 
+    /*
     @Override
     public void damage() {
         if (player != null && player.isOnline()) {
@@ -41,6 +42,7 @@ public class RangedDmg extends BaseDmg {
             }
         }
     }
+    */
 
     @Override
     public String getDeathMsg() {

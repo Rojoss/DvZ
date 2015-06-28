@@ -17,7 +17,13 @@ public class BaseDmg {
     }
 
     public void damage() {
-        //--
+        if (player != null && player.isOnline()) {
+            CustomDamageEvent event = new CustomDamageEvent((Player)player, damage, type, this);
+            Bukkit.getPluginManager().callEvent(event);
+            if (!event.isCancelled() && player.isOnline() && !((Player)player).isDead()) {
+                ((Player)player).setHealth(Math.max(((Player) player).getHealth() - event.getDamage(), 0));
+            }
+        }
     }
 
     public String getDeathMsg() {

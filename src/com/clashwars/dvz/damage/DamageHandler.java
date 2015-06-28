@@ -352,6 +352,7 @@ public class DamageHandler implements Listener {
 
         Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
         for (Player player : players) {
+            String msg = deathMsg.replace(player.getName(), "&a" + player.getName() + "&7");
             PlayerSettings settings = dvz.getSettingsCfg().getSettings(player.getUniqueId());
             if (settings != null) {
                 //No messages at all
@@ -364,39 +365,39 @@ public class DamageHandler implements Listener {
 
                 //All messages
                 if (settings.dwarfDeathMessages == 1 && classType == ClassType.DWARF) {
-                    player.sendMessage(CWUtil.integrateColor(deathMsg));
+                    player.sendMessage(CWUtil.integrateColor(msg));
                     continue;
                 }
                 if (settings.monsterDeathMessages == 1 && classType == ClassType.MONSTER) {
-                    player.sendMessage(CWUtil.integrateColor(deathMsg));
+                    player.sendMessage(CWUtil.integrateColor(msg));
                     continue;
                 }
 
                 //Personal kills/deaths/assists only
                 if (settings.dwarfDeathMessages == 2 && classType == ClassType.DWARF
                         && ((killer != null && player.getUniqueId().equals(killer.getUniqueId())) || player.getUniqueId().equals(dmgLog.logOwner) || damagers.contains(player.getUniqueId()))) {
-                    player.sendMessage(CWUtil.integrateColor(deathMsg));
+                    player.sendMessage(CWUtil.integrateColor(msg));
                     continue;
                 }
                 if (settings.monsterDeathMessages == 2 && classType == ClassType.MONSTER
                         && ((killer != null && player.getUniqueId().equals(killer.getUniqueId())) || player.getUniqueId().equals(dmgLog.logOwner) || damagers.contains(player.getUniqueId()))) {
-                    player.sendMessage(CWUtil.integrateColor(deathMsg));
+                    player.sendMessage(CWUtil.integrateColor(msg));
                     continue;
                 }
 
                 //Personal kills/deaths only
                 if (settings.dwarfDeathMessages == 3 && classType == ClassType.DWARF
                         && ((killer != null && player.getUniqueId().equals(killer.getUniqueId())) || player.getUniqueId().equals(dmgLog.logOwner))) {
-                    player.sendMessage(CWUtil.integrateColor(deathMsg));
+                    player.sendMessage(CWUtil.integrateColor(msg));
                     continue;
                 }
                 if (settings.monsterDeathMessages == 3 && classType == ClassType.MONSTER
                         && ((killer != null && player.getUniqueId().equals(killer.getUniqueId())) || player.getUniqueId().equals(dmgLog.logOwner))) {
-                    player.sendMessage(CWUtil.integrateColor(deathMsg));
+                    player.sendMessage(CWUtil.integrateColor(msg));
                     continue;
                 }
             } else {
-                player.sendMessage(CWUtil.integrateColor(deathMsg));
+                player.sendMessage(CWUtil.integrateColor(msg));
             }
         }
     }
