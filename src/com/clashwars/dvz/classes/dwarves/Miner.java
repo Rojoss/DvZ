@@ -57,17 +57,20 @@ public class Miner extends DwarfClass {
         }
 
         if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop by placing your workbench on one of the pistons! &4&l<<"));
             dvz.logTimings("Miner.blockBreak()[no workshop]", t);
             return;
         }
 
         final MinerWorkshop ws = (MinerWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
         if (!ws.isBuild()) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop by placing your workbench on one of the pistons! &4&l<<"));
             dvz.logTimings("Miner.blockBreak()[ws not build]", t);
             return;
         }
 
         if (!ws.getMineableBlocks().contains(block)) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cMine stone and ores in your own workshop! &4&l<<"));
             dvz.logTimings("Miner.blockBreak()[not part of workshop]", t);
             return;
         }
@@ -164,15 +167,18 @@ public class Miner extends DwarfClass {
         }
 
         if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop by placing your workbench on one of the pistons! &4&l<<"));
             return;
         }
 
         MinerWorkshop ws = (MinerWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
         if (!ws.isBuild()) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop by placing your workbench on one of the pistons! &4&l<<"));
             return;
         }
 
         if (!ws.getCuboid().contains(event.getClickedBlock())) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cClick on the workbench in your own workshop to craft! &4&l<<"));
             return;
         }
 
@@ -248,7 +254,6 @@ public class Miner extends DwarfClass {
             }
         }
         if (block.getType() != Material.AIR) {
-            Debug.bc("Couldn't spawn lowest... Spawning at random loc.");
             block = CWUtil.random(airBlocks);
         }
         block.setType(mat);
