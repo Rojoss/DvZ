@@ -55,6 +55,7 @@ public class Builder extends DwarfClass {
         }
 
         if (Util.isNearShrine(block.getLocation(), 10)) {
+            CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't build this close to the shrine! &4&l<<"));
             dvz.logTimings("Builder.blockPlace()[near shrine]", t);
             return;
         }
@@ -101,6 +102,7 @@ public class Builder extends DwarfClass {
         }
 
         if (Util.isNearShrine(block.getLocation(), 10)) {
+            CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't break blocks this close to the shrine! &4&l<<"));
             dvz.logTimings("Builder.blockBreak()[near shrine]", t);
             return;
         }
