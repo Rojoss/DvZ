@@ -135,6 +135,7 @@ public class Fletcher extends DwarfClass {
             cwp.addClassExp(2);
             dvz.getSM().changeLocalStatVal(cwp.getUUID(), StatType.FLETCHER_FEATHERS_COLLECTED, 2);
         } else {
+            CWUtil.sendActionBar(cwp.getPlayer(), CWUtil.integrateColor("&2&l>> &aTIP: &7You get double feathers/xp if you kill chickens in the air! &2&l<<"));
             ParticleEffect.PORTAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 8, entity.getLocation(), 500);
             dvz.getSM().changeLocalStatVal(cwp.getUUID(), StatType.FLETCHER_FEATHERS_COLLECTED, 1);
             cwp.addClassExp(1);
@@ -161,15 +162,18 @@ public class Fletcher extends DwarfClass {
         }
 
         if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop by placing your workbench on one of the pistons! &4&l<<"));
             return;
         }
 
         FletcherWorkshop ws = (FletcherWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
+        CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop by placing your workbench on one of the pistons! &4&l<<"));
         if (!ws.isBuild()) {
             return;
         }
 
         if (!ws.getCuboid().contains(event.getClickedBlock())) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cClick on the workbench in your own workshop to craft! &4&l<<"));
             return;
         }
 
@@ -236,6 +240,7 @@ public class Fletcher extends DwarfClass {
 
         Player player = event.getPlayer();
         if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.FLETCHER) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need to be a fletcher to collect flint! &4&l<<"));
             return;
         }
 
