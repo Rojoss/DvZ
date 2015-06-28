@@ -50,11 +50,13 @@ public class Tailor extends DwarfClass {
         CWPlayer cwp = dvz.getPM().getPlayer(player);
 
         if (cwp.getPlayerClass() != DvzClass.TAILOR) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need to be a tailor to shear sheep! &4&l<<"));
             return;
         }
 
         if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
             dvz.logTimings("Tailor.shear()[no workshop]", t);
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop by placing your workbench on one of the pistons! &4&l<<"));
             return;
         }
         final TailorWorkshop ws = (TailorWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
@@ -67,6 +69,7 @@ public class Tailor extends DwarfClass {
             }
         }
         if (cwe == null) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis is not your sheep! &4&l<<"));
             dvz.logTimings("Tailor.shear()[invalid sheep]", t);
             return;
         }
@@ -106,6 +109,7 @@ public class Tailor extends DwarfClass {
 
         Player player = event.getPlayer();
         if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.TAILOR) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need to be a tailor to collect flowers/dyes! &4&l<<"));
             dvz.logTimings("Tailor.blockBreak()[not tailor]", t);
             return;
         }
@@ -118,7 +122,7 @@ public class Tailor extends DwarfClass {
             block.getWorld().dropItem(block.getLocation(), Product.DYE_2.getItem());
             dvz.getSM().changeLocalStatVal(player, StatType.TAILOR_BLUE_FLOWERS_COLLECTED, 1);
         }
-        dvz.getPM().getPlayer(player).addClassExp(5);
+        dvz.getPM().getPlayer(player).addClassExp(3);
         block.setType(Material.AIR);
 
         new BukkitRunnable() {
@@ -152,15 +156,18 @@ public class Tailor extends DwarfClass {
         }
 
         if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop by placing your workbench on one of the pistons! &4&l<<"));
             return;
         }
 
         TailorWorkshop ws = (TailorWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
         if (!ws.isBuild()) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop by placing your workbench on one of the pistons! &4&l<<"));
             return;
         }
 
         if (!ws.getCuboid().contains(event.getClickedBlock())) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cClick on the workbench in your own workshop to craft! &4&l<<"));
             return;
         }
 
