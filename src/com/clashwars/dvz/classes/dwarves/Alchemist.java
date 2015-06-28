@@ -82,16 +82,18 @@ public class Alchemist extends DwarfClass {
 
         Player player = event.getPlayer();
         if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.ALCHEMIST) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need to be an alchemist to use empty cauldrons! &4&l<<"));
             return;
         }
 
         if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop by placing your workbench on one of the pistons! &4&l<<"));
             return;
         }
 
         AlchemistWorkshop ws = (AlchemistWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
         if (!ws.isBuild()) {
-            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your own workshop! &4&l<<"));
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop by placing your workbench on one of the pistons! &4&l<<"));
             dvz.logTimings("Alchemist.onInteract()[no workshop]", t);
             return;
         }
@@ -138,13 +140,14 @@ public class Alchemist extends DwarfClass {
         }
 
         if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop by placing your workbench on one of the pistons! &4&l<<"));
             dvz.logTimings("Alchemist.onBucketEmpty()[no workshop]", t);
             return;
         }
 
         final AlchemistWorkshop ws = (AlchemistWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
         if (!ws.isBuild()) {
-            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop and place the water in your pot! &4&l<<"));
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop by placing your workbench on one of the pistons! &4&l<<"));
             dvz.logTimings("Alchemist.onBucketEmpty()[ws not build]", t);
             return;
         }
@@ -187,12 +190,17 @@ public class Alchemist extends DwarfClass {
 
         Player player = event.getPlayer();
         if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.ALCHEMIST) {
+            if (block.getType() == Material.MELON_BLOCK) {
+                CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need to be an alchemist to collect melons! &4&l<<"));
+            } else {
+                CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need to be an alchemist to collect sugar(cane)! &4&l<<"));
+            }
             return;
         }
 
         if (block.getType() == Material.MELON_BLOCK) {
             event.setCancelled(false);
-            block.getWorld().dropItem(block.getLocation(), Product.MELON.getItem());
+            CWUtil.dropItemStack(block.getLocation(), Product.MELON.getItem(3), dvz, player);
             dvz.getPM().getPlayer(player).addClassExp(3);
 
             dvz.getSM().changeLocalStatVal(player, StatType.ALCHEMIST_MELONS_COLLECTED, 1);
@@ -220,9 +228,7 @@ public class Alchemist extends DwarfClass {
                 sugarcane.add(currentBlock);
             }
 
-            CWItem sugar = Product.SUGAR.getItem();
-            sugar.setAmount(sugarcane.size());
-            block.getWorld().dropItem(block.getLocation(), sugar);
+            CWUtil.dropItemStack(block.getLocation(), Product.SUGAR.getItem(sugarcane.size()), dvz, player);
             dvz.getPM().getPlayer(player).addClassExp(sugarcane.size());
 
             dvz.getSM().changeLocalStatVal(player, StatType.ALCHEMIST_SUGAR_COLLECTED, sugarcane.size());
@@ -230,8 +236,6 @@ public class Alchemist extends DwarfClass {
             for (Block sugarcaneBlock : sugarcane) {
                 sugarcaneBlock.setType(Material.AIR);
                 sugarcaneBlock.getWorld().playEffect(sugarcaneBlock.getLocation(), Effect.STEP_SOUND, 83);
-                //ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(sugarcaneBlock.getType(), sugarcaneBlock.getData()), 0.5f, 0.5f, 0.5f, 0.2f, 20, sugarcaneBlock.getLocation().add(0.5f, 0f, 0.5f));
-                //sugarcaneBlock.getWorld().playSound(sugarcaneBlock.getLocation(), Sound.DIG_GRASS, 1.0f, 1.3f);
             }
 
             final Block floorBlock;
@@ -273,12 +277,14 @@ public class Alchemist extends DwarfClass {
         }
 
         if (!dvz.getWM().hasWorkshop(player.getUniqueId())) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop by placing your workbench on one of the pistons! &4&l<<"));
             dvz.logTimings("Alchemist.itemDrop()[no workshop]", t);
             return;
         }
 
         final AlchemistWorkshop ws = (AlchemistWorkshop)dvz.getWM().getWorkshop(player.getUniqueId());
         if (!ws.isBuild()) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cBuild your workshop by placing your workbench on one of the pistons! &4&l<<"));
             dvz.logTimings("Alchemist.itemDrop()[ws not build]", t);
             return;
         }
