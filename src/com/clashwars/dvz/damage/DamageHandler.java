@@ -319,14 +319,9 @@ public class DamageHandler implements Listener {
         cwp.damageLogs.set(cwp.damageLogs.size()-1, dmgLog);
         dvz.getPM().getPlayer(event.getEntity()).damageLogs.add(new DamageLog(event.getEntity().getUniqueId()));
 
+
         //Instant respawning.
-        dvz.getServer().getScheduler().scheduleSyncDelayedTask(dvz, new Runnable() {
-            public void run() {
-                if (player.isDead()) {
-                    ((CraftPlayer) player).getHandle().playerConnection.a(new PacketPlayInClientCommand(PacketPlayInClientCommand.EnumClientCommand.PERFORM_RESPAWN));
-                }
-            }
-        });
+        //player.spigot().respawn();
     }
 
     private void broadcastDeathMessage(DamageLog dmgLog, OfflinePlayer killer, ClassType classType, String deathMsg) {
@@ -418,8 +413,4 @@ public class DamageHandler implements Listener {
         }
     }
 
-
-    private static void getDamage(EntityDamageEvent.DamageCause cause, double baseDmg) {
-
-    }
 }

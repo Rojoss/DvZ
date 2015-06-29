@@ -116,7 +116,6 @@ public class Explode extends BaseAbility {
                 //If player stops sneaking then explode!
                 if (!player.isSneaking()) {
                     player.sendMessage(Util.formatMsg("&cExploded with &4" + power + " &cpower!"));
-                    player.setHealth(0);
                     createExplosion(player, playerLoc, power.floatValue());
                     this.cancel();
                     return;
@@ -125,7 +124,6 @@ public class Explode extends BaseAbility {
                 //After 30 seconds force explosion. [because this is quite a heavy task so it's just a waste running this forever]
                 if (ticks > 600) {
                     player.sendMessage(Util.formatMsg("&cOvercharge!"));
-                    player.setHealth(0);
                     createExplosion(player, playerLoc, power.floatValue());
                     this.cancel();
                 }
@@ -184,6 +182,6 @@ public class Explode extends BaseAbility {
             }
         }
 
-        new CustomDmg(caster, 500, "{0} exploded", "explode");
+        new CustomDmg(caster, 20, "{0} exploded", "explode");
     }
 }
