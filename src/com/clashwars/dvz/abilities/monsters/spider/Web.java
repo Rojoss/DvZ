@@ -27,7 +27,7 @@ public class Web extends BaseAbility {
     public Web() {
         super();
         ability = Ability.WEB;
-        castItem = new DvzItem(Material.WEB, 5, (short)0, displayName, 51, -1);
+        castItem = new DvzItem(Material.WEB, 10, (short)0, displayName, 51, -1);
         castActions = new ArrayList<Action>(Arrays.asList(new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}));
     }
 
