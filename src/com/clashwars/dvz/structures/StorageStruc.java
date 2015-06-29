@@ -8,6 +8,7 @@ import com.clashwars.dvz.Product;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.structures.data.StorageData;
 import com.clashwars.dvz.structures.extra.StorageItem;
 import com.clashwars.dvz.structures.internal.Structure;
@@ -176,6 +177,9 @@ public class StorageStruc extends Structure {
                 cwp.productsTaken.put(storageItem.getName(), 0);
             }
             int remainingTillLimit = storageItem.getLimit() - cwp.productsTaken.get(storageItem.getName());
+            if (storageItem.getItem().getType() == Material.EXP_BOTTLE) {
+                remainingTillLimit -= dvz.getSM().getLocalStatVal(player, StatType.DWARF_XP_EARNED);
+            }
             if (remainingTillLimit >= amtToChange || storageItem.getLimit() == -1) {
                 cwp.productsTaken.put(storageItem.getName(), cwp.productsTaken.get(storageItem.getName()) + amtToChange);
             } else if (remainingTillLimit > 0) {

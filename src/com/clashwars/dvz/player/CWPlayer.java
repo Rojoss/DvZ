@@ -500,9 +500,11 @@ public class CWPlayer {
             Bukkit.getServer().getPluginManager().callEvent(new ClassLevelupEvent(this));
         } else {
             data.setClassExp(getClassExp() + exp);
-            ExpUtil xpu = new ExpUtil(getPlayer());
-            xpu.changeExp(exp);
         }
+
+        ExpUtil xpu = new ExpUtil(getPlayer());
+        xpu.changeExp(exp);
+
         if (System.currentTimeMillis() - lastSave >= 30000) {
             lastSave = 0;
             savePlayer();
