@@ -5,6 +5,7 @@ import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.VIP.BannerData;
 import com.clashwars.dvz.abilities.Ability;
+import com.clashwars.dvz.abilities.dwarves.bonus.Camouflage;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.GameCfg;
@@ -282,6 +283,8 @@ public class GameManager {
         if (!force) {
             setState(GameState.DRAGON);
         }
+
+        Camouflage.removeAllBlocks();
 
         final Player dragonPlayer = player;
         new BukkitRunnable() {

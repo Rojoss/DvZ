@@ -6,6 +6,7 @@ import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.util.DvzItem;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -49,7 +51,7 @@ public class Camouflage extends BaseAbility {
                     }
                 }
             }
-        }.runTaskTimer(dvz, 0, 3);
+        }.runTaskTimer(dvz, 0, 5);
     }
 
     @Override
@@ -61,8 +63,21 @@ public class Camouflage extends BaseAbility {
         Long t = System.currentTimeMillis();
         Block block = triggerLoc.getBlock();
         if (block == null || block.getType() == Material.AIR) {
-            dvz.logTimings("Camouflage.castAbility()[invalid block]", t);
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cClick a valid block to transform in to! &4&l<<"));
+            dvz.logTimings("Camouflage.castAbility()[invalid block]", t);
+            return;
+        }
+
+        if (dvz.getUndestroyableBlocks().contains(block.getType())) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't camouflage in to this block! &4&l<<"));
+            dvz.logTimings("Camouflage.castAbility()[undestroyable block]", t);
+            return;
+        }
+
+        Block disguiseBlock = player.getLocation().getBlock();
+        if (disguiseBlock.getType() != Material.AIR) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't create a block where you're standing! &4&l<<"));
+            dvz.logTimings("Camouflage.castAbility()[not air]", t);
             return;
         }
 
@@ -71,7 +86,10 @@ public class Camouflage extends BaseAbility {
             return;
         }
 
-        Block disguiseBlock = player.getLocation().getBlock();
+        Location loc = disguiseBlock.getLocation();
+        loc.setYaw(player.getLocation().getYaw());
+        loc.setPitch(player.getLocation().getPitch());
+        player.teleport(loc.add(0.5f, 0, 0.5f));
         blocks.put(player.getUniqueId(), disguiseBlock.getLocation());
         disguiseBlock.setType(block.getType());
         disguiseBlock.setData(block.getData());
@@ -87,17 +105,28 @@ public class Camouflage extends BaseAbility {
     }
 
 
-    private void removeBlock(UUID ownerUUID) {
-        blocks.get(ownerUUID).getBlock().setType(Material.AIR);
+    private static void removeBlock(UUID ownerUUID) {
+        Block disguiseBlock = blocks.get(ownerUUID).getBlock();
+        disguiseBlock.setType(Material.AIR);
         blocks.remove(ownerUUID);
 
-        Player player = dvz.getServer().getPlayer(ownerUUID);
+        Player player = Bukkit.getPlayer(ownerUUID);
         if (player != null && player.isOnline()) {
             player.setGameMode(GameMode.SURVIVAL);
-
+            Location loc = disguiseBlock.getLocation();
+            loc.setYaw(player.getLocation().getYaw());
+            loc.setPitch(player.getLocation().getPitch());
+            player.teleport(loc.add(0.5f, 0, 0.5f));
             if (HatManager.hasHat(player)) {
                 HatManager.getHat(player).equip();
             }
+        }
+    }
+
+    public static void removeAllBlocks() {
+        HashMap<UUID, Location> blocksClone = new HashMap<UUID, Location>(blocks);
+        for (UUID uuid : blocksClone.keySet()) {
+            removeBlock(uuid);
         }
     }
 
@@ -119,6 +148,17 @@ public class Camouflage extends BaseAbility {
                     CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou were found by " + event.getPlayer().getDisplayName() + "&c! &4You are no longer a block! &4&l<<"));
                 }
                 removeBlock(entry.getKey());
+            }
+        }
+    }
+
+    @EventHandler
+    private void teleport(PlayerTeleportEvent event) {
+        if (event.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
+            if (blocks.containsKey(event.getPlayer().getUniqueId())) {
+                CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cYou can't use this! &4You are no longer a block! &4&l<<"));
+                removeBlock(event.getPlayer().getUniqueId());
+                event.setCancelled(true);
             }
         }
     }

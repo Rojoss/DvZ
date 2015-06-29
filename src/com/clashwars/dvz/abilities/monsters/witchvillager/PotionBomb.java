@@ -5,6 +5,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.abilities.dwarves.bonus.Camouflage;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.player.CWPlayer;
@@ -78,7 +79,7 @@ public class PotionBomb extends BaseAbility {
             return;
         }
 
-        if(bomb.getWorld().getHighestBlockYAt(bomb) > bomb.getY() + 1) {
+        if (bomb.getWorld().getHighestBlockYAt(bomb) > bomb.getY() + 1) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThere can't be a block above the bomb! &4&l<<"));
             return;
         }
@@ -88,6 +89,11 @@ public class PotionBomb extends BaseAbility {
                 CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou can't place that here! &8(&7bedrock underneath&8) &4&l<<"));
                 return;
             }
+        }
+
+        if (bombs.size() > 0) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThere is already an active bomb! &4&l<<"));
+            return;
         }
 
         boolean found = false;
@@ -143,6 +149,7 @@ public class PotionBomb extends BaseAbility {
                 bomb.getWorld().playSound(bomb, Sound.EXPLODE, 3, 2);
 
                 dvz.getServer().broadcastMessage(Util.formatMsg("&6The bomb (&c" + bomb.getX() + "&7, &a" + bomb.getY() + "&7, &9" + bomb.getZ() + "&6) has exploded!"));
+                Camouflage.removeAllBlocks();
 
                 for(CWPlayer cwp : dvz.getPM().getPlayers(ClassType.DWARF, true, false)) {
                     boolean blindAdded = false;
@@ -150,19 +157,19 @@ public class PotionBomb extends BaseAbility {
                     Collection<PotionEffect> activeEffects = cwp.getPlayer().getActivePotionEffects();
                     for (PotionEffect pe : activeEffects) {
                         if(pe.getType().equals(PotionEffectType.BLINDNESS)) {
-                            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int)dvz.getGM().getMonsterPower(80, 140) + pe.getDuration(), 1), true);
+                            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int)dvz.getGM().getMonsterPower(80, 160) + pe.getDuration(), 0), true);
                             blindAdded = true;
                         } else if (pe.getType().equals(PotionEffectType.POISON)) {
-                            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(100, 180) + pe.getDuration(), 1), true);
+                            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(100, 200) + pe.getDuration(), 0), true);
                             poisonAdded = true;
                         }
                     }
 
                     if (!blindAdded) {
-                        cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int)dvz.getGM().getMonsterPower(100, 200), 0));
+                        cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int)dvz.getGM().getMonsterPower(80, 160), 0));
                     }
                     if (!poisonAdded) {
-                        cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(200, 400), 1));
+                        cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(100, 200), 0));
                     }
 
                     new AbilityDmg(cwp.getPlayer(), 0, ability, player);
