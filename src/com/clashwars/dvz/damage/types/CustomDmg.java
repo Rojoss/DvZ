@@ -33,6 +33,14 @@ public class CustomDmg extends BaseDmg {
         damage();
     }
 
+    public OfflinePlayer getDmgSource() {
+        return damageSource;
+    }
+
+    public boolean hasDmgSource() {
+        return damageSource != null;
+    }
+
     /*
     @Override
     public void damage() {

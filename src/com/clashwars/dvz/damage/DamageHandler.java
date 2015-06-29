@@ -70,6 +70,9 @@ public class DamageHandler implements Listener {
         if (dmg instanceof AbilityDmg) {
             damager = ((AbilityDmg)dmg).getCaster();
         }
+        if (dmg instanceof CustomDmg) {
+            damager = ((CustomDmg)dmg).getDamageSource();
+        }
 
         if (damager != null) {
             List<DamageLog> dmgLogsDmger = dvz.getPM().getPlayer(damager).damageLogs;
@@ -177,6 +180,13 @@ public class DamageHandler implements Listener {
                     if (((AbilityDmg)entry.dmgClass).hasCaster()) {
                         finalDamage = entry;
                         killer = ((AbilityDmg)entry.dmgClass).getCaster();
+                        break;
+                    }
+                }
+                if (entry.dmgClass instanceof CustomDmg) {
+                    if (((CustomDmg)entry.dmgClass).hasDmgSource()) {
+                        finalDamage = entry;
+                        killer = ((CustomDmg)entry.dmgClass).getDamageSource();
                         break;
                     }
                 }
@@ -345,6 +355,12 @@ public class DamageHandler implements Listener {
             if (entry.dmgClass instanceof AbilityDmg) {
                 if (((AbilityDmg)entry.dmgClass).hasCaster()) {
                     damagers.add(((AbilityDmg)entry.dmgClass).getCaster().getUniqueId());
+                    break;
+                }
+            }
+            if (entry.dmgClass instanceof CustomDmg) {
+                if (((CustomDmg)entry.dmgClass).hasDmgSource()) {
+                    damagers.add(((CustomDmg)entry.dmgClass).getDamageSource().getUniqueId());
                     break;
                 }
             }
