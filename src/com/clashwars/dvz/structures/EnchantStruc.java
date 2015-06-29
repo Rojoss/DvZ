@@ -156,23 +156,26 @@ public class EnchantStruc extends Structure {
         //Weapons
         enchants.add(new CustomEnchant(Enchantment.DAMAGE_ALL, "Sharpness 1", new String[] {"&7Your greatsword will deal more damage."}, 1, 200, new Material[] {Material.DIAMOND_AXE}));
         enchants.add(new CustomEnchant(Enchantment.DAMAGE_ALL, "Sharpness 2", new String[] {"&7Your greatsword will deal more damage."}, 2, 300, new Material[] {Material.DIAMOND_AXE}));
-        enchants.add(new CustomEnchant(Enchantment.LOOT_BONUS_MOBS, "Lifesteal 1", new String[] {"&77% &7chance to lifesteal when attacking.", "&7You will steal half a heart."}, 1, 100, new Material[] {Material.DIAMOND_AXE}));
-        enchants.add(new CustomEnchant(Enchantment.LOOT_BONUS_MOBS, "Lifesteal 2", new String[] {"&714% &7chance to lifesteal when attacking.", "&7You will steal half a heart."}, 1, 250, new Material[] {Material.DIAMOND_AXE}));
-        enchants.add(new CustomEnchant(Enchantment.LOOT_BONUS_MOBS, "Lifesteal 3", new String[] {"&721% &7chance to lifesteal when attacking.", "&7You will steal half a heart."}, 1, 500, new Material[] {Material.DIAMOND_AXE}));
+        enchants.add(new CustomEnchant(Enchantment.LOOT_BONUS_MOBS, "Lifesteal 1", new String[] {"&27% &7chance to lifesteal when attacking.", "&7You will steal 1 heart."}, 1, 100, new Material[] {Material.DIAMOND_AXE}));
+        enchants.add(new CustomEnchant(Enchantment.LOOT_BONUS_MOBS, "Lifesteal 2", new String[] {"&214% &7chance to lifesteal when attacking.", "&7You will steal 1 heart."}, 1, 250, new Material[] {Material.DIAMOND_AXE}));
+        enchants.add(new CustomEnchant(Enchantment.LOOT_BONUS_MOBS, "Lifesteal 3", new String[] {"&221% &7chance to lifesteal when attacking.", "&7You will steal 1 heart."}, 1, 500, new Material[] {Material.DIAMOND_AXE}));
 
-
-        enchants.add(new CustomEnchant(Enchantment.LUCK, "Swing 1", new String[] {"&28% &7chance to swing while attacking.",
-                "&7When you swing all monsters nearby get", "&7damaged and pushed away from you."}, 1, 250, new Material[] {Material.IRON_SWORD}));
-        enchants.add(new CustomEnchant(Enchantment.LUCK, "Swing 2", new String[] {"&215% &7chance to swing while attacking.",
-                "&7When you swing all monsters nearby get", "&7damaged and pushed away from you."}, 2, 500, new Material[] {Material.IRON_SWORD}));
+        enchants.add(new CustomEnchant(Enchantment.DAMAGE_ALL, "Sharpness 1", new String[] {"&7Your battleaxe will deal more damage."}, 1, 300, new Material[] {Material.IRON_SWORD}));
         enchants.add(new CustomEnchant(Enchantment.DURABILITY, "Block 1", new String[] {"&7When &ablocking &7damage is reduced by &20.5 &7hearts.",
                 "&7When &ablocking &7and &asneaking &7it's reduced by &21 &7heart!"}, 1, 150, new Material[] {Material.IRON_SWORD}));
         enchants.add(new CustomEnchant(Enchantment.DURABILITY, "Block 2", new String[] {"&7When &ablocking &7damage is reduced by &21 &7heart.",
                 "&7When &ablocking &7and &asneaking &7it's reduced by &22 &7hearts!"}, 2, 300, new Material[] {Material.IRON_SWORD}));
-        enchants.add(new CustomEnchant(Enchantment.DAMAGE_ALL, "Sharpness 1", new String[] {"&7Your battleaxe will deal more damage."}, 1, 300, new Material[] {Material.IRON_SWORD}));
+        enchants.add(new CustomEnchant(Enchantment.LUCK, "Swing 1", new String[] {"&28% &7chance to swing while attacking.",
+                "&7When you swing all monsters nearby get", "&7damaged and pushed away from you."}, 1, 250, new Material[] {Material.IRON_SWORD}));
+        enchants.add(new CustomEnchant(Enchantment.LUCK, "Swing 2", new String[] {"&215% &7chance to swing while attacking.",
+                "&7When you swing all monsters nearby get", "&7damaged and pushed away from you."}, 2, 500, new Material[] {Material.IRON_SWORD}));
 
-        enchants.add(new CustomEnchant(Enchantment.FIRE_ASPECT, "Fire Aspect 1", new String[] {"&7Put your flail on fire!", "&7Burn all monsters you hit with the flail."}, 1, 400, new Material[] {Material.GOLD_SWORD}));
         enchants.add(new CustomEnchant(Enchantment.DAMAGE_ALL, "Sharpness 1", new String[] {"&7Your fiery flail will deal more damage."}, 1, 200, new Material[] {Material.GOLD_SWORD}));
+        enchants.add(new CustomEnchant(Enchantment.FIRE_ASPECT, "Fire 1", new String[] {"&7Put your flail on fire!", "&7Burn all monsters you hit with the flail."}, 1, 400, new Material[] {Material.GOLD_SWORD}));
+        enchants.add(new CustomEnchant(Enchantment.LURE, "Chain 1", new String[] {"&7You will get the ability to chain monsters.", "&7Look at a monster you want to chain",
+                "&7and hold right click to pull them towards you.", "&215s cooldown &7and &215 range"}, 1, 250, new Material[] {Material.GOLD_SWORD}));
+        enchants.add(new CustomEnchant(Enchantment.LURE, "Chain 2", new String[] {"&7You will get the ability to chain monsters.", "&7Look at a monster you want to chain",
+                "&7and hold right click to pull them towards you.", "&27s cooldown &7and &220 range"}, 2, 250, new Material[] {Material.GOLD_SWORD}));
 
         //Armor
         enchants.add(new CustomEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, "Protection 1", new String[] {"&7Give your armor some extra protection."}, 1, 50, new Material[] {Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS}));

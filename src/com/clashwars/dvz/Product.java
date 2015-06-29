@@ -18,7 +18,7 @@ public enum Product {
     IRON_INGOT(new CWItem(Material.IRON_INGOT).setName("&8Iron Bar").setLore(new String[] {"&7Very strong world class iron.", "&8Combine with &7sticks &8in your workbench for a greatsword."}), false),
     BATTLEAXE(new CWItem(Material.IRON_SWORD).setName("&8Dwarven Battleaxe").setLore(new String[] {"&7Heavy dwarven battleaxe.", "&8Decent damage output and high defence."}), true),
     GREATSWORD(new CWItem(Material.DIAMOND_AXE).setName("&8Dwarven Greatsword").setLore(new String[] {"&7Mighty dwarven greatsword.", "&8Weapon with the highest damage output."}), true),
-    FIERY_FLAIL(new CWItem(Material.GOLD_SWORD).setName("&8Fiery Flail").setLore(new String[] {"&7Burning flail that never stops burning.", "&8This flail will burn players you hit."}), true),
+    FIERY_FLAIL(new CWItem(Material.GOLD_SWORD).setName("&8Fiery Flail").setLore(new String[] {"&7Burning flail.", "&8Utility weapon."}), true),
     STONE_BRICK(new CWItem(Material.SMOOTH_BRICK).setName("&8Reinforced Brick").setLore(new String[] {"A very strong stone that has been reinforced.", "&8Can be used to build reinforced walls!"}), true),
     MINER_STICK(new CWItem(Material.STICK).setName("&8Stick").setLore(new String[] {"&7Strong stick great for making weapons.", "&7It will never break!", "&8Combine with &7iron,gold or diamonds &8to make weapons!"}), false),
 

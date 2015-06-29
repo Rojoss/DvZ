@@ -1,5 +1,6 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.CooldownManager;
 import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.effect.Particle;
 import com.clashwars.cwcore.effect.effects.AnimatedCircleEffect;
@@ -10,6 +11,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.classes.ClassType;
+import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.damage.types.CustomDmg;
 import com.clashwars.dvz.player.CWPlayer;
 import org.bukkit.Bukkit;
@@ -19,6 +21,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -43,7 +46,6 @@ public class WeaponHandler implements Listener {
     public WeaponHandler(DvZ dvz) {
         this.dvz = dvz;
 
-        /*
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -51,29 +53,35 @@ public class WeaponHandler implements Listener {
                     Player caster = Bukkit.getPlayer(entry.getKey());
                     Player target = Bukkit.getPlayer(entry.getValue());
 
-                    if (caster == null || target == null || caster.isDead() || target.isDead()) {
+                    if (caster == null || target == null || caster.isDead() || target.isDead() || !caster.isBlocking()) {
                         flailedPlayers.remove(entry.getKey());
                         return;
                     }
 
-                    Vector dir = target.getLocation().add(0,1,0).toVector().subtract(caster.getLocation().add(0, 1, 0).toVector());
+                    Vector casterDir = caster.getLocation().getDirection();
+                    casterDir = casterDir.setY(0);
+                    Vector dir = target.getLocation().add(0, 1, 0).toVector().subtract(caster.getLocation().add(0, 1, 0).add(casterDir).toVector());
                     float length = (float)dir.length();
                     dir.normalize();
 
-                    float ratio = length / 10;
+                    if (length <= 1 || length > 20) {
+                        flailedPlayers.remove(entry.getKey());
+                        return;
+                    }
+
+                    float ratio = length / CWUtil.random(5,15);
                     Vector v = dir.multiply(ratio);
-                    Location loc = caster.getLocation().add(0,1,0).clone().subtract(v);
+                    Location loc = caster.getLocation().add(0,1,0).add(casterDir).clone().subtract(v);
                     for (int i = 0; i < 10; i++) {
                         loc.add(v);
-                        ParticleEffect.CRIT.display(0,0,0,0,1,loc);
+                        ParticleEffect.REDSTONE.display(new ParticleEffect.OrdinaryColor(194, 100, 0), loc, 32);
                     }
 
                     dir = dir.multiply(-1);
-                    target.setVelocity(target.getVelocity().add(dir.multiply(0.2f)));
+                    target.setVelocity(target.getVelocity().add(dir.multiply(0.5f)));
                 }
             }
         }.runTaskTimer(dvz, 0, 1);
-        */
     }
 
     @EventHandler
@@ -94,7 +102,7 @@ public class WeaponHandler implements Listener {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     private void entityDamageByEntity(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player)) {
             return;
@@ -115,7 +123,7 @@ public class WeaponHandler implements Listener {
 
             if (enchantLvl == 1 && CWUtil.randomFloat() > 0.08f) {
                 return;
-            } else if (enchantLvl == 2 && CWUtil.randomFloat() > 1.15f) {
+            } else if (enchantLvl == 2 && CWUtil.randomFloat() > 0.15f) {
                 return;
             }
 
@@ -125,7 +133,7 @@ public class WeaponHandler implements Listener {
                 if (dvz.getPM().getPlayer(player).isDwarf()) {
                     continue;
                 }
-                new CustomDmg(player, 4, "{0} died from {1}'s swinging axe", "Swinging axe", damager);
+                new CustomDmg(player, 4, "{0} died from {1}'s swinging axe", "{1}'s swinging axe", damager);
                 Vector dir = player.getLocation().toVector().subtract(damager.getLocation().toVector()).normalize();
                 player.setVelocity(player.getVelocity().add(dir.multiply(2)));
                 damager.getWorld().playSound(damager.getLocation(), Sound.ZOMBIE_METAL, 0.2f, 2f);
@@ -159,11 +167,21 @@ public class WeaponHandler implements Listener {
 
             damager.getWorld().playSound(damager.getLocation(), Sound.SILVERFISH_KILL, 0.5f, 0f);
             ParticleEffect.HEART.display(0.2f, 0.1f, 0.2f, 0, 3, damager.getLocation().add(0, 1.5f, 0));
-            damager.setHealth(Math.max(damager.getHealth() + 1, damager.getMaxHealth()));
+            damager.setHealth(Math.max(damager.getHealth() + 2, damager.getMaxHealth()));
+        }
+
+
+        //Flail fire
+        if (CWUtil.compareItems(damager.getItemInHand(), Product.FIERY_FLAIL.getItem(), true, false)) {
+            int enchantLvl = damager.getItemInHand().getEnchantmentLevel(Enchantment.FIRE_ASPECT);
+            if (enchantLvl <= 0) {
+                return;
+            }
+
+            ParticleEffect.FLAME.display(0.3f, 0.5f, 0.3f, 0, 10, event.getEntity().getLocation().add(0, 0.5f, 0));
         }
     }
 
-    /*
     @EventHandler
     private void interact(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
@@ -179,7 +197,22 @@ public class WeaponHandler implements Listener {
 
         //Flail
         if (CWUtil.compareItems(player.getItemInHand(), Product.FIERY_FLAIL.getItem(), true, false)) {
-            final Player target = CWUtil.getTargetedPlayer(player, 10);
+            int enchantLvl = player.getItemInHand().getEnchantmentLevel(Enchantment.LURE);
+            if (enchantLvl <= 0) {
+                return;
+            }
+
+            int cooldownTime = 60000;
+            int distance = 0;
+            if (enchantLvl == 1) {
+                cooldownTime = 15000;
+                distance = 15;
+            } else if (enchantLvl == 2) {
+                cooldownTime = 7000;
+                distance = 20;
+            }
+
+            final Player target = CWUtil.getTargetedPlayer(player, distance);
 
             if (target == null) {
                 if (flailedPlayers.containsKey(player.getUniqueId())) {
@@ -188,12 +221,22 @@ public class WeaponHandler implements Listener {
                 return;
             }
 
+            CooldownManager.Cooldown cd = cwp.getCDM().getCooldown("flail-chain");
+            if (cd == null) {
+                cwp.getCDM().createCooldown("flail-chain", cooldownTime);
+            } else if (!cd.onCooldown()) {
+                cd.setTime(cooldownTime);
+            } else {
+                CWUtil.sendActionBar(player, CWUtil.integrateColor("&6&lFlail Chain &4&l> &7" + CWUtil.formatTime(cd.getTimeLeft(), "&c%S&4.&c%%%&4s")));
+                return;
+            }
+
             if (flailedPlayers.containsKey(player.getUniqueId())) {
                 flailedPlayers.remove(player.getUniqueId());
             }
             flailedPlayers.put(player.getUniqueId(), target.getUniqueId());
+            new CustomDmg(target, 0, "{0} died from {1}'s flail chain", "{1}'s flail chain", player);
         }
     }
-    */
 
 }
