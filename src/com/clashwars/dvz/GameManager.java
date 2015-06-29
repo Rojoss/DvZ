@@ -1,5 +1,6 @@
 package com.clashwars.dvz;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
@@ -16,6 +17,7 @@ import com.clashwars.dvz.maps.DvzMap;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.player.SavedPlayerState;
 import com.clashwars.dvz.runnables.DragonRunnable;
 import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.structures.StorageStruc;
@@ -35,6 +37,7 @@ public class GameManager {
     private GameCfg gCfg;
     private Set<ShrineBlock> shrineBlocks = new HashSet<ShrineBlock>();
     private int dragonPower = 1;
+    private SavedPlayerState dragonSaveData;
     private float monsterPerc = 0;
     Long startTime;
 
@@ -279,6 +282,7 @@ public class GameManager {
         title.broadcast();
 
         CWPlayer cwp = dvz.getPM().getPlayer(player);
+        dragonSaveData = new SavedPlayerState(cwp.getPlayerClass(), player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getLocation());
         cwp.setClass(dragonType, true);
         player.setAllowFlight(true);
         player.setFlying(true);
@@ -513,6 +517,10 @@ public class GameManager {
             gCfg.GAME__DRAGON_PLAYER = uuid.toString();
         }
         gCfg.save();
+    }
+
+    public SavedPlayerState getDragonSaveData() {
+        return dragonSaveData;
     }
 
     public void setDragonSlayer(Player player) {

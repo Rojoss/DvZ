@@ -20,7 +20,7 @@ public class BaseDmg {
         if (player != null && player.isOnline() && !((Player)player).isDead()) {
             CustomDamageEvent event = new CustomDamageEvent((Player)player, damage, type, this);
             Bukkit.getPluginManager().callEvent(event);
-            ((Player)player).setHealth(Math.max(((Player) player).getHealth() - event.getDamage(), 0));
+            ((Player)player).setHealth(Math.min(Math.max(((Player) player).getHealth() - event.getDamage(), 0), ((Player) player).getMaxHealth()));
         }
     }
 

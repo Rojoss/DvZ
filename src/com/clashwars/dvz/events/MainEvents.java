@@ -311,6 +311,20 @@ public class MainEvents implements Listener {
         }
         final CWPlayer cwp = dvz.getPM().getPlayer(player);
 
+        //Dragon death (respawn with saved data)
+        if (dvz.getGM().getDragonPlayer().getUniqueId().equals(player.getUniqueId())) {
+            if (dvz.getGM().getDragonSaveData() != null) {
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        dvz.getGM().getDragonSaveData().load(player);
+                        dvz.getGM().setDragonPlayer(null);
+                    }
+                }.runTaskLater(dvz, 20);
+            }
+            return;
+        }
+
         //Death during first day. (if dwarf respawn back at keep)
         if (cwp.isDwarf() && dvz.getGM().isDwarves()) {
             player.sendMessage(Util.formatMsg("&6You're alive again as Dwarf because the dragon hasn't come yet!"));
@@ -348,7 +362,7 @@ public class MainEvents implements Listener {
                     cwp.giveClassItems(ClassType.MONSTER, suicide, -1);
                 }
             }
-        }.runTaskLater(dvz, 15);
+        }.runTaskLater(dvz, 10);
         dvz.logTimings("MainEvents.respawn()", t);
     }
 }

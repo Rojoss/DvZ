@@ -1,8 +1,10 @@
 package com.clashwars.dvz.runnables;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.ClassType;
+import com.clashwars.dvz.damage.types.CustomDmg;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -21,7 +23,7 @@ public class DragonRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (dvz.getGM() == null || dvz.getGM().getDragonPlayer() == null || dvz.getGM().getDragonType() == null || dvz.getGM().isMonsters()) {
+        if (dvz.getGM() == null || dvz.getGM().getDragonPlayer() == null || dvz.getGM().getDragonType() == null || dvz.getGM().isMonsters() || dvz.getGM().getDragonPlayer().isDead()) {
             this.cancel();
         }
         if (dragon == null) {
@@ -44,6 +46,6 @@ public class DragonRunnable extends BukkitRunnable {
         dvz.getGM().setDragonPower(power);
 
         Double hpRegen = (double)(power * 0.5f) - 0.5f;
-        dragon.setHealth(Math.min(dragon.getHealth() + hpRegen, dragon.getMaxHealth()));
+        new CustomDmg(dragon, -hpRegen, "", "");
     }
 }

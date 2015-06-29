@@ -167,7 +167,7 @@ public class WeaponHandler implements Listener {
 
             damager.getWorld().playSound(damager.getLocation(), Sound.SILVERFISH_KILL, 0.5f, 0f);
             ParticleEffect.HEART.display(0.2f, 0.1f, 0.2f, 0, 3, damager.getLocation().add(0, 1.5f, 0));
-            damager.setHealth(Math.max(damager.getHealth() + 2, damager.getMaxHealth()));
+            new CustomDmg(damager, -2, "", "lifesteal");
         }
 
 
