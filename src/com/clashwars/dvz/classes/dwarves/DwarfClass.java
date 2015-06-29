@@ -2,6 +2,7 @@ package com.clashwars.dvz.classes.dwarves;
 
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.dvz.SwapType;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.DvzClass;
@@ -27,7 +28,7 @@ public class DwarfClass extends BaseClass {
         abilities.add(Ability.HORN);
 
         for (Ability ability : Ability.values()) {
-            if (ability.isDwarfBonus()) {
+            if (ability.getSwapType() == SwapType.DWARF_ABILITY) {
                 abilities.add(ability);
                 bonusAbilities.add(ability);
             }

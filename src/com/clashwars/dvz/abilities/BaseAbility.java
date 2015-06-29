@@ -1,24 +1,26 @@
 package com.clashwars.dvz.abilities;
 
 import com.clashwars.cwcore.CooldownManager;
-import com.clashwars.cwcore.Debug;
+import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameState;
+import com.clashwars.dvz.SwapType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class BaseAbility implements Listener {
 
@@ -243,25 +245,74 @@ public class BaseAbility implements Listener {
             return;
         }
 
+        //Swap/cycle items
+        Player player = event.getPlayer();
+        if (ability.getSwapType() != SwapType.NONE && event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
+            PlayerInventory inv = player.getInventory();
+
+            LinkedHashMap<Ability, CWItem> swapAbilities = Ability.getSwapItems(ability.getSwapType());
+            List<Ability> abilities = new ArrayList<>(swapAbilities.keySet());
+
+            //Get index of the current held ability.
+            int startIndex = 0;
+            for (Ability a : abilities) {
+                if (a == ability) {
+                    break;
+                }
+                startIndex++;
+            }
+
+            //Go through the abilities 1 by 1 starting from the current ability index.
+            int index = startIndex+1;
+            if (index >= abilities.size()) {
+                index = 0;
+            }
+            for (int i = 0; i < abilities.size(); i++) {
+                Ability a = abilities.get(index);
+                index++;
+                if (a == ability) {
+                    continue;
+                }
+
+                for (int invIndex = 9; invIndex < 36; invIndex++) {
+                    if (invIndex == inv.getHeldItemSlot()) {
+                        continue;
+                    }
+                    if (a.getAbilityClass().isCastItem(inv.getItem(invIndex))) {
+                        ItemStack swapItem = inv.getItem(invIndex);
+                        inv.setItem(invIndex, event.getItem());
+                        inv.setItem(inv.getHeldItemSlot(), swapItem);
+                        event.setCancelled(true);
+                        player.playSound(player.getLocation(), Sound.PISTON_RETRACT, 0.2f, 2f);
+                        return;
+                    }
+                }
+
+                if (index >= abilities.size()) {
+                    index = 0;
+                }
+            }
+        }
+
         //Compare the click action with allowed actions.
         if (castActions == null || !castActions.contains(event.getAction())) {
             return;
         }
 
         //Make sure we can cast it. (same class)
-        if (!canCast(event.getPlayer())) {
+        if (!canCast(player)) {
             return;
         }
 
         event.setCancelled(true);
-        event.getPlayer().updateInventory();
+        player.updateInventory();
 
         //CAST! (we need to get the actual ability class when casting and not this BaseAbility cast method)
-        Location loc = event.getPlayer().getLocation();
+        Location loc = player.getLocation();
         if (event.getClickedBlock() != null) {
             loc = event.getClickedBlock().getLocation();
         }
-        ability.getAbilityClass().castAbility(event.getPlayer(), loc);
+        ability.getAbilityClass().castAbility(player, loc);
     }
 
     public void onCastItemGiven(Player player) {

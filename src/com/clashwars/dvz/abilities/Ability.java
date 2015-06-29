@@ -1,5 +1,7 @@
 package com.clashwars.dvz.abilities;
 
+import com.clashwars.cwcore.helpers.CWItem;
+import com.clashwars.dvz.SwapType;
 import com.clashwars.dvz.abilities.dragons.air.AirShield;
 import com.clashwars.dvz.abilities.dragons.air.Wind;
 import com.clashwars.dvz.abilities.dragons.air.WindStorm;
@@ -42,65 +44,63 @@ import com.clashwars.dvz.abilities.monsters.witchvillager.PotionBomb;
 import com.clashwars.dvz.abilities.monsters.zombie.Infect;
 import com.clashwars.dvz.abilities.monsters.zombie.Rush;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public enum Ability {
-    BASE(new BaseAbility(), false, ""),
+    BASE(new BaseAbility(), SwapType.NONE, ""),
 
     //Dwarf abilities
-    HEAL_POTION(new HealPotion(), false, ""),
-    SPEED_POTION(new SpeedPotion(), false, ""),
-    BUILDING_BRICK(new BuildingBrick(), false, ""),
-    BUILDING_BLOCK(new BuildingBlock(), false, ""),
-    REINFORCE(new Reinforce(), false, ""),
-    SUMMON_STONE(new SummonStone(), false, ""),
-    HORN(new Horn(), false, ""),
+    HEAL_POTION(new HealPotion(), SwapType.POTION, ""),
+    SPEED_POTION(new SpeedPotion(), SwapType.POTION, ""),
+    BUILDING_BRICK(new BuildingBrick(), SwapType.NONE, ""),
+    BUILDING_BLOCK(new BuildingBlock(), SwapType.NONE, ""),
+    REINFORCE(new Reinforce(), SwapType.NONE, ""),
+    SUMMON_STONE(new SummonStone(), SwapType.NONE, ""),
+    HORN(new Horn(), SwapType.DWARF_ABILITY, ""),
 
     //Monster abilities
-    SUICIDE(new Suicide(), false, "{0} committed suicide"),
-    HAMMER(new Hammer(), false, ""),
-    TELEPORT_PORTAL(new TeleportPortal(), false, ""),
-    INFECT(new Infect(), false, ""),
-    RUSH(new Rush(), false, ""),
-    RAPIDFIRE(new Rapidfire(), false, ""),
-    POISON_ATTACK(new PoisonAttack(), false, "{0} died from {1}'s poison attack"),
-    POISON(new Poison(), false, "{0} died from {1}'s poison cloud"),
-    WEB(new Web(), false, ""),
-    EXPLODE(new Explode(), false, "{0} died from {1}'s creeper explosion"),
-    SHOOT(new Shoot(), false, "{0} burned to death by {1}'s shoot"),
-    GLIDE(new Glide(), false, ""),
-    BLAST(new Blast(), false, "{0} burned to death by {1}'s blast"),
-    FIREBALL(new Fireball(), false, "{0} died from {1}'s fireball"),
-    PICKUP(new Pickup(), false, "{0} died from being picked up by {1}"),
-    BLINK(new Blink(), false, ""),
-    PORTAL(new Portal(), false, ""),
-    MORPH(new Morph(), false, ""),
-    POTION_BOMB(new PotionBomb(), false, "{0} died from {1}'s potionbomb"),
-    BUFF(new Buff(), false, ""),
-    FLY(new Fly(), false, ""),
-    EXPLOSIVE_EGG(new ExplosiveEgg(), false, "{0} exploded by {1}'s explosive egg"),
-    LAY_EGG(new LayEgg(), false, ""),
-    DROP_EGG(new DropEgg(), false, "{0} died from {1}'s rotten egg"),
+    SUICIDE(new Suicide(), SwapType.NONE, "{0} committed suicide"),
+    HAMMER(new Hammer(), SwapType.NONE, ""),
+    TELEPORT_PORTAL(new TeleportPortal(), SwapType.NONE, ""),
+    INFECT(new Infect(), SwapType.NONE, ""),
+    RUSH(new Rush(), SwapType.NONE, ""),
+    RAPIDFIRE(new Rapidfire(), SwapType.NONE, ""),
+    POISON_ATTACK(new PoisonAttack(), SwapType.NONE, "{0} died from {1}'s poison attack"),
+    POISON(new Poison(), SwapType.NONE, "{0} died from {1}'s poison cloud"),
+    WEB(new Web(), SwapType.NONE, ""),
+    EXPLODE(new Explode(), SwapType.NONE, "{0} died from {1}'s creeper explosion"),
+    SHOOT(new Shoot(), SwapType.NONE, "{0} burned to death by {1}'s shoot"),
+    GLIDE(new Glide(), SwapType.NONE, ""),
+    BLAST(new Blast(), SwapType.NONE, "{0} burned to death by {1}'s blast"),
+    FIREBALL(new Fireball(), SwapType.NONE, "{0} died from {1}'s fireball"),
+    PICKUP(new Pickup(), SwapType.NONE, "{0} died from being picked up by {1}"),
+    BLINK(new Blink(), SwapType.NONE, ""),
+    PORTAL(new Portal(), SwapType.NONE, ""),
+    MORPH(new Morph(), SwapType.NONE, ""),
+    POTION_BOMB(new PotionBomb(), SwapType.NONE, "{0} died from {1}'s potionbomb"),
+    BUFF(new Buff(), SwapType.NONE, ""),
+    FLY(new Fly(), SwapType.NONE, ""),
+    EXPLOSIVE_EGG(new ExplosiveEgg(), SwapType.NONE, "{0} exploded by {1}'s explosive egg"),
+    LAY_EGG(new LayEgg(), SwapType.NONE, ""),
+    DROP_EGG(new DropEgg(), SwapType.NONE, "{0} died from {1}'s rotten egg"),
 
     //Dragon abilities
-    BURN(new Burn(), false, "{0} burned to death from the dragons heat"),
-    FIREFLY(new FireFly(), false, "{0} burned to death while the dragon flew by"),
-    FIRE_BREATH(new FireBreath(), false, "{0} burned to death by the dragons fire breath"),
-    GEYSER(new Geyser(), false, "{0} died from a hot geyser"),
-    TOXIC_RAIN(new ToxicRain(), false, "{0} didn't survive the toxic rain"),
-    WATER_BUBBLE(new WaterBubble(), false,"{0} drowned in a water bubble"),
-    WIND(new Wind(), false, "{0} was blown away by wind and died"),
-    WINDSTORM(new WindStorm(), false, "{0} died during a wind storm"),
-    AIRSHIELD(new AirShield(), false, "{0} died from a reflected arrow by the dragon"),
+    BURN(new Burn(), SwapType.NONE, "{0} burned to death from the dragons heat"),
+    FIREFLY(new FireFly(), SwapType.NONE, "{0} burned to death while the dragon flew by"),
+    FIRE_BREATH(new FireBreath(), SwapType.NONE, "{0} burned to death by the dragons fire breath"),
+    GEYSER(new Geyser(), SwapType.NONE, "{0} died from a hot geyser"),
+    TOXIC_RAIN(new ToxicRain(), SwapType.NONE, "{0} didn't survive the toxic rain"),
+    WATER_BUBBLE(new WaterBubble(), SwapType.NONE,"{0} drowned in a water bubble"),
+    WIND(new Wind(), SwapType.NONE, "{0} was blown away by wind and died"),
+    WINDSTORM(new WindStorm(), SwapType.NONE, "{0} died during a wind storm"),
+    AIRSHIELD(new AirShield(), SwapType.NONE, "{0} died from a reflected arrow by the dragon"),
 
     //Dwarf bonus abilities
-    LEAP(new Leap(), true, "{0} died while trying to leap away"),
-    TORRENT(new Torrent(), true, "{0} died from {1}'s water torrent"),
-    LAND_MINE(new Landmine(), true, "{0} was blown to pieces by {1}'s mine"),
-    NET(new Net(), true, ""),
-    CAMOUFLAGE(new Camouflage(), true, "");
+    LEAP(new Leap(), SwapType.DWARF_ABILITY, "{0} died while trying to leap away"),
+    TORRENT(new Torrent(), SwapType.DWARF_ABILITY, "{0} died from {1}'s water torrent"),
+    LAND_MINE(new Landmine(), SwapType.DWARF_ABILITY, "{0} was blown to pieces by {1}'s mine"),
+    NET(new Net(), SwapType.DWARF_ABILITY, ""),
+    CAMOUFLAGE(new Camouflage(), SwapType.DWARF_ABILITY, "");
 
 
     //------------------------------
@@ -109,13 +109,14 @@ public enum Ability {
 
 
     private BaseAbility abilityClass;
-    private boolean dwarfBonus = false;
+    private SwapType swapType;
     private String deathMsg;
+    private static HashMap<SwapType, LinkedHashMap<Ability, CWItem>> swapItems = new HashMap<>();
 
-    Ability(BaseAbility abilityClass, boolean dwarfBonus, String deathMsg) {
+    Ability(BaseAbility abilityClass, SwapType swapType, String deathMsg) {
         this.abilityClass = abilityClass;
         abilityClass.setAbility(this);
-        this.dwarfBonus = dwarfBonus;
+        this.swapType = swapType;
         this.deathMsg = deathMsg;
     }
 
@@ -123,8 +124,21 @@ public enum Ability {
         return abilityClass;
     }
 
-    public boolean isDwarfBonus() {
-        return dwarfBonus;
+    public SwapType getSwapType(){
+        return swapType;
+    }
+
+    public static LinkedHashMap<Ability, CWItem> getSwapItems(SwapType swapType) {
+        if (!swapItems.containsKey(swapType)) {
+            LinkedHashMap<Ability, CWItem> items = new LinkedHashMap<Ability, CWItem>();
+            for (Ability ability : values()) {
+                if (ability.swapType == swapType && ability.getAbilityClass().getCastItem() != null) {
+                    items.put(ability, ability.getAbilityClass().getCastItem());
+                }
+            }
+            swapItems.put(swapType, items);
+        }
+        return swapItems.get(swapType);
     }
 
     public String getDeathMsg() {
