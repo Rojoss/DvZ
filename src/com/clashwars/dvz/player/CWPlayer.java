@@ -8,6 +8,7 @@ import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.VIP.BannerData;
+import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
@@ -129,6 +130,7 @@ public class CWPlayer {
     public void resetData() {
         productsTaken.clear();
         data.setClassOptions(new HashSet<DvzClass>());
+        data.setDwarfAbilitiesReceived(new HashSet<Ability>());
         data.setPlayerClass(DvzClass.DWARF);
         data.setClassExp(0);
         data.setParkourCompleted(false);
@@ -367,8 +369,6 @@ public class CWPlayer {
         }.runTaskLater(dvz, 5);
     }
 
-
-
     public PlayerData getPlayerData() {
         return data;
     }
@@ -412,6 +412,11 @@ public class CWPlayer {
 
     public void clearClassOptions() {
         data.setClassOptions(new HashSet<DvzClass>());
+    }
+
+
+    public void addDwarfAbility(Ability ability) {
+        data.addDwarfAbility(ability);
     }
 
 

@@ -1,5 +1,6 @@
 package com.clashwars.dvz.player;
 
+import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.DvzClass;
 
 import java.util.HashSet;
@@ -12,6 +13,7 @@ public class PlayerData {
     private int classExp = 0;
     private boolean parkourCompleted = false;
     private Set<DvzClass> classOptions = new HashSet<DvzClass>();
+    private Set<Ability> dwarfAbilitiesReceived = new HashSet<Ability>();
     private boolean buffUsed = false;
     private boolean bombUsed = false;
     private boolean isBuffed = false;
@@ -62,6 +64,18 @@ public class PlayerData {
 
     public void setClassOptions(Set<DvzClass> classOptions) {
         this.classOptions = classOptions;
+    }
+
+    public Set<Ability> getDwarfAbilitiesReceived() {
+        return dwarfAbilitiesReceived;
+    }
+
+    public void addDwarfAbility(Ability ability) {
+        dwarfAbilitiesReceived.add(ability);
+    }
+
+    public void setDwarfAbilitiesReceived(Set<Ability> abilities) {
+        this.dwarfAbilitiesReceived = abilities;
     }
 
     public boolean isBuffUsed() {
