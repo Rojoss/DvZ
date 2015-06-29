@@ -261,10 +261,9 @@ public class GameManager {
             return;
         }
         DvzClass dragonType = getDragonType();
-        setDragonType(dragonType);
 
         Bukkit.broadcastMessage(CWUtil.integrateColor("&7======= &a&lThe " + dragonType.getClassClass().getDisplayName() + " &a&larises! &7======="));
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Stop working and get to the walls!"));
+        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Stop working and get to the keep!"));
         if (getDragonPlayer() == null) {
             Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Kill the dragon and become the &bDragonSlayer&7!"));
         }
@@ -290,15 +289,11 @@ public class GameManager {
         Camouflage.removeAllBlocks();
 
         final Player dragonPlayer = player;
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                double health = 20 + dvz.getPM().getPlayers(ClassType.DWARF, true, true).size() * 2;
-                dragonPlayer.setMaxHealth(health);
-                dragonPlayer.setHealth(health);
-            }
-        }.runTaskLater(dvz, 60);
-        new DragonRunnable(dvz).runTaskTimer(dvz, 20, 20);
+        double health = 20 + dvz.getPM().getPlayers(ClassType.DWARF, true, true).size() * 2;
+        dragonPlayer.setMaxHealth(health);
+        dragonPlayer.setHealth(health);
+
+        new DragonRunnable(dvz).runTaskTimer(dvz, 0, 20);
         dvz.logTimings("GameManager.createDragon()", t);
     }
 
@@ -483,6 +478,7 @@ public class GameManager {
         if (dvzClass == null) {
             Set<DvzClass> dragons = dvz.getCM().getClasses(ClassType.DRAGON).keySet();
             dvzClass = CWUtil.random(new ArrayList<DvzClass>(dragons));
+            gCfg.GAME__DRAGON_TYPE = dvzClass.toString();
         }
         return dvzClass;
     }

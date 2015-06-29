@@ -158,90 +158,85 @@ public class CWPlayer {
         //Reset
         reset(c.isSwitchable());
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                setPlayerClass(dvzClass);
-                if (dvzClass.getType() == ClassType.DWARF) {
-                    removeClassOption(dvzClass);
-                }
+        setPlayerClass(dvzClass);
+        if (dvzClass.getType() == ClassType.DWARF) {
+            removeClassOption(dvzClass);
+        }
 
-                //Disguise
-                if (dvzClass.getType() == ClassType.MONSTER || dvzClass.getType() == ClassType.DRAGON) {
-                    Util.disguisePlayer(player.getName(), c.getStrOption("disguise"), dvzClass);
-                }
+        //Disguise
+        if (dvzClass.getType() == ClassType.MONSTER || dvzClass.getType() == ClassType.DRAGON) {
+            Util.disguisePlayer(player.getName(), c.getStrOption("disguise"), dvzClass);
+        }
 
-                //Team
-                if (dvz.getBoard().hasTeam(dvzClass.getTeam() + getTeamSuffix())) {
-                    dvz.getBoard().getTeam(dvzClass.getTeam() + getTeamSuffix()).addPlayer(player);
-                }
+        //Team
+        if (dvz.getBoard().hasTeam(dvzClass.getTeam() + getTeamSuffix())) {
+            dvz.getBoard().getTeam(dvzClass.getTeam() + getTeamSuffix()).addPlayer(player);
+        }
 
-                //Prefix
-                dvz.getPerms().playerAdd(player, "prefix." + getPlayerClass().toString().toLowerCase());
+        //Prefix
+        dvz.getPerms().playerAdd(player, "prefix." + getPlayerClass().toString().toLowerCase());
 
-                //Teleport
-                if (eggUse) {
-                    if (dvzClass.getType() == ClassType.DWARF) {
-                        player.teleport(dvz.getMM().getActiveMap().getLocation("dwarf"));
-                    } else if (dvzClass.getType() == ClassType.MONSTER) {
-                        if (dvz.getGM().getState() == GameState.MONSTERS_WALL) {
-                            player.teleport(dvz.getMM().getActiveMap().getLocation("wall"));
-                        } else if (dvz.getGM().getState() == GameState.MONSTERS_KEEP) {
-                            player.teleport(dvz.getMM().getActiveMap().getLocation("dwarf"));
-                        } else {
-                            player.teleport(dvz.getMM().getActiveMap().getLocation("monster"));
-                        }
-                    } else if (dvzClass.getType() == ClassType.DRAGON) {
-                        player.teleport(dvz.getMM().getActiveMap().getLocation("dragon"));
-                    }
+        //Teleport
+        if (eggUse) {
+            if (dvzClass.getType() == ClassType.DWARF) {
+                player.teleport(dvz.getMM().getActiveMap().getLocation("dwarf"));
+            } else if (dvzClass.getType() == ClassType.MONSTER) {
+                if (dvz.getGM().getState() == GameState.MONSTERS_WALL) {
+                    player.teleport(dvz.getMM().getActiveMap().getLocation("wall"));
+                } else if (dvz.getGM().getState() == GameState.MONSTERS_KEEP) {
+                    player.teleport(dvz.getMM().getActiveMap().getLocation("dwarf"));
+                } else {
+                    player.teleport(dvz.getMM().getActiveMap().getLocation("monster"));
                 }
-
-                //Equip class and items etc.
-                c.equipItems(player);
-                dvzClass.getClassClass().onEquipClass(player);
-                if (!c.isSwitchable()) {
-                    player.setMaxHealth(c.getHealth());
-                    player.setHealth(c.getHealth());
-                }
-                player.setWalkSpeed(Math.min(Math.max(c.getSpeed(), 0), 1));
-                player.setFlySpeed(Math.min(Math.max(c.getSpeed(), 0), 1));
-
-                //Equip VIP items.
-                if (c.getType() == ClassType.DWARF) {
-                    int bannerCount = 0;
-                    for (int i = 10; i > 0; i--) {
-                        if (player.hasPermission("banner." + i)) {
-                            bannerCount = i;
-                            break;
-                        }
-                    }
-                    if (bannerCount > 0) {
-                        CWItem banner = Product.VIP_BANNER.getItem(bannerCount);
-                        BannerData bannerData;
-                        if (dvz.getBannerCfg().BANNERS.containsKey(player.getUniqueId().toString())) {
-                            bannerData = dvz.getBannerCfg().getBanner(player.getUniqueId());
-                            banner.setBaseColor(bannerData.getBaseColor());
-                            banner.setPatterns(bannerData.getPatterns());
-                        } else {
-                            bannerData = new BannerData();
-                        }
-                        bannerData.setGiven(true);
-                        dvz.getBannerCfg().setBanner(uuid, bannerData);
-
-                        banner.giveToPlayer(player);
-                    }
-                }
-
-                if (eggUse) {
-                    player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));
-                }
-                if (c.getType() == ClassType.DWARF) {
-                    player.sendMessage(CWUtil.integrateColor("&7&o" + c.getTask()));
-                }
-                savePlayer();
-                dvz.logTimings("CWPlayer.setClass()[runTaskLater:30]", t);
+            } else if (dvzClass.getType() == ClassType.DRAGON) {
+                player.teleport(dvz.getMM().getActiveMap().getLocation("dragon"));
             }
-        }.runTaskLater(dvz, 30);
+        }
+
+        //Equip class and items etc.
+        c.equipItems(player);
+        dvzClass.getClassClass().onEquipClass(player);
+        if (!c.isSwitchable()) {
+            player.setMaxHealth(c.getHealth());
+            player.setHealth(c.getHealth());
+        }
+        player.setWalkSpeed(Math.min(Math.max(c.getSpeed(), 0), 1));
+        player.setFlySpeed(Math.min(Math.max(c.getSpeed(), 0), 1));
+
+        //Equip VIP items.
+        if (c.getType() == ClassType.DWARF) {
+            int bannerCount = 0;
+            for (int i = 10; i > 0; i--) {
+                if (player.hasPermission("banner." + i)) {
+                    bannerCount = i;
+                    break;
+                }
+            }
+            if (bannerCount > 0) {
+                CWItem banner = Product.VIP_BANNER.getItem(bannerCount);
+                BannerData bannerData;
+                if (dvz.getBannerCfg().BANNERS.containsKey(player.getUniqueId().toString())) {
+                    bannerData = dvz.getBannerCfg().getBanner(player.getUniqueId());
+                    banner.setBaseColor(bannerData.getBaseColor());
+                    banner.setPatterns(bannerData.getPatterns());
+                } else {
+                    bannerData = new BannerData();
+                }
+                bannerData.setGiven(true);
+                dvz.getBannerCfg().setBanner(uuid, bannerData);
+
+                banner.giveToPlayer(player);
+            }
+        }
+
+        if (eggUse) {
+            player.sendMessage(Util.formatMsg("&6You became a &5" + c.getDisplayName()));
+        }
+        if (c.getType() == ClassType.DWARF) {
+            player.sendMessage(CWUtil.integrateColor("&7&o" + c.getTask()));
+        }
+        savePlayer();
+        dvz.logTimings("CWPlayer.setClass()", t);
     }
 
 
@@ -281,20 +276,15 @@ public class CWPlayer {
         }
         dvz.getPerms().playerAdd(player, "prefix." + getPlayerClass().toString().toLowerCase());
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (int i = 9; i < menu.getSize(); i++) {
-                    if (menu.getItems()[i] != null && menu.getItems()[i].getType() != Material.AIR) {
-                        if (player.getInventory().getItem(i - 9) == null || player.getInventory().getItem(i - 9).getType() == Material.AIR) {
-                            player.getInventory().setItem(i - 9, menu.getItems()[i]);
-                        } else {
-                            player.getInventory().addItem(menu.getItems()[i]);
-                        }
-                    }
+        for (int i = 9; i < menu.getSize(); i++) {
+            if (menu.getItems()[i] != null && menu.getItems()[i].getType() != Material.AIR) {
+                if (player.getInventory().getItem(i - 9) == null || player.getInventory().getItem(i - 9).getType() == Material.AIR) {
+                    player.getInventory().setItem(i - 9, menu.getItems()[i]);
+                } else {
+                    player.getInventory().addItem(menu.getItems()[i]);
                 }
             }
-        }.runTaskLater(dvz, 20);
+        }
 
         player.setMaxHealth(c.getHealth());
         player.setHealth(c.getHealth());
@@ -340,34 +330,29 @@ public class CWPlayer {
 
 
     public void giveClassItems(final ClassType type, final boolean forcePrevious, final int amount) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                Long t = System.currentTimeMillis();
-                Player player = getPlayer();
-                if (forcePrevious) {
-                    if (type == ClassType.MONSTER) {
-                        DvzClass.ZOMBIE.getClassClass().getClassItem().giveToPlayer(player);
-                    }
-                    return;
-                }
-                Map<DvzClass, BaseClass> classOptions = dvz.getCM().getRandomClasses(player, type, amount);
-                clearClassOptions();
-                setClassOptions(classOptions.keySet());
-                if (type == ClassType.MONSTER) {
-                    DvzClass.ZOMBIE.getClassClass().getClassItem().giveToPlayer(player);
-                    if (!classOptions.containsKey(DvzClass.ZOMBIE)) {
-                        classOptions.put(DvzClass.ZOMBIE, DvzClass.ZOMBIE.getClassClass());
-                    }
-                }
-                for (DvzClass c : classOptions.keySet()) {
-                    if (classOptions.get(c) != null && classOptions.get(c).getClassItem() != null) {
-                        classOptions.get(c).getClassItem().giveToPlayer(player);
-                    }
-                }
-                dvz.logTimings("CWPlayer.giveClassItems()", t);
+        Long t = System.currentTimeMillis();
+        Player player = getPlayer();
+        if (forcePrevious) {
+            if (type == ClassType.MONSTER) {
+                DvzClass.ZOMBIE.getClassClass().getClassItem().giveToPlayer(player);
             }
-        }.runTaskLater(dvz, 5);
+            return;
+        }
+        Map<DvzClass, BaseClass> classOptions = dvz.getCM().getRandomClasses(player, type, amount);
+        clearClassOptions();
+        setClassOptions(classOptions.keySet());
+        if (type == ClassType.MONSTER) {
+            DvzClass.ZOMBIE.getClassClass().getClassItem().giveToPlayer(player);
+            if (!classOptions.containsKey(DvzClass.ZOMBIE)) {
+                classOptions.put(DvzClass.ZOMBIE, DvzClass.ZOMBIE.getClassClass());
+            }
+        }
+        for (DvzClass c : classOptions.keySet()) {
+            if (classOptions.get(c) != null && classOptions.get(c).getClassItem() != null) {
+                classOptions.get(c).getClassItem().giveToPlayer(player);
+            }
+        }
+        dvz.logTimings("CWPlayer.giveClassItems()", t);
     }
 
     public PlayerData getPlayerData() {
