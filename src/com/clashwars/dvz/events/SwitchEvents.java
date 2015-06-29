@@ -4,6 +4,7 @@ import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.Product;
+import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.util.ItemMenu;
@@ -104,8 +105,17 @@ public class SwitchEvents implements Listener {
                     return;
                 }
                 if (!Product.canKeep(item.getType())) {
-                    player.sendMessage(Util.formatMsg("&cThis item can't be kept."));
-                    dvz.logTimings("SwitchEvents.menuClick()[can't keep]", t);
+                    boolean isCastItem = false;
+                    for (Ability ability : Ability.values()) {
+                        if (ability.getAbilityClass().isCastItem(item)) {
+                            isCastItem = true;
+                            break;
+                        }
+                    }
+                    if (!isCastItem) {
+                        player.sendMessage(Util.formatMsg("&cThis item can't be kept."));
+                        dvz.logTimings("SwitchEvents.menuClick()[can't keep]", t);
+                    }
                     return;
                 }
 

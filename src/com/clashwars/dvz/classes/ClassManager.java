@@ -4,6 +4,7 @@ import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.Product;
+import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.ItemMenu;
 import org.bukkit.Material;
@@ -230,9 +231,22 @@ public class ClassManager {
         ItemStack empty = new ItemStack(Material.AIR);
         for (int i = 0; i < player.getInventory().getSize(); i++) {
             ItemStack item = player.getInventory().getItem(i);
-            if (item == null || item.getType() == Material.AIR || !Product.canKeep(item.getType())) {
+            if (item == null || item.getType() == Material.AIR) {
                 continue;
             }
+            if (!Product.canKeep(item.getType())) {
+                boolean isCastItem = false;
+                for (Ability ability : Ability.values()) {
+                    if (ability.getAbilityClass().isCastItem(item)) {
+                        isCastItem = true;
+                        break;
+                    }
+                }
+                if (!isCastItem) {
+                    continue;
+                }
+            }
+
             menu.setSlot(new CWItem(item), i + 9, null);
             player.getInventory().setItem(i, empty);
         }

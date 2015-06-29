@@ -4,8 +4,12 @@ import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.ClassType;
+import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.damage.types.CustomDmg;
 import com.clashwars.dvz.util.Util;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -47,5 +51,18 @@ public class DragonRunnable extends BukkitRunnable {
 
         Double hpRegen = (double)(power * 0.5f) - 0.5f;
         new CustomDmg(dragon, -hpRegen, "", "");
+
+        //Make players take damage from water if it's the fire dragon
+        if (dvz.getPM().getPlayer(dragon).getPlayerClass() == DvzClass.FIREDRAGON) {
+            for (Player player : dvz.getServer().getOnlinePlayers()) {
+                Block block = player.getLocation().getBlock();
+                Block blockAbove = block.getRelative(BlockFace.UP);
+                if (block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER || block.getType() == Material.CAULDRON
+                        || blockAbove.getType() == Material.WATER || blockAbove.getType() == Material.STATIONARY_WATER) {
+                    CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThe water is boiling from the dragon! &4GET OUT! &4&l<<"));
+                    new CustomDmg(player, 4, "{0} died from standing in boiling water", "boiling water", dragon);
+                }
+            }
+        }
     }
 }
