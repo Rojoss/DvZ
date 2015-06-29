@@ -60,6 +60,12 @@ public class DamageHandler implements Listener {
         }
 
         BaseDmg dmg = event.getDmgClass();
+        if (!(dmg instanceof MeleeDmg) && !(dmg instanceof RangedDmg) && !(dmg instanceof EnvironmentDmg)) {
+            if (dmg.getDmg() > 0) {
+                player.damage(0);
+            }
+        }
+
         OfflinePlayer damager = null;
         if (dmg instanceof MeleeDmg) {
             damager = ((MeleeDmg)dmg).getAttacker();
