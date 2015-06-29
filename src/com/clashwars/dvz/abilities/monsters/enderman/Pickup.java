@@ -36,7 +36,7 @@ public class Pickup extends BaseAbility {
     public Pickup() {
         super();
         ability = Ability.PICKUP;
-        castItem = new DvzItem(Material.GOLD_HOE, 1, (short)0, displayName, 3, -1);
+        castItem = new DvzItem(Material.GOLD_HOE, 1, (short)0, displayName, 100, -1);
     }
 
     public void dropTarget(Player player) {

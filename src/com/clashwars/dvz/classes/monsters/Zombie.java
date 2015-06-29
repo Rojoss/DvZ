@@ -15,7 +15,7 @@ public class Zombie extends MobClass {
         abilities.add(Ability.INFECT);
         abilities.add(Ability.RUSH);
 
-        equipment.add(new DvzItem(Material.STONE_SWORD, -1, -1));
+        equipment.add(new DvzItem(Material.STONE_SWORD, 100, -1));
     }
 
 }

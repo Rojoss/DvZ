@@ -19,7 +19,7 @@ public class DropEgg extends BaseAbility {
     public DropEgg() {
         super();
         ability = Ability.DROP_EGG;
-        castItem = new DvzItem(Material.HUGE_MUSHROOM_1, 1, (short) 0, displayName, 200, -1);
+        castItem = new DvzItem(Material.HUGE_MUSHROOM_1, 1, (short) 0, displayName, 140, -1);
     }
 
     @Override

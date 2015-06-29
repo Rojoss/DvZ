@@ -29,7 +29,7 @@ public class ExplosiveEgg extends BaseAbility {
     public ExplosiveEgg() {
         super();
         ability = Ability.EXPLOSIVE_EGG;
-        castItem = new DvzItem(Material.EGG, 1, (short) 0, displayName, 200, -1);
+        castItem = new DvzItem(Material.EGG, 1, (short) 0, displayName, 180, -1);
     }
 
     @Override

@@ -22,15 +22,14 @@ public class Buff extends BaseAbility {
     public Buff() {
         super();
         ability = Ability.BUFF;
-        castItem = new DvzItem(Material.EMERALD, 1, (short)0, displayName, -1, -1, false);
+        castItem = new DvzItem(Material.EMERALD, 1, (short)0, displayName, -1, 2, false);
     }
 
     @Override
     public void onCastItemGiven(Player player) {
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         if (!cwp.getPlayerData().isBuffUsed()) {
-            castItem.giveToPlayer(player);
-        } else {
+            player.getInventory().setItem(1, castItem);
         }
     }
 

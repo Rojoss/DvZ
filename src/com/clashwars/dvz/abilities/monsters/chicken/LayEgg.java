@@ -24,7 +24,7 @@ public class LayEgg extends BaseAbility {
     public LayEgg() {
         super();
         ability = Ability.LAY_EGG;
-        castItem = new DvzItem(Material.HUGE_MUSHROOM_1, 1, (short) 0, displayName, 200, -1);
+        castItem = new DvzItem(Material.HUGE_MUSHROOM_1, 1, (short) 0, displayName, 160, -1);
     }
 
     @Override

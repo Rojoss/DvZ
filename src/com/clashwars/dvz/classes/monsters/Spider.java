@@ -19,7 +19,7 @@ public class Spider extends MobClass {
         abilities.add(Ability.WEB);
         abilities.add(Ability.POISON_ATTACK);
 
-        equipment.add(new DvzItem(Material.WOOD_SWORD, -1, -1));
+        equipment.add(new DvzItem(Material.WOOD_SWORD, 100, -1));
     }
 
     @Override

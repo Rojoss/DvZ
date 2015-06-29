@@ -46,7 +46,7 @@ public class PotionBomb extends BaseAbility {
     public PotionBomb() {
         super();
         ability = Ability.POTION_BOMB;
-        DvzItem skull = new DvzItem(Material.SKULL_ITEM, 1, (short)0, displayName, 3, -1, false);
+        DvzItem skull = new DvzItem(Material.SKULL_ITEM, 1, (short)0, displayName, -1, 3, false);
         skull.setSkullOwner("Scott11B");
         castItem = skull;
     }
@@ -55,7 +55,7 @@ public class PotionBomb extends BaseAbility {
     public void onCastItemGiven(Player player) {
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         if (!cwp.getPlayerData().isBombUsed()) {
-            castItem.giveToPlayer(player);
+            player.getInventory().setItem(2, castItem);
         }
     }
 

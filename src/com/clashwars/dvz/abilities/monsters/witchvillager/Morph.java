@@ -17,7 +17,7 @@ public class Morph extends BaseAbility {
     public Morph() {
         super();
         ability = Ability.MORPH;
-        castItem = new DvzItem(Material.PRISMARINE_SHARD, 1, (short)0, displayName, 0, 1);
+        castItem = new DvzItem(Material.PRISMARINE_SHARD, 1, (short)0, displayName, 50, -1);
     }
 
     @Override

@@ -14,7 +14,7 @@ public class Skeleton extends MobClass {
 
         abilities.add(Ability.RAPIDFIRE);
 
-        equipment.add(new DvzItem(Material.ARROW,-1,-1));
+        equipment.add(new DvzItem(Material.ARROW, -1, 9));
     }
 
 }
