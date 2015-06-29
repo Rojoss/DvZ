@@ -99,7 +99,7 @@ public class DamageHandler implements Listener {
             return;
         }
 
-        event.setDamage(EntityDamageEvent.DamageModifier.MAGIC, event.getDamage(EntityDamageEvent.DamageModifier.MAGIC) / 100 * 75);
+        //event.setDamage(EntityDamageEvent.DamageModifier.MAGIC, event.getDamage(EntityDamageEvent.DamageModifier.MAGIC) / 100 * 75);
 
         double dmg = event.getDamage();
         double finalDmg = event.getFinalDamage();
