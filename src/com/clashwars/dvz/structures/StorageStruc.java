@@ -7,11 +7,13 @@ import com.clashwars.cwcore.utils.ExpUtil;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.events.custom.GameResetEvent;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.structures.data.StorageData;
 import com.clashwars.dvz.structures.extra.StorageItem;
 import com.clashwars.dvz.structures.internal.Structure;
+import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Material;
@@ -73,13 +75,6 @@ public class StorageStruc extends Structure {
                 dvz.logTimings("StorageStruc.StorageStruc[saving items]", t);
             }
         }.runTaskTimer(dvz, 600, 600);
-    }
-
-    public void reset() {
-        for (StorageItem item : items) {
-            item.setAmt(0);
-            updateItem(item);
-        }
     }
 
 
@@ -255,6 +250,15 @@ public class StorageStruc extends Structure {
             player.playSound(player.getLocation(), Sound.ORB_PICKUP, 0.8f, 1.6f);
         }
         dvz.logTimings("StorageStruc.menuclick()", t);
+    }
+
+    @EventHandler
+    private void gameReset(GameResetEvent event) {
+        for (StorageItem item : items) {
+            item.setAmt(0);
+            updateItem(item);
+        }
+        dvz.getGameCfg().STORAGE_PRODUCTS.clear();
     }
 
 

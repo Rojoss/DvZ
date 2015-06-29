@@ -9,6 +9,9 @@ import com.clashwars.dvz.abilities.dwarves.bonus.Camouflage;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.GameCfg;
+import com.clashwars.dvz.events.custom.GameOpenEvent;
+import com.clashwars.dvz.events.custom.GameResetEvent;
+import com.clashwars.dvz.events.custom.GameStartEvent;
 import com.clashwars.dvz.maps.DvzMap;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
@@ -19,10 +22,7 @@ import com.clashwars.dvz.structures.StorageStruc;
 import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.WorkShop;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -54,6 +54,8 @@ public class GameManager {
 
 
     public void resetGame(boolean nextGame, String mapName) {
+        Bukkit.getPluginManager().callEvent(new GameResetEvent(nextGame, mapName));
+
         Long t = System.currentTimeMillis();
         setState(GameState.SETUP);
         if (!nextGame) {
@@ -96,9 +98,6 @@ public class GameManager {
             ws.destroy();
         }
         dvz.getWM().removeWorkshops(true);
-
-        ((StorageStruc)StructureType.STORAGE.getStrucClass()).reset();
-        gCfg.STORAGE_PRODUCTS.clear();
 
         setDragonPlayer(null);
         setDragonType(null);
@@ -150,6 +149,8 @@ public class GameManager {
     }
 
     public void openGame() {
+        Bukkit.getPluginManager().callEvent(new GameOpenEvent());
+
         Long t = System.currentTimeMillis();
         if (dvz.getMM().getActiveMap() == null || !dvz.getMM().getActiveMap().isLoaded()) {
             dvz.getMM().loadMap(null);
@@ -204,6 +205,8 @@ public class GameManager {
 
 
     public void startGame() {
+        Bukkit.getPluginManager().callEvent(new GameStartEvent());
+
         Long t = System.currentTimeMillis();
         Bukkit.broadcastMessage(CWUtil.integrateColor("&7========== &a&lDvZ has started! &7=========="));
         Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7You can now choose a dwarf class!"));
@@ -538,19 +541,14 @@ public class GameManager {
         if (gCfg.GAME__DRAGON_SLAYER == null || gCfg.GAME__DRAGON_SLAYER.isEmpty() || UUID.fromString(gCfg.GAME__DRAGON_SLAYER) == null) {
             return;
         }
-        Player player = dvz.getServer().getPlayer(UUID.fromString(gCfg.GAME__DRAGON_SLAYER));
+        OfflinePlayer player = dvz.getServer().getOfflinePlayer(UUID.fromString(gCfg.GAME__DRAGON_SLAYER));
 
-        if (player == null) {
-            return;
-        }
-
-        if (dvz.getPerms() != null) {
-            dvz.getPerms().playerRemove(player, "prefix.dragonslayer");
-        }
-
-        player.setMaxHealth(20);
-
+        dvz.getServer().dispatchCommand(dvz.getServer().getConsoleSender(), "pex user " + player.getName() + " remove prefix.dragonslayer");
         dvz.getBoard().getTeam("dragonslayer").removePlayer(player);
+
+        if (player.isOnline()) {
+            ((Player)player).setMaxHealth(20);
+        }
 
         gCfg.GAME__DRAGON_SLAYER = "";
         gCfg.save();

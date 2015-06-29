@@ -8,6 +8,7 @@ import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.abilities.dwarves.bonus.Camouflage;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.damage.types.AbilityDmg;
+import com.clashwars.dvz.events.custom.GameResetEvent;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.util.DvzItem;
@@ -29,16 +30,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class PotionBomb extends BaseAbility {
 
@@ -233,6 +232,24 @@ public class PotionBomb extends BaseAbility {
         dvz.getServer().broadcastMessage(Util.formatMsg("&6The bomb (&c" + bomb.getX() + "&7, &a" + bomb.getY() + "&7, &9" + bomb.getZ() + "&6) has been destroyed!"));
         bombs.get(bomb.getLocation()).cancel();
         bombs.remove(bomb.getLocation());
+    }
+
+    @EventHandler
+    private void gameReset(GameResetEvent event) {
+        for (Map.Entry<Location, BukkitTask> entry : bombs.entrySet()) {
+            fixGround(entry.getKey().getBlock());
+            entry.getValue().cancel();
+        }
+        bombs.clear();
+    }
+
+    @EventHandler
+    private void pluginUnload(PluginDisableEvent event) {
+        for (Map.Entry<Location, BukkitTask> entry : bombs.entrySet()) {
+            fixGround(entry.getKey().getBlock());
+            entry.getValue().cancel();
+        }
+        bombs.clear();
     }
 
     public void fixGround(Block bomb) {

@@ -40,6 +40,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -111,6 +112,9 @@ public class DvZ extends JavaPlugin {
         Long t = System.currentTimeMillis();
         //Save all player data.
         getPM().savePlayers();
+        for (Player player : getServer().getOnlinePlayers()) {
+            player.closeInventory();
+        }
 
         //Destroy all workshops but keep them in config. (they will be build again on load)
         HashMap<UUID, WorkShop> workshopsClone = new HashMap<UUID, WorkShop>(getWM().getWorkShops());

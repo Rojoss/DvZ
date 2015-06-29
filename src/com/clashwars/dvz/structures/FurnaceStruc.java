@@ -4,9 +4,11 @@ import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.Product;
+import com.clashwars.dvz.events.custom.GameResetEvent;
 import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.structures.data.FurnaceData;
 import com.clashwars.dvz.structures.extra.FurnaceItem;
+import com.clashwars.dvz.structures.extra.StorageItem;
 import com.clashwars.dvz.structures.internal.Structure;
 import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
@@ -15,6 +17,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -182,6 +185,14 @@ public class FurnaceStruc extends Structure {
         dvz.logTimings("FurnaceStruc.menuClick()", t);
     }
 
+
+    @EventHandler
+    private void gameReset(GameResetEvent event) {
+        for (ItemMenu menu : menus.values()) {
+            menu.clear(null);
+        }
+        menus.clear();
+    }
 
 
     private void populateFurnaceItems() {

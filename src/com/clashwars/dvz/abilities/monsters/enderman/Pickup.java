@@ -6,10 +6,12 @@ import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.damage.types.AbilityDmg;
+import com.clashwars.dvz.events.custom.GameResetEvent;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.runnables.PickupRunnable;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -18,6 +20,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
@@ -163,5 +167,29 @@ public class Pickup extends BaseAbility {
         block.getWorld().playSound(block.getLocation(), Sound.ITEM_PICKUP, 1, 2);
 
         block.setType(Material.AIR);
+    }
+
+    @EventHandler
+    private void gameReset(GameResetEvent event) {
+        for (Map.Entry<UUID, PickupRunnable> entry : pickupRunnables.entrySet()) {
+            entry.getValue().cancel();
+            if (Bukkit.getPlayer(entry.getKey()) != null) {
+                dropTarget(Bukkit.getPlayer(entry.getKey()));
+            }
+        }
+        pickupRunnables.clear();
+        pickupPlayers.clear();
+    }
+
+    @EventHandler
+    private void pluginUnload(PluginDisableEvent event) {
+        for (Map.Entry<UUID, PickupRunnable> entry : pickupRunnables.entrySet()) {
+            entry.getValue().cancel();
+            if (Bukkit.getPlayer(entry.getKey()) != null) {
+                dropTarget(Bukkit.getPlayer(entry.getKey()));
+            }
+        }
+        pickupRunnables.clear();
+        pickupPlayers.clear();
     }
 }

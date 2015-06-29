@@ -14,6 +14,7 @@ import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.PlayerCfg;
 import com.clashwars.dvz.damage.log.DamageLog;
+import com.clashwars.dvz.events.custom.ClassLevelupEvent;
 import com.clashwars.dvz.runnables.TeleportRunnable;
 import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.util.ItemMenu;
@@ -624,32 +625,6 @@ public class CWPlayer {
             return other.getUUID() == getUUID();
         }
         return false;
-    }
-
-
-    //Custom ClassLevelupEvent.
-    public static class ClassLevelupEvent extends Event {
-
-        private CWPlayer cwp;
-
-        public ClassLevelupEvent(CWPlayer cwp) {
-            this.cwp = cwp;
-        }
-
-        public CWPlayer getCWPlayer() {
-            return cwp;
-        }
-
-        private static final HandlerList handlers = new HandlerList();
-
-        @Override
-        public HandlerList getHandlers() {
-            return handlers;
-        }
-
-        public static HandlerList getHandlerList() {
-            return handlers;
-        }
     }
 
 }

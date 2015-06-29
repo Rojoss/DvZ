@@ -4,6 +4,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.events.custom.GameResetEvent;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,6 +15,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
@@ -78,6 +80,7 @@ public class Fly extends BaseAbility {
     @EventHandler
     private void playerDeath(PlayerDeathEvent event) {
         if (flyingPlayers.containsKey(event.getEntity().getUniqueId())) {
+            flyingPlayers.get(event.getEntity().getUniqueId()).cancel();
             flyingPlayers.remove(event.getEntity().getUniqueId());
         }
     }
@@ -85,8 +88,25 @@ public class Fly extends BaseAbility {
     @EventHandler
     private void playerLeave(PlayerQuitEvent event) {
         if (flyingPlayers.containsKey(event.getPlayer().getUniqueId())) {
+            flyingPlayers.get(event.getPlayer().getUniqueId()).cancel();
             flyingPlayers.remove(event.getPlayer().getUniqueId());
         }
+    }
+
+    @EventHandler
+    private void gameReset(GameResetEvent event) {
+        for (BukkitTask flyingTask : flyingPlayers.values()) {
+            flyingTask.cancel();
+        }
+        flyingPlayers.clear();
+    }
+
+    @EventHandler
+    private void pluginUnload(PluginDisableEvent event) {
+        for (BukkitTask flyingTask : flyingPlayers.values()) {
+            flyingTask.cancel();
+        }
+        flyingPlayers.clear();
     }
 
     @EventHandler

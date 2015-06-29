@@ -7,6 +7,8 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.damage.types.CustomDmg;
+import com.clashwars.dvz.events.custom.GameResetEvent;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.util.DvzItem;
@@ -25,6 +27,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
 
@@ -217,6 +221,28 @@ public class Portal extends BaseAbility {
         }
     }
 
+    @EventHandler
+    private void logout(PlayerQuitEvent event) {
+        if (dvz.getPM().getPlayer(event.getPlayer()).getPlayerClass() == DvzClass.ENDERMAN) {
+            if (activePortal == null || !activePortal.getOwner().equals(event.getPlayer())) {
+                return;
+            }
+
+            dvz.getServer().broadcastMessage(Util.formatMsg("&cThe portal has been destroyed because the enderman logged off!"));
+            destroyPortal(false);
+        }
+    }
+
+    @EventHandler
+    private void gameReset(GameResetEvent event) {
+        destroyPortal(true);
+    }
+
+    @EventHandler
+    private void pluginUnload(PluginDisableEvent event) {
+        destroyPortal(true);
+    }
+
     public void destroyPortal(boolean kill) {
         if (activePortal == null || activePortal.getCuboid() == null) {
             return;
@@ -267,7 +293,7 @@ public class Portal extends BaseAbility {
 
         //Kill owner if needed. (needs to be last because of the check of enderman death will also remove the portal)
         if (kill) {
-            portalOwner.setHealth(0);
+            new CustomDmg(portalOwner, 20, "{0} died because the portal got destroyed", "portal destroy");
         }
     }
 }

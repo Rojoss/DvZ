@@ -5,6 +5,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.events.custom.GameResetEvent;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -172,9 +173,11 @@ public class Camouflage extends BaseAbility {
 
     @EventHandler
     private void pluginUnload(PluginDisableEvent event) {
-        HashMap<UUID, Location> blocksClone = new HashMap<UUID, Location>(blocks);
-        for (UUID uuid : blocksClone.keySet()) {
-            removeBlock(uuid);
-        }
+        removeAllBlocks();
+    }
+
+    @EventHandler
+    private void gameReset(GameResetEvent event) {
+        removeAllBlocks();
     }
 }

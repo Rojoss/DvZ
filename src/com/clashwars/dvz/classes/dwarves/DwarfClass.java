@@ -6,6 +6,7 @@ import com.clashwars.dvz.SwapType;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.events.custom.ClassLevelupEvent;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.player.PlayerData;
 import com.clashwars.dvz.util.Util;
@@ -42,7 +43,7 @@ public class DwarfClass extends BaseClass {
     }
 
     @EventHandler
-    private void levelUp(CWPlayer.ClassLevelupEvent event) {
+    private void levelUp(ClassLevelupEvent event) {
         CWPlayer cwp = event.getCWPlayer();
         PlayerData pData = cwp.getPlayerData();
         cwp.sendMessage(Util.formatMsg("&a&lLEVEL UP! &7You are now level &a&l" + cwp.getPlayerData().getClassLvl() + "&7!"));

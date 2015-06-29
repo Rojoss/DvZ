@@ -6,6 +6,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.damage.types.AbilityDmg;
+import com.clashwars.dvz.events.custom.GameResetEvent;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Bukkit;
@@ -14,6 +15,8 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -129,6 +132,22 @@ public class Chicken extends MobClass {
                 }
             }
         }.runTaskTimer(dvz, 0, 1);
+    }
+
+    @EventHandler
+    private void gameReset(GameResetEvent event) {
+        for (CWEntity egg : eggs.values()) {
+            egg.entity().remove();
+        }
+        eggs.clear();
+    }
+
+    @EventHandler
+    private void pluginUnload(PluginDisableEvent event) {
+        for (CWEntity egg : eggs.values()) {
+            egg.entity().remove();
+        }
+        eggs.clear();
     }
 
 }
