@@ -82,7 +82,9 @@ public class Alchemist extends DwarfClass {
 
         Player player = event.getPlayer();
         if (dvz.getPM().getPlayer(player).getPlayerClass() != DvzClass.ALCHEMIST) {
-            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need to be an alchemist to use empty cauldrons! &4&l<<"));
+            if (block.getType() == Material.CAULDRON) {
+                CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need to be an alchemist to empty cauldrons! &4&l<<"));
+            }
             return;
         }
 
