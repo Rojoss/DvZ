@@ -312,7 +312,7 @@ public class MainEvents implements Listener {
         final CWPlayer cwp = dvz.getPM().getPlayer(player);
 
         //Dragon death (respawn with saved data)
-        if (dvz.getGM().getDragonPlayer().getUniqueId().equals(player.getUniqueId())) {
+        if (dvz.getGM().getDragonPlayer() != null && dvz.getGM().getDragonPlayer().getUniqueId().equals(player.getUniqueId())) {
             if (dvz.getGM().getDragonSaveData() != null) {
                 new BukkitRunnable() {
                     @Override
@@ -338,31 +338,27 @@ public class MainEvents implements Listener {
         }
         event.setRespawnLocation(spawnLoc);
 
-        new BukkitRunnable() {
-            public void run() {
-                if (dvz.getGM().isStarted()) {
-                    //Player died as a dwarf.
-                    if (cwp.isDwarf()) {
-                        player.sendMessage(Util.formatMsg("&4&lYou have turned into a monster!!!"));
-                    }
-
-                    //Remove player from suicide list if he suicided.
-                    boolean suicide = false;
-                    if (dvz.getPM().suicidePlayers.contains(player.getUniqueId())) {
-                        suicide = true;
-                        dvz.getPM().suicidePlayers.remove(player.getUniqueId());
-                    }
-
-                    //Reset player and give class items.
-                    cwp.reset();
-                    cwp.setPlayerClass(DvzClass.MONSTER);
-                    if (dvz.getBoard().hasTeam(DvzClass.MONSTER.getTeam() + cwp.getTeamSuffix())) {
-                        dvz.getBoard().getTeam(DvzClass.MONSTER.getTeam() + cwp.getTeamSuffix()).addPlayer(player);
-                    }
-                    cwp.giveClassItems(ClassType.MONSTER, suicide, -1);
-                }
+        if (dvz.getGM().isStarted()) {
+            //Player died as a dwarf.
+            if (cwp.isDwarf()) {
+                player.sendMessage(Util.formatMsg("&4&lYou have turned into a monster!!!"));
             }
-        }.runTaskLater(dvz, 10);
+
+            //Remove player from suicide list if he suicided.
+            boolean suicide = false;
+            if (dvz.getPM().suicidePlayers.contains(player.getUniqueId())) {
+                suicide = true;
+                dvz.getPM().suicidePlayers.remove(player.getUniqueId());
+            }
+
+            //Reset player and give class items.
+            cwp.reset();
+            cwp.setPlayerClass(DvzClass.MONSTER);
+            if (dvz.getBoard().hasTeam(DvzClass.MONSTER.getTeam() + cwp.getTeamSuffix())) {
+                dvz.getBoard().getTeam(DvzClass.MONSTER.getTeam() + cwp.getTeamSuffix()).addPlayer(player);
+            }
+            cwp.giveClassItems(ClassType.MONSTER, suicide, -1);
+        }
         dvz.logTimings("MainEvents.respawn()", t);
     }
 }

@@ -105,7 +105,7 @@ public class DamageHandler implements Listener {
             return;
         }
 
-        //event.setDamage(EntityDamageEvent.DamageModifier.MAGIC, event.getDamage(EntityDamageEvent.DamageModifier.MAGIC) / 100 * 75);
+        event.setDamage(EntityDamageEvent.DamageModifier.MAGIC, event.getDamage(EntityDamageEvent.DamageModifier.MAGIC) / 100 * 125);
 
         double dmg = event.getDamage();
         double finalDmg = event.getFinalDamage();
@@ -251,7 +251,7 @@ public class DamageHandler implements Listener {
             broadcastDeathMessage(dmgLog, killer, ClassType.DWARF, CWUtil.integrateColor("&6>> &7&o" + deathMsg + " &6<<"));
             dvz.getSM().changeLocalStatVal(player, StatType.COMBAT_DWARF_DEATHS, 1);
 
-            if (killer != null && dvz.getGM().getDragonPlayer().getName().equals(killer.getName())) {
+            if (killer != null && dvz.getGM().getDragonPlayer() != null && dvz.getGM().getDragonPlayer().getName().equals(killer.getName())) {
                 dvz.getSM().changeLocalStatVal(player, StatType.COMBAT_DEATHS_BY_DRAGON, 1);
             }
 
@@ -271,7 +271,7 @@ public class DamageHandler implements Listener {
             broadcastDeathMessage(dmgLog, killer, ClassType.DRAGON, CWUtil.integrateColor("&5>> &7&o" + deathMsg + " &5<<"));
 
             //First dragon death
-            if (dvz.getGM().getState() == GameState.DRAGON && dvz.getGM().getDragonPlayer().getName().equalsIgnoreCase(player.getName())) {
+            if (dvz.getGM().getState() == GameState.DRAGON && dvz.getGM().getDragonPlayer() != null && dvz.getGM().getDragonPlayer().getName().equalsIgnoreCase(player.getName())) {
                 Bukkit.broadcastMessage(CWUtil.integrateColor("&7======= &a&lThe dragon has been killed! &7======="));
                 if (killer != null) {
                     dvz.getSM().changeLocalStatVal(killer.getUniqueId(), StatType.COMBAT_DRAGON_KILLS, 1);

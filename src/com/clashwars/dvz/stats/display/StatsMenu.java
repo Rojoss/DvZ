@@ -129,9 +129,11 @@ public class StatsMenu implements Listener {
                 statValue = dvz.getSM().getLocalStatVal(settings.stat_lookupPlayer, stat.stat_id);
             } else {
                 Set<CachedStat> cachedStats = userStats.get(player.getUniqueId());
-                for (CachedStat cachedStat : cachedStats) {
-                    if (cachedStat.stat_id == stat.stat_id) {
-                        statValue += cachedStat.value;
+                if (cachedStats != null) {
+                    for (CachedStat cachedStat : cachedStats) {
+                        if (cachedStat.stat_id == stat.stat_id) {
+                            statValue += cachedStat.value;
+                        }
                     }
                 }
             }
@@ -143,9 +145,11 @@ public class StatsMenu implements Listener {
                     statValue = dvz.getSM().getLocalStatVal(settings.stat_comparePlayer, stat.stat_id);
                 } else {
                     Set<CachedStat> cachedStats = userStats.get(settings.stat_comparePlayer);
-                    for (CachedStat cachedStat : cachedStats) {
-                        if (cachedStat.stat_id == stat.stat_id) {
-                            statValue += cachedStat.value;
+                    if (cachedStats != null) {
+                        for (CachedStat cachedStat : cachedStats) {
+                            if (cachedStat.stat_id == stat.stat_id) {
+                                statValue += cachedStat.value;
+                            }
                         }
                     }
                 }

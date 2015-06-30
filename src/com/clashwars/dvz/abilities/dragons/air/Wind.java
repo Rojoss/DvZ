@@ -55,7 +55,7 @@ public class Wind extends BaseAbility {
                         if (!dvz.getPM().getPlayer(p).isDwarf()) {
                             continue;
                         }
-                        new AbilityDmg(p, dvz.getGM().getDragonPower() * 3 - 2, ability, player);
+                        new AbilityDmg(p, dvz.getGM().getDragonPower() * 2 - 2, ability, player);
                         p.setVelocity(p.getVelocity().add( player.getLocation().getDirection().multiply(dvz.getGM().getDragonPower() * 0.6f) ));
                     }
 
