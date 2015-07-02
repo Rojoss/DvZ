@@ -1,6 +1,7 @@
 package com.clashwars.dvz.abilities;
 
 import com.clashwars.cwcore.CooldownManager;
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
@@ -247,7 +248,7 @@ public class BaseAbility implements Listener {
 
         //Swap/cycle items
         Player player = event.getPlayer();
-        if (ability.getSwapType() != SwapType.NONE && event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR) {
+        if (ability.getSwapType() != SwapType.NONE && (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR)) {
             PlayerInventory inv = player.getInventory();
 
             LinkedHashMap<Ability, CWItem> swapAbilities = Ability.getSwapItems(ability.getSwapType());
@@ -312,6 +313,7 @@ public class BaseAbility implements Listener {
         if (event.getClickedBlock() != null) {
             loc = event.getClickedBlock().getLocation();
         }
+
         ability.getAbilityClass().castAbility(player, loc);
     }
 
