@@ -1,12 +1,14 @@
 package com.clashwars.dvz.damage.types;
 
 import com.clashwars.cwcore.Debug;
+import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.damage.BaseDmg;
 import com.clashwars.dvz.damage.CustomDamageEvent;
 import com.clashwars.dvz.damage.DmgType;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class MeleeDmg extends BaseDmg {
 
@@ -17,21 +19,9 @@ public class MeleeDmg extends BaseDmg {
 
         this.attacker = attacker;
         type = DmgType.MELEE;
+
         damage();
     }
-
-    /*
-    @Override
-    public void damage() {
-        if (player != null && player.isOnline()) {
-            CustomDamageEvent event = new CustomDamageEvent((Player)player, damage, type, this);
-            Bukkit.getPluginManager().callEvent(event);
-            if (!event.isCancelled() && player.isOnline()) {
-                ((Player)player).setHealth(Math.max(((Player) player).getHealth() - event.getDamage(), 0));
-            }
-        }
-    }
-    */
 
     @Override
     public String getDeathMsg() {

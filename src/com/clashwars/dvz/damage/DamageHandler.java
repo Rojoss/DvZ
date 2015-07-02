@@ -100,27 +100,32 @@ public class DamageHandler implements Listener {
 
     /* Cancel all damage and transform it into custom damage */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    private void damageTake(EntityDamageEvent event) {
+    private void damageTake(final EntityDamageEvent event) {
         if (!(event.getEntity() instanceof Player)) {
             return;
         }
 
         event.setDamage(EntityDamageEvent.DamageModifier.MAGIC, event.getDamage(EntityDamageEvent.DamageModifier.MAGIC) / 100 * 125);
 
-        double dmg = event.getDamage();
-        double finalDmg = event.getFinalDamage();
+        final double dmg = event.getDamage();
+        final double finalDmg = event.getFinalDamage();
 
-        Player player = (Player)event.getEntity();
+        final Player player = (Player)event.getEntity();
         EntityDamageEvent.DamageCause cause = event.getCause();
 
         event.setDamage(0);
 
         if (event instanceof  EntityDamageByEntityEvent) {
-            EntityDamageByEntityEvent entityDmgByEntityEvent = (EntityDamageByEntityEvent)event;
+            final EntityDamageByEntityEvent entityDmgByEntityEvent = (EntityDamageByEntityEvent)event;
 
             if (cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
                 if (entityDmgByEntityEvent.getDamager() instanceof Player) {
-                    new MeleeDmg(player, finalDmg, (Player)entityDmgByEntityEvent.getDamager());
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            new MeleeDmg(player, finalDmg, (Player)entityDmgByEntityEvent.getDamager());
+                        }
+                    }.runTaskLater(dvz, 1);
                     return;
                 }
                 //TODO: MobDmg type with option to get owner of mob.
@@ -129,20 +134,30 @@ public class DamageHandler implements Listener {
 
             if (cause == EntityDamageEvent.DamageCause.PROJECTILE) {
                 if (entityDmgByEntityEvent.getDamager() instanceof Projectile) {
-                    Projectile proj = (Projectile)entityDmgByEntityEvent.getDamager();
+                    final Projectile proj = (Projectile)entityDmgByEntityEvent.getDamager();
                     if (proj.getShooter() instanceof Player) {
-                        new RangedDmg(player, finalDmg, (Player)proj.getShooter(), ((EntityDamageByEntityEvent) event).getDamager().getType());
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                new RangedDmg(player, finalDmg, (Player)proj.getShooter(), ((EntityDamageByEntityEvent) event).getDamager().getType());
+                            }
+                        }.runTaskLater(dvz, 1);
                     }
                     return;
                 }
             }
         }
 
-        if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
-            new EnvironmentDmg(player, finalDmg, event.getCause());
-        } else {
-            new EnvironmentDmg(player, dmg, event.getCause());
-        }
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                    new EnvironmentDmg(player, finalDmg, event.getCause());
+                } else {
+                    new EnvironmentDmg(player, dmg, event.getCause());
+                }
+            }
+        }.runTaskLater(dvz, 1);
     }
 
     @EventHandler
@@ -205,21 +220,7 @@ public class DamageHandler implements Listener {
 
         String deathMsg = player.getName() + " died";
         if (finalDamage != null) {
-            if (finalDamage.dmgClass instanceof MeleeDmg) {
-                deathMsg = ((MeleeDmg)finalDamage.dmgClass).getDeathMsg();
-            }
-            if (finalDamage.dmgClass instanceof RangedDmg) {
-                deathMsg = ((RangedDmg)finalDamage.dmgClass).getDeathMsg();
-            }
-            if (finalDamage.dmgClass instanceof AbilityDmg) {
-                deathMsg = ((AbilityDmg)finalDamage.dmgClass).getDeathMsg();
-            }
-            if (finalDamage.dmgClass instanceof EnvironmentDmg) {
-                deathMsg = ((EnvironmentDmg)finalDamage.dmgClass).getDeathMsg();
-            }
-            if (finalDamage.dmgClass instanceof CustomDmg) {
-                deathMsg = ((CustomDmg)finalDamage.dmgClass).getDeathMsg();
-            }
+            deathMsg = finalDamage.dmgClass.getDeathMsg();
         }
 
         if (cwp.isMonster()) {

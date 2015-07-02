@@ -1,9 +1,11 @@
 package com.clashwars.dvz.damage;
 
 import com.clashwars.cwcore.Debug;
+import com.clashwars.dvz.DvZ;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class BaseDmg {
 
