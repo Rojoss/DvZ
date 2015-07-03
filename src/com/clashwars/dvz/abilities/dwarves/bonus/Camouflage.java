@@ -15,9 +15,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -79,6 +77,15 @@ public class Camouflage extends BaseAbility {
         if (disguiseBlock.getType() != Material.AIR) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't create a block where you're standing! &4&l<<"));
             dvz.logTimings("Camouflage.castAbility()[not air]", t);
+            return;
+        }
+
+        if (!dvz.getGM().isMonsters() && dvz.getMM().getActiveMap().getCuboid("keep").contains(disguiseBlock)) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cTorrent can't be used inside the keep right now &4&l<<"));
+            return;
+        }
+        if (!dvz.getGM().isMonsters() && dvz.getMM().getActiveMap().getCuboid("innerwall").contains(disguiseBlock)) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cTorrent can't be used inside the keep right now &4&l<<"));
             return;
         }
 
@@ -165,7 +172,7 @@ public class Camouflage extends BaseAbility {
     }
 
     @EventHandler
-    private void playerQuit(PlayerJoinEvent event) {
+    private void playerQuit(PlayerQuitEvent event) {
         if (blocks.containsKey(event.getPlayer().getUniqueId())) {
             removeBlock(event.getPlayer().getUniqueId());
         }
