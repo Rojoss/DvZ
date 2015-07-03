@@ -4,6 +4,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
@@ -20,6 +21,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +34,24 @@ public class Landmine extends BaseAbility {
         ability = Ability.LAND_MINE;
         castItem = new DvzItem(Material.STONE_PLATE, 1, (short)0, displayName, -1, -1, false);
         castActions = new ArrayList<Action>(Arrays.asList(new Action[]{Action.LEFT_CLICK_BLOCK, Action.RIGHT_CLICK_BLOCK}));
+
+        new BukkitRunnable() {
+            boolean give = true;
+
+            @Override
+            public void run() {
+                give = !give;
+                if (!dvz.getGM().isMonsters() && !give) {
+                    return;
+                }
+                List<CWPlayer> players = dvz.getPM().getPlayers(ClassType.DWARF, true, false);
+                for (CWPlayer cwp : players) {
+                    if (cwp.getPlayerData().getDwarfAbilitiesReceived().contains(ability)) {
+                        castItem.giveToPlayer(cwp.getPlayer());
+                    }
+                }
+            }
+        }.runTaskTimer(dvz, 0, 600);
     }
 
     @Override
@@ -53,6 +73,7 @@ public class Landmine extends BaseAbility {
         ParticleEffect.SMOKE_NORMAL.display(0.3f, 0.3f, 0.3f, 0, 20, triggerLoc.add(0.5f, 0.5f, 0.5f), 500);
         triggerLoc.getWorld().playSound(triggerLoc, Sound.DOOR_OPEN, 1, 2);
         CWUtil.sendActionBar(player, CWUtil.integrateColor("&2&l>> &aMine placed! &2&l<<"));
+        CWUtil.removeItemsFromHand(player, 1);
         dvz.logTimings("Landmine.castAbility()", t);
     }
 
