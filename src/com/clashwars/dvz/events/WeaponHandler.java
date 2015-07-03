@@ -9,8 +9,7 @@ import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.damage.types.CustomDmg;
 import com.clashwars.dvz.player.CWPlayer;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import com.clashwars.dvz.runnables.FlailChainRunnable;
 import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -24,55 +23,19 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 public class WeaponHandler implements Listener {
 
     private DvZ dvz;
-    private HashMap<UUID, UUID> flailedPlayers = new HashMap<UUID, UUID>();
+    public static HashMap<UUID, FlailChainRunnable> flailedPlayers = new HashMap<UUID, FlailChainRunnable>();
 
     public WeaponHandler(DvZ dvz) {
         this.dvz = dvz;
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (Map.Entry<UUID, UUID> entry : flailedPlayers.entrySet()) {
-                    Player caster = Bukkit.getPlayer(entry.getKey());
-                    Player target = Bukkit.getPlayer(entry.getValue());
-
-                    if (caster == null || target == null || caster.isDead() || target.isDead() || !caster.isBlocking()) {
-                        flailedPlayers.remove(entry.getKey());
-                        return;
-                    }
-
-                    Vector casterDir = caster.getLocation().getDirection();
-                    casterDir = casterDir.setY(0);
-                    Vector dir = target.getLocation().add(0, 1, 0).toVector().subtract(caster.getLocation().add(0, 1, 0).add(casterDir).toVector());
-                    float length = (float)dir.length();
-                    dir.normalize();
-
-                    if (length <= 1 || length > 20) {
-                        flailedPlayers.remove(entry.getKey());
-                        return;
-                    }
-
-                    float ratio = length / CWUtil.random(5,15);
-                    Vector v = dir.multiply(ratio);
-                    Location loc = caster.getLocation().add(0,1,0).add(casterDir).clone().subtract(v);
-                    for (int i = 0; i < 10; i++) {
-                        loc.add(v);
-                        ParticleEffect.REDSTONE.display(new ParticleEffect.OrdinaryColor(194, 100, 0), loc, 32);
-                    }
-
-                    dir = dir.multiply(-1);
-                    target.setVelocity(target.getVelocity().add(dir.multiply(0.5f)));
-                }
-            }
-        }.runTaskTimer(dvz, 0, 1);
     }
 
     @EventHandler
@@ -196,19 +159,20 @@ public class WeaponHandler implements Listener {
             int cooldownTime = 60000;
             int distance = 0;
             if (enchantLvl == 1) {
-                cooldownTime = 15000;
-                distance = 15;
-            } else if (enchantLvl == 2) {
-                cooldownTime = 7000;
+                cooldownTime = 25000;
                 distance = 20;
+            } else if (enchantLvl == 2) {
+                cooldownTime = 12000;
+                distance = 30;
+            }
+
+            if (flailedPlayers.containsKey(player.getUniqueId())) {
+                flailedPlayers.get(player.getUniqueId()).cancel();
+                flailedPlayers.remove(player.getUniqueId());
             }
 
             final Player target = CWUtil.getTargetedPlayer(player, distance);
-
             if (target == null) {
-                if (flailedPlayers.containsKey(player.getUniqueId())) {
-                    flailedPlayers.remove(player.getUniqueId());
-                }
                 return;
             }
 
@@ -222,10 +186,7 @@ public class WeaponHandler implements Listener {
                 return;
             }
 
-            if (flailedPlayers.containsKey(player.getUniqueId())) {
-                flailedPlayers.remove(player.getUniqueId());
-            }
-            flailedPlayers.put(player.getUniqueId(), target.getUniqueId());
+            new FlailChainRunnable(player, target).runTaskTimer(dvz, 0, 1);
             new CustomDmg(target, 0, "{0} died from {1}'s flail chain", "{1}'s flail chain", player);
         }
     }

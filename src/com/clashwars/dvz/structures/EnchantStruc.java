@@ -175,9 +175,9 @@ public class EnchantStruc extends Structure {
         enchants.add(new CustomEnchant(Enchantment.DAMAGE_ALL, "Sharpness 1", new String[] {"&7Your fiery flail will deal more damage."}, 1, 200, new Material[] {Material.GOLD_SWORD}));
         enchants.add(new CustomEnchant(Enchantment.FIRE_ASPECT, "Fire 1", new String[] {"&7Put your flail on fire!", "&7Burn all monsters you hit with the flail."}, 1, 200, new Material[] {Material.GOLD_SWORD}));
         enchants.add(new CustomEnchant(Enchantment.LURE, "Chain 1", new String[] {"&7You will get the ability to chain monsters.", "&7Look at a monster you want to chain",
-                "&7and hold right click to pull them towards you.", "&215s cooldown &7and &215 range"}, 1, 200, new Material[] {Material.GOLD_SWORD}));
+                "&7and hold right click to pull them towards you.", "&225s cooldown &7and &220 range"}, 1, 200, new Material[] {Material.GOLD_SWORD}));
         enchants.add(new CustomEnchant(Enchantment.LURE, "Chain 2", new String[] {"&7You will get the ability to chain monsters.", "&7Look at a monster you want to chain",
-                "&7and hold right click to pull them towards you.", "&27s cooldown &7and &220 range"}, 2, 400, new Material[] {Material.GOLD_SWORD}));
+                "&7and hold right click to pull them towards you.", "&212s cooldown &7and &230 range"}, 2, 400, new Material[] {Material.GOLD_SWORD}));
 
         //Armor - 1200
         enchants.add(new CustomEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, "Protection 1", new String[] {"&7Give your armor some extra protection."}, 1, 50, new Material[] {Material.LEATHER_HELMET, Material.LEATHER_CHESTPLATE, Material.LEATHER_LEGGINGS, Material.LEATHER_BOOTS}));
