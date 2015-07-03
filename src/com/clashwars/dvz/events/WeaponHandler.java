@@ -40,6 +40,7 @@ public class WeaponHandler implements Listener {
 
     @EventHandler
     private void hotbarSwitch(PlayerItemHeldEvent event) {
+        /*
         Player player = event.getPlayer();
         ItemStack prevItem = player.getInventory().getItem(event.getPreviousSlot());
         ItemStack newItem = player.getInventory().getItem(event.getNewSlot());
@@ -53,6 +54,7 @@ public class WeaponHandler implements Listener {
         if (newItem != null && CWUtil.compareItems(Product.BATTLEAXE.getItem(), newItem, true, false)) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 99999, 0));
         }
+        */
     }
 
 
