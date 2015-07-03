@@ -105,7 +105,7 @@ public class DvZ extends JavaPlugin {
     public GameRunnable gameRunnable;
 
     private List<Material> undestroyableBlocks = Arrays.asList(new Material[] {Material.BEDROCK, Material.OBSIDIAN, Material.ENDER_STONE, Material.ENDER_PORTAL_FRAME,
-        Material.WEB, Material.STANDING_BANNER, Material.WALL_BANNER, Material.DRAGON_EGG, Material.BARRIER, Material.REDSTONE_BLOCK});
+        Material.WEB, Material.STANDING_BANNER, Material.WALL_BANNER, Material.DRAGON_EGG, Material.BARRIER, Material.REDSTONE_BLOCK, Material.GLOWSTONE, Material.REDSTONE_LAMP_OFF, Material.REDSTONE_LAMP_ON});
 
     @Override
     public void onDisable() {
