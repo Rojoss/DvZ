@@ -1,9 +1,7 @@
 package com.clashwars.dvz.abilities.monsters.creeper;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
-import com.clashwars.cwcore.utils.RandomUtils;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.damage.types.AbilityDmg;
@@ -16,19 +14,14 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import javax.security.auth.Destroyable;
 import java.util.List;
-import java.util.Set;
 
 public class Explode extends BaseAbility {
 
@@ -74,11 +67,11 @@ public class Explode extends BaseAbility {
         } else if (dvz.getGM().getMonsterPower(1) >= 0.3f) {
             pps = 1f;
         }
-        final double powerPerSec = dvz.getGM().getMonsterPower(2) + 0.5f;
+        final double powerPerSec = pps;
 
         new BukkitRunnable() {
-            int minPower = 3;
-            int maxPower = (int)dvz.getGM().getMonsterPower(3, 12);
+            int minPower = 4;
+            int maxPower = (int)dvz.getGM().getMonsterPower(4, 15);
             int ticks = 0;
             Double power = (double)minPower;
             Location playerLoc = player.getLocation();
