@@ -1,6 +1,8 @@
 package com.clashwars.dvz.abilities.dwarves.bonus;
 
 import com.clashwars.cwcore.packet.ParticleEffect;
+import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.util.DvzItem;
@@ -26,6 +28,10 @@ public class FireStaff extends BaseAbility {
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
+        if (dvz.getGM().getState() == GameState.DRAGON) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThe dragon his powers are blocking you from using this right now! &4&l<<"));
+            return;
+        }
         if (onCooldown(player)) {
             return;
         }
@@ -37,15 +43,16 @@ public class FireStaff extends BaseAbility {
                     SmallFireball smallFireball = player.launchProjectile(SmallFireball.class);
                     smallFireball.setVelocity(player.getVelocity());
 
-                    player.getWorld().playSound(player.getLocation(), Sound.GHAST_FIREBALL, 1, 0.6f);
+                    player.getWorld().playSound(player.getLocation(), Sound.GHAST_FIREBALL, 0.8f, 0.6f);
                     ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0, 20, player.getLocation().add(0, 1, 0));
                 }
 
             }
         }.runTaskLater(dvz, 10);
     }
+
     @EventHandler
-    public void onEntityExplode(final ProjectileHitEvent event) {
+    public void onProjectileHit(final ProjectileHitEvent event) {
         if(!(event.getEntity() instanceof SmallFireball)) {
             return;
         }
@@ -53,6 +60,7 @@ public class FireStaff extends BaseAbility {
         if(!(event.getEntity().getShooter() instanceof Player)) {
             return;
         }
+
         final Location l = event.getEntity().getLocation();
         final int radius = 2;
         final Player p = ((Player) event.getEntity().getShooter()).getPlayer();
