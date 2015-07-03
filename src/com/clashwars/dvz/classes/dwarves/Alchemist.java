@@ -386,7 +386,7 @@ public class Alchemist extends DwarfClass {
         ws.melons = 0;
         ws.sugar = 0;
 
-        dvz.getPM().getPlayer(ws.getOwner()).addClassExp(60);
+        dvz.getPM().getPlayer(ws.getOwner()).addClassExp(70);
         // + 3 per melon broken
         // + 1 per sugarcane broken
         // + 1 per bucket filled
