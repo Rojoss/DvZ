@@ -165,9 +165,7 @@ public class EnchantStruc extends Structure {
         //Battleaxe - 800
         enchants.add(new CustomEnchant(Enchantment.DAMAGE_ALL, "Sharpness 1", new String[] {"&7Your battleaxe will deal more damage."}, 1, 200, new Material[] {Material.IRON_SWORD}));
         enchants.add(new CustomEnchant(Enchantment.DURABILITY, "Block 1", new String[] {"&7When &ablocking &7damage is reduced by &20.5 &7hearts.",
-                "&7When &ablocking &7and &asneaking &7it's reduced by &21 &7heart!"}, 1, 100, new Material[] {Material.IRON_SWORD}));
-        enchants.add(new CustomEnchant(Enchantment.DURABILITY, "Block 2", new String[] {"&7When &ablocking &7damage is reduced by &21 &7heart.",
-                "&7When &ablocking &7and &asneaking &7it's reduced by &22 &7hearts!"}, 2, 200, new Material[] {Material.IRON_SWORD}));
+                "&7When &ablocking &7and &asneaking &7it's reduced by &21 &7heart!"}, 1, 200, new Material[] {Material.IRON_SWORD}));
         enchants.add(new CustomEnchant(Enchantment.LUCK, "Swing 1", new String[] {"&28% &7chance to swing while attacking.",
                 "&7When you swing all monsters nearby get", "&7damaged and pushed away from you."}, 1, 200, new Material[] {Material.IRON_SWORD}));
         enchants.add(new CustomEnchant(Enchantment.LUCK, "Swing 2", new String[] {"&215% &7chance to swing while attacking.",
