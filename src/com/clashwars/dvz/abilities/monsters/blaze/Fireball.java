@@ -5,14 +5,12 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.damage.types.AbilityDmg;
-import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SmallFireball;
 import org.bukkit.event.EventHandler;
@@ -79,7 +77,7 @@ public class Fireball extends BaseAbility {
             return;
         }
 
-        final int radius = (int)dvz.getGM().getMonsterPower(1, 1);
+        final int radius = (int)dvz.getGM().getMonsterPower(1, 2);
 
         ParticleEffect.LAVA.display(radius,radius,radius, 0, 15, l);
         ParticleEffect.FLAME.display(radius, radius, radius, 0, 20, l);
@@ -92,7 +90,7 @@ public class Fireball extends BaseAbility {
                     Block b = l.getWorld().getBlockAt(x, y, z);
                     if(b.getType().isSolid()) {
                         if (b.getRelative(BlockFace.UP).getType() == Material.AIR) {
-                            if (CWUtil.randomFloat() <= 0.1f + dvz.getGM().getMonsterPower(0.4f)) {
+                            if (CWUtil.randomFloat() <= dvz.getGM().getMonsterPower(0.1f, 0.6f)) {
                                 b.getRelative(BlockFace.UP).setType(Material.FIRE);
                             }
                         }
@@ -105,7 +103,7 @@ public class Fireball extends BaseAbility {
         for (Player p : players) {
             if (dvz.getPM().getPlayer((Player)p).isDwarf()) {
                 new AbilityDmg(p, dvz.getGM().getMonsterPower(1, 3), ability, player);
-                player.setFireTicks((int) dvz.getGM().getMonsterPower(20, 60));
+                player.setFireTicks((int) dvz.getGM().getMonsterPower(20, 80));
             }
         }
 
