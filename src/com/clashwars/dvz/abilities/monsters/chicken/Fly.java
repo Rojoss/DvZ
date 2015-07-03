@@ -43,7 +43,7 @@ public class Fly extends BaseAbility {
                         flyingPlayers.get(uuid).cancel();
                         flyingPlayers.remove(uuid);
                     }
-                    if (i % 20 == 0) {
+                    if (i % 5 == 0) {
                         if (player.getLocation().getY() > player.getWorld().getHighestBlockYAt(player.getLocation()) + 20) {
                             player.setVelocity(player.getVelocity().add(new Vector(0,-1,0)));
                         }
