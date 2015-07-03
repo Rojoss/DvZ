@@ -112,7 +112,6 @@ public class Baker extends DwarfClass {
             return;
         }
 
-        dvz.getPM().getPlayer(player).addClassExp(1);
         event.setCancelled(false);
         dvz.logTimings("Baker.blockPlace()", t);
     }
@@ -189,7 +188,7 @@ public class Baker extends DwarfClass {
         if (flourCount > 0) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&6&l>> &eGrinded your wheat in to " + flourCount + " flour! &7(Bake the flour in the furnace) &6&l<<"));
             CWUtil.dropItemStack(ws.getHopperBlock().getRelative(BlockFace.DOWN).getLocation(), Product.FLOUR.getItem(flourCount), dvz, player);
-            dvz.getPM().getPlayer(player).addClassExp(flourCount * 3);
+            dvz.getPM().getPlayer(player).addClassExp(flourCount * 2);
             dvz.getSM().changeLocalStatVal(player, StatType.BAKER_FLOUR_GRINDED, flourCount);
         } else {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&6&l>> &eWheat added in the grinder! &8[&e" + wheatCount
