@@ -220,7 +220,7 @@ public class Fletcher extends DwarfClass {
 
                 dvz.getSM().changeLocalStatVal(player, StatType.FLETCHER_ARROWS_CRAFTED, arrows.getAmount());
 
-                dvz.getPM().getPlayer(player).addClassExp(35);
+                dvz.getPM().getPlayer(player).addClassExp(30);
                 // + 1 per flint
                 // + 1 per chicken
                 // + 2 per chicken in air
