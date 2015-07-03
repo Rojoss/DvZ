@@ -17,15 +17,10 @@ import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.util.io.file.FilenameException;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.SkullType;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -156,10 +151,10 @@ public class PotionBomb extends BaseAbility {
                     Collection<PotionEffect> activeEffects = cwp.getPlayer().getActivePotionEffects();
                     for (PotionEffect pe : activeEffects) {
                         if(pe.getType().equals(PotionEffectType.BLINDNESS)) {
-                            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int)dvz.getGM().getMonsterPower(80, 160) + pe.getDuration(), 0), true);
+                            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int)dvz.getGM().getMonsterPower(100, 180) + pe.getDuration(), 0), true);
                             blindAdded = true;
                         } else if (pe.getType().equals(PotionEffectType.POISON)) {
-                            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(100, 200) + pe.getDuration(), 0), true);
+                            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(120, 240) + pe.getDuration(), 0), true);
                             poisonAdded = true;
                         }
                     }
