@@ -34,6 +34,7 @@ public class Fly extends BaseAbility {
         castItem = new DvzItem(Material.FEATHER, 1, (short)0, displayName, 200, -1);
 
         new BukkitRunnable() {
+            int i = 0;
             @Override
             public void run() {
                 for (UUID uuid : flyingPlayers.keySet()) {
@@ -42,7 +43,13 @@ public class Fly extends BaseAbility {
                         flyingPlayers.get(uuid).cancel();
                         flyingPlayers.remove(uuid);
                     }
+                    if (i % 20 == 0) {
+                        if (player.getLocation().getY() > player.getWorld().getHighestBlockYAt(player.getLocation()) + 20) {
+                            player.setVelocity(player.getVelocity().add(new Vector(0,-1,0)));
+                        }
+                    }
                     ParticleEffect.FIREWORKS_SPARK.display(0.3f, 0.2f, 0.3f, 0, 1, player.getLocation(), 500);
+                    i++;
                 }
             }
         }.runTaskTimer(dvz, 1, 1);
