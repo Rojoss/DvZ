@@ -8,7 +8,6 @@ import com.clashwars.dvz.events.custom.GameResetEvent;
 import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.structures.data.FurnaceData;
 import com.clashwars.dvz.structures.extra.FurnaceItem;
-import com.clashwars.dvz.structures.extra.StorageItem;
 import com.clashwars.dvz.structures.internal.Structure;
 import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
@@ -17,7 +16,6 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -196,10 +194,10 @@ public class FurnaceStruc extends Structure {
 
 
     private void populateFurnaceItems() {
-        furnaceItems.add(new FurnaceItem(Product.DIAMOND_ORE.getItem(), Product.DIAMOND.getItem(), 600, 8));
-        furnaceItems.add(new FurnaceItem(Product.IRON_ORE.getItem(), Product.IRON_INGOT.getItem(), 500, 8));
+        furnaceItems.add(new FurnaceItem(Product.DIAMOND_ORE.getItem(), Product.DIAMOND.getItem(), 400, 8));
+        furnaceItems.add(new FurnaceItem(Product.IRON_ORE.getItem(), Product.IRON_INGOT.getItem(), 400, 8));
         furnaceItems.add(new FurnaceItem(Product.GOLD_ORE.getItem(), Product.GOLD_INGOT.getItem(), 400, 8));
-        furnaceItems.add(new FurnaceItem(Product.FLOUR.getItem(), Product.BREAD.getItem(), 300, 3));
+        furnaceItems.add(new FurnaceItem(Product.FLOUR.getItem(), Product.BREAD.getItem(), 120, 3));
     }
 
     public FurnaceItem getFurnaceItem(ItemStack item) {
