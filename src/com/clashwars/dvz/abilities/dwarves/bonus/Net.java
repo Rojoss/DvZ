@@ -1,11 +1,9 @@
 package com.clashwars.dvz.abilities.dwarves.bonus;
 
-import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
-import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,7 +17,6 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
 import java.util.List;
 
@@ -34,11 +31,17 @@ public class Net extends BaseAbility {
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
         Long t = System.currentTimeMillis();
-        if (onCooldown(player)) {
-            dvz.logTimings("Net.castAbility()[cd]", t);
+        if (dvz.getGM().getState() == GameState.DRAGON) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThe dragon his powers are blocking you from using this right now! &4&l<<"));
             return;
         }
+
         if (player.getLocation().getPitch() >= 50) {
+            return;
+        }
+
+        if (onCooldown(player)) {
+            dvz.logTimings("Net.castAbility()[cd]", t);
             return;
         }
         player.getWorld().playSound(player.getLocation(), Sound.BAT_TAKEOFF, 0.5f, 2);
@@ -69,7 +72,7 @@ public class Net extends BaseAbility {
         }.runTaskLater(dvz, 5);
 
         final BlockFace[] dirs = new BlockFace[] {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
-        final List<Player> players = CWUtil.getNearbyPlayers(event.getEntity().getLocation(), 1.5f);
+        final List<Player> players = CWUtil.getNearbyPlayers(event.getEntity().getLocation(), 2.5f);
         for (final Player p : players) {
             if (dvz.getPM().getPlayer((Player) p).isDwarf()) {
                 continue;
