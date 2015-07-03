@@ -7,12 +7,10 @@ import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.events.custom.GameResetEvent;
-import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,10 +20,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Chicken extends MobClass {
 
@@ -70,7 +65,7 @@ public class Chicken extends MobClass {
 
                     //If egg is lifted move it to player.
                     if (name.contains("lifted")) {
-                        entry.getValue().entity().teleport(owner.getLocation().add(0,-0.7f,0));
+                        entry.getValue().entity().teleport(owner.getLocation().add(0,-0.9f,0));
                         dvz.logTimings("Chicken.Runnable()[lifted]", t);
                         continue;
                     }
