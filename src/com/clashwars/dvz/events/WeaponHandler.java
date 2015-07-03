@@ -63,6 +63,10 @@ public class WeaponHandler implements Listener {
         }
         final Player damager = (Player)event.getDamager();
 
+        if (damager.getItemInHand() == null) {
+            return;
+        }
+
         CWPlayer cwd = dvz.getPM().getPlayer(damager);
         if (!cwd.isDwarf()) {
             return;
