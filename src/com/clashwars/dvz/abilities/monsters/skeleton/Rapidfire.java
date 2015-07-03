@@ -27,6 +27,7 @@ public class Rapidfire extends BaseAbility {
         ability = Ability.RAPIDFIRE;
         DvzItem bow = new DvzItem(Material.BOW, 1, (short)0, displayName, 100, -1);
         bow.addEnchantment(Enchantment.ARROW_INFINITE, 1);
+        bow.addEnchantment(Enchantment.ARROW_DAMAGE, 1);
         castItem = bow;
         castActions = new ArrayList<Action>(Arrays.asList(new Action[]{Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK}));
     }
