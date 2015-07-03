@@ -173,6 +173,12 @@ public class WeaponHandler implements Listener {
 
             final Player target = CWUtil.getTargetedPlayer(player, distance);
             if (target == null) {
+                CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cLook at a monster and hold right click to use this! &4&l<<"));
+                return;
+            }
+
+            if (!dvz.getPM().getPlayer(target).isMonster()) {
+                CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou can only chain monsters! &4&l<<"));
                 return;
             }
 
