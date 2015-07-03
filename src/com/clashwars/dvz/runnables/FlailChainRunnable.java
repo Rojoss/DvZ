@@ -29,7 +29,7 @@ public class FlailChainRunnable extends BukkitRunnable {
             return;
         }
 
-        if (System.currentTimeMillis() >= startTime + 2000) {
+        if (System.currentTimeMillis() >= startTime + 1250) {
             WeaponHandler.flailedPlayers.remove(caster.getUniqueId());
             cancel();
             return;
@@ -64,6 +64,6 @@ public class FlailChainRunnable extends BukkitRunnable {
         }
 
         dir = dir.multiply(-1);
-        targetPlayer.setVelocity(targetPlayer.getVelocity().add(dir.multiply(0.3f)));
+        targetPlayer.setVelocity(targetPlayer.getVelocity().add(dir.multiply(0.2f)));
     }
 }
