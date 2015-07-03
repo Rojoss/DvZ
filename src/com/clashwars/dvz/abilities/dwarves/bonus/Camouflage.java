@@ -113,7 +113,7 @@ public class Camouflage extends BaseAbility {
     }
 
 
-    private static void removeBlock(UUID ownerUUID) {
+    public static void removeBlock(UUID ownerUUID) {
         Block disguiseBlock = blocks.get(ownerUUID).getBlock();
         disguiseBlock.setType(Material.AIR);
         blocks.remove(ownerUUID);

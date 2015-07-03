@@ -4,6 +4,7 @@ import com.clashwars.cwcore.helpers.CWEntity;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
+import com.clashwars.dvz.abilities.dwarves.bonus.Camouflage;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.events.custom.GameResetEvent;
@@ -90,6 +91,10 @@ public class Chicken extends MobClass {
                             List<Player> players = CWUtil.getNearbyPlayers(entry.getValue().entity().getLocation(), (int)dvz.getGM().getMonsterPower(2, 8));
                             for (Player p : players) {
                                 if (dvz.getPM().getPlayer(p).isDwarf()) {
+                                    if (Camouflage.blocks.containsKey(p.getUniqueId())) {
+                                        CWUtil.sendActionBar(p, CWUtil.integrateColor("&4&l>> &cYou were hit by a rotten egg! &4You are no longer a block! &4&l<<"));
+                                        Camouflage.removeBlock(p.getUniqueId());
+                                    }
                                     p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, power / 2, 1));
                                     p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, power * 2, 1));
                                     new AbilityDmg(p, dvz.getGM().getMonsterPower(1, 5), Ability.DROP_EGG, owner);
