@@ -158,9 +158,9 @@ public class EnchantStruc extends Structure {
         //Greatsword - 800
         enchants.add(new CustomEnchant(Enchantment.DAMAGE_ALL, "Sharpness 1", new String[] {"&7Your greatsword will deal more damage."}, 1, 200, new Material[] {Material.DIAMOND_AXE}));
         enchants.add(new CustomEnchant(Enchantment.DAMAGE_ALL, "Sharpness 2", new String[] {"&7Your greatsword will deal more damage."}, 2, 300, new Material[] {Material.DIAMOND_AXE}));
-        enchants.add(new CustomEnchant(Enchantment.LOOT_BONUS_MOBS, "Lifesteal 1", new String[] {"&27% &7chance to lifesteal when attacking.", "&7You will steal 1 heart."}, 1, 100, new Material[] {Material.DIAMOND_AXE}));
-        enchants.add(new CustomEnchant(Enchantment.LOOT_BONUS_MOBS, "Lifesteal 2", new String[] {"&214% &7chance to lifesteal when attacking.", "&7You will steal 1 heart."}, 1, 250, new Material[] {Material.DIAMOND_AXE}));
-        enchants.add(new CustomEnchant(Enchantment.LOOT_BONUS_MOBS, "Lifesteal 3", new String[] {"&221% &7chance to lifesteal when attacking.", "&7You will steal 1 heart."}, 1, 500, new Material[] {Material.DIAMOND_AXE}));
+        enchants.add(new CustomEnchant(Enchantment.LOOT_BONUS_MOBS, "Lifesteal 1", new String[] {"&210% &7chance to lifesteal when attacking.", "&7You will steal 1 heart."}, 1, 100, new Material[] {Material.DIAMOND_AXE}));
+        enchants.add(new CustomEnchant(Enchantment.LOOT_BONUS_MOBS, "Lifesteal 2", new String[] {"&220% &7chance to lifesteal when attacking.", "&7You will steal 1 heart."}, 1, 250, new Material[] {Material.DIAMOND_AXE}));
+        enchants.add(new CustomEnchant(Enchantment.LOOT_BONUS_MOBS, "Lifesteal 3", new String[] {"&230% &7chance to lifesteal when attacking.", "&7You will steal 1 heart."}, 1, 500, new Material[] {Material.DIAMOND_AXE}));
 
         //Battleaxe - 800
         enchants.add(new CustomEnchant(Enchantment.DAMAGE_ALL, "Sharpness 1", new String[] {"&7Your battleaxe will deal more damage."}, 1, 200, new Material[] {Material.IRON_SWORD}));

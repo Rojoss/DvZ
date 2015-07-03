@@ -1,23 +1,17 @@
 package com.clashwars.dvz.events;
 
 import com.clashwars.cwcore.CooldownManager;
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.effect.Particle;
 import com.clashwars.cwcore.effect.effects.AnimatedCircleEffect;
-import com.clashwars.cwcore.effect.effects.CircleEffect;
-import com.clashwars.cwcore.effect.effects.LineEffect;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.Product;
-import com.clashwars.dvz.classes.ClassType;
-import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.damage.types.CustomDmg;
 import com.clashwars.dvz.player.CWPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,10 +27,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class WeaponHandler implements Listener {
 
@@ -157,11 +148,11 @@ public class WeaponHandler implements Listener {
                 return;
             }
 
-            if (enchantLvl == 1 && CWUtil.randomFloat() > 0.07f) {
+            if (enchantLvl == 1 && CWUtil.randomFloat() > 0.1f) {
                 return;
-            } else if (enchantLvl == 2 && CWUtil.randomFloat() > 0.14f) {
+            } else if (enchantLvl == 2 && CWUtil.randomFloat() > 0.2f) {
                 return;
-            } else if (enchantLvl == 3 && CWUtil.randomFloat() > 0.21f) {
+            } else if (enchantLvl == 3 && CWUtil.randomFloat() > 0.3f) {
                 return;
             }
 
