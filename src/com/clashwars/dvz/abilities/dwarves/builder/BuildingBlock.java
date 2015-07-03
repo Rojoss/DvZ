@@ -95,7 +95,11 @@ public class BuildingBlock extends BaseAbility {
         }
         if (placed) {
             dvz.getSM().changeLocalStatVal(player, StatType.BUILDER_BLOCK_USED, 1);
-            dvz.getPM().getPlayer(player).addClassExp(1);
+            if (CWUtil.randomFloat() < 0.08f) {
+                dvz.getPM().getPlayer(player).addClassExp(2);
+            } else {
+                dvz.getPM().getPlayer(player).addClassExp(1);
+            }
         }
         dvz.logTimings("BuildingBlock.castAbility()", t);
     }

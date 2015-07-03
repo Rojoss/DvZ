@@ -11,13 +11,11 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -90,7 +88,11 @@ public class BuildingBrick extends BaseAbility {
                 block.getWorld().playSound(block.getLocation(), Sound.DIG_STONE, 0.8f, 1f);
                 player.updateInventory();
 
-                dvz.getPM().getPlayer(player).addClassExp(1);
+                if (CWUtil.randomFloat() < 0.08f) {
+                    dvz.getPM().getPlayer(player).addClassExp(2);
+                } else {
+                    dvz.getPM().getPlayer(player).addClassExp(1);
+                }
                 dvz.getSM().changeLocalStatVal(player, StatType.BUILDER_BRICK_USED, 1);
                 dvz.logTimings("BuildingBrick.castAbility()[place]", t);
                 return;
