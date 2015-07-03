@@ -13,6 +13,7 @@ public class Skeleton extends MobClass {
         classItem = new DvzItem(Material.MONSTER_EGG, 1, (short)51, displayName, 20, -1);
 
         abilities.add(Ability.RAPIDFIRE);
+        abilities.add(Ability.MOUNT);
 
         equipment.add(new DvzItem(Material.ARROW, -1, 9));
     }

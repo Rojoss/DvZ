@@ -25,7 +25,6 @@ import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.entity.PlayerLeashEntityEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.vehicle.VehicleDamageEvent;
-import org.bukkit.event.vehicle.VehicleEnterEvent;
 
 public class ProtectEvents implements Listener {
 
@@ -327,12 +326,6 @@ public class ProtectEvents implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void bedEnter(PlayerBedEnterEvent event) {
-        event.setCancelled(true);
-    }
-
-
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    private void vehicleEnter(VehicleEnterEvent event) {
         event.setCancelled(true);
     }
 

@@ -34,6 +34,7 @@ import com.clashwars.dvz.abilities.monsters.creeper.Explode;
 import com.clashwars.dvz.abilities.monsters.enderman.Blink;
 import com.clashwars.dvz.abilities.monsters.enderman.Pickup;
 import com.clashwars.dvz.abilities.monsters.enderman.Portal;
+import com.clashwars.dvz.abilities.monsters.skeleton.Mount;
 import com.clashwars.dvz.abilities.monsters.skeleton.Rapidfire;
 import com.clashwars.dvz.abilities.monsters.spider.Poison;
 import com.clashwars.dvz.abilities.monsters.spider.PoisonAttack;
@@ -65,6 +66,7 @@ public enum Ability {
     INFECT(new Infect(), SwapType.NONE, ""),
     RUSH(new Rush(), SwapType.NONE, ""),
     RAPIDFIRE(new Rapidfire(), SwapType.NONE, ""),
+    MOUNT(new Mount(), SwapType.NONE, ""),
     POISON_ATTACK(new PoisonAttack(), SwapType.NONE, "{0} died from {1}'s poison attack"),
     POISON(new Poison(), SwapType.NONE, "{0} died from {1}'s poison cloud"),
     WEB(new Web(), SwapType.NONE, ""),
