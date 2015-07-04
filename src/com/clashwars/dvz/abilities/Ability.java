@@ -151,9 +151,10 @@ public enum Ability {
 
     //Get class by name or alias and return null if no class was found.
     public static Ability fromString(String name) {
+        name = name.toLowerCase().replace("_","");
         //First check by name.
         for (Ability c : values()) {
-            if (c.toString().equalsIgnoreCase(name)) {
+            if (c.toString().toLowerCase().replace("_", "").equals(name)) {
                 return c;
             }
         }

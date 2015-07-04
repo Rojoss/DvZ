@@ -12,6 +12,7 @@ import com.clashwars.cwcore.utils.Enjin;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
+import com.clashwars.dvz.Product;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.classes.BaseClass;
@@ -683,6 +684,44 @@ public class Commands {
                         sender.sendMessage(CWUtil.integrateColor("&6Cooldown&8: &5" + cdPlayer + "&8/" + CWUtil.formatTime((long)baseAbility.getCooldown(), "&5%S&ds")));
                     }
                     dvz.logTimings("Commands.onCommand()[/dvz ability]", t);
+                    return true;
+                }
+
+
+
+                //##########################################################################################################################
+                //################################################ /dvz product [name] [amt] ###############################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("product")) {
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                        return true;
+                    }
+                    Player player = (Player)sender;
+
+                    if (!sender.isOp() && !sender.hasPermission("dvz.admin")) {
+                        sender.sendMessage(Util.formatMsg("Insufficient permissions."));
+                        return true;
+                    }
+
+                    if (args.length <= 1 || Product.fromString(args[1]) == null) {
+                        sender.sendMessage(Util.formatMsg("&cInvalid product name specified."));
+                        String products = "&c";
+                        for (Product p : Product.values()) {
+                            products += p.toString().toLowerCase().replace("_","") + "&8, &c";
+                        }
+                        sender.sendMessage(Util.formatMsg("&4Products&8: &c" + products));
+                        return true;
+                    }
+                    Product product = Product.fromString(args[1]);
+
+                    int amount = 1;
+                    if (args.length > 2) {
+                        amount = Math.max(CWUtil.getInt(args[2]), 1);
+                    }
+
+                    product.getItem(amount).giveToPlayer(player);
+                    dvz.logTimings("Commands.onCommand()[/dvz product]", t);
                     return true;
                 }
 

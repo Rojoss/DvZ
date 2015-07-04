@@ -85,4 +85,16 @@ public enum Product {
         i.setAmount(amount);
         return i;
     }
+
+    //Get class by name or alias and return null if no class was found.
+    public static Product fromString(String name) {
+        name = name.toLowerCase().replace("_","");
+        //First check by name.
+        for (Product p : values()) {
+            if (p.toString().toLowerCase().replace("_","").equals(name)) {
+                return p;
+            }
+        }
+        return null;
+    }
 }
