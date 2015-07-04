@@ -88,7 +88,7 @@ public class BuildingBrick extends BaseAbility {
                 block.getWorld().playSound(block.getLocation(), Sound.DIG_STONE, 0.8f, 1f);
                 player.updateInventory();
 
-                if (CWUtil.randomFloat() < 0.08f) {
+                if (CWUtil.randomFloat() < 0.02f) {
                     dvz.getPM().getPlayer(player).addClassExp(2);
                 } else {
                     dvz.getPM().getPlayer(player).addClassExp(1);
