@@ -20,6 +20,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -47,7 +48,17 @@ public class Landmine extends BaseAbility {
                 List<CWPlayer> players = dvz.getPM().getPlayers(ClassType.DWARF, true, false);
                 for (CWPlayer cwp : players) {
                     if (cwp.getPlayerData().getDwarfAbilitiesReceived().contains(ability)) {
-                        castItem.giveToPlayer(cwp.getPlayer());
+                        Player player = cwp.getPlayer();
+                        int mineCount = 0;
+                        for (int i = 0; i < player.getInventory().getSize(); i++) {
+                            ItemStack item = player.getInventory().getItem(i);
+                            if (item != null && Ability.LAND_MINE.getAbilityClass().isCastItem(item)) {
+                                mineCount += item.getAmount();
+                            }
+                        }
+                        if (mineCount < 16) {
+                            castItem.giveToPlayer(cwp.getPlayer());
+                        }
                     }
                 }
             }
