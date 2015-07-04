@@ -116,9 +116,9 @@ public class Landmine extends BaseAbility {
         for (Player p : players) {
             if (dvz.getPM().getPlayer(p).isMonster()) {
                 if (owner == null) {
-                    new AbilityDmg(p, 10, ability);
+                    new AbilityDmg(p, 8, ability);
                 } else {
-                    new AbilityDmg(p, 10, ability, owner);
+                    new AbilityDmg(p, 8, ability, owner);
                 }
                 CWUtil.sendActionBar(p, CWUtil.integrateColor("&4&l>> &8Hit by a landmine! &4&l<<"));
             }
