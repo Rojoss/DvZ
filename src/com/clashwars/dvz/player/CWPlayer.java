@@ -46,6 +46,7 @@ public class CWPlayer {
     public HashMap<String, Integer> productsTaken = new HashMap<String, Integer>();
     public List<DamageLog> damageLogs = new ArrayList<DamageLog>();
     private Color color;
+    private Long spawnTime = System.currentTimeMillis();
 
     private int userID = -1;
     private int charID = -1;
@@ -150,6 +151,8 @@ public class CWPlayer {
         final Long t = System.currentTimeMillis();
         final BaseClass c = dvzClass.getClassClass();
         final Player player = getPlayer();
+
+        spawnTime = System.currentTimeMillis();
 
         if (eggUse && dvzClass.getPickStat() != null) {
             dvz.getSM().changeLocalStatVal(player, dvzClass.getPickStat(), 1);
@@ -506,6 +509,9 @@ public class CWPlayer {
         return color;
     }
 
+    public Long getSpawnTime() {
+        return spawnTime;
+    }
 
     public int getUserID() {
         return userID;

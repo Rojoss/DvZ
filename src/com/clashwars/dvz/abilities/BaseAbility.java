@@ -246,6 +246,12 @@ public class BaseAbility implements Listener {
             return;
         }
 
+        //Bit delay after spawning till abilities can be used
+        if (System.currentTimeMillis() < dvz.getPM().getPlayer(event.getPlayer()).getSpawnTime() + 2000) {
+            CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't use abilities yet! &4&l<<"));
+            return;
+        }
+
         //Swap/cycle items
         Player player = event.getPlayer();
         if (ability.getSwapType() != SwapType.NONE && (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.LEFT_CLICK_AIR)) {

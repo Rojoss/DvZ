@@ -22,7 +22,7 @@ public class FireStaff extends BaseAbility {
 
     public FireStaff() {
         super();
-        ability = Ability.FIRESTAFF;
+        //ability = Ability.FIRESTAFF;
         castItem = new DvzItem(Material.BLAZE_ROD, 1, (short)0, displayName, -1, -1, false);
     }
 
