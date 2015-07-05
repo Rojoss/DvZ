@@ -40,6 +40,7 @@ public class Mount extends BaseAbility {
         mount.setSaddle(true);
         mount.setTamed(true, player);
         mount.setHorseSpeed(0.35d);
+        mount.setBaby(false);
         mount.entity().setPassenger(player);
         mounts.put(player.getUniqueId(), mount.entity());
 
