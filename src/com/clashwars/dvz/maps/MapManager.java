@@ -1,5 +1,6 @@
 package com.clashwars.dvz.maps;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameState;
@@ -80,6 +81,14 @@ public class MapManager {
         if (getActiveMap() == null || !getActiveMap().isLoaded()) {
             dvz.logTimings("MapManager.removeActiveMap()[no map]", t);
             return false;
+        }
+
+        //Kick all death players
+        Collection<Player> onlinePlayers = (Collection<Player>)dvz.getServer().getOnlinePlayers();
+        for (Player p : onlinePlayers) {
+            if (p.isDead() || !p.isValid()) {
+                p.kickPlayer(CWUtil.integrateColor("&4&lYou have been kicked because the map is resetting!\n&cWe couldn't teleport you to the lobby for some reason.\n&cYou can try to log back in to fix it."));
+            }
         }
 
         //Kick all players remaining in the map.
