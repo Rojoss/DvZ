@@ -166,6 +166,7 @@ public class Camouflage extends BaseAbility {
             if (blocks.containsKey(event.getPlayer().getUniqueId())) {
                 CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cYou can't use this! &4You are no longer a block! &4&l<<"));
                 removeBlock(event.getPlayer().getUniqueId());
+                event.getPlayer().teleport(event.getFrom());
                 event.setCancelled(true);
             }
         }
