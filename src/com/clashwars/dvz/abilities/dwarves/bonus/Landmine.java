@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.dwarves.bonus;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
@@ -12,6 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -99,20 +101,30 @@ public class Landmine extends BaseAbility {
             return;
         }
 
-        OfflinePlayer owner = dvz.getServer().getOfflinePlayer(event.getTo().getBlock().getMetadata("owner").get(0).asString());
-
         CWPlayer cwp = dvz.getPM().getPlayer(event.getPlayer());
         if (!cwp.isMonster()) {
             dvz.logTimings("Landmine.playerMove()[not monster]", t);
             return;
         }
 
-        event.getTo().getBlock().setType(Material.AIR);
-        ParticleEffect.SMOKE_LARGE.display(2f, 2f, 2f, 0, 200, event.getTo(), 500);
-        ParticleEffect.EXPLOSION_NORMAL.display(2f, 2f, 2f, 0, 3, event.getTo(), 200);
-        event.getPlayer().getWorld().playSound(event.getTo(), Sound.EXPLODE, 0.8f, 0.3f);
+        explodeMine(event.getTo(), event.getPlayer());
+        dvz.logTimings("Landmine.playerMove()", t);
+    }
 
-        List<Player> players = CWUtil.getNearbyPlayers(event.getTo(), 3);
+    public void explodeMine(Location loc, Player triggerPlayer) {
+        if (loc.getBlock().getType() != Material.TRIPWIRE) {
+            return;
+        }
+
+        OfflinePlayer owner = dvz.getServer().getOfflinePlayer(loc.getBlock().getMetadata("owner").get(0).asString());
+
+        loc.getBlock().setType(Material.AIR);
+        ParticleEffect.SMOKE_LARGE.display(2f, 2f, 2f, 0, 200, loc, 500);
+        ParticleEffect.EXPLOSION_NORMAL.display(2f, 2f, 2f, 0, 3, loc, 200);
+        loc.getWorld().playSound(loc, Sound.EXPLODE, 0.8f, 0.3f);
+
+        //Damage players
+        List<Player> players = CWUtil.getNearbyPlayers(loc, 3);
         for (Player p : players) {
             if (dvz.getPM().getPlayer(p).isMonster()) {
                 if (owner == null) {
@@ -123,7 +135,15 @@ public class Landmine extends BaseAbility {
                 CWUtil.sendActionBar(p, CWUtil.integrateColor("&4&l>> &8Hit by a landmine! &4&l<<"));
             }
         }
-        dvz.logTimings("Landmine.playerMove()", t);
+
+        //Explode nearby mines too
+        for (int x = loc.getBlockX() - 2; x < loc.getBlockX() + 2; x++) {
+            for (int y = loc.getBlockY() - 1; y < loc.getBlockY() + 1; y++) {
+                for (int z = loc.getBlockZ() - 2; z < loc.getBlockZ() + 2; z++) {
+                    explodeMine(loc.getWorld().getBlockAt(x, y, z).getLocation(), triggerPlayer);
+                }
+            }
+        }
     }
 
 
