@@ -47,7 +47,7 @@ public class Builder extends DwarfClass {
         }
 
         DvzMap activeMap = dvz.getMM().getActiveMap();
-        if (activeMap != null && event.getBlock().getLocation().distance(activeMap.getLocation("monster")) < 50f) {
+        if (activeMap != null && event.getBlock().getLocation().distance(activeMap.getLocation("monster")) < 100f) {
             CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't build this close to the monster spawn! &4&l<<"));
                     event.setCancelled(true);
             dvz.logTimings("Builder.blockPlace()[monster spawn]", t);
@@ -94,7 +94,7 @@ public class Builder extends DwarfClass {
         }
 
         DvzMap activeMap = dvz.getMM().getActiveMap();
-        if (activeMap != null && event.getBlock().getLocation().distance(activeMap.getLocation("monster")) <  50f) {
+        if (activeMap != null && event.getBlock().getLocation().distance(activeMap.getLocation("monster")) <  100f) {
             CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't break blocks this close to the monster spawn! &4&l<<"));
             event.setCancelled(true);
             dvz.logTimings("Builder.blockBreak()[monster spawn]", t);

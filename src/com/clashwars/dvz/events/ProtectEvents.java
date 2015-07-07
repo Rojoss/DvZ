@@ -117,7 +117,7 @@ public class ProtectEvents implements Listener {
             }
 
             //Don't allow near monster spawn.
-            if (event.getBlock().getLocation().distance(activeMap.getLocation("monster")) <  50f) {
+            if (event.getBlock().getLocation().distance(activeMap.getLocation("monster")) <  100f) {
                 CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't build this close to the monster spawn! &4&l<<"));
                 event.setCancelled(true);
                 return;
@@ -183,7 +183,7 @@ public class ProtectEvents implements Listener {
             }
 
             //Don't allow near monster spawn.
-            if (event.getBlock().getLocation().distance(activeMap.getLocation("monster")) <  50f) {
+            if (event.getBlock().getLocation().distance(activeMap.getLocation("monster")) <  100f) {
                 CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't break blocks this close to the monster spawn! &4&l<<"));
                 event.setCancelled(true);
                 return;
