@@ -62,11 +62,10 @@ public class Hammer extends BaseAbility {
         ParticleEffect effect = ParticleEffect.SMOKE_NORMAL;
         int effectAmt = 3;
         if (block.getType() == Material.ENDER_PORTAL_FRAME) {
-            if (!damageShrine(block.getLocation(), player)) {
+            if (!Util.damageShrine(block.getLocation(), player, dvz.getCfg().SHRINE__DAMAGE_PER_HIT)) {
                 return;
             }
 
-            dvz.getSM().changeLocalStatVal(player, StatType.MONSTER_SHRINE_DAMAGE, dvz.getCfg().SHRINE__DAMAGE_PER_HIT);
             effect = ParticleEffect.SPELL_WITCH;
             effectAmt = 8;
         }
@@ -126,7 +125,7 @@ public class Hammer extends BaseAbility {
             return;
         }
 
-        if (!damageShrine(block.getLocation(), damager)) {
+        if (!Util.damageShrine(block.getLocation(), damager, dvz.getCfg().SHRINE__DAMAGE_PER_HIT)) {
             return;
         }
 
@@ -134,30 +133,8 @@ public class Hammer extends BaseAbility {
             return;
         }
 
-        dvz.getSM().changeLocalStatVal(damager, StatType.MONSTER_SHRINE_DAMAGE, dvz.getCfg().SHRINE__DAMAGE_PER_HIT);
-
         ParticleEffect.SPELL_WITCH.display(0.2f, 0.0f, 0.2f, 0.00001f, 8, block.getLocation().add(0.5f, 1, 0.5f));
         damager.getWorld().playSound(block.getLocation(), Sound.ZOMBIE_WOOD, 0.1f, 2.2f - CWUtil.randomFloat());
     }
 
-    private boolean damageShrine(Location shrineLoc, Player player) {
-        ShrineBlock shrineBlock = dvz.getGM().getShrineBlock(shrineLoc);
-        if (shrineBlock == null) {
-            return false;
-        }
-        if (dvz.getGM().getState() == GameState.MONSTERS) {
-            if (shrineBlock.getType() == ShrineType.KEEP_1 || shrineBlock.getType() == ShrineType.KEEP_2) {
-                player.sendMessage(CWUtil.formatCWMsg("&cYou have to destroy the shrine at the wall first!"));
-                return false;
-            }
-        } else if (dvz.getGM().getState() == GameState.MONSTERS_WALL) {
-            if (shrineBlock.getType() == ShrineType.KEEP_2) {
-                player.sendMessage(CWUtil.formatCWMsg("&cYou have to destroy the shrine at the bottom of the keep first!"));
-                return false;
-            }
-        }
-
-        shrineBlock.damage();
-        return true;
-    }
 }

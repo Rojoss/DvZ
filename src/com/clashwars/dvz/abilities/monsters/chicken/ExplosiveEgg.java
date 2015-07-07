@@ -8,6 +8,7 @@ import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.util.DvzItem;
+import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -77,10 +78,7 @@ public class ExplosiveEgg extends BaseAbility {
                     Block block = blockCenter.getWorld().getBlockAt((int)x, (int)y, (int)z);
                     if (undestroyableBlocks.contains(block.getType())) {
                         if (block.getType() == Material.ENDER_PORTAL_FRAME) {
-                            ShrineBlock shrineBlock = dvz.getGM().getShrineBlock(block.getLocation());
-                            if (shrineBlock != null && !shrineBlock.isDestroyed()) {
-                                shrineBlock.damage(1);
-                            }
+                            Util.damageShrine(block.getLocation(), (Player)egg.getShooter(), (int)dvz.getGM().getMonsterPower(1, 2));
                         }
                         continue;
                     }

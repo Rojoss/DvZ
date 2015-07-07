@@ -4,9 +4,13 @@ import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
+import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.maps.DvzMap;
+import com.clashwars.dvz.maps.ShrineBlock;
+import com.clashwars.dvz.maps.ShrineType;
+import com.clashwars.dvz.stats.internal.StatType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -133,4 +137,32 @@ public class Util {
         return DvZ.inst().getGameCfg().TEST_MODE && player.hasPermission("dvz.test");
     }
 
+
+    public static boolean damageShrine(Location shrineLoc, Player player, int amount) {
+        ShrineBlock shrineBlock = DvZ.inst().getGM().getShrineBlock(shrineLoc);
+        if (shrineBlock == null || shrineBlock.isDestroyed()) {
+            return false;
+        }
+
+        if (!DvZ.inst().getGM().isMonsters()) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThe monsters haven't been released yet! &4&l<<"));
+            return false;
+        }
+
+        if (DvZ.inst().getGM().getState() == GameState.MONSTERS) {
+            if (shrineBlock.getType() == ShrineType.KEEP_1 || shrineBlock.getType() == ShrineType.KEEP_2) {
+                CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou have to destroy the shrine at the wall first! &4&l<<"));
+                return false;
+            }
+        } else if (DvZ.inst().getGM().getState() == GameState.MONSTERS_WALL) {
+            if (shrineBlock.getType() == ShrineType.KEEP_2) {
+                CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou have to destroy the shrine at the bottom of the keep first! &4&l<<"));
+                return false;
+            }
+        }
+
+        shrineBlock.damage(amount);
+        DvZ.inst().getSM().changeLocalStatVal(player, StatType.MONSTER_SHRINE_DAMAGE, amount);
+        return true;
+    }
 }

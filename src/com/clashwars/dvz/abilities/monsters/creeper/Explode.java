@@ -151,10 +151,7 @@ public class Explode extends BaseAbility {
                     Block block = loc.getWorld().getBlockAt((int)x, (int)y, (int)z);
                     if (undestroyableBlocks.contains(block.getType())) {
                         if (block.getType() == Material.ENDER_PORTAL_FRAME) {
-                            ShrineBlock shrineBlock = dvz.getGM().getShrineBlock(block.getLocation());
-                            if (shrineBlock != null && !shrineBlock.isDestroyed()) {
-                                shrineBlock.damage(Math.round(power));
-                            }
+                            Util.damageShrine(loc, caster, Math.round(power));
                         }
                         continue;
                     }
