@@ -78,8 +78,10 @@ public class FilterMenu implements Listener {
 
         //Set time option based of settings.
         if (settings.stat_firstTime == null && settings.stat_secondTime == null) {
+            //Current game
             updateDates(player, 23);
         } else if ((settings.stat_firstTime == null || settings.stat_secondTime == null) || settings.stat_firstTime.equals(settings.stat_secondTime)) {
+            //Certain game
             Game[] games = dvz.getDM().getGames();
             int highest = 0;
             for (Game game : games) {
@@ -95,8 +97,11 @@ public class FilterMenu implements Listener {
                 updateDates(player, 25);
             } else if (closestGame.game_id == highest-2) {
                 updateDates(player, 26);
+            } else {
+                updateDates(player, 41);
             }
         } else {
+            //Timespan
             Long timeDiff = settings.stat_secondTime.getTime() - settings.stat_firstTime.getTime();
             int msDay = 1000 * 60 * 60 * 24;
             if (timeDiff == msDay) {
