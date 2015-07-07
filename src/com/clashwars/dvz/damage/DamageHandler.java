@@ -266,22 +266,22 @@ public class DamageHandler implements Listener {
             //Dragon slayer died
             if (dvz.getGM().getDragonSlayer() != null && dvz.getGM().getDragonSlayer().getName().equalsIgnoreCase(player.getName())) {
                 dvz.getGM().resetDragonSlayer();
-                dvz.getServer().broadcastMessage(Util.formatMsg("&d&lThe DragonSlayer died!"));
+                Util.broadcast("&d&lThe DragonSlayer died!");
             }
         } else if (cwp.getPlayerClass().getType() == ClassType.DRAGON) {
             broadcastDeathMessage(dmgLog, killer, ClassType.DRAGON, CWUtil.integrateColor("&5>> &7&o" + deathMsg + " &5<<"));
 
             //First dragon death
             if (dvz.getGM().getState() == GameState.DRAGON && dvz.getGM().getDragonPlayer() != null && dvz.getGM().getDragonPlayer().getName().equalsIgnoreCase(player.getName())) {
-                Bukkit.broadcastMessage(CWUtil.integrateColor("&7======= &a&lThe dragon has been killed! &7======="));
+                Util.broadcast("&7======= &a&lThe dragon has been killed! &7=======");
                 if (killer != null) {
                     dvz.getSM().changeLocalStatVal(killer.getUniqueId(), StatType.COMBAT_DRAGON_KILLS, 1);
-                    Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &3" + killer.getName() + " &7is the &bDragonSlayer&7!"));
+                    Util.broadcast("&a- &3" + killer.getName() + " &7is the &bDragonSlayer&7!");
                     if (killer.isOnline()) {
                         dvz.getGM().setDragonSlayer((Player)killer);
                     }
                 } else {
-                    Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Couldn't find the killer so there is no DragonSlayer."));
+                    Util.broadcast("&a- &7Couldn't find the killer so there is no DragonSlayer.");
                 }
                 dvz.getGM().releaseMonsters(false);
             }
@@ -333,13 +333,13 @@ public class DamageHandler implements Listener {
 
     private void broadcastDeathMessage(DamageLog dmgLog, OfflinePlayer killer, ClassType classType, String deathMsg) {
         if (dmgLog == null || dmgLog.logOwner == null) {
-            dvz.getServer().broadcastMessage(CWUtil.integrateColor(deathMsg));
+            Util.broadcast(deathMsg);
             return;
         }
 
         //Dragon messages for everyone
         if (classType == ClassType.DRAGON) {
-            dvz.getServer().broadcastMessage(CWUtil.integrateColor(deathMsg));
+            Util.broadcast(deathMsg);
             return;
         }
 

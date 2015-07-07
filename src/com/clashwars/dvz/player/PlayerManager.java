@@ -19,7 +19,6 @@ public class PlayerManager {
     private PlayerCfg pcfg;
 
     private Map<UUID, CWPlayer> players = new HashMap<UUID, CWPlayer>();
-    public Map<DvzClass, Integer> fakePlayers = new HashMap<DvzClass, Integer>();
 
     public List<UUID> suicidePlayers = new ArrayList<UUID>();
 

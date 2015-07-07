@@ -38,25 +38,6 @@ public class WeaponHandler implements Listener {
         this.dvz = dvz;
     }
 
-    @EventHandler
-    private void hotbarSwitch(PlayerItemHeldEvent event) {
-        /*
-        Player player = event.getPlayer();
-        ItemStack prevItem = player.getInventory().getItem(event.getPreviousSlot());
-        ItemStack newItem = player.getInventory().getItem(event.getNewSlot());
-
-
-        if (prevItem != null && CWUtil.compareItems(Product.BATTLEAXE.getItem(), prevItem, true, false)) {
-            if (player.hasPotionEffect(PotionEffectType.SLOW_DIGGING)) {
-                player.removePotionEffect(PotionEffectType.SLOW_DIGGING);
-            }
-        }
-        if (newItem != null && CWUtil.compareItems(Product.BATTLEAXE.getItem(), newItem, true, false)) {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 99999, 0));
-        }
-        */
-    }
-
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     private void entityDamageByEntity(EntityDamageByEntityEvent event) {

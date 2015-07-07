@@ -52,7 +52,6 @@ public class GameRunnable extends BukkitRunnable {
 
         //Saving
         if (ticks % 600 == 0) {
-            Bukkit.broadcastMessage(Util.formatMsg("&7Saving all data..."));
             dvz.getPM().savePlayers();
             dvz.getServer().savePlayers();
             DvzMap dvzMap = dvz.getMM().getActiveMap();
@@ -115,8 +114,7 @@ public class GameRunnable extends BukkitRunnable {
         if (time > 14000 && time < 22500) {
             if (gm.getState() == GameState.DAY_ONE) {
                 gm.setState(GameState.NIGHT_ONE);
-                Bukkit.broadcastMessage(Util.formatMsg("&6The first day has passed by..."));
-                Bukkit.broadcastMessage(Util.formatMsg("&6If you die now you'll become a monster!"));
+                Util.broadcast("&6&lThe first day has passed by...");
             }
             if (gm.getState() == GameState.DAY_TWO) {
                 gm.setState(GameState.DRAGON);
@@ -125,13 +123,12 @@ public class GameRunnable extends BukkitRunnable {
         } else if (time > 22500 || time < 14000) {
             if (gm.getState() == GameState.NIGHT_ONE) {
                 gm.setState(GameState.DAY_TWO);
-                Bukkit.broadcastMessage(Util.formatMsg("&6The sun is rising..."));
-                Bukkit.broadcastMessage(Util.formatMsg("&6This is the last day you can prepare for the fight!"));
+                Util.broadcast("&6&lThe sun is rising...");
+                Util.broadcast("&6&lThis is the last day you can prepare for the fight!");
             }
             if (gm.getState() == GameState.NIGHT_TWO) {
                 gm.setState(GameState.DAY_TWO);
-                Bukkit.broadcastMessage(Util.formatMsg("&6The sun is rising..."));
-                Bukkit.broadcastMessage(Util.formatMsg("&6There has been no dragon. &8(&7You might die now..&8)"));
+                Util.broadcast("&4&lThere has been no dragon. &8(&cYou might die now..&8)");
                 gm.releaseMonsters(true);
             }
         }

@@ -59,7 +59,7 @@ public class LobbyEvents implements Listener {
                         if (cwp.hasCompletedParkour()) {
                             player.sendMessage(Util.formatMsg("&cYou already completed the parkour this game!"));
                         } else {
-                            dvz.getServer().broadcastMessage(Util.formatMsg("&5&l" + player.getName() + " &6completed the parkour!"));
+                            Util.broadcast("&5&l" + player.getName() + " &6completed the parkour!");
                             cwp.setParkourCompleted(true);
                             dvz.getSM().changeLocalStatVal(player, StatType.GENERAL_TIMES_COMPLETED_PARKOUR, 1);
 
@@ -235,8 +235,9 @@ public class LobbyEvents implements Listener {
     private void serverPing(ServerListPingEvent event) {
         Long t = System.currentTimeMillis();
         GameState state = dvz.getGM().getState();
-        if (state == GameState.CLOSED) {
+        if (state == GameState.CLOSED || Util.isTest()) {
             event.setMotd(CWUtil.integrateColor("&4&lClashWars &6&lDwarves &2&lVS &c&lZombies\n&cNo DvZ right now!"));
+            return;
         }
         if (state == GameState.SETUP) {
             event.setMotd(CWUtil.integrateColor("&4&lClashWars &6&lDwarves &2&lVS &c&lZombies\n&6Setting up..."));

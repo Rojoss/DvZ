@@ -62,28 +62,27 @@ public class GameManager {
         Long t = System.currentTimeMillis();
         setState(GameState.SETUP);
         if (!nextGame) {
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&7========== &c&lDvZ has ended! &7=========="));
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &7Come back again later for more DvZ!"));
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &7Make sure to follow us on Twitch to know when DvZ starts!"));
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &9&lhttp://twitch.tv/clashwars"));
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &9&lhttp://clashwars.com"));
+            Util.broadcast("&7========== &c&lDvZ has ended! &7==========");
+            Util.broadcast("&c- &7Come back again later for more DvZ!");
+            Util.broadcast("&c- &7Make sure to follow us on Twitch to know when DvZ starts!");
+            Util.broadcast("&c- &9&lhttp://twitch.tv/clashwars");
+            Util.broadcast("&c- &9&lhttp://clashwars.com");
             setState(GameState.CLOSED);
-            Title title = new Title("&c&lDvZ has ended!", "&7Come back again later for more DvZ!", 10, 500, 30);
-            title.setTimingsToTicks();
-            title.broadcast();
+            Util.broadcastTitle(new Title("&c&lDvZ has ended!", "&7Come back again later for more DvZ!", 10, 500, 30));
         } else {
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&7========== &a&lDvZ is resetting! &7=========="));
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7A new game will be starting soon."));
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7If you're not watching the stream yet make sure to do!"));
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &9&lhttp://twitch.tv/clashwars"));
-            Title title = new Title("&a&lDvZ is resetting!", "&7A new game will be starting soon.", 10, 100, 30);
-            title.setTimingsToTicks();
-            title.broadcast();
+            Util.broadcast("&7========== &a&lDvZ is resetting! &7==========");
+            Util.broadcast("&a- &7A new game will be starting soon.");
+            Util.broadcast("&a- &7If you're not watching the stream yet make sure to do!");
+            Util.broadcast("&a- &9&lhttp://twitch.tv/clashwars");
+            Util.broadcastTitle(new Title("&a&lDvZ is resetting!", "&7A new game will be starting soon.", 10, 100, 30));
         }
 
         //Reset data
         Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
         for (Player player : players) {
+            if (!Util.canTest(player)) {
+                continue;
+            }
             CWPlayer cwp = dvz.getPM().getPlayer(player);
             cwp.undisguise();
             cwp.reset();
@@ -121,6 +120,9 @@ public class GameManager {
             //Tp all players to default world.
             Collection<Player> onlinePlayers = (Collection<Player>)dvz.getServer().getOnlinePlayers();
             for (Player player : onlinePlayers) {
+                if (!Util.canTest(player)) {
+                    continue;
+                }
                 player.teleport(dvz.getCfg().getDefaultWorld().getSpawnLocation());
             }
 
@@ -182,15 +184,12 @@ public class GameManager {
         }
 
         setState(GameState.OPENED);
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&7========== &a&lDvZ has opened! &7=========="));
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7The game will be starting soon so please wait."));
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Beat the parkour to get 3 classes instead of 2!"));
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7If you're not watching the stream yet make sure to do!"));
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &9&lhttp://twitch.tv/clashwars"));
-        Title title = new Title("&a&lDvZ has opened!", "&7The game will be starting soon so please wait.", 10, 100, 30);
-        title.setTimingsToTicks();
-        title.broadcast();
-
+        Util.broadcast("&7========== &a&lDvZ has opened! &7==========");
+        Util.broadcast("&a- &7The game will be starting soon so please wait.");
+        Util.broadcast("&a- &7Beat the parkour to get 3 classes instead of 2!");
+        Util.broadcast("&a- &7If you're not watching the stream yet make sure to do!");
+        Util.broadcast("&a- &9&lhttp://twitch.tv/clashwars");
+        Util.broadcastTitle(new Title("&a&lDvZ has opened!", "&7The game will be starting soon so please wait.", 10, 100, 30));
         dvz.getServer().dispatchCommand(dvz.getServer().getConsoleSender(), "hd reload");
 
         if (dvz.getSql() != null) {
@@ -200,6 +199,9 @@ public class GameManager {
         //Tp all players to active world.
         Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
         for (Player player : players) {
+            if (!Util.canTest(player)) {
+                continue;
+            }
             dvz.getPM().getPlayer(player).reset();
             player.teleport(dvz.getMM().getUsedWorld().getSpawnLocation());
         }
@@ -211,19 +213,20 @@ public class GameManager {
         Bukkit.getPluginManager().callEvent(new GameStartEvent());
 
         Long t = System.currentTimeMillis();
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&7========== &a&lDvZ has started! &7=========="));
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7You can now choose a dwarf class!"));
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7You get one and a half day to prepare."));
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Do your tasks and get fully equipped!."));
-        Title title = new Title("&a&lDvZ has started!", "&7You can now choose a dwarf class!", 10, 50, 30);
-        title.setTimingsToTicks();
-        title.broadcast();
+        Util.broadcast("&7========== &a&lDvZ has started! &7==========");
+        Util.broadcast("&a- &7You can now choose a dwarf class!");
+        Util.broadcast("&a- &7You get one and a half day to prepare.");
+        Util.broadcast("&a- &7Do your tasks and get fully equipped!.");
+        Util.broadcastTitle(new Title("&a&lDvZ has started!", "&7You can now choose a dwarf class!", 10, 50, 30));
 
         gCfg.GAME__START_TIME = System.currentTimeMillis();
         startTime = System.currentTimeMillis();
         
         Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
         for (Player player : players) {
+            if (!Util.canTest(player)) {
+                continue;
+            }
             dvz.getPM().getPlayer(player).giveClassItems(ClassType.DWARF, false, -1);
         }
 
@@ -244,12 +247,13 @@ public class GameManager {
             Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
             for (Player p : players) {
                 if (p.isOp() || p.hasPermission("dvz.admin")) {
-                    p.sendMessage(Util.formatMsg("&cNo dragon was set up so you have been set as dragon!"));
+                    p.sendMessage(Util.formatMsg("&c&lNo dragon was set up so you have been set as dragon!"));
                     player = p;
                     setDragonPlayer(p.getUniqueId());
                     if (getDragonType() == null) {
                         setDragonType(DvzClass.FIREDRAGON);
                     }
+                    break;
                 }
             }
         }
@@ -258,19 +262,19 @@ public class GameManager {
             return;
         }
         if (player == null) {
-            Bukkit.broadcastMessage(Util.formatMsg("&4&lThere is no staff member to player the dragon. &c&lPlease wait..."));
-            Bukkit.broadcastMessage(Util.formatMsg("&7If there has been no dragon when the sun rises again, the monsters will be automatically released. Random dwarves will be killed!"));
+            Util.broadcast("&4&lThere is no staff member to player the dragon. &c&lPlease wait...");
+            Util.broadcast("&7If there has been no dragon when the sun rises again, the monsters will be automatically released. Random dwarves will be killed!");
             dvz.logTimings("GameManager.createDragon()[invalid player3]", t);
             return;
         }
         DvzClass dragonType = getDragonType();
 
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&7======= &a&lThe " + dragonType.getClassClass().getDisplayName() + " &a&larises! &7======="));
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Stop working and get to the keep!"));
+        Util.broadcast("&7======= &a&lThe " + dragonType.getClassClass().getDisplayName() + " &a&larises! &7=======");
+        Util.broadcast("&a- &7Stop working and get to the keep!");
         if (getDragonPlayer() == null) {
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Kill the dragon and become the &bDragonSlayer&7!"));
+            Util.broadcast("&a- &7Kill the dragon and become the &bDragonSlayer&7!");
         }
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &8Remember: &7If you die you become a monster."));
+        Util.broadcast("&a- &8Remember: &7If you die you become a monster.");
 
         Title title;
         if (getDragonPlayer() == null) {
@@ -278,8 +282,7 @@ public class GameManager {
         } else {
             title = new Title("&a&lThe " + dragonType.getClassClass().getDisplayName() + " &a&larises!", "", 10, 50, 30);
         }
-        title.setTimingsToTicks();
-        title.broadcast();
+        Util.broadcastTitle(title);
 
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         dragonSaveData = new SavedPlayerState(cwp.getPlayerClass(), player.getInventory().getContents(), player.getInventory().getArmorContents(), player.getLocation());
@@ -321,15 +324,13 @@ public class GameManager {
                 attempts = 20;
                 killed.add(randomDwarf);
                 randomDwarf.getPlayer().setHealth(0);
-                Bukkit.broadcastMessage(Util.formatMsg("&8" + randomDwarf.getName() + " &7has been killed!"));
+                Util.broadcast(Util.formatMsg("&8" + randomDwarf.getName() + " &7has been killed!"));
             }
         }
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&7===== &a&lThe monsters have been released! &7====="));
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Get to the front wall to hold the monsters of!"));
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Don't let them break the shrine at the wall."));
-        Title title = new Title("&c&lMonsters Released!", "&7Get to the front wall to hold the monsters of!", 10, 50, 30);
-        title.setTimingsToTicks();
-        title.broadcast();
+        Util.broadcast("&7===== &a&lThe monsters have been released! &7=====");
+        Util.broadcast("&a- &7Get to the front wall to hold the monsters of!");
+        Util.broadcast("&a- &7Don't let them break the shrine at the wall.");
+        Util.broadcastTitle(new Title("&c&lMonsters Released!", "&7Get to the front wall to hold the monsters of!", 10, 50, 30));
         setState(GameState.MONSTERS);
         dvz.logTimings("GameManager.releaseMonsters()", t);
     }
@@ -337,12 +338,10 @@ public class GameManager {
 
     public void captureWall() {
         Long t = System.currentTimeMillis();
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&7===== &a&lThe wall has been captured! &7====="));
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Get back to the keep to defend the main shrine!"));
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Monsters will now spawn at the wall."));
-        Title title = new Title("&c&lWall captured!", "&7Get back to the keep to defend the keep shrine!", 10, 50, 30);
-        title.setTimingsToTicks();
-        title.broadcast();
+        Util.broadcast("&7===== &a&lThe wall has been captured! &7=====");
+        Util.broadcast("&a- &7Get back to the keep to defend the main shrine!");
+        Util.broadcast("&a- &7Monsters will now spawn at the wall.");
+        Util.broadcastTitle(new Title("&c&lWall captured!", "&7Get back to the keep to defend the keep shrine!", 10, 50, 30));
         setState(GameState.MONSTERS_WALL);
 
         Cuboid wall = dvz.getMM().getActiveMap().getCuboid("wall");
@@ -375,12 +374,10 @@ public class GameManager {
 
     public void captureFirstKeepShrine() {
         Long t = System.currentTimeMillis();
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&7== &a&lThe bottom of the keep has been captured! &7=="));
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Defend the shrine at the top!"));
-        Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Monsters will now spawn in the keep!"));
-        Title title = new Title("&c&lKeep captured!", "&7Get to the top of the keep to defend the final shrine!", 10, 50, 30);
-        title.setTimingsToTicks();
-        title.broadcast();
+        Util.broadcast("&7== &a&lThe bottom of the keep has been captured! &7==");
+        Util.broadcast("&a- &7Defend the shrine at the top!");
+        Util.broadcast("&a- &7Monsters will now spawn in the keep!");
+        Util.broadcastTitle(new Title("&c&lKeep captured!", "&7Get to the top of the keep to defend the final shrine!", 10, 50, 30));
         setState(GameState.MONSTERS_KEEP);
         dvz.logTimings("GameManager.captureFirstKeepShrine()", t);
     }
@@ -389,21 +386,18 @@ public class GameManager {
     public void stopGame(boolean force, String reason) {
         Long t = System.currentTimeMillis();
         if (force) {
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&7===== &4&lThe game has been stopped! &7====="));
+            Util.broadcast("&7===== &4&lThe game has been stopped! &7=====");
             if (reason != null && !reason.isEmpty()) {
-                Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &8Reason: &7" + reason));
-
+                Util.broadcast("&c- &8Reason: &7" + reason);
             }
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &7The game will be closed soon."));
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&c- &7Don't log off yet! There might be another round."));
+            Util.broadcast("&c- &7The game will be closed soon.");
+            Util.broadcast("&c- &7Don't log off yet! There might be another round.");
         } else {
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&7=== &a&lThe monsters have destroyed the shrine! &7==="));
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7The game will be closed soon."));
-            Bukkit.broadcastMessage(CWUtil.integrateColor("&a- &7Don't log off yet! There might be another round."));
+            Util.broadcast("&7=== &a&lThe monsters have destroyed the shrine! &7===");
+            Util.broadcast("&a- &7The game will be closed soon.");
+            Util.broadcast("&a- &7Don't log off yet! There might be another round.");
         }
-        Title title = new Title("&c&lGame Ended!", "&4Don't log off yet! &7There might be another round.", 10, 100, 30);
-        title.setTimingsToTicks();
-        title.broadcast();
+        Util.broadcastTitle(new Title("&c&lGame Ended!", "&4Don't log off yet! &7There might be another round.", 10, 100, 30));
         setState(GameState.ENDED);
 
         dvz.getSM().changeLocalStatVal(StatType.GENERAL_GAME_TIME, ((int)(System.currentTimeMillis() - startTime)));
@@ -597,8 +591,9 @@ public class GameManager {
     }
 
     public void calculateMonsterPerc() {
-        int dwarves = dvz.getPM().getPlayers(ClassType.DWARF, true, true).size();
-        int monsters = dvz.getPM().getPlayers(ClassType.MONSTER, true, true).size();
+        int dwarves = dvz.getPM().getPlayers(ClassType.DWARF, true, !Util.isTest()).size();
+        int monsters = dvz.getPM().getPlayers(ClassType.MONSTER, true, !Util.isTest()).size();
+
         monsterPerc = (float)monsters / (monsters + dwarves);
     }
 

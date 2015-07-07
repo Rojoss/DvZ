@@ -92,7 +92,12 @@ public class MainEvents implements Listener {
             //Player joined without a class.
             cwp.reset();
             cwp.resetData();
-            if (gm.isDwarves()) {
+            if (gm.getState() == GameState.CLOSED || !Util.canTest(player)) {
+                //Player joined after the game is closed.
+                player.sendMessage(Util.formatMsg("&cThere is no &4DvZ &cright now!"));
+                subtitleStr = "&c&lThere is &4&lno DvZ &c&lright now.";
+                spawnLoc = dvz.getCfg().getDefaultWorld().getSpawnLocation();
+            } else if (gm.isDwarves()) {
                 //Player joined during dwarf time.
                 player.sendMessage(Util.formatMsg("&6You have joined DvZ as a &8Dwarf&6!"));
                 cwp.setPlayerClass(DvzClass.DWARF);
@@ -115,10 +120,6 @@ public class MainEvents implements Listener {
                 //Player joined before the game is started
                 player.sendMessage(Util.formatMsg("&6The game hasn't started yet but it will start soon."));
                 subtitleStr = "&9The game hasn't started yet but it will start soon.";
-            } else if (gm.getState() == GameState.CLOSED) {
-                //Player joined after the game is closed.
-                player.sendMessage(Util.formatMsg("&cThere is no &4DvZ &cright now!"));
-                subtitleStr = "&c&lThere is &4&lno DvZ &c&lright now.";
             }
         }
         dvz.getGM().calculateMonsterPerc();
@@ -128,7 +129,7 @@ public class MainEvents implements Listener {
         title.setTimingsToTicks();
         title.send(player);
 
-        CWUtil.setTab(player, " &8======== &6&lDwarves &2VS &c&lZombies &8========", " &6INFO &8>>> &9&lclashwars.com/info &8<<< &6INFO");
+        CWUtil.setTab(player, " &8======== &6&lDwarves &2VS &c&lZombies &8========", " &6INFO &8>>> &9&lwiki.clashwars.com &8<<< &6INFO");
 
         //Teleport player
         final Location spawnLocFinal = spawnLoc;
@@ -136,7 +137,6 @@ public class MainEvents implements Listener {
             @Override
             public void run() {
                 player.teleport(spawnLocFinal);
-                //player.setResourcePack("http://web.clashwars.com/ResourcePack/CWDvZ.zip");
             }
         }.runTaskLater(dvz, 10);
 
@@ -292,6 +292,7 @@ public class MainEvents implements Listener {
                 }
             }.runTaskAsynchronously(dvz);
         }
+
         dvz.logTimings("MainEvents.playerJoin()", t);
     }
 
@@ -302,7 +303,10 @@ public class MainEvents implements Listener {
         final Player player = event.getPlayer();
         //Get the respawn location and get the active map.
         Location spawnLoc = dvz.getGM().getUsedWorld().getSpawnLocation();
-        if (!dvz.getGM().isStarted()) {
+        if (dvz.getGM().getState() == GameState.ENDED || dvz.getGM().getState() == GameState.CLOSED || dvz.getGM().getState() == GameState.SETUP || !Util.canTest(player)) {
+            event.setRespawnLocation(spawnLoc);
+            return;
+        } else if (!dvz.getGM().isStarted()) {
             if (dvz.getMM().getActiveMap() != null && dvz.getMM().getActiveMap().getLocation("lobby") != null) {
                 spawnLoc = dvz.getMM().getActiveMap().getLocation("lobby");
             }

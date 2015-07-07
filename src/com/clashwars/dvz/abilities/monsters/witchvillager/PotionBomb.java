@@ -172,8 +172,8 @@ public class PotionBomb extends BaseAbility {
             }
         }.runTaskLater(dvz, fuseTime);
 
-        dvz.getServer().broadcastMessage(Util.formatMsg("&6A bomb has been placed at&8: &c" + bomb.getBlockX() + "&7, &a" + bomb.getBlockY() + "&7, &9" + bomb.getBlockZ()));
-        dvz.getServer().broadcastMessage(Util.formatMsg("&6If not destroyed, it will explode in &a&l" + fuseTime / 20 + " &6seconds!"));
+        Util.broadcast("&6A bomb has been placed at&8: &c" + bomb.getBlockX() + "&7, &a" + bomb.getBlockY() + "&7, &9" + bomb.getBlockZ());
+        Util.broadcast("&6If not destroyed, it will explode in &a&l" + fuseTime / 20 + " &6seconds!");
         bombs.put(bomb.getBlock().getLocation(), bt);
 
         dvz.getPM().getPlayer(player).getPlayerData().setbombUsed(true);
@@ -224,7 +224,7 @@ public class PotionBomb extends BaseAbility {
 
         fixGround(bomb);
 
-        dvz.getServer().broadcastMessage(Util.formatMsg("&6The bomb (&c" + bomb.getX() + "&7, &a" + bomb.getY() + "&7, &9" + bomb.getZ() + "&6) has been destroyed!"));
+        Util.broadcast("&6The bomb (&c" + bomb.getX() + "&7, &a" + bomb.getY() + "&7, &9" + bomb.getZ() + "&6) has been destroyed!");
         bombs.get(bomb.getLocation()).cancel();
         bombs.remove(bomb.getLocation());
     }

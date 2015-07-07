@@ -1,5 +1,6 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.hat.Hat;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -130,9 +131,9 @@ public class VIPEvents implements Listener {
 
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void onInteract(PlayerInteractEvent event) {
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK && (event.getAction() != Action.LEFT_CLICK_BLOCK && (event.getItem() == null || event.getItem().getType() == Material.AIR))) {
             return;
         }
         Block block = event.getClickedBlock();

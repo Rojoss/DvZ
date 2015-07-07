@@ -2,6 +2,7 @@ package com.clashwars.dvz.commands;
 
 import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.CooldownManager;
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.cuboid.SelectionStatus;
 import com.clashwars.cwcore.hat.Hat;
@@ -140,7 +141,11 @@ public class Commands {
             }
             Player player = (Player)sender;
 
-            dvz.getSM().filterMenu.showMenu(player);
+            if (dvz.getSettingsCfg().getSettings(player.getUniqueId()).statsDirect) {
+                dvz.getSM().statsMenu.showMenu(player);
+            } else {
+                dvz.getSM().filterMenu.showMenu(player);
+            }
             return true;
         }
 
@@ -206,7 +211,7 @@ public class Commands {
                 return true;
             }
 
-            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted()) {
+            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted() || !Util.canTest(player)) {
                 sender.sendMessage(Util.formatMsg("&cCan only be used as a dwarf!"));
                 return true;
             }
@@ -228,7 +233,7 @@ public class Commands {
                 return true;
             }
 
-            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted()) {
+            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted() || !Util.canTest(player)) {
                 sender.sendMessage(Util.formatMsg("&cCan only be used as a dwarf!"));
                 return true;
             }
@@ -250,7 +255,7 @@ public class Commands {
                 return true;
             }
 
-            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted()) {
+            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted() || !Util.canTest(player)) {
                 sender.sendMessage(Util.formatMsg("&cCan only be used as a dwarf!"));
                 return true;
             }
@@ -266,7 +271,7 @@ public class Commands {
             }
             Player player = (Player)sender;
 
-            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted()) {
+            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted() || !Util.canTest(player)) {
                 sender.sendMessage(Util.formatMsg("&cCan only be used as a dwarf!"));
                 return true;
             }
@@ -348,7 +353,7 @@ public class Commands {
                         return true;
                     }
 
-                    if (!gm.isStarted()) {
+                    if (!gm.isStarted() || !Util.canTest(player)) {
                         sender.sendMessage(Util.formatMsg("&cThe game isn't started or has already ended!"));
                         return true;
                     }
@@ -374,7 +379,7 @@ public class Commands {
                         return true;
                     }
 
-                    if (!gm.isStarted()) {
+                    if (!gm.isStarted() || !Util.canTest(player)) {
                         sender.sendMessage(Util.formatMsg("&cThe game isn't started or has already ended!"));
                         return true;
                     }
@@ -400,7 +405,7 @@ public class Commands {
                         return true;
                     }
 
-                    if (!gm.isStarted()) {
+                    if (!gm.isStarted() || !Util.canTest(player)) {
                         sender.sendMessage(Util.formatMsg("&cThe game isn't started or has already ended!"));
                         return true;
                     }
@@ -454,7 +459,7 @@ public class Commands {
                     Player player = (Player)sender;
                     CWPlayer cwp = pm.getPlayer(player);
 
-                    if (!cwp.isDwarf()) {
+                    if (!cwp.isDwarf() || !Util.canTest(player)) {
                         sender.sendMessage(Util.formatMsg("&cYou have to be a dwarf to use this command."));
                         return true;
                     }
@@ -1006,6 +1011,66 @@ public class Commands {
 
 
 
+
+                //##########################################################################################################################
+                //################################################### /dvz test [player] ###################################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("test")) {
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                        return true;
+                    }
+                    Player player = (Player)sender;
+
+                    if (!player.isOp() && !player.hasPermission("dvz.admin")) {
+                        player.sendMessage(Util.formatMsg("Insufficient permissions."));
+                        return true;
+                    }
+
+                    if (args.length < 2) {
+                        dvz.getGameCfg().TEST_MODE = !dvz.getGameCfg().TEST_MODE;
+                        if (dvz.getGameCfg().TEST_MODE) {
+                            dvz.getServer().broadcastMessage(CWUtil.integrateColor("&6&lThe server is now in test mode."));
+                            player.sendMessage(CWUtil.integrateColor("&cDon't forget to turn in back off!"));
+                        } else {
+                            dvz.getServer().broadcastMessage(CWUtil.integrateColor("&6&lThe server is no longer in test mode."));
+                        }
+                        dvz.logTimings("Commands.onCommand()[/dvz test]", t);
+                        return true;
+                    }
+
+                    Player target = dvz.getServer().getPlayer(args[1]);
+                    if (target == null) {
+                        player.sendMessage(Util.formatMsg("&cInvalid player specified!"));
+                        return true;
+                    }
+
+                    CWPlayer cwp = dvz.getPM().getPlayer(target);
+                    cwp.setTesting(!cwp.isTesting());
+
+                    if (cwp.isTesting()) {
+                        sender.sendMessage(Util.formatMsg("&6Added &a" + target.getName() + " &6to the test game/mode."));
+                        cwp.sendMessage(CWUtil.integrateColor("&6&lYou have been added to the test game!"));
+                        cwp.sendMessage(CWUtil.integrateColor("&4&lThis is a test game so don't expect to be able to play normally!"));
+                        if (dvz.getGM().isStarted() && (cwp.getPlayerClass() == null || cwp.getPlayerClass().isBaseClass())) {
+                            cwp.giveClassItems(ClassType.DWARF, false, 10);
+                        }
+                    } else {
+                        sender.sendMessage(Util.formatMsg("&cRemoved &4" + target.getName() + " &cfrom the test game/mode."));
+                        cwp.sendMessage(CWUtil.integrateColor("&c&lYou have been removed from the test game!"));
+                        cwp.undisguise();
+                        cwp.reset();
+                        cwp.resetData();
+                        dvz.getPM().removePlayer(cwp, true);
+                        target.teleport(dvz.getCfg().getDefaultWorld().getSpawnLocation());
+                    }
+                    dvz.logTimings("Commands.onCommand()[/dvz test {player}]", t);
+                    return true;
+                }
+
+
+
+
                 //##########################################################################################################################
                 //################################################ /dvz loc {type} [block] #################################################
                 //##########################################################################################################################
@@ -1264,42 +1329,6 @@ public class Commands {
                     dvz.logTimings("Commands.onCommand()[/dvz timings]", t);
                     return true;
                 }
-
-
-                //##########################################################################################################################
-                //####################################################### /dvz test ########################################################
-                //##########################################################################################################################
-                if (args[0].equalsIgnoreCase("test")) {
-                    if (!(sender instanceof Player)) {
-                        sender.sendMessage(Util.formatMsg("&cPlayer command only."));
-                        return true;
-                    }
-                    Player player = (Player)sender;
-
-                    if (!sender.isOp() && !sender.hasPermission("dvz.admin")) {
-                        sender.sendMessage(Util.formatMsg("Insufficient permissions."));
-                        return true;
-                    }
-
-                    int count = CWUtil.getInt(args[2]);
-                    for (int i = 0; i < (args.length > 2 && count > 0 ? count : 100); i++) {
-                        Map<DvzClass, BaseClass> classes = dvz.getCM().getRandomClasses(player, args.length > 1 && args[1].equalsIgnoreCase("monster") ? ClassType.MONSTER : ClassType.DWARF, -1);
-                        for (DvzClass dvzClass : classes.keySet()) {
-                            if (dvz.getPM().fakePlayers.containsKey(dvzClass)) {
-                                dvz.getPM().fakePlayers.put(dvzClass, dvz.getPM().fakePlayers.get(dvzClass) + 1);
-                            } else {
-                                dvz.getPM().fakePlayers.put(dvzClass, 1);
-                            }
-                        }
-                    }
-                    player.sendMessage(Util.formatMsg("&4&lTest results&8&l:"));
-                    for (DvzClass dvzClass : dvz.getPM().fakePlayers.keySet()) {
-                        player.sendMessage(CWUtil.integrateColor("&6" + dvzClass.toString() + ": &5" + dvz.getPM().fakePlayers.get(dvzClass)));
-                    }
-                    dvz.getPM().fakePlayers.clear();
-                    dvz.logTimings("Commands.onCommand()[/dvz test]", t);
-                    return true;
-                }
             }
 
             ShrineType[] shrineTypes = new ShrineType[] {ShrineType.WALL, ShrineType.KEEP_1, ShrineType.KEEP_2};
@@ -1318,7 +1347,12 @@ public class Commands {
 
 
             sender.sendMessage(CWUtil.integrateColor("&8========== &4&lDvZ Game Information &8=========="));
-            sender.sendMessage(CWUtil.integrateColor("&6Game State&8: &5" + gm.getState().getColor() + gm.getState().getName() + " &8(&7Speed: &a" + gm.getSpeed() + "&7)"));
+            if (Util.isTest()) {
+                sender.sendMessage(CWUtil.integrateColor("&6Game State&8: &c&lServer is in test mode!"));
+            } else {
+                sender.sendMessage(CWUtil.integrateColor("&6Game State&8: &5" + gm.getState().getColor() + gm.getState().getName() + " &8(&7Speed: &a" + gm.getSpeed() + "&7)"));
+            }
+
             if (gm.getState() == GameState.DRAGON) {
                 sender.sendMessage(CWUtil.integrateColor("&6Dragon power&8: &d" + gm.getDragonPower() + "&8/&53"));
             }

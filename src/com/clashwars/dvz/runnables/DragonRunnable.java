@@ -44,7 +44,7 @@ public class DragonRunnable extends BukkitRunnable {
             power = 1;
         }
         if (power != prevPower) {
-            dvz.getServer().broadcastMessage(Util.formatMsg("&aDragon power decreased! &8[&2" + prevPower + "&7>&a" + power + "&8]"));
+            Util.broadcast("&aDragon power decreased! &8[&2" + prevPower + "&7>&a" + power + "&8]");
         }
         prevPower = power;
         dvz.getGM().setDragonPower(power);

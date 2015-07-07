@@ -62,6 +62,11 @@ public class ProtectEvents implements Listener {
             }
         }
 
+        if (!Util.canTest(damagerPlayer)) {
+            event.setCancelled(true);
+            return;
+        }
+
         //Don't allow hitting mobs
         if (!(event.getEntity() instanceof Player)) {
             //Allow hitting monsters during monster time for like endermite etc as a dwarf.
@@ -87,15 +92,15 @@ public class ProtectEvents implements Listener {
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
             return;
         }
-        CWPlayer cwp = dvz.getPM().getPlayer(event.getPlayer());
 
         //Don't allow it if game hasn't started.
-        if (!gm.isStarted()) {
+        if (!gm.isStarted() || !Util.canTest(event.getPlayer())) {
             event.setCancelled(true);
             return;
         }
 
         //Don't allow monsters
+        CWPlayer cwp = dvz.getPM().getPlayer(event.getPlayer());
         if (cwp.isMonster()) {
             event.setCancelled(true);
             return;
@@ -133,15 +138,15 @@ public class ProtectEvents implements Listener {
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
             return;
         }
-        CWPlayer cwp = dvz.getPM().getPlayer(event.getPlayer());
 
         //Don't allow it if game hasn't started.
-        if (!gm.isStarted()) {
+        if (!gm.isStarted() || !Util.canTest(event.getPlayer())) {
             event.setCancelled(true);
             return;
         }
 
         //Don't allow monsters
+        CWPlayer cwp = dvz.getPM().getPlayer(event.getPlayer());
         if (cwp.isMonster()) {
             event.setCancelled(true);
             return;
@@ -197,15 +202,18 @@ public class ProtectEvents implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void itemDrop(PlayerDropItemEvent event) {
-        CWPlayer cwp = dvz.getPM().getPlayer(event.getPlayer());
+        if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
+            return;
+        }
 
         //Don't allow it if game hasn't started.
-        if (!gm.isStarted()) {
+        if (!gm.isStarted() || !Util.canTest(event.getPlayer())) {
             event.setCancelled(true);
             return;
         }
 
         //Don't allow monsters
+        CWPlayer cwp = dvz.getPM().getPlayer(event.getPlayer());
         if (cwp.isMonster()) {
             event.setCancelled(true);
             return;
@@ -221,15 +229,18 @@ public class ProtectEvents implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void itemPickup(PlayerPickupItemEvent event) {
-        CWPlayer cwp = dvz.getPM().getPlayer(event.getPlayer());
+        if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
+            return;
+        }
 
         //Don't allow it if game hasn't started.
-        if (!gm.isStarted()) {
+        if (!gm.isStarted() || !Util.canTest(event.getPlayer())) {
             event.setCancelled(true);
             return;
         }
 
         //Don't allow monsters
+        CWPlayer cwp = dvz.getPM().getPlayer(event.getPlayer());
         if (cwp.isMonster()) {
             event.setCancelled(true);
             return;

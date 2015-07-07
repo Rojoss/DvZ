@@ -1,6 +1,7 @@
 package com.clashwars.dvz.util;
 
 import com.clashwars.cwcore.cuboid.Cuboid;
+import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.ClassType;
@@ -19,6 +20,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
 
 public class Util {
 
@@ -46,6 +48,33 @@ public class Util {
         for (Player player : players) {
             if (player.isOp() || player.hasPermission("dvz.admin")) {
                 player.sendMessage(msg);
+            }
+        }
+    }
+
+    public static void broadcast(String message) {
+        if (!isTest()) {
+            Bukkit.broadcastMessage(CWUtil.integrateColor(message));
+        } else {
+            Collection<Player> players = (Collection<Player>)Bukkit.getOnlinePlayers();
+            for (Player player : players) {
+                if (player.hasPermission("dvz.test")) {
+                    player.sendMessage(CWUtil.integrateColor(message));
+                }
+            }
+        }
+    }
+
+    public static void broadcastTitle(Title title) {
+        title.setTimingsToTicks();
+        if (!isTest()) {
+            title.broadcast();
+        } else {
+            Collection<Player> players = (Collection<Player>)Bukkit.getOnlinePlayers();
+            for (Player player : players) {
+                if (player.hasPermission("dvz.test")) {
+                    title.send(player);
+                }
             }
         }
     }
@@ -96,25 +125,12 @@ public class Util {
         return new SimpleDateFormat("dd MMM yyyy").format(timestamp);
     }
 
-
-    public static void damageEntity(Entity target, double damage) {
-        damageEntity(target, damage, EntityDamageEvent.DamageCause.CUSTOM);
+    public static boolean isTest() {
+        return DvZ.inst().getGameCfg().TEST_MODE;
     }
 
-    public static void damageEntity(Entity target, double damage, EntityDamageEvent.DamageCause cause) {
-        EntityDamageEvent event = new EntityDamageEvent(target, cause, damage);
-        target.setLastDamageCause(event);
-        Bukkit.getServer().getPluginManager().callEvent(event);
-    }
-
-    public static void damageEntity(Entity target, Entity damager, double damage) {
-        damageEntity(target, damager, damage, EntityDamageEvent.DamageCause.CUSTOM);
-    }
-
-    public static void damageEntity(Entity target, Entity damager, double damage, EntityDamageEvent.DamageCause cause) {
-        EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(damager, target, cause, damage);
-        target.setLastDamageCause(event);
-        Bukkit.getServer().getPluginManager().callEvent(event);
+    public static boolean canTest(Player player) {
+        return DvZ.inst().getGameCfg().TEST_MODE && player.hasPermission("dvz.test");
     }
 
 }

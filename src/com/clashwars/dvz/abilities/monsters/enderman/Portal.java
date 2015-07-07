@@ -97,9 +97,9 @@ public class Portal extends BaseAbility {
             CWUtil.removeItemsFromHand(player, 1);
             dvz.getSM().changeLocalStatVal(player, StatType.MONSTER_PORTALS_CREATED, 1);
 
-            dvz.getServer().broadcastMessage(Util.formatMsg("&dPortal created by &5" + player.getName() + "&d!"));
-            dvz.getServer().broadcastMessage(Util.formatMsg("&7Monsters can &dtp &7to it by using the &dportal block&7."));
-            dvz.getServer().broadcastMessage(Util.formatMsg("&7Dwarves can destroy it by &dbreaking the egg &7or &dkilling the enderman&7!"));
+            Util.broadcast("&dPortal created by &5" + player.getName() + "&d!");
+            Util.broadcast("&7Monsters can &dtp &7to it by using the &dportal block&7.");
+            Util.broadcast("&7Dwarves can destroy it by &dbreaking the egg &7or &dkilling the enderman&7!");
             player.sendMessage(Util.formatMsg("&6Portal created! &7Click the egg if you want to deactivate the portal."));
             return;
         } catch (CommandException e) {
@@ -140,7 +140,7 @@ public class Portal extends BaseAbility {
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         if (cwp.isDwarf()) {
             dvz.getSM().changeLocalStatVal(player, StatType.DWARF_PORTALS_DESTROYED, 1);
-            dvz.getServer().broadcastMessage(Util.formatMsg("&cThe portal has been destroyed by &4" + player.getName()));
+            Util.broadcast("&cThe portal has been destroyed by &4" + player.getName());
             portalOwner.sendMessage(Util.formatMsg("&cYou have been killed because your portal was destroyed!"));
             destroyPortal(true);
             return;
@@ -198,7 +198,7 @@ public class Portal extends BaseAbility {
             CWPlayer cwp = dvz.getPM().getPlayer(player);
             if (cwp.isDwarf()) {
                 dvz.getSM().changeLocalStatVal(player, StatType.DWARF_PORTALS_DESTROYED, 1);
-                dvz.getServer().broadcastMessage(Util.formatMsg("&cThe portal has been destroyed by &4" + player.getName()));
+                Util.broadcast("&cThe portal has been destroyed by &4" + player.getName());
                 activePortal.getOwner().sendMessage("&cYou have been killed because your portal was shot!");
                 destroyPortal(true);
             }
@@ -216,7 +216,7 @@ public class Portal extends BaseAbility {
                 dvz.getSM().changeLocalStatVal(event.getEntity().getKiller(), StatType.DWARF_PORTALS_DESTROYED, 1);
             }
 
-            dvz.getServer().broadcastMessage(Util.formatMsg("&cThe portal has been destroyed!"));
+            Util.broadcast("&cThe portal has been destroyed!");
             destroyPortal(false);
         }
     }
@@ -228,7 +228,7 @@ public class Portal extends BaseAbility {
                 return;
             }
 
-            dvz.getServer().broadcastMessage(Util.formatMsg("&cThe portal has been destroyed because the enderman logged off!"));
+            Util.broadcast("&cThe portal has been destroyed because the enderman logged off!");
             destroyPortal(false);
         }
     }

@@ -72,6 +72,7 @@ public class MapManager {
                 loadMap(activeMap);
             }
         }
+        dvz.getServer().dispatchCommand(dvz.getServer().getConsoleSender(), "hd reload");
         dvz.log("Active map loaded in successfully!");
         dvz.logTimings("MapManager.populate()", t);
     }

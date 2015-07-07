@@ -126,14 +126,6 @@ public class ClassManager {
                     }
                 }
 
-                //Add in fake players purely for testing purposes.
-                Set<DvzClass> fakePlayers = dvz.getPM().fakePlayers.keySet();
-                for (DvzClass dwarfClass : fakePlayers) {
-                    if (dwarfClass != null) {
-                        classCounts.put(dwarfClass, dvz.getPM().fakePlayers.get(dwarfClass).doubleValue());
-                    }
-                }
-
                 //Multiply classes by weight.
                 for (DvzClass dwarfClass : classCounts.keySet()) {
                     // Picks * (weight * 100) [the *100 is just to make it a little more accurate]

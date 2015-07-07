@@ -47,6 +47,7 @@ public class CWPlayer {
     public List<DamageLog> damageLogs = new ArrayList<DamageLog>();
     private Color color;
     private Long spawnTime = System.currentTimeMillis();
+    private boolean testing = false;
 
     private int userID = -1;
     private int charID = -1;
@@ -415,6 +416,15 @@ public class CWPlayer {
 
     public void setParkourCompleted(boolean completed) {
         data.setParkourCompleted(completed);
+        savePlayer();
+    }
+
+    public boolean isTesting() {
+        return testing;
+    }
+
+    public void setTesting(boolean testing) {
+        this.testing = testing;
     }
 
 

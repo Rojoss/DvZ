@@ -53,6 +53,10 @@ public class StatsManager {
     }
 
     public void uploadLocalStats() {
+        if (dvz.getGameCfg().TEST_MODE) {
+            dvz.log("Didn't upload local stats because the server is in test mode!");
+            return;
+        }
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -139,12 +143,12 @@ public class StatsManager {
                 }
 
                 if (!statsSaved) {
-                    dvz.getServer().broadcastMessage(CWUtil.integrateColor("&4&lFailed at saving statistics to the database!"));
-                    dvz.getServer().broadcastMessage(CWUtil.integrateColor("&4This might mean no stats are being stored for this game!"));
+                    Util.broadcast("&4&lFailed at saving statistics to the database!");
+                    Util.broadcast("&4This might mean no stats are being stored for this game!");
                     Util.broadcastAdmins(Util.formatMsg("&4&lStaff&8: &4If you start a new game now the statistics from this game will be gone forever! " +
                             "Please try using &c/dvz sync uploadall &4several times before opening a new game!"));
                 } else {
-                    dvz.getServer().broadcastMessage(CWUtil.integrateColor("&a&lStatistics from the previous game are uploaded!"));
+                    Util.broadcast("&a&lStatistics from the previous game are uploaded!");
                     clearLocalStats();
                 }
             }
