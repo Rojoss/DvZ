@@ -32,6 +32,7 @@ public enum DvzClass {
     VILLAGER(ClassType.MONSTER, "monster", new Villager(), StatType.VILLAGER_PICKS, new String[]{"villagers", "villager"}),
     WITCH(ClassType.MONSTER, "monster", new Witch(), StatType.VILLAGER_PICKS, new String[]{"witches", "witch"}),
     CHICKEN(ClassType.MONSTER, "monster", new Chicken(), StatType.CHICKEN_PICKS, new String[]{"chickens"}),
+    SILVERFISH(ClassType.MONSTER, "monster", new Silverfish(), StatType.SILVERFISH_PICKS, new String[]{"broodmother"}),
 
     DRAGON(ClassType.BASE, null, new DragonClass(), null, new String[]{"dragons"}),
     FIREDRAGON(ClassType.DRAGON, null, new FireDragon(), null, new String[]{"firedragons", "firedragon", "fire"}),
