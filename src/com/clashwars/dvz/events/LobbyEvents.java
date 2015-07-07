@@ -80,6 +80,9 @@ public class LobbyEvents implements Listener {
 
                             //Give extra class item because game already started.
                             if (dvz.getGM().isStarted() && dvz.getGM().getState() != GameState.OPENED) {
+                                if (!Util.canTest(player)) {
+                                    return;
+                                }
                                 if (cwp.getPlayerClass() == null || cwp.getPlayerClass() == DvzClass.DWARF) {
                                     Set<DvzClass> classOptions = cwp.getClassOptions();
                                     if (classOptions.size() >= dvz.getCM().getClasses(ClassType.DWARF).size()) {

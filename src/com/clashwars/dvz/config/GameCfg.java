@@ -7,6 +7,7 @@ import java.util.HashMap;
 public class GameCfg extends EasyConfig {
 
     public boolean TEST_MODE = false;
+    public int EXTRA_MONSTER_POWER = 0;
     public String GAME__STATE = "CLOSED";
     public int GAME__SPEED = 0;
     public String GAME__DRAGON_PLAYER = "";

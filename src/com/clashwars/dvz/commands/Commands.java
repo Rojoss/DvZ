@@ -320,8 +320,10 @@ public class Commands {
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " open &8- &5Open the game."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " start &8- &5Start the game."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " end [reason] &8- &5Force end the game."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " test [player] &8- &5Toggle test mode/add test players."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " speed [value] &8- &5Set the game speed (def:0)"));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " dragon [type] &8- &5Set yourself to be the dragon."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " power {-100<>100} &8- &5Add/remove extra monster power."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " setclass {type} [player] &8- &5Force set your class."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " product [name] [amt] &8- &5Give yourself [amt] products."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " fixws [player] &8- &5Rebuild someone his workshop."));
@@ -856,6 +858,30 @@ public class Commands {
                     dvz.logTimings("Commands.onCommand()[/dvz speed]", t);
                     return true;
                 }
+
+
+
+                //##########################################################################################################################
+                //################################################# /dvz power [-100<>100] #################################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("power")) {
+                    if (args.length < 2) {
+                        sender.sendMessage(Util.formatMsg("&6Extra monster power&8: &5" + dvz.getGameCfg().EXTRA_MONSTER_POWER + "%"));
+                        sender.sendMessage(Util.formatMsg("&5Specify a value between -100 and 100 to modify it. &7(default:0)"));
+                        return true;
+                    }
+
+                    if (!sender.isOp() && !sender.hasPermission("dvz.admin")) {
+                        sender.sendMessage(Util.formatMsg("Insufficient permissions."));
+                        return true;
+                    }
+
+                    dvz.getGameCfg().EXTRA_MONSTER_POWER = Math.min(Math.max(CWUtil.getInt(args[1]), -100), 100);
+                    sender.sendMessage(Util.formatMsg("&6Extra monster power set to&8: &5" + dvz.getGameCfg().EXTRA_MONSTER_POWER + "%"));
+                    dvz.logTimings("Commands.onCommand()[/dvz power]", t);
+                    return true;
+                }
+
 
 
                 //##########################################################################################################################
