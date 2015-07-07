@@ -249,6 +249,7 @@ public class BaseAbility implements Listener {
         //Bit delay after spawning till abilities can be used
         if (System.currentTimeMillis() < dvz.getPM().getPlayer(event.getPlayer()).getSpawnTime() + 2000) {
             CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't use abilities yet! &4&l<<"));
+            event.setCancelled(true);
             return;
         }
 
