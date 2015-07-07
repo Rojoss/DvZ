@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.dwarves.bonus;
 
+import com.clashwars.cwcore.hat.Hat;
 import com.clashwars.cwcore.hat.HatManager;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.GameState;
@@ -80,12 +81,18 @@ public class Camouflage extends BaseAbility {
             return;
         }
 
+        if (player.getActivePotionEffects().size() > 0) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't camouflage while you have active potion effects! &4&l<<"));
+            dvz.logTimings("Camouflage.castAbility()[active effects]", t);
+            return;
+        }
+
         if (!dvz.getGM().isMonsters() && dvz.getMM().getActiveMap().getCuboid("keep").contains(disguiseBlock)) {
-            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cTorrent can't be used inside the keep right now &4&l<<"));
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCamouflage can't be used inside the keep right now &4&l<<"));
             return;
         }
         if (!dvz.getGM().isMonsters() && dvz.getMM().getActiveMap().getCuboid("innerwall").contains(disguiseBlock)) {
-            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cTorrent can't be used inside the keep right now &4&l<<"));
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCamouflage can't be used inside the keep right now &4&l<<"));
             return;
         }
 
@@ -107,9 +114,9 @@ public class Camouflage extends BaseAbility {
         player.setGameMode(GameMode.SPECTATOR);
         player.setVelocity(new Vector(0,0,0));
         if (HatManager.hasHat(player)) {
-            HatManager.getHat(player).unequip();
+            Hat hat = HatManager.getHat(player);
+            hat.unequip();
         }
-        dvz.logTimings("Camouflage.castAbility()", t);
     }
 
 
