@@ -31,7 +31,7 @@ public class TeleportPortal extends BaseAbility {
             return;
         }
 
-        dvz.getPM().getPlayer(player).timedTeleport(Portal.activePortal.getLocation(), 5, "the portal");
+        dvz.getPM().getPlayer(player).timedTeleport(Portal.activePortal.getLocation().add(1,1,0), 5, "the portal");
     }
 
     @EventHandler

@@ -53,7 +53,7 @@ public class WorkShopEvents implements Listener {
             Location topLoc = player.getWorld().getHighestBlockAt(player.getLocation()).getLocation();
             topLoc.setYaw(player.getLocation().getYaw());
             topLoc.setPitch(player.getLocation().getPitch());
-            player.teleport(topLoc);
+            player.teleport(topLoc.add(0,1,0));
         } else {
             event.setCancelled(true);
             player.sendMessage(Util.formatMsg("&4ERROR&8: &cCould not create workshop."));

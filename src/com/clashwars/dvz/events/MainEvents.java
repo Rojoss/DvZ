@@ -136,7 +136,7 @@ public class MainEvents implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                player.teleport(spawnLocFinal);
+                player.teleport(spawnLocFinal.add(0,1,0));
             }
         }.runTaskLater(dvz, 10);
 

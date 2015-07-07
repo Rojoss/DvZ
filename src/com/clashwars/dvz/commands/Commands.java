@@ -358,7 +358,7 @@ public class Commands {
                         return true;
                     }
 
-                    cwp.timedTeleport(dvz.getMM().getActiveMap().getLocation("dwarf"), 5, "the keep");
+                    cwp.timedTeleport(dvz.getMM().getActiveMap().getLocation("dwarf").add(0,1,0), 5, "the keep");
                     dvz.logTimings("Commands.onCommand()[/dvz keep]", t);
                     return true;
                 }
@@ -384,7 +384,7 @@ public class Commands {
                         return true;
                     }
 
-                    cwp.timedTeleport(dvz.getMM().getActiveMap().getCuboid("shrine2keep").getCenterLoc().add(0, 2, 0), 5, "the shrine");
+                    cwp.timedTeleport(dvz.getMM().getActiveMap().getCuboid("shrine2keep").getCenterLoc().add(0, 3, 0), 5, "the shrine");
                     dvz.logTimings("Commands.onCommand()[/dvz shrine]", t);
                     return true;
                 }
@@ -415,7 +415,7 @@ public class Commands {
                         return true;
                     }
 
-                    cwp.timedTeleport(dvz.getMM().getActiveMap().getLocation("wall"), 5, "the wall");
+                    cwp.timedTeleport(dvz.getMM().getActiveMap().getLocation("wall").add(0,1,0), 5, "the wall");
                     dvz.logTimings("Commands.onCommand()[/dvz wall]", t);
                     return true;
                 }
@@ -441,7 +441,7 @@ public class Commands {
                         return true;
                     }
 
-                    Location loc = dvz.getWM().getWorkshop(player.getUniqueId()).getCuboid().getMinLoc().add(2, 1, -1);
+                    Location loc = dvz.getWM().getWorkshop(player.getUniqueId()).getCuboid().getMinLoc().add(2, 2, -1);
                     cwp.timedTeleport(loc, 5, "your workshop");
                     dvz.logTimings("Commands.onCommand()[/dvz ws]", t);
                     return true;
@@ -1062,7 +1062,7 @@ public class Commands {
                         cwp.reset();
                         cwp.resetData();
                         dvz.getPM().removePlayer(cwp, true);
-                        target.teleport(dvz.getCfg().getDefaultWorld().getSpawnLocation());
+                        target.teleport(dvz.getCfg().getDefaultWorld().getSpawnLocation().add(0,1,0));
                     }
                     dvz.logTimings("Commands.onCommand()[/dvz test {player}]", t);
                     return true;

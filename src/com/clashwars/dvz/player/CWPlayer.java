@@ -183,17 +183,17 @@ public class CWPlayer {
         //Teleport
         if (eggUse) {
             if (dvzClass.getType() == ClassType.DWARF) {
-                player.teleport(dvz.getMM().getActiveMap().getLocation("dwarf"));
+                player.teleport(dvz.getMM().getActiveMap().getLocation("dwarf").add(0,1,0));
             } else if (dvzClass.getType() == ClassType.MONSTER) {
                 if (dvz.getGM().getState() == GameState.MONSTERS_WALL) {
-                    player.teleport(dvz.getMM().getActiveMap().getLocation("wall"));
+                    player.teleport(dvz.getMM().getActiveMap().getLocation("wall").add(0, 1, 0));
                 } else if (dvz.getGM().getState() == GameState.MONSTERS_KEEP) {
-                    player.teleport(dvz.getMM().getActiveMap().getLocation("dwarf"));
+                    player.teleport(dvz.getMM().getActiveMap().getLocation("dwarf").add(0, 1, 0));
                 } else {
-                    player.teleport(dvz.getMM().getActiveMap().getLocation("monster"));
+                    player.teleport(dvz.getMM().getActiveMap().getLocation("monster").add(0, 1, 0));
                 }
             } else if (dvzClass.getType() == ClassType.DRAGON) {
-                player.teleport(dvz.getMM().getActiveMap().getLocation("dragon"));
+                player.teleport(dvz.getMM().getActiveMap().getLocation("dragon").add(0,1,0));
             }
         }
 
