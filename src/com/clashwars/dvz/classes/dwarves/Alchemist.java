@@ -109,12 +109,14 @@ public class Alchemist extends DwarfClass {
         event.setCancelled(false);
         if (block.getType() == Material.CAULDRON) {
             if (event.getItem() == null || event.getItem().getType() != Material.BUCKET) {
-                CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cUse a bucket to empty the cauldron! &4&l<<"));
+                event.setCancelled(true);
+                CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cUse a empty bucket to empty the cauldron! &4&l<<"));
                 dvz.logTimings("Alchemist.onInteract()[not holding bucket]", t);
                 return;
             }
             if (block.getData() != 3) {
                 CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis cauldron isn't full yet! &4&l<<"));
+                event.setCancelled(true);
                 dvz.logTimings("Alchemist.onInteract()[cauldron not full]", t);
                 return;
             }
