@@ -73,6 +73,7 @@ public class DvZ extends JavaPlugin {
     private BannerCfg bannerCfg;
     private StatsCfg statsCfg;
     private PlayerSettingsCfg settingsCfg;
+    private ReleasePlayersCfg releasePlayersCfg;
 
     private MySQL sql;
     private Connection c;
@@ -187,6 +188,8 @@ public class DvZ extends JavaPlugin {
         statsCfg.load();
         settingsCfg = new PlayerSettingsCfg("plugins/DvZ/PlayerSettings.yml");
         settingsCfg.load();
+        releasePlayersCfg = new ReleasePlayersCfg("plugins/DvZ/data/ReleasePlayers.yml");
+        releasePlayersCfg.load();
 
         sql = new MySQL(this, "37.26.106.5", "3306", "clashwar_data", "clashwar_main", SqlPass.Pass());
         try {
@@ -419,6 +422,10 @@ public class DvZ extends JavaPlugin {
 
     public PlayerSettingsCfg getSettingsCfg() {
         return settingsCfg;
+    }
+
+    public ReleasePlayersCfg getReleasePlayersCfg() {
+        return releasePlayersCfg;
     }
 
 
