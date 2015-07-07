@@ -55,7 +55,7 @@ public class VIPEvents implements Listener {
                     } else if (player.hasPermission("rank.mod")) {
                         ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.EMERALD_BLOCK, (byte)0), 0.3f, 0.1f, 0.3f, 0, 3, player.getLocation());
                     } else if (player.hasPermission("rank.helper")) {
-                        ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.PRISMARINE, (byte)0), 0.3f, 0.1f, 0.3f, 0, 3, player.getLocation());
+                        ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.GLOWSTONE, (byte)0), 0.3f, 0.1f, 0.3f, 0, 3, player.getLocation());
                     } else if (player.hasPermission("vip.diamond")) {
                         ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.DIAMOND_BLOCK, (byte)0), 0.3f, 0.1f, 0.3f, 0, 3, player.getLocation());
                     } else if (player.hasPermission("vip.gold")) {
@@ -79,7 +79,7 @@ public class VIPEvents implements Listener {
         } else if (player.hasPermission("rank.mod")) {
             ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.EMERALD_BLOCK, (byte)0), 0.3f, 1f, 0.3f, 0, 20, player.getLocation().add(0, 1, 0));
         } else if (player.hasPermission("rank.helper")) {
-            ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.PRISMARINE, (byte)0), 0.3f, 1f, 0.3f, 0, 20,player.getLocation().add(0, 1, 0));
+            ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.GLOWSTONE, (byte)0), 0.3f, 1f, 0.3f, 0, 20,player.getLocation().add(0, 1, 0));
         } else if (player.hasPermission("vip.diamond")) {
             ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.DIAMOND_BLOCK, (byte)0), 0.3f, 1f, 0.3f, 0, 20, player.getLocation().add(0, 1, 0));
         } else if (player.hasPermission("vip.gold")) {
@@ -100,7 +100,7 @@ public class VIPEvents implements Listener {
         } else if (player.hasPermission("rank.mod")) {
             blockType = Material.EMERALD_BLOCK;
         } else if (player.hasPermission("rank.helper")) {
-            blockType = Material.PRISMARINE;
+            blockType = Material.GLOWSTONE;
         } else if (player.hasPermission("vip.diamond")) {
             blockType = Material.DIAMOND_BLOCK;
         } else if (player.hasPermission("vip.gold")) {
@@ -256,7 +256,7 @@ public class VIPEvents implements Listener {
         if (player.hasPermission("hat.diamond"))
             hatItem = new CWItem(Material.DIAMOND);
         if (player.hasPermission("hat.helper"))
-            hatItem = new CWItem(Material.PRISMARINE_SHARD);
+            hatItem = new CWItem(Material.GLOWSTONE_DUST);
         if (player.hasPermission("hat.mod"))
             hatItem = new CWItem(Material.EMERALD);
         if (player.hasPermission("hat.admin"))
