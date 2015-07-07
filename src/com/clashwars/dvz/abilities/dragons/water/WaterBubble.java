@@ -52,7 +52,7 @@ public class WaterBubble extends BaseAbility {
                         if (!dvz.getPM().getPlayer(p).isDwarf()) {
                             continue;
                         }
-                        p.setRemainingAir(160 - dvz.getGM().getDragonPower() * 40);
+                        p.setRemainingAir(190 - dvz.getGM().getDragonPower() * 40);
                         new AbilityDmg(p, 0, ability, player);
                     }
 

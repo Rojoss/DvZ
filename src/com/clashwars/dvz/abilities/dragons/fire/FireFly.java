@@ -55,7 +55,7 @@ public class FireFly extends BaseAbility {
                         if (dvz.getGM().getDragonPower() == 1) {
                             new AbilityDmg((Player)e, 1, ability, player);
                         } else {
-                            new AbilityDmg((Player)e, dvz.getGM().getDragonPower() * 3, ability, player);
+                            new AbilityDmg((Player)e, dvz.getGM().getDragonPower() * 2, ability, player);
                         }
                     }
                 }
