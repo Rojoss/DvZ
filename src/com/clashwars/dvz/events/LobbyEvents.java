@@ -1,6 +1,5 @@
 package com.clashwars.dvz.events;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
@@ -11,9 +10,7 @@ import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.stats.internal.StatType;
-import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -154,7 +151,7 @@ public class LobbyEvents implements Listener {
 
                             //Give extra class item because game already started.
                             if (dvz.getGM().isStarted() && dvz.getGM().getState() != GameState.OPENED) {
-                                if (!Util.canTest(player)) {
+                                if (Util.isTest() && !Util.canTest(player)) {
                                     return;
                                 }
                                 if (cwp.getPlayerClass() == null || cwp.getPlayerClass() == DvzClass.DWARF) {

@@ -2,7 +2,6 @@ package com.clashwars.dvz.commands;
 
 import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.CooldownManager;
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.cuboid.SelectionStatus;
 import com.clashwars.cwcore.hat.Hat;
@@ -24,11 +23,6 @@ import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.player.PlayerManager;
-import com.clashwars.dvz.player.PlayerSettings;
-import com.clashwars.dvz.stats.internal.Stat;
-import com.clashwars.dvz.stats.internal.StatCategory;
-import com.clashwars.dvz.stats.internal.StatType;
-import com.clashwars.dvz.stats.internal.StatsData;
 import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.WorkShop;
@@ -44,7 +38,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.json.simple.JSONObject;
 
-import java.sql.Timestamp;
 import java.util.*;
 
 public class Commands {
@@ -232,7 +225,7 @@ public class Commands {
                 return true;
             }
 
-            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted() || !Util.canTest(player)) {
+            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted() || (Util.isTest() && !Util.canTest(player))) {
                 sender.sendMessage(Util.formatMsg("&cCan only be used as a dwarf!"));
                 return true;
             }
@@ -254,7 +247,7 @@ public class Commands {
                 return true;
             }
 
-            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted() || !Util.canTest(player)) {
+            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted() || (Util.isTest() && !Util.canTest(player))) {
                 sender.sendMessage(Util.formatMsg("&cCan only be used as a dwarf!"));
                 return true;
             }
@@ -276,7 +269,7 @@ public class Commands {
                 return true;
             }
 
-            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted() || !Util.canTest(player)) {
+            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted() || (Util.isTest() && !Util.canTest(player))) {
                 sender.sendMessage(Util.formatMsg("&cCan only be used as a dwarf!"));
                 return true;
             }
@@ -292,7 +285,7 @@ public class Commands {
             }
             Player player = (Player)sender;
 
-            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted() || !Util.canTest(player)) {
+            if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted() || (Util.isTest() && !Util.canTest(player))) {
                 sender.sendMessage(Util.formatMsg("&cCan only be used as a dwarf!"));
                 return true;
             }
@@ -376,7 +369,7 @@ public class Commands {
                         return true;
                     }
 
-                    if (!gm.isStarted() || !Util.canTest(player)) {
+                    if (!gm.isStarted() || (Util.isTest() && !Util.canTest(player))) {
                         sender.sendMessage(Util.formatMsg("&cThe game isn't started or has already ended!"));
                         return true;
                     }
@@ -402,7 +395,7 @@ public class Commands {
                         return true;
                     }
 
-                    if (!gm.isStarted() || !Util.canTest(player)) {
+                    if (!gm.isStarted() || (Util.isTest() && !Util.canTest(player))) {
                         sender.sendMessage(Util.formatMsg("&cThe game isn't started or has already ended!"));
                         return true;
                     }
@@ -428,7 +421,7 @@ public class Commands {
                         return true;
                     }
 
-                    if (!gm.isStarted() || !Util.canTest(player)) {
+                    if (!gm.isStarted() || (Util.isTest() && !Util.canTest(player))) {
                         sender.sendMessage(Util.formatMsg("&cThe game isn't started or has already ended!"));
                         return true;
                     }
@@ -482,7 +475,7 @@ public class Commands {
                     Player player = (Player)sender;
                     CWPlayer cwp = pm.getPlayer(player);
 
-                    if (!cwp.isDwarf() || !Util.canTest(player)) {
+                    if (!cwp.isDwarf() || (Util.isTest() && !Util.canTest(player))) {
                         sender.sendMessage(Util.formatMsg("&cYou have to be a dwarf to use this command."));
                         return true;
                     }

@@ -1,6 +1,5 @@
 package com.clashwars.dvz;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
@@ -20,14 +19,11 @@ import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.player.SavedPlayerState;
 import com.clashwars.dvz.runnables.DragonRunnable;
 import com.clashwars.dvz.stats.internal.StatType;
-import com.clashwars.dvz.structures.StorageStruc;
-import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
@@ -80,7 +76,8 @@ public class GameManager {
         //Reset data
         Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
         for (Player player : players) {
-            if (!Util.canTest(player)) {
+            //If it's testing and the player can not test.
+            if (Util.isTest() && !Util.canTest(player)) {
                 continue;
             }
             CWPlayer cwp = dvz.getPM().getPlayer(player);
@@ -120,7 +117,7 @@ public class GameManager {
             //Tp all players to default world.
             Collection<Player> onlinePlayers = (Collection<Player>)dvz.getServer().getOnlinePlayers();
             for (Player player : onlinePlayers) {
-                if (!Util.canTest(player)) {
+                if (Util.isTest() && !Util.canTest(player)) {
                     continue;
                 }
                 player.teleport(dvz.getCfg().getDefaultWorld().getSpawnLocation());
@@ -199,7 +196,7 @@ public class GameManager {
         //Tp all players to active world.
         Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
         for (Player player : players) {
-            if (!Util.canTest(player)) {
+            if (Util.isTest() && !Util.canTest(player)) {
                 continue;
             }
             dvz.getPM().getPlayer(player).reset();
@@ -224,7 +221,7 @@ public class GameManager {
         
         Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
         for (Player player : players) {
-            if (!Util.canTest(player)) {
+            if (Util.isTest() && !Util.canTest(player)) {
                 continue;
             }
             dvz.getPM().getPlayer(player).giveClassItems(ClassType.DWARF, false, -1);

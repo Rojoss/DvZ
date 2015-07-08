@@ -1,6 +1,5 @@
 package com.clashwars.dvz.events;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
@@ -61,7 +60,7 @@ public class ProtectEvents implements Listener {
             }
         }
 
-        if (!Util.canTest(damagerPlayer)) {
+        if (Util.isTest() && !Util.canTest(damagerPlayer)) {
             event.setCancelled(true);
             return;
         }
@@ -93,7 +92,7 @@ public class ProtectEvents implements Listener {
         }
 
         //Don't allow it if game hasn't started.
-        if (!gm.isStarted() || !Util.canTest(event.getPlayer())) {
+        if (!gm.isStarted() || (Util.isTest() && !Util.canTest(event.getPlayer()))) {
             event.setCancelled(true);
             return;
         }
@@ -139,7 +138,7 @@ public class ProtectEvents implements Listener {
         }
 
         //Don't allow it if game hasn't started.
-        if (!gm.isStarted() || !Util.canTest(event.getPlayer())) {
+        if (!gm.isStarted() || (Util.isTest() && !Util.canTest(event.getPlayer()))) {
             event.setCancelled(true);
             return;
         }
@@ -206,7 +205,7 @@ public class ProtectEvents implements Listener {
         }
 
         //Don't allow it if game hasn't started.
-        if (!gm.isStarted() || !Util.canTest(event.getPlayer())) {
+        if (!gm.isStarted() || (Util.isTest() && !Util.canTest(event.getPlayer()))) {
             event.setCancelled(true);
             return;
         }
@@ -233,7 +232,7 @@ public class ProtectEvents implements Listener {
         }
 
         //Don't allow it if game hasn't started.
-        if (!gm.isStarted() || !Util.canTest(event.getPlayer())) {
+        if (!gm.isStarted() || (Util.isTest() && !Util.canTest(event.getPlayer()))) {
             event.setCancelled(true);
             return;
         }

@@ -37,10 +37,15 @@ public class Util {
     }
 
     public static void disguisePlayer(String player, String disguiseStr, DvzClass dvzClass) {
-        Bukkit.dispatchCommand(DvZ.inst().getServer().getConsoleSender(), "disguiseplayer " + player + " "
-                + (disguiseStr == null || disguiseStr.isEmpty() ? dvzClass.toString().toLowerCase() : disguiseStr)
-                + " setCustomName &c" + (dvzClass.getType() == ClassType.DRAGON ? dvzClass.getClassClass().getDisplayName() : player)
-                + " setCustomNameVisible true");
+        if (dvzClass == DvzClass.SILVERFISH) {
+            Bukkit.dispatchCommand(DvZ.inst().getServer().getConsoleSender(), "disguiseplayer " + player + " "
+                    + (disguiseStr == null || disguiseStr.isEmpty() ? dvzClass.toString().toLowerCase() : disguiseStr));
+        } else {
+            Bukkit.dispatchCommand(DvZ.inst().getServer().getConsoleSender(), "disguiseplayer " + player + " "
+                    + (disguiseStr == null || disguiseStr.isEmpty() ? dvzClass.toString().toLowerCase() : disguiseStr)
+                    + " setCustomName &c" + (dvzClass.getType() == ClassType.DRAGON ? dvzClass.getClassClass().getDisplayName() : player)
+                    + " setCustomNameVisible true");
+        }
     }
 
     public static void undisguisePlayer(String player) {
@@ -134,7 +139,7 @@ public class Util {
     }
 
     public static boolean canTest(Player player) {
-        return DvZ.inst().getGameCfg().TEST_MODE && player.hasPermission("dvz.test");
+        return player.hasPermission("dvz.test") || DvZ.inst().getPM().getPlayer(player).isTesting();
     }
 
 

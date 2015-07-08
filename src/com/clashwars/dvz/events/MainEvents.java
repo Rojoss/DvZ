@@ -1,30 +1,21 @@
 package com.clashwars.dvz.events;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.Enjin;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
-import com.clashwars.dvz.abilities.monsters.enderman.Pickup;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
-import com.clashwars.dvz.maps.ShrineBlock;
-import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.mysql.MySQL;
 import com.clashwars.dvz.player.CWPlayer;
-import com.clashwars.dvz.stats.internal.StatType;
 import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.WorkShop;
-import net.minecraft.server.v1_8_R2.PacketPlayInClientCommand;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -36,8 +27,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
-import java.util.Set;
 
 public class MainEvents implements Listener {
 
@@ -93,7 +82,7 @@ public class MainEvents implements Listener {
             //Player joined without a class.
             cwp.reset();
             cwp.resetData();
-            if (gm.getState() == GameState.CLOSED || !Util.canTest(player)) {
+            if (gm.getState() == GameState.CLOSED || (Util.isTest() && !Util.canTest(player))) {
                 //Player joined after the game is closed.
                 player.sendMessage(Util.formatMsg("&cThere is no &4DvZ &cright now!"));
                 subtitleStr = "&c&lThere is &4&lno DvZ &c&lright now.";
@@ -305,7 +294,7 @@ public class MainEvents implements Listener {
         final CWPlayer cwp = dvz.getPM().getPlayer(player);
         //Get the respawn location and get the active map.
         Location spawnLoc = dvz.getGM().getUsedWorld().getSpawnLocation();
-        if (dvz.getGM().getState() == GameState.ENDED || dvz.getGM().getState() == GameState.CLOSED || dvz.getGM().getState() == GameState.SETUP || !Util.canTest(player)) {
+        if (dvz.getGM().getState() == GameState.ENDED || dvz.getGM().getState() == GameState.CLOSED || dvz.getGM().getState() == GameState.SETUP || (Util.isTest() && !Util.canTest(player))) {
             if (cwp.pvping) {
                 player.getInventory().clear();
                 player.getInventory().setArmorContents(new ItemStack[] {});
