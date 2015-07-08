@@ -49,3 +49,6 @@ commands:
     description: View your damage log
     usage: /<command>
     aliases: [dmglog,dlog,damage,dmg]
+  parkour:
+    description: Simple command for lobby parkour
+    usage: /<command> [player]
