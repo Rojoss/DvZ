@@ -599,10 +599,10 @@ public class GameManager {
     }
 
     public float getMonsterPower(float scale) {
-        return scale - (float)scale * (monsterPerc - 0.1f - dvz.getGameCfg().EXTRA_MONSTER_POWER / 100);
+        return scale - (float)scale * (monsterPerc - 0.1f - ((float)dvz.getGameCfg().EXTRA_MONSTER_POWER / 100));
     }
 
     public float getMonsterPower(float base, float scale) {
-        return base + (scale - (float)scale * (monsterPerc - 0.1f - dvz.getGameCfg().EXTRA_MONSTER_POWER / 100));
+        return base + (scale - (float)scale * (monsterPerc - 0.1f - ((float)dvz.getGameCfg().EXTRA_MONSTER_POWER / 100)));
     }
 }
