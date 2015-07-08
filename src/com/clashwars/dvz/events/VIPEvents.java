@@ -133,11 +133,15 @@ public class VIPEvents implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onInteract(PlayerInteractEvent event) {
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK && (event.getAction() != Action.LEFT_CLICK_BLOCK && (event.getItem() == null || event.getItem().getType() == Material.AIR))) {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
         Block block = event.getClickedBlock();
         Player player = event.getPlayer();
+
+        if (block == null) {
+            return;
+        }
 
         //Clicking on dispenser to open armor coloring.
         if (block.getType() == Material.DISPENSER && block.getData() == 1) {
