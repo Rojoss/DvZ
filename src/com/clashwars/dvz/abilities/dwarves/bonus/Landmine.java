@@ -70,9 +70,19 @@ public class Landmine extends BaseAbility {
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
         Long t = System.currentTimeMillis();
-        if (triggerLoc.getBlock().getRelative(BlockFace.UP).getType() != Material.AIR) {
+        Block mineBlock = triggerLoc.getBlock().getRelative(BlockFace.UP);
+        if (mineBlock.getType() != Material.AIR) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't place a mine here! &4&l<<"));
             dvz.logTimings("Landmine.castAbility()[invalid loc]", t);
+            return;
+        }
+
+        if (!dvz.getGM().isMonsters() && dvz.getMM().getActiveMap().getCuboid("keep").contains(mineBlock)) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cMines can't be placed inside the keep right now &4&l<<"));
+            return;
+        }
+        if (!dvz.getGM().isMonsters() && dvz.getMM().getActiveMap().getCuboid("innerwall").contains(mineBlock)) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cMines can't be placed inside the keep right now &4&l<<"));
             return;
         }
 
@@ -81,9 +91,9 @@ public class Landmine extends BaseAbility {
             return;
         }
 
-        triggerLoc.getBlock().getRelative(BlockFace.UP).setType(Material.TRIPWIRE);
-        triggerLoc.getBlock().getRelative(BlockFace.UP).setMetadata("owner", new FixedMetadataValue(dvz, player.getName()));
-        ParticleEffect.SMOKE_NORMAL.display(0.3f, 0.3f, 0.3f, 0, 20, triggerLoc.add(0.5f, 0.5f, 0.5f), 500);
+        mineBlock.setType(Material.TRIPWIRE);
+        mineBlock.setMetadata("owner", new FixedMetadataValue(dvz, player.getName()));
+        ParticleEffect.SMOKE_NORMAL.display(0.3f, 0.3f, 0.3f, 0, 20, mineBlock.getLocation().add(0.5f, 0.1f, 0.5f), 500);
         triggerLoc.getWorld().playSound(triggerLoc, Sound.DOOR_OPEN, 1, 2);
         CWUtil.sendActionBar(player, CWUtil.integrateColor("&2&l>> &aMine placed! &2&l<<"));
         CWUtil.removeItemsFromHand(player, 1);
