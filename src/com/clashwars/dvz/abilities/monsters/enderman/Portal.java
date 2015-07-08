@@ -93,7 +93,7 @@ public class Portal extends BaseAbility {
 
             activePortal = new PortalData(player, portalLoc, cuboid);
 
-            player.teleport(portalLoc.add(1,1,0));
+            player.teleport(portalLoc.clone().add(1,1,0));
             CWUtil.removeItemsFromHand(player, 1);
             dvz.getSM().changeLocalStatVal(player, StatType.MONSTER_PORTALS_CREATED, 1);
 
