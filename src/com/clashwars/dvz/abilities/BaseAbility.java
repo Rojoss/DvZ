@@ -243,6 +243,10 @@ public class BaseAbility implements Listener {
             return;
         }
 
+        if (Util.isTest() && !Util.canTest(event.getPlayer())) {
+            return;
+        }
+
         //Compare items.
         if (!isCastItem(event.getItem())) {
             return;

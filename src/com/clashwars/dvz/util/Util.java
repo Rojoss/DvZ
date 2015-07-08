@@ -12,6 +12,7 @@ import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.stats.internal.StatType;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -139,7 +140,7 @@ public class Util {
     }
 
     public static boolean canTest(Player player) {
-        return player.hasPermission("dvz.test") || DvZ.inst().getPM().getPlayer(player).isTesting();
+        return (player.hasPermission("dvz.test") && player.getGameMode() != GameMode.CREATIVE) || DvZ.inst().getPM().getPlayer(player).isTesting();
     }
 
 

@@ -61,7 +61,6 @@ public class ProtectEvents implements Listener {
         }
 
         if (Util.isTest() && !Util.canTest(damagerPlayer)) {
-            event.setCancelled(true);
             return;
         }
 

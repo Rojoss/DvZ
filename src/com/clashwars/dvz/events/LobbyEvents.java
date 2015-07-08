@@ -65,16 +65,16 @@ public class LobbyEvents implements Listener {
                     player.getInventory().clear();
                     player.getInventory().setArmorContents(new ItemStack[] {});
                     player.updateInventory();
-                    cwp.pvping = false;
+                    cwp.setPvping(false);
                 }
                 if (CWUtil.removeColour(lines[0]).equalsIgnoreCase("&4&l[JOIN PVP]")) {
                     player.sendMessage(CWUtil.integrateColor("&6You are now in &4PvP &6mode!"));
                     player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 0);
                     player.teleport(DvZ.pvpArenaSpawn);
-                    cwp.pvping = true;
+                    cwp.setPvping(true);
                 }
                 if (CWUtil.removeColour(lines[0]).equalsIgnoreCase("&5[CLASS]")) {
-                    cwp.pvping = true;
+                    cwp.setPvping(true);
                     player.getInventory().clear();
                     player.getInventory().setArmorContents(new ItemStack[] {});
 

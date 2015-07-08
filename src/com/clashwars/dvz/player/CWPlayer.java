@@ -47,8 +47,6 @@ public class CWPlayer {
     public List<DamageLog> damageLogs = new ArrayList<DamageLog>();
     private Color color;
     private Long spawnTime = System.currentTimeMillis();
-    private boolean testing = false;
-    public boolean pvping = false;
 
     private int userID = -1;
     private int charID = -1;
@@ -77,7 +75,7 @@ public class CWPlayer {
             return;
         }
 
-        pvping = false;
+        data.setPvping(false);
         player.getInventory().clear();
         player.getInventory().setHelmet(new CWItem(Material.AIR));
         player.getInventory().setChestplate(new CWItem(Material.AIR));
@@ -134,7 +132,7 @@ public class CWPlayer {
 
     public void resetData() {
         productsTaken.clear();
-        pvping = false;
+        data.setPvping(false);
         data.setClassOptions(new HashSet<DvzClass>());
         data.setDwarfAbilitiesReceived(new HashSet<Ability>());
         data.setPlayerClass(DvzClass.DWARF);
@@ -423,11 +421,19 @@ public class CWPlayer {
     }
 
     public boolean isTesting() {
-        return testing;
+        return data.isTesting();
     }
 
     public void setTesting(boolean testing) {
-        this.testing = testing;
+        data.setTesting(testing);
+    }
+
+    public boolean isPvping() {
+        return data.isPvping();
+    }
+
+    public void setPvping(boolean pvping) {
+        data.setPvping(pvping);
     }
 
 

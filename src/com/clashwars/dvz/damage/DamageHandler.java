@@ -294,7 +294,7 @@ public class DamageHandler implements Listener {
 
             if (killer != null && killer.isOnline()) {
                 Player killerP = (Player)killer;
-                if (dvz.getPM().getPlayer(killerP).pvping) {
+                if (dvz.getPM().getPlayer(killerP).isPvping()) {
                     new CWItem(PotionType.INSTANT_HEAL, true, 1).addPotionEffect(PotionEffectType.HEAL, 2, 1).giveToPlayer(killerP);
                 }
             }

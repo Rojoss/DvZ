@@ -17,6 +17,8 @@ public class PlayerData {
     private boolean buffUsed = false;
     private boolean bombUsed = false;
     private boolean isBuffed = false;
+    private boolean testing = false;
+    private boolean pvping = false;
 
     public PlayerData() {
         //--
@@ -102,4 +104,19 @@ public class PlayerData {
         this.isBuffed = buffed;
     }
 
+    public boolean isTesting() {
+        return testing;
+    }
+
+    public void setTesting(boolean testing) {
+        this.testing = testing;
+    }
+
+    public boolean isPvping() {
+        return pvping;
+    }
+
+    public void setPvping(boolean pvping) {
+        this.pvping = pvping;
+    }
 }

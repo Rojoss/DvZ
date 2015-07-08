@@ -295,7 +295,7 @@ public class MainEvents implements Listener {
         //Get the respawn location and get the active map.
         Location spawnLoc = dvz.getGM().getUsedWorld().getSpawnLocation();
         if (dvz.getGM().getState() == GameState.ENDED || dvz.getGM().getState() == GameState.CLOSED || dvz.getGM().getState() == GameState.SETUP || (Util.isTest() && !Util.canTest(player))) {
-            if (cwp.pvping) {
+            if (cwp.isPvping()) {
                 player.getInventory().clear();
                 player.getInventory().setArmorContents(new ItemStack[] {});
                 player.updateInventory();
