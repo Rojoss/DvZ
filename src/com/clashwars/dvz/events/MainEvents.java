@@ -29,6 +29,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.PreparedStatement;
@@ -301,10 +302,19 @@ public class MainEvents implements Listener {
     private void respawn(PlayerRespawnEvent event) {
         Long t = System.currentTimeMillis();
         final Player player = event.getPlayer();
+        final CWPlayer cwp = dvz.getPM().getPlayer(player);
         //Get the respawn location and get the active map.
         Location spawnLoc = dvz.getGM().getUsedWorld().getSpawnLocation();
         if (dvz.getGM().getState() == GameState.ENDED || dvz.getGM().getState() == GameState.CLOSED || dvz.getGM().getState() == GameState.SETUP || !Util.canTest(player)) {
-            event.setRespawnLocation(spawnLoc);
+            if (cwp.pvping) {
+                player.getInventory().clear();
+                player.getInventory().setArmorContents(new ItemStack[] {});
+                player.updateInventory();
+                player.sendMessage(CWUtil.integrateColor("&6Respawning at &4&lPVP &6Click the &4[leave pvp] &6sign to go back."));
+                event.setRespawnLocation(DvZ.pvpArenaSpawn);
+            } else {
+                event.setRespawnLocation(spawnLoc);
+            }
             return;
         } else if (!dvz.getGM().isStarted()) {
             if (dvz.getMM().getActiveMap() != null && dvz.getMM().getActiveMap().getLocation("lobby") != null) {
@@ -313,7 +323,6 @@ public class MainEvents implements Listener {
             event.setRespawnLocation(spawnLoc);
             return;
         }
-        final CWPlayer cwp = dvz.getPM().getPlayer(player);
 
         //Dragon death (respawn with saved data)
         if (dvz.getGM().getDragonPlayer() != null && dvz.getGM().getDragonPlayer().getUniqueId().equals(player.getUniqueId())) {

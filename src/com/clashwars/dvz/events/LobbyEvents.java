@@ -1,5 +1,7 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.Debug;
+import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
@@ -9,11 +11,14 @@ import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.stats.internal.StatType;
+import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -27,6 +32,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Set;
@@ -47,12 +54,79 @@ public class LobbyEvents implements Listener {
         CWPlayer cwp = dvz.getPM().getPlayer(player);
         ItemStack item = event.getItem();
 
-        //Parkour sign
+        //Parkour and pvp class signs.
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Block block = event.getClickedBlock();
             if ((block.getType() == Material.SIGN || block.getType() == Material.WALL_SIGN) && block.getState() instanceof Sign) {
                 Sign sign = (Sign) block.getState();
                 String[] lines = sign.getLines();
+                //Pvp class signs.
+                if (CWUtil.removeColour(lines[0]).equalsIgnoreCase("&4&l[LEAVE PVP]")) {
+                    player.sendMessage(CWUtil.integrateColor("&6You are no longer in &aPvP &6mode!"));
+                    player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 0);
+                    player.teleport(dvz.getCfg().getDefaultWorld().getSpawnLocation().add(0,1,0));
+                    player.getInventory().clear();
+                    player.getInventory().setArmorContents(new ItemStack[] {});
+                    player.updateInventory();
+                    cwp.pvping = false;
+                }
+                if (CWUtil.removeColour(lines[0]).equalsIgnoreCase("&4&l[JOIN PVP]")) {
+                    player.sendMessage(CWUtil.integrateColor("&6You are now in &4PvP &6mode!"));
+                    player.playSound(player.getLocation(), Sound.ORB_PICKUP, 1, 0);
+                    player.teleport(DvZ.pvpArenaSpawn);
+                    cwp.pvping = true;
+                }
+                if (CWUtil.removeColour(lines[0]).equalsIgnoreCase("&5[CLASS]")) {
+                    cwp.pvping = true;
+                    player.getInventory().clear();
+                    player.getInventory().setArmorContents(new ItemStack[] {});
+
+                    String className = CWUtil.stripAllColor(lines[1]);
+                    if (className.equalsIgnoreCase("warrior")) {
+                        CWItem sword = new CWItem(Material.DIAMOND_SWORD);
+                        sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
+                        sword.giveToPlayer(player);
+
+                        player.getInventory().setHelmet(new CWItem(Material.IRON_HELMET));
+                        player.getInventory().setChestplate(new CWItem(Material.IRON_CHESTPLATE));
+                        player.getInventory().setLeggings(new CWItem(Material.IRON_LEGGINGS));
+                        player.getInventory().setBoots(new CWItem(Material.IRON_BOOTS));
+
+                    } else if (className.equalsIgnoreCase("tank")) {
+                        new CWItem(Material.IRON_SWORD).giveToPlayer(player);
+
+                        player.getInventory().setHelmet(new CWItem(Material.DIAMOND_HELMET));
+                        player.getInventory().setChestplate(new CWItem(Material.DIAMOND_CHESTPLATE));
+                        player.getInventory().setLeggings(new CWItem(Material.DIAMOND_LEGGINGS));
+                        player.getInventory().setBoots(new CWItem(Material.DIAMOND_BOOTS));
+
+                    } else if (className.equalsIgnoreCase("archer")) {
+                        CWItem bow = new CWItem(Material.BOW);
+                        bow.addEnchantment(Enchantment.ARROW_DAMAGE, 2);
+                        bow.giveToPlayer(player);
+                        new CWItem(Material.WOOD_SWORD).giveToPlayer(player);
+                        new CWItem(Material.ARROW, 64).giveToPlayer(player);
+
+                        CWItem armor = new CWItem(Material.LEATHER_HELMET);
+                        armor.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+                        player.getInventory().setHelmet(armor);
+                        armor = new CWItem(Material.LEATHER_CHESTPLATE);
+                        armor.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+                        player.getInventory().setChestplate(armor);
+                        armor = new CWItem(Material.LEATHER_LEGGINGS);
+                        armor.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+                        player.getInventory().setLeggings(armor);
+                        armor = new CWItem(Material.LEATHER_BOOTS);
+                        armor.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 2);
+                        player.getInventory().setBoots(armor);
+                    }
+                    new CWItem(PotionType.INSTANT_HEAL, true, 2).addPotionEffect(PotionEffectType.HEAL, 2, 1).giveToPlayer(player);
+
+                    player.updateInventory();
+                    player.sendMessage(CWUtil.integrateColor("&6Equiped the &a" + className + " &6class!"));
+                }
+
+                //Parkour sign
                 for (String str : lines) {
                     if (CWUtil.removeColour(str).equalsIgnoreCase("&9[PARKOUR]")) {
                         event.setCancelled(true);

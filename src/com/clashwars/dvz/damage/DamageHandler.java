@@ -1,6 +1,7 @@
 package com.clashwars.dvz.damage;
 
 import com.clashwars.cwcore.Debug;
+import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameState;
@@ -28,6 +29,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -284,6 +287,16 @@ public class DamageHandler implements Listener {
                     Util.broadcast("&a- &7Couldn't find the killer so there is no DragonSlayer.");
                 }
                 dvz.getGM().releaseMonsters(false);
+            }
+        } else {
+            //PvP arena
+            broadcastDeathMessage(dmgLog, killer, ClassType.DWARF, CWUtil.integrateColor("&6>> &7&o" + deathMsg + " &6<<"));
+
+            if (killer != null && killer.isOnline()) {
+                Player killerP = (Player)killer;
+                if (dvz.getPM().getPlayer(killerP).pvping) {
+                    new CWItem(PotionType.INSTANT_HEAL, true, 1).addPotionEffect(PotionEffectType.HEAL, 2, 1).giveToPlayer(killerP);
+                }
             }
         }
 

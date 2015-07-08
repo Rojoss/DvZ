@@ -48,6 +48,7 @@ public class CWPlayer {
     private Color color;
     private Long spawnTime = System.currentTimeMillis();
     private boolean testing = false;
+    public boolean pvping = false;
 
     private int userID = -1;
     private int charID = -1;
@@ -76,6 +77,7 @@ public class CWPlayer {
             return;
         }
 
+        pvping = false;
         player.getInventory().clear();
         player.getInventory().setHelmet(new CWItem(Material.AIR));
         player.getInventory().setChestplate(new CWItem(Material.AIR));
@@ -132,6 +134,7 @@ public class CWPlayer {
 
     public void resetData() {
         productsTaken.clear();
+        pvping = false;
         data.setClassOptions(new HashSet<DvzClass>());
         data.setDwarfAbilitiesReceived(new HashSet<Ability>());
         data.setPlayerClass(DvzClass.DWARF);

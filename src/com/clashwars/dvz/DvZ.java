@@ -37,6 +37,7 @@ import com.gmail.filoghost.holograms.api.HolographicDisplaysAPI;
 import com.google.gson.Gson;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -105,6 +106,7 @@ public class DvZ extends JavaPlugin {
 
     public GameRunnable gameRunnable;
 
+    public static Location pvpArenaSpawn;
     private List<Material> undestroyableBlocks = Arrays.asList(new Material[] {Material.BEDROCK, Material.OBSIDIAN, Material.ENDER_STONE, Material.ENDER_PORTAL_FRAME,
         Material.WEB, Material.STANDING_BANNER, Material.WALL_BANNER, Material.DRAGON_EGG, Material.BARRIER, Material.REDSTONE_BLOCK, Material.GLOWSTONE, Material.REDSTONE_LAMP_OFF, Material.REDSTONE_LAMP_ON});
 
@@ -227,6 +229,9 @@ public class DvZ extends JavaPlugin {
         cmds = new Commands(this);
 
         startRunnables();
+
+        pvpArenaSpawn = new Location(getCfg().getDefaultWorld(), -8, 39, -53);
+        pvpArenaSpawn.setYaw(180);
 
         log("loaded successfully");
         logTimings("Dvz.onEnable()", t);
