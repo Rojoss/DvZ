@@ -14,6 +14,7 @@ public class Silverfish extends MobClass {
 
         abilities.add(Ability.INFECT_STONE);
         abilities.add(Ability.ROAR);
+        abilities.add(Ability.INFEST);
     }
 
 }

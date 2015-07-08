@@ -35,6 +35,7 @@ import com.clashwars.dvz.abilities.monsters.enderman.Blink;
 import com.clashwars.dvz.abilities.monsters.enderman.Pickup;
 import com.clashwars.dvz.abilities.monsters.enderman.Portal;
 import com.clashwars.dvz.abilities.monsters.silverfish.InfectStone;
+import com.clashwars.dvz.abilities.monsters.silverfish.Infest;
 import com.clashwars.dvz.abilities.monsters.silverfish.Roar;
 import com.clashwars.dvz.abilities.monsters.skeleton.Mount;
 import com.clashwars.dvz.abilities.monsters.skeleton.Rapidfire;
@@ -89,6 +90,7 @@ public enum Ability {
     DROP_EGG(new DropEgg(), SwapType.NONE, "{0} died from {1}'s rotten egg"),
     INFECT_STONE(new InfectStone(), SwapType.NONE, ""),
     ROAR(new Roar(), SwapType.NONE, ""),
+    INFEST(new Infest(), SwapType.NONE, ""),
 
     //Dragon abilities
     BURN(new Burn(), SwapType.NONE, "{0} burned to death from the dragons heat"),

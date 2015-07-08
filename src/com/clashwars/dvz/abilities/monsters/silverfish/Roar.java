@@ -31,12 +31,16 @@ public class Roar extends BaseAbility {
     public Roar() {
         super();
         ability = Ability.ROAR;
-        castItem = new DvzItem(Material.COBBLE_WALL, 1, (short)0, displayName, 10, -1);
+        castItem = new DvzItem(Material.COBBLE_WALL, 1, (short)0, displayName, 4, -1);
     }
 
 
     @Override
     public void castAbility(final Player player, Location triggerLoc) {
+        if (onCooldown(player)) {
+            return;
+        }
+
         player.getWorld().playSound(player.getLocation(), Sound.CAT_PURR, 2, 0.4f);
         player.getWorld().playSound(player.getLocation(), Sound.CAT_HISS, 0.05f, 0f);
         player.getWorld().playSound(player.getLocation(), Sound.SILVERFISH_HIT, 0.05f, 0f);
@@ -89,7 +93,7 @@ public class Roar extends BaseAbility {
                         }
 
                         if (block.hasMetadata("infected")) {
-                            int count = (int)dvz.getGM().getMonsterPower(1, 1);
+                            int count = (int)dvz.getGM().getMonsterPower(1, 2);
                             for (int c = 0; c < count; c++) {
                                 CWEntity silverfish = CWEntity.create(EntityType.SILVERFISH, block.getLocation().add(0.5f, 0.5f, 0.5f));
                                 silverfish.entity().setMetadata("owner", new FixedMetadataValue(dvz, block.getMetadata("infected").get(0).asString()));

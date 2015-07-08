@@ -23,7 +23,7 @@ public class InfectStone extends BaseAbility {
     public InfectStone() {
         super();
         ability = Ability.INFECT_STONE;
-        castItem = new DvzItem(Material.MONSTER_EGG, 1, (short)60, displayName, 10, -1);
+        castItem = new DvzItem(Material.MONSTER_EGG, 1, (short)60, displayName, 3, -1);
 
         castActions = new ArrayList<Action>(Arrays.asList(new Action[]{Action.LEFT_CLICK_BLOCK, Action.RIGHT_CLICK_BLOCK}));
     }
