@@ -94,7 +94,7 @@ public class DamageHandler implements Listener {
                 dvz.getSM().changeLocalStatVal(damager.getUniqueId(), StatType.COMBAT_DWARF_DAMAGE_DEALT, (float) event.getDamage());
             } else if (cwp.isDwarf()) {
                 dvz.getSM().changeLocalStatVal(damager.getUniqueId(), StatType.COMBAT_MONSTER_DAMAGE_DEALT, (float)event.getDamage());
-            } else if (dvz.getGM().getDragonPlayer().getName().equalsIgnoreCase(cwp.getName())) {
+            } else if (dvz.getGM().getDragonPlayer() != null && dvz.getGM().getDragonPlayer().getName().equalsIgnoreCase(cwp.getName())) {
                 dvz.getSM().changeLocalStatVal(damager.getUniqueId(), StatType.COMBAT_DRAGON_DAMAGE, (float)event.getDamage());
             }
         }
