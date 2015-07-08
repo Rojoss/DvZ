@@ -32,6 +32,8 @@ public class Baker extends DwarfClass {
 
         equipment.add(new DvzItem(Material.WORKBENCH, 1, (byte)0, "&6&lWorkshop", new String[] {"&7Place this down on any of the pistons.", "&7Your workshop will be build then."}, 500, -1));
         equipment.add(new DvzItem(Product.SEED.getItem(10), -1, -1));
+
+        equipment.add(new DvzItem(Material.IRON_PICKAXE, 1, -1, -1));
     }
 
     @EventHandler(priority = EventPriority.HIGH)

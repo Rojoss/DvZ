@@ -39,6 +39,8 @@ public class Tailor extends DwarfClass {
 
         equipment.add(new DvzItem(Material.WORKBENCH, 1, (byte)0, "&3&lWorkshop", new String[] {"&7Place this down on any of the pistons.", "&7Your workshop will be build then."}, 500, -1));
         equipment.add(new DvzItem(Material.SHEARS, 1, -1, -1));
+
+        equipment.add(new DvzItem(Material.IRON_PICKAXE, 1, -1, -1));
     }
 
 

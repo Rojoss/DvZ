@@ -41,6 +41,8 @@ public class Fletcher extends DwarfClass {
         spade.addEnchantment(Enchantment.DIG_SPEED, 1);
         equipment.add(spade);
         equipment.add(new DvzItem(Material.STONE_AXE, 1, -1, -1));
+
+        equipment.add(new DvzItem(Material.IRON_PICKAXE, 1, -1, -1));
     }
 
     @EventHandler
