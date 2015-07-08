@@ -35,6 +35,7 @@ import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
@@ -54,6 +55,7 @@ public class Commands {
     private ClassManager cm;
 
     private List<UUID> cows = new ArrayList<UUID>();
+    private List<String> parkourCompleted = new ArrayList<String>();
 
     public Commands(DvZ dvz) {
         this.dvz = dvz;
@@ -111,6 +113,25 @@ public class Commands {
                 }
             }
             dvz.logTimings("Commands.onCommand()[/crash]", t);
+            return true;
+        }
+
+        if (label.equalsIgnoreCase("parkour")) {
+            if (!(sender instanceof BlockCommandSender)) {
+                return true;
+            }
+            BlockCommandSender cmdSender = (BlockCommandSender)sender;
+
+            List<Player> nearbyPlayers = CWUtil.getNearbyPlayers(cmdSender.getBlock().getLocation(), 2);
+            for (Player player : nearbyPlayers) {
+                if (parkourCompleted.contains(player.getName())) {
+                    player.sendMessage(CWUtil.integrateColor("&6You already completed the parkour!"));
+                    return true;
+                }
+
+                dvz.getServer().broadcastMessage(CWUtil.integrateColor("&a&l" +player.getName() + " &6completed the lobby parkour!"));
+                parkourCompleted.add(player.getName());
+            }
             return true;
         }
 
