@@ -22,6 +22,9 @@ import com.clashwars.dvz.abilities.dwarves.dragonslayer.Horn;
 import com.clashwars.dvz.abilities.monsters.Hammer;
 import com.clashwars.dvz.abilities.monsters.Suicide;
 import com.clashwars.dvz.abilities.monsters.TeleportPortal;
+import com.clashwars.dvz.abilities.monsters.irongolem.GroundPound;
+import com.clashwars.dvz.abilities.monsters.irongolem.Smash;
+import com.clashwars.dvz.abilities.monsters.irongolem.Toss;
 import com.clashwars.dvz.abilities.monsters.blaze.Blast;
 import com.clashwars.dvz.abilities.monsters.blaze.Fireball;
 import com.clashwars.dvz.abilities.monsters.blaze.Glide;
@@ -91,6 +94,9 @@ public enum Ability {
     INFECT_STONE(new InfectStone(), SwapType.NONE, ""),
     ROAR(new Roar(), SwapType.NONE, ""),
     INFEST(new Infest(), SwapType.NONE, ""),
+    TOSS(new Toss(), SwapType.NONE, "{0} was tossed by {1}"),
+    SMASH(new Smash(), SwapType.NONE, "{0} died from {1}'s smashed rock"),
+    GROUND_POUND(new GroundPound(), SwapType.NONE, "{0} died from {1}'s ground pound"),
 
     //Dragon abilities
     BURN(new Burn(), SwapType.NONE, "{0} burned to death from the dragons heat"),
