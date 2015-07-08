@@ -154,7 +154,9 @@ public class BaseAbility implements Listener {
         }
 
         if (!dvz.getGM().isStarted()) {
-            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThe game hasn't started! &4&l<<"));
+            if (castItem != null) {
+                CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThe game hasn't started! &4&l<<"));
+            }
             return false;
         }
 
