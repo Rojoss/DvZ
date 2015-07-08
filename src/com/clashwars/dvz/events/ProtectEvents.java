@@ -1,5 +1,6 @@
 package com.clashwars.dvz.events;
 
+import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
@@ -39,9 +40,7 @@ public class ProtectEvents implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void damageEntity(EntityDamageByEntityEvent event) {
-        //Don't allow it if game hasn't started.
         if (!gm.isStarted()) {
-            event.setCancelled(true);
             return;
         }
 

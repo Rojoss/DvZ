@@ -47,7 +47,7 @@ public class UtilityEvents implements Listener {
 
             //Cancel damage if player has no class.
             if (cwp.getPlayerClass().isBaseClass()) {
-                event.setCancelled(true);
+                //event.setCancelled(true);
             }
 
             //Cancel teleport if taking damage.
