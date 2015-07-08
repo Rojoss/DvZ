@@ -7,21 +7,26 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.classes.monsters.Silverfish;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Roar extends BaseAbility {
+
+    private static List<Entity> silverfishes = new ArrayList<Entity>();
 
     public Roar() {
         super();
@@ -35,6 +40,14 @@ public class Roar extends BaseAbility {
         player.getWorld().playSound(player.getLocation(), Sound.CAT_PURR, 2, 0.4f);
         player.getWorld().playSound(player.getLocation(), Sound.CAT_HISS, 0.05f, 0f);
         player.getWorld().playSound(player.getLocation(), Sound.SILVERFISH_HIT, 0.05f, 0f);
+
+        List<Entity> newList = new ArrayList<Entity>();
+        for (Entity e : silverfishes) {
+            if (e != null && !e.isDead()) {
+                newList.add(e);
+            }
+        }
+        silverfishes = newList;
 
         new BukkitRunnable() {
             int iterations = 0;
@@ -70,14 +83,20 @@ public class Roar extends BaseAbility {
                         block.getWorld().playSound(block.getLocation(), Sound.DIG_GRAVEL, 1, 0);
                         block.getWorld().playSound(block.getLocation(), Sound.SILVERFISH_HIT, 0.5f, 0);
 
-                        int count = (int)dvz.getGM().getMonsterPower(1, 2);
-                        for (int c = 0; c < count; c++) {
-                            CWEntity silverfish = CWEntity.create(EntityType.SILVERFISH, block.getLocation().add(0.5f, 0.5f, 0.5f));
-                            if (block.hasMetadata("infected")) {
-                                silverfish.setName(block.getMetadata("infected").get(0).asString());
-                                silverfish.setNameVisible(false);
+                        if (silverfishes.size() > 300) {
+                            cancel();
+                            break;
+                        }
+
+                        if (block.hasMetadata("infected")) {
+                            int count = (int)dvz.getGM().getMonsterPower(1, 1);
+                            for (int c = 0; c < count; c++) {
+                                CWEntity silverfish = CWEntity.create(EntityType.SILVERFISH, block.getLocation().add(0.5f, 0.5f, 0.5f));
+                                silverfish.entity().setMetadata("owner", new FixedMetadataValue(dvz, block.getMetadata("infected").get(0).asString()));
+                                silverfishes.add(silverfish.entity());
                             }
                         }
+
 
                         block.setType(Material.AIR);
                     }
