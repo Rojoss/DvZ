@@ -81,7 +81,7 @@ public class LobbyEvents implements Listener {
                     String className = CWUtil.stripAllColor(lines[1]);
                     if (className.equalsIgnoreCase("warrior")) {
                         CWItem sword = new CWItem(Material.DIAMOND_SWORD);
-                        sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 1);
+                        sword.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 2);
                         sword.giveToPlayer(player);
 
                         player.getInventory().setHelmet(new CWItem(Material.IRON_HELMET));
@@ -90,7 +90,7 @@ public class LobbyEvents implements Listener {
                         player.getInventory().setBoots(new CWItem(Material.IRON_BOOTS));
 
                     } else if (className.equalsIgnoreCase("tank")) {
-                        new CWItem(Material.IRON_SWORD).giveToPlayer(player);
+                        new CWItem(Material.STONE_SWORD).giveToPlayer(player);
 
                         player.getInventory().setHelmet(new CWItem(Material.DIAMOND_HELMET));
                         player.getInventory().setChestplate(new CWItem(Material.DIAMOND_CHESTPLATE));
@@ -99,7 +99,7 @@ public class LobbyEvents implements Listener {
 
                     } else if (className.equalsIgnoreCase("archer")) {
                         CWItem bow = new CWItem(Material.BOW);
-                        bow.addEnchantment(Enchantment.ARROW_DAMAGE, 2);
+                        bow.addEnchantment(Enchantment.ARROW_DAMAGE, 4);
                         bow.giveToPlayer(player);
                         new CWItem(Material.WOOD_SWORD).giveToPlayer(player);
                         new CWItem(Material.ARROW, 64).giveToPlayer(player);
