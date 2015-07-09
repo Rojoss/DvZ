@@ -786,6 +786,10 @@ public class Commands {
                 //######################################################## /dvz open #######################################################
                 //##########################################################################################################################
                 if (args[0].equalsIgnoreCase("open")) {
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                        return true;
+                    }
                     if (!sender.isOp() && !sender.hasPermission("dvz.admin")) {
                         sender.sendMessage(Util.formatMsg("Insufficient permissions."));
                         return true;
@@ -796,7 +800,7 @@ public class Commands {
                         //return true;
                     }
 
-                    gm.openGame();
+                    gm.openGame((Player)sender);
                     dvz.logTimings("Commands.onCommand()[/dvz open]", t);
                     return true;
                 }

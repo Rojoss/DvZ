@@ -150,7 +150,7 @@ public class GameManager {
         dvz.logTimings("GameManager.resetGame()", t);
     }
 
-    public void openGame() {
+    public void openGame(Player player) {
         Bukkit.getPluginManager().callEvent(new GameOpenEvent());
 
         Long t = System.currentTimeMillis();
@@ -166,6 +166,7 @@ public class GameManager {
 
         Set<String> setupOptions = dvz.getMM().isSetProperly(dvz.getMM().getActiveMap());
         if (!setupOptions.isEmpty()) {
+            player.teleport(dvz.getMM().getActiveMap().getWorld().getSpawnLocation());
             Util.broadcastAdmins(CWUtil.integrateColor("&cCould not open the game because the map is not set up properly."));
             Util.broadcastAdmins(CWUtil.integrateColor("&4Missing&8: &c" + CWUtil.implode(setupOptions.toArray(new String[dvz.getMM().getMaps().size()]), "&8, &c")));
             dvz.logTimings("GameManager.openGame()[map invalid]", t);
@@ -173,6 +174,7 @@ public class GameManager {
         }
 
         if (!populateShrines()) {
+            player.teleport(dvz.getMM().getActiveMap().getWorld().getSpawnLocation());
             Util.broadcastAdmins(CWUtil.integrateColor("&cCould not open the game because the map is not set up properly."));
             Util.broadcastAdmins(CWUtil.integrateColor("&cMissing end portal frames between shrine locations."));
             Util.broadcastAdmins(CWUtil.integrateColor("&cThere has to be at least 1 shrine block for the wall and one for the keep."));
@@ -195,12 +197,12 @@ public class GameManager {
 
         //Tp all players to active world.
         Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
-        for (Player player : players) {
-            if (Util.isTest() && !Util.canTest(player)) {
+        for (Player p : players) {
+            if (Util.isTest() && !Util.canTest(p)) {
                 continue;
             }
-            dvz.getPM().getPlayer(player).reset();
-            player.teleport(dvz.getMM().getUsedWorld().getSpawnLocation());
+            dvz.getPM().getPlayer(p).reset();
+            p.teleport(dvz.getMM().getUsedWorld().getSpawnLocation());
         }
         dvz.logTimings("GameManager.openGame()", t);
     }
