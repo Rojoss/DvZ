@@ -6,6 +6,8 @@ import org.bukkit.World;
 
 public class PluginCfg extends EasyConfig {
 
+    public String SQL_PASS = "SECRET";
+
     public int XP_NEEDED_TO_LVL = 500;
     public String DEFAULT_WORD = "world";
     public int DWARF_CLASS_COUNT = 2;

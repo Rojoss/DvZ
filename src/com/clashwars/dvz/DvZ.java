@@ -17,7 +17,6 @@ import com.clashwars.dvz.damage.log.LogMenu;
 import com.clashwars.dvz.events.*;
 import com.clashwars.dvz.maps.MapManager;
 import com.clashwars.dvz.mysql.MySQL;
-import com.clashwars.dvz.mysql.SqlPass;
 import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.player.SettingsMenu;
 import com.clashwars.dvz.runnables.AntiCamp;
@@ -193,7 +192,7 @@ public class DvZ extends JavaPlugin {
         releasePlayersCfg = new ReleasePlayersCfg("plugins/DvZ/data/ReleasePlayers.yml");
         releasePlayersCfg.load();
 
-        sql = new MySQL(this, "37.26.106.5", "3306", "clashwar_data", "clashwar_main", SqlPass.Pass());
+        sql = new MySQL(this, "37.26.106.5", "3306", "clashwar_data", "clashwar_main", cfg.SQL_PASS);
         try {
             c = sql.openConnection();
         } catch(Exception e) {
