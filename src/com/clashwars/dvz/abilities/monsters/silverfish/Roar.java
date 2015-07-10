@@ -87,12 +87,12 @@ public class Roar extends BaseAbility {
                         block.getWorld().playSound(block.getLocation(), Sound.DIG_GRAVEL, 1, 0);
                         block.getWorld().playSound(block.getLocation(), Sound.SILVERFISH_HIT, 0.5f, 0);
 
-                        if (silverfishes.size() > 300) {
+                        if (silverfishes.size() > 500) {
                             cancel();
                             break;
                         }
 
-                        if (block.hasMetadata("infected")) {
+                        if (block.hasMetadata("infected") || CWUtil.randomFloat() > 0.7f) {
                             int count = (int)dvz.getGM().getMonsterPower(1, 2);
                             for (int c = 0; c < count; c++) {
                                 CWEntity silverfish = CWEntity.create(EntityType.SILVERFISH, block.getLocation().add(0.5f, 0.5f, 0.5f));

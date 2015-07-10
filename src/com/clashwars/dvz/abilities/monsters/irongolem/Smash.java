@@ -67,7 +67,7 @@ public class Smash extends BaseAbility {
 
                     FallingBlock fallingBlock = b.getWorld().spawnFallingBlock(b.getLocation(), b.getType(), b.getData());
                     Vector dir = b.getLocation().toVector().subtract(player.getLocation().toVector()).normalize();
-                    fallingBlock.setVelocity(dir.multiply(1.2f));
+                    fallingBlock.setVelocity(dir.multiply(1.5f));
                     fallingBlock.setMetadata("smashblock", new FixedMetadataValue(dvz, player.getName()));
 
                     b.getWorld().playSound(b.getLocation(), Sound.ZOMBIE_WOOD, 0.1f, 2.2f - CWUtil.randomFloat());
