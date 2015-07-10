@@ -2,6 +2,7 @@
 /build
 /dist
 /target
+/out
 /manifest.mf
 
 # Intellij stuff
