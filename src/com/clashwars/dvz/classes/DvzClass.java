@@ -1,12 +1,12 @@
 package com.clashwars.dvz.classes;
 
+import com.clashwars.cwstats.stats.internal.StatType;
 import com.clashwars.dvz.classes.dragons.AirDragon;
 import com.clashwars.dvz.classes.dragons.DragonClass;
 import com.clashwars.dvz.classes.dragons.FireDragon;
 import com.clashwars.dvz.classes.dragons.WaterDragon;
 import com.clashwars.dvz.classes.dwarves.*;
 import com.clashwars.dvz.classes.monsters.*;
-import com.clashwars.dvz.stats.internal.StatType;
 
 import java.util.ArrayList;
 import java.util.Arrays;

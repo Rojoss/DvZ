@@ -4,7 +4,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.classes.DvzClass;
-import com.clashwars.dvz.events.custom.GameResetEvent;
+import com.clashwars.dvz.listeners.custom.GameResetEvent;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;

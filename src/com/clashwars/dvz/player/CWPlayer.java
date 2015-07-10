@@ -1,6 +1,7 @@
 package com.clashwars.dvz.player;
 
 import com.clashwars.cwcore.CooldownManager;
+import com.clashwars.cwcore.ItemMenu;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.ExpUtil;
@@ -14,17 +15,12 @@ import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.PlayerCfg;
 import com.clashwars.dvz.damage.log.DamageLog;
-import com.clashwars.dvz.events.custom.ClassLevelupEvent;
+import com.clashwars.dvz.listeners.custom.ClassLevelupEvent;
 import com.clashwars.dvz.runnables.TeleportRunnable;
-import com.clashwars.dvz.stats.internal.StatType;
-import com.clashwars.dvz.util.ItemMenu;
+import com.clashwars.cwstats.stats.internal.StatType;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.*;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
@@ -47,9 +43,6 @@ public class CWPlayer {
     public List<DamageLog> damageLogs = new ArrayList<DamageLog>();
     private Color color;
     private Long spawnTime = System.currentTimeMillis();
-
-    private int userID = -1;
-    private int charID = -1;
 
     private Material endermanBlock = Material.AIR;
 
@@ -532,21 +525,6 @@ public class CWPlayer {
         return spawnTime;
     }
 
-    public int getUserID() {
-        return userID;
-    }
-
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
-
-    public int getCharID() {
-        return charID;
-    }
-
-    public void setCharID(int charID) {
-        this.charID = charID;
-    }
 
     public String getTeamSuffix() {
         if (getPlayer().hasPermission("team.staff")) {

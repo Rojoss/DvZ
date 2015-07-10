@@ -1,6 +1,5 @@
 package com.clashwars.dvz.structures.internal;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.dependencies.CWWorldGuard;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;

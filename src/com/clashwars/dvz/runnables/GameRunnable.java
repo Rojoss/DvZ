@@ -10,7 +10,7 @@ import com.clashwars.dvz.maps.DvzMap;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
-import com.clashwars.dvz.stats.internal.StatType;
+import com.clashwars.cwstats.stats.internal.StatType;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

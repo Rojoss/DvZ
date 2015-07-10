@@ -47,9 +47,6 @@ public class Commands {
     private PlayerManager pm;
     private ClassManager cm;
 
-    private List<UUID> cows = new ArrayList<UUID>();
-    private List<String> parkourCompleted = new ArrayList<String>();
-
     public Commands(DvZ dvz) {
         this.dvz = dvz;
         gm = dvz.getGM();
@@ -60,73 +57,7 @@ public class Commands {
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Long t = System.currentTimeMillis();
-        if (label.equalsIgnoreCase("cow")) {
-            if (sender instanceof Player) {
-                final Player player = (Player)sender;
-                player.playSound(player.getLocation(), Sound.COW_HURT, 2, 2 - CWUtil.randomFloat());
 
-                if (!cows.contains(player.getUniqueId())) {
-                    cows.add(player.getUniqueId());
-                    final Hat prevHat = HatManager.getHat(player);
-                    final Hat h = new Hat(player, EntityType.COW);
-                    h.equip();
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            h.remove();
-                            cows.remove(player.getUniqueId());
-                            if (prevHat != null) {
-                                if (prevHat.getItem() != null) {
-                                    Hat newHat = new Hat(player, prevHat.getItem());
-                                } else {
-                                    Hat newHat = new Hat(player, prevHat.getEntityType());
-                                }
-                            }
-                        }
-                    }.runTaskLater(dvz, 100);
-                }
-            }
-            dvz.logTimings("Commands.onCommand()[/cow]", t);
-            return true;
-        }
-
-        if (label.equalsIgnoreCase("crash")) {
-            if (sender instanceof Player) {
-                sender.sendMessage(Util.formatMsg("Can only crash the server from the console!"));
-                return true;
-            }
-            dvz.getServer().broadcastMessage(CWUtil.integrateColor("&4&lFORCING A SERVER CRASH!!!"));
-            dvz.getServer().broadcastMessage(CWUtil.integrateColor("&4&lFORCING A SERVER CRASH!!!"));
-            dvz.getServer().broadcastMessage(CWUtil.integrateColor("&4&lFORCING A SERVER CRASH!!!"));
-            List<World> worlds = Bukkit.getWorlds();
-            for (World world : worlds) {
-                Block block = world.getSpawnLocation().getBlock();
-                while (block.getType() != Material.SOUL_SAND) {
-                    block = block.getRelative(BlockFace.NORTH);
-                }
-            }
-            dvz.logTimings("Commands.onCommand()[/crash]", t);
-            return true;
-        }
-
-        if (label.equalsIgnoreCase("parkour")) {
-            if (!(sender instanceof BlockCommandSender)) {
-                return true;
-            }
-            BlockCommandSender cmdSender = (BlockCommandSender)sender;
-
-            List<Player> nearbyPlayers = CWUtil.getNearbyPlayers(cmdSender.getBlock().getLocation(), 2);
-            for (Player player : nearbyPlayers) {
-                if (parkourCompleted.contains(player.getName())) {
-                    player.sendMessage(CWUtil.integrateColor("&6You already completed the parkour!"));
-                    return true;
-                }
-
-                dvz.getServer().broadcastMessage(CWUtil.integrateColor("&a&l" +player.getName() + " &6completed the lobby parkour!"));
-                parkourCompleted.add(player.getName());
-            }
-            return true;
-        }
 
         if (label.equalsIgnoreCase("settings") || label.equalsIgnoreCase("prefs")) {
             if (!(sender instanceof Player)) {
@@ -148,70 +79,6 @@ public class Commands {
             return true;
         }
 
-        if (label.equalsIgnoreCase("stats") || label.equalsIgnoreCase("stat") || label.equalsIgnoreCase("statistics")) {
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(Util.formatMsg("&cPlayer command only."));
-                return true;
-            }
-            Player player = (Player)sender;
-
-            if (dvz.getSettingsCfg().getSettings(player.getUniqueId()).statsDirect) {
-                dvz.getSM().statsMenu.showMenu(player);
-            } else {
-                dvz.getSM().filterMenu.showMenu(player);
-            }
-            return true;
-        }
-
-        if (label.equalsIgnoreCase("enjinprofile")) {
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(Util.formatMsg("&cPlayer command only."));
-                return true;
-            }
-            Player player = (Player)sender;
-
-            JSONObject users = Enjin.getUsers();
-
-            String userID = Enjin.getUserIdByCharacter(player.getName(), true);
-            if (userID == null) {
-                player.sendMessage(CWUtil.integrateColor("&4&lNOT LINKED&8&l: &4Your character isn't linked with the website."));
-                player.sendMessage(CWUtil.integrateColor("&4This can have one of the following reasons:"));
-                player.sendMessage(CWUtil.integrateColor("&81. &cYou haven't joined the website."));
-                player.sendMessage(CWUtil.integrateColor("    &7Please join the website first: &9http://clashwars.com"));
-                player.sendMessage(CWUtil.integrateColor("&82. &cYou don't have this character added to your profile."));
-                player.sendMessage(CWUtil.integrateColor("    &7Follow this step by step tutorial! &9http://goo.gl/BrckMP"));
-                player.sendMessage(CWUtil.integrateColor("    &7After adding your character also add it to this server!"));
-                player.sendMessage(CWUtil.integrateColor("&83. &cSomething went wrong with syncing your account."));
-                player.sendMessage(CWUtil.integrateColor("    &7Try again later... :D (Or contact a staff member!)"));
-                player.sendMessage(CWUtil.integrateColor("&a&lYou can still play! &7(Some advanced features might be locked)"));
-            } else {
-                player.sendMessage(CWUtil.integrateColor("&3&lLINKED&8&8l: &aYour character is linked to your website profile!"));
-                player.sendMessage(CWUtil.integrateColor("&3Profile&8: &bhttp://clashwars.com/profile/" + userID));
-            }
-
-            dvz.logTimings("Commands.onCommand()[/enjinprofile]", t);
-            return true;
-        }
-
-
-        if (label.equalsIgnoreCase("soundtest") || label.equalsIgnoreCase("st")) {
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(Util.formatMsg("&cPlayer command only."));
-                return true;
-            }
-            Player player = (Player)sender;
-
-            if (!player.isOp() && !player.hasPermission("cmd.soundtest")) {
-                sender.sendMessage(Util.formatMsg("Insufficient permissions."));
-                return true;
-            }
-
-            dvz.getSoundMenu().menu.show(player);
-            dvz.getSoundMenu().showMenu(player, 0, null);
-
-            dvz.logTimings("Commands.onCommand()[/soundtest]", t);
-            return true;
-        }
 
         if (label.equalsIgnoreCase("storage") || label.equalsIgnoreCase("chests") || label.equalsIgnoreCase("chest")) {
             if (!(sender instanceof Player)) {

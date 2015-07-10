@@ -9,16 +9,16 @@ import com.clashwars.dvz.abilities.dwarves.bonus.Camouflage;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.GameCfg;
-import com.clashwars.dvz.events.custom.GameOpenEvent;
-import com.clashwars.dvz.events.custom.GameResetEvent;
-import com.clashwars.dvz.events.custom.GameStartEvent;
+import com.clashwars.dvz.listeners.custom.GameOpenEvent;
+import com.clashwars.dvz.listeners.custom.GameResetEvent;
+import com.clashwars.dvz.listeners.custom.GameStartEvent;
 import com.clashwars.dvz.maps.DvzMap;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.player.SavedPlayerState;
 import com.clashwars.dvz.runnables.DragonRunnable;
-import com.clashwars.dvz.stats.internal.StatType;
+import com.clashwars.cwstats.stats.internal.StatType;
 import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.*;
@@ -402,7 +402,12 @@ public class GameManager {
         dvz.getSM().changeLocalStatVal(StatType.GENERAL_GAME_TIME, ((int)(System.currentTimeMillis() - startTime)));
 
         //Save local statistics to database and create a new game record
-        dvz.getSM().uploadLocalStats();
+        if (dvz.getGameCfg().TEST_MODE) {
+            dvz.log("Didn't upload local stats because the server is in test mode!");
+            dvz.getSM().clearLocalStats();
+        } else {
+            dvz.getSM().uploadLocalStats();
+        }
 
         dvz.logTimings("GameManager.stopGame()", t);
     }

@@ -1,9 +1,9 @@
 package com.clashwars.dvz.VIP;
 
+import com.clashwars.cwcore.ItemMenu;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
-import com.clashwars.dvz.util.ItemMenu;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;

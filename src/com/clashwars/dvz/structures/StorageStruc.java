@@ -1,5 +1,6 @@
 package com.clashwars.dvz.structures;
 
+import com.clashwars.cwcore.ItemMenu;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
@@ -7,14 +8,12 @@ import com.clashwars.cwcore.utils.ExpUtil;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.DvzClass;
-import com.clashwars.dvz.events.custom.GameResetEvent;
+import com.clashwars.dvz.listeners.custom.GameResetEvent;
 import com.clashwars.dvz.player.CWPlayer;
-import com.clashwars.dvz.stats.internal.StatType;
+import com.clashwars.cwstats.stats.internal.StatType;
 import com.clashwars.dvz.structures.data.StorageData;
 import com.clashwars.dvz.structures.extra.StorageItem;
 import com.clashwars.dvz.structures.internal.Structure;
-import com.clashwars.dvz.structures.internal.StructureType;
-import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Material;
 import org.bukkit.Sound;

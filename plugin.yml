@@ -2,22 +2,12 @@ main : com.clashwars.dvz.DvZ
 name: DvZ
 version: 0.1
 description: Dwarves VS Zombies plugin.
-depend: [CWCore]
+depend: [CWCore,ClashWars,CWStats]
 commands:
   dvz:
     description: Main dvz command
     usage: /<command>
     aliases: [d, dz, dvsz]
-  crash:
-    description: Try and crash the server for testing purposes.
-    usage: /<command>
-  cow:
-    description: /cow
-    usage: /<command>
-  soundtest:
-    description: Command to test sounds.
-    usage: /<command> <category>
-    aliases: [st]
   storage:
     description: Virtual storage for VIP members.
     usage: /<command>
@@ -34,21 +24,11 @@ commands:
     description: Virtual item disposal.
     usage: /<command>
     aliases: [dispose,clear]
-  enjinprofile:
-    description: Verify your enjin profile link.
-    usage: /<command>
   settings:
     description: View and manage settings.
     usage: /<command>
     aliases: [prefs]
-  stats:
-    description: View statistics.
-    usage: /<command>
-    aliases: [statistics,stat]
   damagelog:
     description: View your damage log
     usage: /<command>
     aliases: [dmglog,dlog,damage,dmg]
-  parkour:
-    description: Simple command for lobby parkour
-    usage: /<command> [player]

@@ -6,7 +6,7 @@ import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.damage.types.AbilityDmg;
-import com.clashwars.dvz.events.custom.GameResetEvent;
+import com.clashwars.dvz.listeners.custom.GameResetEvent;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.runnables.PickupRunnable;
 import com.clashwars.dvz.util.DvzItem;
@@ -21,7 +21,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.server.PluginDisableEvent;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;

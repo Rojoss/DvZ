@@ -1,13 +1,10 @@
 package com.clashwars.dvz.abilities.monsters.silverfish;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWEntity;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
-import com.clashwars.dvz.classes.DvzClass;
-import com.clashwars.dvz.classes.monsters.Silverfish;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;

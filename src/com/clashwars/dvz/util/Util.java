@@ -10,22 +10,15 @@ import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.maps.DvzMap;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
-import com.clashwars.dvz.stats.internal.StatType;
+import com.clashwars.cwstats.stats.internal.StatType;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.util.Vector;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.List;
 
 public class Util {
 
@@ -121,18 +114,6 @@ public class Util {
         }
         DvZ.inst().logTimings("Util.isNearShrine()[false]", t);
         return false;
-    }
-
-    public static String getTimeStamp() {
-        return getTimeStamp("[dd-MM HH:mm:ss]");
-    }
-
-    public static String getTimeStamp(String syntax) {
-        return new SimpleDateFormat(syntax).format(Calendar.getInstance().getTime());
-    }
-
-    public static String timeStampToDateString(Timestamp timestamp) {
-        return new SimpleDateFormat("dd MMM yyyy").format(timestamp);
     }
 
     public static boolean isTest() {

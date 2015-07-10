@@ -6,7 +6,7 @@ import com.clashwars.dvz.SwapType;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.classes.BaseClass;
 import com.clashwars.dvz.classes.DvzClass;
-import com.clashwars.dvz.events.custom.ClassLevelupEvent;
+import com.clashwars.dvz.listeners.custom.ClassLevelupEvent;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.player.PlayerData;
 import com.clashwars.dvz.util.Util;

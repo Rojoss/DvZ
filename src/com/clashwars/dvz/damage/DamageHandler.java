@@ -1,6 +1,5 @@
 package com.clashwars.dvz.damage;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
@@ -11,16 +10,11 @@ import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.damage.log.DamageLog;
 import com.clashwars.dvz.damage.log.DamageLogEntry;
 import com.clashwars.dvz.damage.types.*;
-import com.clashwars.dvz.maps.ShrineBlock;
-import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.player.PlayerSettings;
-import com.clashwars.dvz.stats.internal.StatType;
+import com.clashwars.cwstats.stats.internal.StatType;
 import com.clashwars.dvz.util.Util;
-import net.minecraft.server.v1_8_R2.PacketPlayInClientCommand;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;

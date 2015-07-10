@@ -1,6 +1,5 @@
 package com.clashwars.dvz.abilities.monsters.skeleton;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.helpers.CWEntity;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;

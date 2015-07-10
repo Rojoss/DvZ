@@ -62,5 +62,7 @@
         </SOURCES>
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="ClashWars" />
+    <orderEntry type="module" module-name="CWStats" />
   </component>
 </module>

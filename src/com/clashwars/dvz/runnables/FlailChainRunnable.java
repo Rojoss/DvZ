@@ -2,7 +2,7 @@ package com.clashwars.dvz.runnables;
 
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
-import com.clashwars.dvz.events.WeaponHandler;
+import com.clashwars.dvz.listeners.WeaponHandler;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;

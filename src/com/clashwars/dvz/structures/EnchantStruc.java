@@ -1,5 +1,6 @@
 package com.clashwars.dvz.structures;
 
+import com.clashwars.cwcore.ItemMenu;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
@@ -7,7 +8,6 @@ import com.clashwars.cwcore.utils.ExpUtil;
 import com.clashwars.dvz.structures.data.EnchantData;
 import com.clashwars.dvz.structures.extra.CustomEnchant;
 import com.clashwars.dvz.structures.internal.Structure;
-import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Material;
 import org.bukkit.Sound;

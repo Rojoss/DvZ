@@ -1,6 +1,5 @@
 package com.clashwars.dvz.player;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
@@ -37,26 +36,6 @@ public class PlayerManager {
         for (UUID uuid : cfgPlayers.keySet()) {
             players.put(uuid, new CWPlayer(uuid, cfgPlayers.get(uuid)));
             players.get(uuid).onClassLoad();
-        }
-
-        //Try to load SQL data from all online players
-        if (dvz.getSql() != null) {
-            try {
-                Statement statement = dvz.getSql().createStatement();
-                sqlCharacters = statement.executeQuery("SELECT char_id,user_id,uuid FROM Characters;");
-
-                while (sqlCharacters.next()) {
-                    if (sqlCharacters.getString("uuid").contains("-")) {
-                        UUID uuid = UUID.fromString(sqlCharacters.getString("uuid"));
-                        CWPlayer cwp = getPlayer(uuid);
-
-                        cwp.setUserID(sqlCharacters.getInt("user_id"));
-                        cwp.setCharID(sqlCharacters.getInt("char_id"));
-                    }
-                }
-            } catch (SQLException e) {
-                dvz.log("Failed to load userdata from MySQL database!");
-            }
         }
         dvz.logTimings("PlayerManager.Populate()", t);
     }

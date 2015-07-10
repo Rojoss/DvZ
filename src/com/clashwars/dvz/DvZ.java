@@ -1,8 +1,15 @@
 package com.clashwars.dvz;
 
+import com.clashwars.clashwars.ClashWars;
 import com.clashwars.cwcore.CWCore;
+import com.clashwars.cwcore.debug.TimingsLog;
 import com.clashwars.cwcore.effect.EffectManager;
+import com.clashwars.cwcore.mysql.MySQL;
 import com.clashwars.cwcore.scoreboard.CWBoard;
+import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.cwstats.CWStats;
+import com.clashwars.cwstats.stats.DataManager;
+import com.clashwars.cwstats.stats.StatsManager;
 import com.clashwars.dvz.VIP.ArmorMenu;
 import com.clashwars.dvz.VIP.BannerMenu;
 import com.clashwars.dvz.VIP.ColorMenu;
@@ -14,21 +21,14 @@ import com.clashwars.dvz.commands.Commands;
 import com.clashwars.dvz.config.*;
 import com.clashwars.dvz.damage.DamageHandler;
 import com.clashwars.dvz.damage.log.LogMenu;
-import com.clashwars.dvz.events.*;
+import com.clashwars.dvz.listeners.*;
 import com.clashwars.dvz.maps.MapManager;
-import com.clashwars.dvz.mysql.MySQL;
 import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.player.SettingsMenu;
 import com.clashwars.dvz.runnables.AntiCamp;
 import com.clashwars.dvz.runnables.GameRunnable;
-import com.clashwars.dvz.stats.DataManager;
-import com.clashwars.dvz.stats.StatsManager;
 import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.tips.TipManager;
-import com.clashwars.dvz.util.ItemMenu;
-import com.clashwars.dvz.util.SoundMenu;
-import com.clashwars.dvz.util.TimingsLog;
-import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.WorkShop;
 import com.clashwars.dvz.workshop.WorkshopManager;
 import com.gmail.filoghost.holograms.api.Hologram;
@@ -57,6 +57,9 @@ public class DvZ extends JavaPlugin {
 
     private static DvZ instance;
     private CWCore cwcore;
+    private ClashWars cw;
+    private CWStats cws;
+
     private Permission permission;
     private Gson gson = new Gson();
     private CWBoard cwb;
@@ -71,7 +74,6 @@ public class DvZ extends JavaPlugin {
     private WorkShopCfg wsCfg;
     private ArmorPresetsCfg presetCfg;
     private BannerCfg bannerCfg;
-    private StatsCfg statsCfg;
     private PlayerSettingsCfg settingsCfg;
     private ReleasePlayersCfg releasePlayersCfg;
 
@@ -87,13 +89,10 @@ public class DvZ extends JavaPlugin {
     private PlayerManager pm;
     private WorkshopManager wm;
     private TipManager tm;
-    private DataManager dm;
-    private StatsManager sm;
     private DamageHandler dmgH;
 
     private ArmorMenu armorMenu;
     private ColorMenu colorMenu;
-    private SoundMenu soundMenu;
     private BannerMenu bannerMenu;
     private PatternMenu patternMenu;
     private SettingsMenu settingsMenu;
@@ -153,6 +152,22 @@ public class DvZ extends JavaPlugin {
         }
         cwcore = (CWCore)plugin;
 
+        plugin = getServer().getPluginManager().getPlugin("ClashWars");
+        if (plugin == null || !(plugin instanceof ClashWars)) {
+            log("ClashWars dependency couldn't be loaded!");
+            setEnabled(false);
+            return;
+        }
+        cw = (ClashWars)plugin;
+
+        plugin = getServer().getPluginManager().getPlugin("CWStats");
+        if (plugin == null || !(plugin instanceof CWStats)) {
+            log("CWStats dependency couldn't be loaded!");
+            setEnabled(false);
+            return;
+        }
+        cws = (CWStats)plugin;
+
         permission = cwcore.getDM().getPermissions();
         if (permission == null) {
             log("Vault permissions couldn't be loaded.");
@@ -185,8 +200,6 @@ public class DvZ extends JavaPlugin {
         presetCfg.load();
         bannerCfg = new BannerCfg("plugins/DvZ/data/Banners.yml");
         bannerCfg.load();
-        statsCfg = new StatsCfg("plugins/DvZ/data/Stats.yml");
-        statsCfg.load();
         settingsCfg = new PlayerSettingsCfg("plugins/DvZ/PlayerSettings.yml");
         settingsCfg.load();
         releasePlayersCfg = new ReleasePlayersCfg("plugins/DvZ/data/ReleasePlayers.yml");
@@ -209,13 +222,10 @@ public class DvZ extends JavaPlugin {
         pm = new PlayerManager(this);
         wm = new WorkshopManager(this);
         tm = new TipManager();
-        dm = new DataManager(this);
-        sm = new StatsManager(this);
         gm.calculateMonsterPerc();
 
         dmgH = new DamageHandler(this);
 
-        soundMenu = new SoundMenu(this);
         armorMenu = new ArmorMenu(this);
         colorMenu = new ColorMenu(this);
         bannerMenu = new BannerMenu(this);
@@ -257,19 +267,14 @@ public class DvZ extends JavaPlugin {
             pm.registerEvents(s.getStrucClass(), this);
         }
 
-        pm.registerEvents(new ItemMenu.Events(), this);
         pm.registerEvents(new ProtectEvents(this), this);
         pm.registerEvents(new VIPEvents(this), this);
         pm.registerEvents(armorMenu, this);
         pm.registerEvents(colorMenu, this);
-        pm.registerEvents(soundMenu, this);
         pm.registerEvents(bannerMenu, this);
         pm.registerEvents(patternMenu, this);
         pm.registerEvents(settingsMenu, this);
         pm.registerEvents(logMenu, this);
-        pm.registerEvents(getSM().filterMenu, this);
-        pm.registerEvents(getSM().statsMenu, this);
-        pm.registerEvents(getSM().playerMenu, this);
         pm.registerEvents(dmgH, this);
         pm.registerEvents(new WeaponHandler(this), this);
     }
@@ -324,7 +329,7 @@ public class DvZ extends JavaPlugin {
     public boolean startTimings () {
         if (timingsLog == null) {
             timingsEnabled = true;
-            timingsLog = new TimingsLog(this, Util.getTimeStamp("dd-MM__HH-mm") + ".timings");
+            timingsLog = new TimingsLog(this, CWUtil.getTimeStamp("dd-MM__HH-mm") + ".timings");
             return true;
         }
         return false;
@@ -420,10 +425,6 @@ public class DvZ extends JavaPlugin {
         return bannerCfg;
     }
 
-    public StatsCfg getStatsCfg() {
-        return statsCfg;
-    }
-
     public PlayerSettingsCfg getSettingsCfg() {
         return settingsCfg;
     }
@@ -471,11 +472,11 @@ public class DvZ extends JavaPlugin {
     }
 
     public DataManager getDM() {
-        return dm;
+        return cws.dm;
     }
 
     public StatsManager getSM() {
-        return sm;
+        return cws.sm;
     }
 
     public ArmorMenu getArmorMenu() {
@@ -484,10 +485,6 @@ public class DvZ extends JavaPlugin {
 
     public ColorMenu getColorMenu() {
         return colorMenu;
-    }
-
-    public SoundMenu getSoundMenu() {
-        return soundMenu;
     }
 
     public BannerMenu getBannerMenu() {

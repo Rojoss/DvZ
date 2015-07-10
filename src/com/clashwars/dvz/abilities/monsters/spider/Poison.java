@@ -1,6 +1,5 @@
 package com.clashwars.dvz.abilities.monsters.spider;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.effect.Particle;
 import com.clashwars.cwcore.effect.effects.ExpandingCircleEffect;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -12,7 +11,6 @@ import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;

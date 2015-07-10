@@ -1,16 +1,10 @@
 package com.clashwars.dvz.damage.types;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
-import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.damage.BaseDmg;
-import com.clashwars.dvz.damage.CustomDamageEvent;
 import com.clashwars.dvz.damage.DmgType;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class AbilityDmg extends BaseDmg {
 

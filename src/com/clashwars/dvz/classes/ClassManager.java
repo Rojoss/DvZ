@@ -1,12 +1,12 @@
 package com.clashwars.dvz.classes;
 
+import com.clashwars.cwcore.ItemMenu;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.player.CWPlayer;
-import com.clashwars.dvz.util.ItemMenu;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

@@ -1,6 +1,5 @@
 package com.clashwars.dvz.player;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.DvzClass;
 import org.bukkit.Location;

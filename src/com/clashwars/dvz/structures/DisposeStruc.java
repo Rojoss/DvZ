@@ -1,10 +1,10 @@
 package com.clashwars.dvz.structures;
 
+import com.clashwars.cwcore.ItemMenu;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.structures.data.DisposeData;
 import com.clashwars.dvz.structures.internal.Structure;
-import com.clashwars.dvz.util.ItemMenu;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

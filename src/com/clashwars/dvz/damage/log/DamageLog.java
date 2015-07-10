@@ -1,6 +1,5 @@
 package com.clashwars.dvz.damage.log;
 
-import com.clashwars.cwcore.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.damage.CustomDamageEvent;
