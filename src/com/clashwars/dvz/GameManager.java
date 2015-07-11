@@ -191,9 +191,7 @@ public class GameManager {
         Util.broadcastTitle(new Title("&a&lDvZ has opened!", "&7The game will be starting soon so please wait.", 10, 100, 30));
         dvz.getServer().dispatchCommand(dvz.getServer().getConsoleSender(), "hd reload");
 
-        if (dvz.getSql() != null) {
-            dvz.getSM().clearLocalStats();
-        }
+        dvz.getSM().clearLocalStats();
 
         //Tp all players to active world.
         Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();

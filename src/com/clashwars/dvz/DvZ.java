@@ -77,9 +77,6 @@ public class DvZ extends JavaPlugin {
     private PlayerSettingsCfg settingsCfg;
     private ReleasePlayersCfg releasePlayersCfg;
 
-    private MySQL sql;
-    private Connection c;
-
     private Commands cmds;
 
     private EffectManager em;
@@ -204,17 +201,6 @@ public class DvZ extends JavaPlugin {
         settingsCfg.load();
         releasePlayersCfg = new ReleasePlayersCfg("plugins/DvZ/data/ReleasePlayers.yml");
         releasePlayersCfg.load();
-
-        sql = new MySQL(this, "37.26.106.5", "3306", "clashwar_data", "clashwar_main", cfg.SQL_PASS);
-        try {
-            c = sql.openConnection();
-        } catch(Exception e) {
-            log("##############################################################");
-            log("Unable to connect to MySQL!");
-            log("Stats and all other data won't be synced/stored!");
-            log("The game should still be able to run fine but this message shouldn't be ignored!");
-            log("##############################################################");
-        }
 
         mm = new MapManager(this);
         gm = new GameManager(this);
@@ -431,11 +417,6 @@ public class DvZ extends JavaPlugin {
 
     public ReleasePlayersCfg getReleasePlayersCfg() {
         return releasePlayersCfg;
-    }
-
-
-    public Connection getSql() {
-        return c;
     }
 
     public DamageHandler getDmgH() {
