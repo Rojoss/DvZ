@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.monsters.enderman;
 
+import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
@@ -108,7 +109,7 @@ public class Pickup extends BaseAbility {
     }
 
     @EventHandler
-    public void interact(PlayerInteractEvent event) {
+    public void interact(DelayedPlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
         }

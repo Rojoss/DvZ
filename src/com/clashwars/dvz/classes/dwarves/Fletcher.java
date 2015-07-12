@@ -1,5 +1,6 @@
 package com.clashwars.dvz.classes.dwarves;
 
+import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.helpers.CWEntity;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -151,7 +152,7 @@ public class Fletcher extends DwarfClass {
 
 
     @EventHandler(priority = EventPriority.HIGH)
-    private void interact(PlayerInteractEvent event) {
+    private void interact(DelayedPlayerInteractEvent event) {
         Long t = System.currentTimeMillis();
         if (event.getAction() != Action.LEFT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;

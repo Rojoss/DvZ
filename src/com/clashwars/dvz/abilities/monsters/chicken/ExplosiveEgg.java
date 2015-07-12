@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.monsters.chicken;
 
+import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
@@ -112,7 +113,7 @@ public class ExplosiveEgg extends BaseAbility {
     }
 
     @EventHandler
-    public void interact(PlayerInteractEvent event) {
+    public void interact(DelayedPlayerInteractEvent event) {
         super.interact(event);
     }
 }

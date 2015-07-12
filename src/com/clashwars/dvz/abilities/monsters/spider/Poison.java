@@ -2,6 +2,7 @@ package com.clashwars.dvz.abilities.monsters.spider;
 
 import com.clashwars.cwcore.effect.Particle;
 import com.clashwars.cwcore.effect.effects.ExpandingCircleEffect;
+import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
@@ -56,7 +57,7 @@ public class Poison extends BaseAbility {
     }
 
     @EventHandler
-    public void interact(PlayerInteractEvent event) {
+    public void interact(DelayedPlayerInteractEvent event) {
         super.interact(event);
     }
 

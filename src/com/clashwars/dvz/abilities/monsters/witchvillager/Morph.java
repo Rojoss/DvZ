@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.monsters.witchvillager;
 
+import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
@@ -40,7 +41,7 @@ public class Morph extends BaseAbility {
 
 
     @EventHandler
-    public void interact(PlayerInteractEvent event) {
+    public void interact(DelayedPlayerInteractEvent event) {
         super.interact(event);
     }
 }

@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.monsters.enderman;
 
+import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.helpers.CWEntity;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
@@ -48,7 +49,7 @@ public class Blink extends BaseAbility {
     }
 
     @EventHandler
-    public void interact(PlayerInteractEvent event) {
+    public void interact(DelayedPlayerInteractEvent event) {
         super.interact(event);
     }
 

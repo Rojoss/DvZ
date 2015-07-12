@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.dragons.water;
 
+import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
@@ -92,7 +93,7 @@ public class Geyser extends BaseAbility {
     }
 
     @EventHandler
-    public void interact(PlayerInteractEvent event) {
+    public void interact(DelayedPlayerInteractEvent event) {
         super.interact(event);
     }
 

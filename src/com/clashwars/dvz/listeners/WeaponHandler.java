@@ -3,6 +3,7 @@ package com.clashwars.dvz.listeners;
 import com.clashwars.cwcore.CooldownManager;
 import com.clashwars.cwcore.effect.Particle;
 import com.clashwars.cwcore.effect.effects.AnimatedCircleEffect;
+import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
@@ -120,7 +121,7 @@ public class WeaponHandler implements Listener {
     }
 
     @EventHandler
-    private void interact(PlayerInteractEvent event) {
+    private void interact(DelayedPlayerInteractEvent event) {
         final Player player = event.getPlayer();
 
         if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) {

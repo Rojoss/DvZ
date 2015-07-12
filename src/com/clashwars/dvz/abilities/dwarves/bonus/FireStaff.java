@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.dwarves.bonus;
 
+import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.GameState;
@@ -85,7 +86,7 @@ public class FireStaff extends BaseAbility {
 
 
     @EventHandler
-    public void interact(PlayerInteractEvent event) {
+    public void interact(DelayedPlayerInteractEvent event) {
         super.interact(event);
     }
 

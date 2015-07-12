@@ -1,5 +1,7 @@
 package com.clashwars.dvz.abilities.monsters;
 
+import com.clashwars.cwcore.CooldownManager;
+import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
@@ -33,7 +35,7 @@ public class Hammer extends BaseAbility {
     }
 
     @EventHandler
-    public void interact(PlayerInteractEvent event) {
+    public void interact(DelayedPlayerInteractEvent event) {
         Player player = event.getPlayer();
 
         if (!isCastItem(player.getItemInHand())) {
@@ -113,6 +115,10 @@ public class Hammer extends BaseAbility {
             return;
         }
         Player damager = (Player) event.getDamager();
+
+        if (CooldownManager.interactCooldown(damager.getUniqueId(), 200l)) {
+            return;
+        }
 
         if (!isCastItem(damager.getItemInHand())) {
             return;

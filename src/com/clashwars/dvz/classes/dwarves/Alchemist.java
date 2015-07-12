@@ -3,6 +3,7 @@ package com.clashwars.dvz.classes.dwarves;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.effect.Particle;
 import com.clashwars.cwcore.effect.effects.BoilEffect;
+import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
@@ -73,7 +74,7 @@ public class Alchemist extends DwarfClass {
 
     //Check for using buckets/bottles on cauldrons.
     @EventHandler(priority = EventPriority.HIGH)
-    private void onInteract(PlayerInteractEvent event) {
+    private void onInteract(DelayedPlayerInteractEvent event) {
         Long t = System.currentTimeMillis();
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;

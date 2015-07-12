@@ -1,6 +1,8 @@
 package com.clashwars.dvz.abilities;
 
 import com.clashwars.cwcore.CooldownManager;
+import com.clashwars.cwcore.debug.Debug;
+import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
@@ -235,7 +237,7 @@ public class BaseAbility implements Listener {
     }
 
     //If the ability has a cast item then cast ability when using that item.
-    protected void interact(PlayerInteractEvent event) {
+    protected void interact(DelayedPlayerInteractEvent event) {
         //This is only for abilities with cast items.
         if (castItem == null) {
             return;
@@ -251,7 +253,7 @@ public class BaseAbility implements Listener {
         }
 
         //Bit delay after spawning till abilities can be used
-        if (System.currentTimeMillis() < dvz.getPM().getPlayer(event.getPlayer()).getSpawnTime() + 2000) {
+        if (System.currentTimeMillis() < dvz.getPM().getPlayer(event.getPlayer()).getSpawnTime() + 1000) {
             CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't use abilities yet! &4&l<<"));
             event.setCancelled(true);
             return;

@@ -1,5 +1,6 @@
 package com.clashwars.dvz.listeners;
 
+import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
@@ -45,7 +46,7 @@ public class LobbyEvents implements Listener {
 
 
     @EventHandler
-    private void interact(PlayerInteractEvent event) {
+    private void interact(DelayedPlayerInteractEvent event) {
         Long t = System.currentTimeMillis();
         final Player player = event.getPlayer();
         CWPlayer cwp = dvz.getPM().getPlayer(player);

@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.dwarves.bonus;
 
+import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.hat.Hat;
 import com.clashwars.cwcore.hat.HatManager;
 import com.clashwars.cwcore.utils.CWUtil;
@@ -147,7 +148,7 @@ public class Camouflage extends BaseAbility {
 
 
     @EventHandler
-    public void interact(PlayerInteractEvent event) {
+    public void interact(DelayedPlayerInteractEvent event) {
         super.interact(event);
 
         //Allow monsters to left click blocks and reveal players.

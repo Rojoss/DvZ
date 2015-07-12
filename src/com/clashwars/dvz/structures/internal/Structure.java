@@ -1,6 +1,7 @@
 package com.clashwars.dvz.structures.internal;
 
 import com.clashwars.cwcore.dependencies.CWWorldGuard;
+import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
@@ -37,7 +38,7 @@ public class Structure implements Listener {
 
 
     @EventHandler
-    private void interact(PlayerInteractEvent event) {
+    private void interact(DelayedPlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
