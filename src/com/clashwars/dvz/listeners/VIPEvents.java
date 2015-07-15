@@ -48,7 +48,7 @@ public class VIPEvents implements Listener {
             public void run() {
                 Collection<Player> players = (Collection<Player>)DvZ.inst().getServer().getOnlinePlayers();
                 for (Player player : players) {
-                    if (player.getGameMode() == GameMode.SPECTATOR) {
+                    if (player.getGameMode() == GameMode.SPECTATOR || player.getGameMode() == GameMode.CREATIVE) {
                         continue;
                     }
                     if (player.hasPermission("rank.admin")) {
@@ -253,6 +253,9 @@ public class VIPEvents implements Listener {
     }
 
     private void equipHat(Player player) {
+        if (player.getGameMode() == GameMode.CREATIVE || player.getName().equalsIgnoreCase("Only_God")) {
+            return;
+        }
         CWItem hatItem = null;
         if (player.hasPermission("hat.iron"))
             hatItem = new CWItem(Material.ANVIL);
