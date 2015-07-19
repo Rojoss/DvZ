@@ -30,6 +30,14 @@ import java.util.List;
 
 public class Tailor extends DwarfClass {
 
+    private final int woolNeeded = 2;
+    private final int dyeNeeded = 1;
+    private final int woolDropAmount = 1;
+    public final int sheepAmount = 8;
+    private final int flowerRespawnTime = 500;
+    private final int minWoolRegrowTime = 50;
+    private final int maxWoolRegrowTime = 400;
+
     private Product[] armorPieces = new Product[] {Product.HELMET, Product.CHESTPLATE, Product.LEGGINGS, Product.BOOTS};
     private int armorID = 0;
 
@@ -78,7 +86,7 @@ public class Tailor extends DwarfClass {
         }
 
         cwe.setSheared(true);
-        entity.getWorld().dropItemNaturally(entity.getLocation(), Product.WOOL.getItem(getIntOption("wool-drop-amount")));
+        entity.getWorld().dropItemNaturally(entity.getLocation(), Product.WOOL.getItem(woolDropAmount));
         player.playSound(entity.getLocation(), Sound.SHEEP_SHEAR, 1.0f, 1.0f);
         dvz.getPM().getPlayer(player).addClassExp(1);
         dvz.getSM().changeLocalStatVal(player, StatType.TAILOR_SHEEP_SHEARED, 1);
@@ -91,7 +99,7 @@ public class Tailor extends DwarfClass {
                 ParticleEffect.SNOWBALL.display(0.6f, 0.6f, 0.6f, 0.0001f, 30, entity.getLocation().add(0, 0.5f, 0));
                 entity.getWorld().playSound(entity.getLocation(), Sound.DIG_WOOL, 1.0f, 0.0f);
             }
-        }.runTaskLater(dvz, CWUtil.random(getIntOption("wool-regrow-min"), getIntOption("wool-regrow-max"))));
+        }.runTaskLater(dvz, CWUtil.random(minWoolRegrowTime, maxWoolRegrowTime)));
         dvz.logTimings("Tailor.shear()", t);
     }
 
@@ -138,7 +146,7 @@ public class Tailor extends DwarfClass {
                     block.getWorld().playSound(block.getLocation(), Sound.DIG_GRASS, 1.0f, 1.3f);
                 }
             }
-        }.runTaskLater(dvz, getIntOption("flower-respawn-time"));
+        }.runTaskLater(dvz, flowerRespawnTime);
         dvz.logTimings("Tailor.blockBreak()", t);
     }
 
@@ -177,11 +185,8 @@ public class Tailor extends DwarfClass {
         Inventory inv = player.getInventory();
         Location dropLoc = event.getClickedBlock().getLocation().add(0.5f, 1f, 0.5f);
         int wool = 0;
-        int redDye = 0;
-        int yellowDye = 0;
-        int woolNeeded = getIntOption("wool-needed");
-        int dye1Needed = getIntOption("reddye-needed");
-        int dye2Needed = getIntOption("yellowdye-needed");
+        int whiteDye = 0;
+        int blueDye = 0;
         //Find all wool/dyes in inventory.
         for (int i = 0; i < inv.getSize(); i++) {
             ItemStack item = inv.getItem(i);
@@ -192,16 +197,16 @@ public class Tailor extends DwarfClass {
             if (item.getType() == Product.WOOL.getItem().getType()) {
                 wool += item.getAmount();
             } else if (item.getType() == Product.DYE_1.getItem().getType() && item.getData().getData() == Product.DYE_1.getItem().getData().getData()) {
-                redDye += item.getAmount();
+                whiteDye += item.getAmount();
             } else if (item.getType() == Product.DYE_2.getItem().getType() && item.getData().getData() == Product.DYE_2.getItem().getData().getData()) {
-                yellowDye += item.getAmount();
+                blueDye += item.getAmount();
             }
 
             //if enough wool/dyes then craft.
-            if (wool >= woolNeeded && redDye >= dye1Needed && yellowDye >= dye2Needed) {
-                CWUtil.removeItems(inv, Product.WOOL.getItem(), woolNeeded, true);
-                CWUtil.removeItems(inv, Product.DYE_1.getItem(), dye1Needed, true, true);
-                CWUtil.removeItems(inv, Product.DYE_2.getItem(), dye2Needed, true, true);
+            if (wool >= woolNeeded && whiteDye >= dyeNeeded && blueDye >= dyeNeeded) {
+                CWUtil.removeItems(inv, Product.WOOL.getItem(), woolNeeded, false);
+                CWUtil.removeItems(inv, Product.DYE_1.getItem(), dyeNeeded, false, true);
+                CWUtil.removeItems(inv, Product.DYE_2.getItem(), dyeNeeded, false, true);
 
                 dropLoc.getWorld().dropItem(dropLoc, armorPieces[armorID].getItem().setLeatherColor(CWUtil.getRandomColor()));
                 armorID++;
@@ -224,10 +229,10 @@ public class Tailor extends DwarfClass {
         }
         if (wool < woolNeeded) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (woolNeeded - wool) + " more WOOL to craftl! &4&l<<"));
-        } else if (redDye < dye1Needed) {
-            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (dye1Needed - redDye) + " more WHITE DYE to craftl! &4&l<<"));
-        } else if(yellowDye < dye2Needed) {
-            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (dye2Needed - yellowDye) + " more BLUE DYE to craftl! &4&l<<"));
+        } else if (whiteDye < dyeNeeded) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (dyeNeeded - whiteDye) + " more WHITE DYE to craftl! &4&l<<"));
+        } else if(blueDye < dyeNeeded) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (dyeNeeded - blueDye) + " more BLUE DYE to craftl! &4&l<<"));
         }
         dvz.logTimings("Tailor.interact()", t);
     }

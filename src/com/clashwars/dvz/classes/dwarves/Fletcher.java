@@ -32,6 +32,19 @@ import java.util.List;
 
 public class Fletcher extends DwarfClass {
 
+    private final int feathersNeeded = 2;
+    private final int flintNeeded = 1;
+    private final int sticksNeeded = 1;
+    public final int chickenAmount = 6;
+    private final int sticksPerLog = 2;
+    private final float flintChance = 0.5f;
+    private final float bowChance = 0.4f;
+    private final int minArrowAmount = 16;
+    private final int maxArrowAmount = 48;
+    private final int woodRespawnTime = 600;
+    public final int maxChickenRespawnTime = 200;
+    public final int minChickenRespawnTime = 60;
+
     public Fletcher() {
         super();
         dvzClass = DvzClass.FLETCHER;
@@ -134,7 +147,7 @@ public class Fletcher extends DwarfClass {
         Location loc = entity.getLocation();
         CWItem feathers = Product.FEATHER.getItem();
         feathers.setAmount(1);
-        if (loc.getBlockY() > ws.getCuboid().getMinY() + getIntOption("chicken-bonus-height")) {
+        if (loc.getBlockY() > ws.getCuboid().getMinY() + 5) {
             feathers.setAmount(2);
             ParticleEffect.VILLAGER_HAPPY.display(0.5f, 0.5f, 0.5f, 0.0001f, 8, entity.getLocation(), 500);
             cwp.addClassExp(2);
@@ -146,7 +159,7 @@ public class Fletcher extends DwarfClass {
             cwp.addClassExp(1);
         }
         entity.getWorld().dropItem(entity.getLocation(), feathers);
-        ws.spawnChicken(EntityType.CHICKEN, CWUtil.random(ws.getCuboid().getMaxY() + 5, ws.getCuboid().getMaxY() + 15));
+        ws.spawnChicken(EntityType.CHICKEN, CWUtil.random(ws.getCuboid().getMaxY() + 6, ws.getCuboid().getMaxY() + 10));
         dvz.logTimings("Fletcher.mobKill()", t);
     }
 
@@ -187,9 +200,6 @@ public class Fletcher extends DwarfClass {
         int flint = 0;
         int feathers = 0;
         int sticks = 0;
-        int flintNeeded = getIntOption("flint-needed");
-        int feathersNeeded = getIntOption("feathers-needed");
-        int sticksNeeded = getIntOption("sticks-needed");
         //Find all feathers/flint/sticks in inventory.
         for (int i = 0; i < inv.getSize(); i++) {
             ItemStack item = inv.getItem(i);
@@ -206,17 +216,17 @@ public class Fletcher extends DwarfClass {
             }
             //if enough feathers, flint and sticks then craft.
             if (feathers >= feathersNeeded && flint >= flintNeeded && sticks >= sticksNeeded) {
-                CWUtil.removeItems(inv, Product.FLINT.getItem(), flintNeeded, true);
-                CWUtil.removeItems(inv, Product.FEATHER.getItem(), feathersNeeded, true);
-                CWUtil.removeItems(inv, Product.FLETCHER_STICK.getItem(), sticksNeeded, true);
+                CWUtil.removeItems(inv, Product.FLINT.getItem(), flintNeeded, false);
+                CWUtil.removeItems(inv, Product.FEATHER.getItem(), feathersNeeded, false);
+                CWUtil.removeItems(inv, Product.FLETCHER_STICK.getItem(), sticksNeeded, false);
                 //Random chance to get a bow.
-                if (CWUtil.randomFloat() <= getDoubleOption("bow-product-chance")) {
+                if (CWUtil.randomFloat() <= bowChance) {
                     dropLoc.getWorld().dropItem(dropLoc, Product.BOW.getItem());
                     dvz.getSM().changeLocalStatVal(player, StatType.FLETCHER_BOWS_CRAFTED, 1);
                 }
                 //Random amount of arrows.
                 CWItem arrows = Product.ARROW.getItem();
-                arrows.setAmount(CWUtil.random(getIntOption("min-arrow-amount"), getIntOption("max-arrow-amount")));
+                arrows.setAmount(CWUtil.random(minArrowAmount, maxArrowAmount));
                 dropLoc.getWorld().dropItem(dropLoc, arrows);
                 ParticleEffect.SPELL_WITCH.display(0.2f, 0.2f, 0.2f, 0.0001f, 20, event.getClickedBlock().getLocation().add(0.5f, 0.5f, 0.5f), 500);
 
@@ -254,7 +264,7 @@ public class Fletcher extends DwarfClass {
                 return;
             }
 
-            CWUtil.dropItemStack(block.getLocation(), Product.FLETCHER_STICK.getItem(), dvz, player);
+            CWUtil.dropItemStack(block.getLocation(), Product.FLETCHER_STICK.getItem(sticksPerLog), dvz, player);
             dvz.getPM().getPlayer(player).addClassExp(1);
             dvz.getSM().changeLocalStatVal(player, StatType.MINER_WOOD_CHOPPED, 1);
 
@@ -271,7 +281,7 @@ public class Fletcher extends DwarfClass {
                     }
                 }
 
-            }.runTaskLater(dvz, getIntOption("wood-respawn-time"));
+            }.runTaskLater(dvz, woodRespawnTime);
             dvz.logTimings("Fletcher.blockBreak()[wood]", t);
         }
 
@@ -287,7 +297,7 @@ public class Fletcher extends DwarfClass {
         //Give flint with random chance for breaking gravel.
         dvz.getSM().changeLocalStatVal(event.getPlayer(), StatType.FLETCHER_GRAVEL_DUG, 1);
         event.setCancelled(false);
-        if (CWUtil.randomFloat() <= getDoubleOption("flint-chance")) {
+        if (CWUtil.randomFloat() <= flintChance) {
             dvz.getSM().changeLocalStatVal(event.getPlayer(), StatType.FLETCHER_FLINT_COLLECTED, 1);
             dvz.getPM().getPlayer(player).addClassExp(1);
             block.getWorld().dropItemNaturally(block.getLocation().add(0.5f, 0.5f, 0.5f), Product.FLINT.getItem());

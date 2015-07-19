@@ -31,6 +31,15 @@ import java.util.List;
 
 public class Miner extends DwarfClass {
 
+    private final int oresNeeded = 2;
+    private final int sticksNeeded = 1;
+    private final int stoneDrops = 5;
+    private final int oreDrops = 1;
+    private final int minRespawnTime = 750;
+    private final int maxRespawnTime = 2000;
+    private final int woodRespawnTime = 600;
+    private final int sticksPerLog = 2;
+
     private List<Material> mineableMaterials = new ArrayList<Material>(Arrays.asList(new Material[] {Material.STONE, Material.DIAMOND_ORE, Material.IRON_ORE, Material.GOLD_ORE}));
 
     public Miner() {
@@ -56,7 +65,7 @@ public class Miner extends DwarfClass {
                 return;
             }
 
-            CWUtil.dropItemStack(block.getLocation(), Product.MINER_STICK.getItem(), dvz, player);
+            CWUtil.dropItemStack(block.getLocation(), Product.MINER_STICK.getItem(sticksPerLog), dvz, player);
             dvz.getPM().getPlayer(player).addClassExp(1);
             dvz.getSM().changeLocalStatVal(player, StatType.MINER_WOOD_CHOPPED, 1);
 
@@ -73,7 +82,7 @@ public class Miner extends DwarfClass {
                     }
                 }
 
-            }.runTaskLater(dvz, getIntOption("wood-respawn-time"));
+            }.runTaskLater(dvz, woodRespawnTime);
             dvz.logTimings("Miner.blockBreak()[wood]", t);
         }
 
@@ -109,22 +118,22 @@ public class Miner extends DwarfClass {
         //Particle effect for breaking blocks and drop ores/stone.
         final Material mat = block.getType();
         if (mat == Material.STONE) {
-            CWUtil.dropItemStack(block.getLocation(), Product.STONE_BRICK.getItem(getIntOption("stone-drops")), dvz, player);
+            CWUtil.dropItemStack(block.getLocation(), Product.STONE_BRICK.getItem(stoneDrops), dvz, player);
             ParticleEffect.SMOKE_NORMAL.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, block.getLocation().add(0.5f, 0.5f, 0.5f));
             dvz.getSM().changeLocalStatVal(player, StatType.MINER_STONE_MINED, 1);
         } else if (mat == Material.DIAMOND_ORE) {
             dvz.getPM().getPlayer(player).addClassExp(10);
-            CWUtil.dropItemStack(block.getLocation(), Product.DIAMOND_ORE.getItem(getIntOption("ore-drops")), dvz, player);
+            CWUtil.dropItemStack(block.getLocation(), Product.DIAMOND_ORE.getItem(oreDrops), dvz, player);
             ParticleEffect.CRIT_MAGIC.display(0.5f, 0.5f, 0.5f, 0.0001f, 20, block.getLocation().add(0.5f,0.5f,0.5f));
             dvz.getSM().changeLocalStatVal(player, StatType.MINER_DIAMONDS_MINED, 1);
         } else if (mat == Material.GOLD_ORE) {
             dvz.getPM().getPlayer(player).addClassExp(10);
-            CWUtil.dropItemStack(block.getLocation(), Product.GOLD_ORE.getItem(getIntOption("ore-drops")), dvz, player);
+            CWUtil.dropItemStack(block.getLocation(), Product.GOLD_ORE.getItem(oreDrops), dvz, player);
             ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 15, block.getLocation().add(0.5f,0.5f,0.5f));
             dvz.getSM().changeLocalStatVal(player, StatType.MINER_GOLD_MINED, 1);
         } else if (mat == Material.IRON_ORE) {
             dvz.getPM().getPlayer(player).addClassExp(10);
-            CWUtil.dropItemStack(block.getLocation(), Product.IRON_ORE.getItem(getIntOption("ore-drops")), dvz, player);
+            CWUtil.dropItemStack(block.getLocation(), Product.IRON_ORE.getItem(oreDrops), dvz, player);
             ParticleEffect.CRIT.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, block.getLocation().add(0.5f,0.5f,0.5f));
             dvz.getSM().changeLocalStatVal(player, StatType.MINER_IRON_MINED, 1);
         }
@@ -176,7 +185,7 @@ public class Miner extends DwarfClass {
                 }
                 dvz.logTimings("Miner.blockBreakRunnable()", t);
             }
-        }.runTaskLater(dvz, CWUtil.random(CWUtil.getInt("min-respawn-time"), getIntOption("max-respawn-time"))));
+        }.runTaskLater(dvz, CWUtil.random(minRespawnTime, maxRespawnTime)));
         dvz.logTimings("Miner.blockBreak()", t);
     }
 
@@ -218,7 +227,6 @@ public class Miner extends DwarfClass {
         int gold = 0;
         int diamond = 0;
         int sticks = 0;
-        int sticksNeeded = getIntOption("sticks-needed");
         boolean craft = false;
         for (int i = 0; i < inv.getSize(); i++) {
             ItemStack item = inv.getItem(i);
@@ -237,19 +245,19 @@ public class Miner extends DwarfClass {
             }
 
             if (sticks >= sticksNeeded) {
-                if (iron >= 3) {
-                    CWUtil.removeItems(inv, Product.MINER_STICK.getItem(), sticksNeeded, true);
-                    CWUtil.removeItems(inv, Product.IRON_INGOT.getItem(), 3, true);
+                if (iron >= oresNeeded) {
+                    CWUtil.removeItems(inv, Product.MINER_STICK.getItem(), sticksNeeded, false);
+                    CWUtil.removeItems(inv, Product.IRON_INGOT.getItem(), oresNeeded, false);
                     CWUtil.dropItemStack(dropLoc, Product.GREATSWORD.getItem(), dvz, player);
                     craft = true;
-                } else if (gold >= 3) {
-                    CWUtil.removeItems(inv, Product.MINER_STICK.getItem(), sticksNeeded, true);
-                    CWUtil.removeItems(inv, Product.GOLD_INGOT.getItem(), 3, true);
+                } else if (gold >= oresNeeded) {
+                    CWUtil.removeItems(inv, Product.MINER_STICK.getItem(), sticksNeeded, false);
+                    CWUtil.removeItems(inv, Product.GOLD_INGOT.getItem(), oresNeeded, false);
                     CWUtil.dropItemStack(dropLoc, Product.FIERY_FLAIL.getItem(), dvz, player);
                     craft = true;
-                } else if (diamond >= 3) {
-                    CWUtil.removeItems(inv, Product.MINER_STICK.getItem(), sticksNeeded, true);
-                    CWUtil.removeItems(inv, Product.DIAMOND.getItem(), 3, true);
+                } else if (diamond >= oresNeeded) {
+                    CWUtil.removeItems(inv, Product.MINER_STICK.getItem(), sticksNeeded, false);
+                    CWUtil.removeItems(inv, Product.DIAMOND.getItem(), oresNeeded, false);
                     CWUtil.dropItemStack(dropLoc, Product.BATTLEAXE.getItem(), dvz, player);
                     craft = true;
                 }
@@ -274,7 +282,7 @@ public class Miner extends DwarfClass {
             if (sticks < sticksNeeded) {
                 CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need " + (sticksNeeded - sticks) + " more STICKS to craft weapons! &4&l<<"));
             } else {
-                CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need at least 3 iron, gold or diamond to craft! &4&l<<"));
+                CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cYou need at least " + oresNeeded + " iron, gold or diamond to craft! &4&l<<"));
             }
         }
         dvz.logTimings("Miner.interact()", t);

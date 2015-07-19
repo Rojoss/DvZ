@@ -5,6 +5,7 @@ import com.clashwars.cwcore.helpers.CWEntity;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.classes.dwarves.Fletcher;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -40,7 +41,7 @@ public class FletcherWorkshop extends WorkShop {
                 chickens.add(entity);
                 ParticleEffect.FLAME.display(0.5f, 0.5f, 0.5f, 0.0001f, 10, entity.entity().getLocation(), 500);
             }
-        }.runTaskLater(dvz, CWUtil.random(DvzClass.FLETCHER.getClassClass().getIntOption("animal-respawn-time-min"), DvzClass.FLETCHER.getClassClass().getIntOption("animal-respawn-time-max"))));
+        }.runTaskLater(dvz, CWUtil.random(((Fletcher)DvzClass.FLETCHER.getClassClass()).minChickenRespawnTime, ((Fletcher)DvzClass.FLETCHER.getClassClass()).maxChickenRespawnTime)));
     }
 
     public List<CWEntity> getChickens() {
@@ -52,7 +53,7 @@ public class FletcherWorkshop extends WorkShop {
     public void onBuild() {
         Long t = System.currentTimeMillis();
         //Spawn chickens
-        int chickenCount = DvzClass.FLETCHER.getClassClass().getIntOption("chicken-amount");
+        int chickenCount = ((Fletcher)DvzClass.FLETCHER.getClassClass()).chickenAmount;
         for (int i = 0; i < chickenCount; i++) {
             spawnChicken(EntityType.CHICKEN, CWUtil.random(cuboid.getMaxY() + 0, cuboid.getMaxY() + 10));
         }

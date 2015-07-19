@@ -97,7 +97,7 @@ public class BakerWorkshop extends WorkShop {
                     if (block.getData() == 7) {
                         continue;
                     }
-                    if (CWUtil.randomFloat() <= 0.2f) {
+                    if (CWUtil.randomFloat() <= 0.16f) {
                         block.setData((byte) (block.getData() + 1));
                         ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(block.getType(), block.getData()), 0.5f, 0.5f, 0.5f, 0.01f, 8, block.getLocation().add(0.5f, 0.5f, 0.5f));
                         block.getWorld().playSound(block.getLocation(), Sound.DIG_GRASS, 0.1f, 2.0f);
@@ -106,7 +106,7 @@ public class BakerWorkshop extends WorkShop {
             }
         }.runTaskTimer(dvz, 10, 10));
 
-        millSpeed = (float)CWUtil.random(3,8) / 100;
+        millSpeed = (float)CWUtil.random(2,6) / 100;
 
         //Mill rotation
         runnables.add(new BukkitRunnable() {

@@ -38,6 +38,12 @@ import java.util.List;
 
 public class Alchemist extends DwarfClass {
 
+    private int melonsNeeeded = 4;
+    private int sugarNeeded = 4;
+    private int sugarcaneRespawnTime = 200;
+    private int melonRespawnTime = 500;
+    public int cauldronRefillDelay = 1;
+
     public Alchemist() {
         super();
         dvzClass = DvzClass.ALCHEMIST;
@@ -67,7 +73,7 @@ public class Alchemist extends DwarfClass {
         }
 
         if (((AlchemistWorkshop)ws).getPot().contains(player)) {
-            player.setVelocity(player.getVelocity().setY(1.3f));
+            player.setVelocity(player.getVelocity().setY(1.4f));
         }
         dvz.logTimings("Alchemist.onSneak()", t);
     }
@@ -223,7 +229,7 @@ public class Alchemist extends DwarfClass {
                     }
                 }
 
-            }.runTaskLater(dvz, getIntOption("melon-respawn-time"));
+            }.runTaskLater(dvz, melonRespawnTime);
             dvz.logTimings("Alchemist.blockBreak()[melon]", t);
         } else if (block.getType() == Material.SUGAR_CANE_BLOCK) {
             event.setCancelled(true);
@@ -267,7 +273,7 @@ public class Alchemist extends DwarfClass {
                     }
                     cancel();
                 }
-            }.runTaskTimer(dvz, getIntOption("sugarcane-respawn-time"), getIntOption("sugarcane-respawn-time"));
+            }.runTaskTimer(dvz, sugarcaneRespawnTime, sugarcaneRespawnTime);
             dvz.logTimings("Alchemist.blockBreak()[sugarcane]", t);
         }
     }
@@ -321,12 +327,18 @@ public class Alchemist extends DwarfClass {
                             player.playSound(item.getLocation(), Sound.SPLASH2, 0.8f, 1.0f);
                             ParticleEffect.SPELL_WITCH.display(0.2f, 0.4f, 0.2f, 0.0001f, 10, item.getLocation());
 
-                            item.remove();
+                            int itemsNeeded = melonsNeeeded - ws.melons;
                             ws.melons += itemStack.getAmount();
-                            if (ws.melons >= getIntOption("melons-needed")) {
+                            if (ws.melons <= melonsNeeeded || itemStack.getAmount() <= itemsNeeded) {
+                                item.remove();
+                            } else {
+                                itemStack.setAmount(itemStack.getAmount() - itemsNeeded);
+                                item.setItemStack(itemStack);
+                            }
+                            if (ws.melons >= melonsNeeeded) {
                                 brew(ws);
                             } else {
-                                CWUtil.sendActionBar(player, CWUtil.integrateColor("&5&l>> &dMelons added! &8(" + ws.melons + "&7/" + getIntOption("melons-needed") + "&8) &5&l<<"));
+                                CWUtil.sendActionBar(player, CWUtil.integrateColor("&5&l>> &dMelons added! &8(" + ws.melons + "&7/" + melonsNeeeded + "&8) &5&l<<"));
                             }
                         }
                     } else if (itemStack.getType() == Material.SUGAR) {
@@ -338,12 +350,18 @@ public class Alchemist extends DwarfClass {
                             player.playSound(item.getLocation(), Sound.SPLASH2, 0.8f, 1.0f);
                             ParticleEffect.SPELL_WITCH.display(0.2f, 0.4f, 0.2f, 0.0001f, 10, item.getLocation());
 
-                            item.remove();
+                            int itemsNeeded = sugarNeeded - ws.sugar;
                             ws.sugar += itemStack.getAmount();
-                            if (ws.sugar >= getIntOption("sugar-needed")) {
+                            if (ws.sugar <= sugarNeeded || itemStack.getAmount() <= itemsNeeded) {
+                                item.remove();
+                            } else {
+                                itemStack.setAmount(itemStack.getAmount() - itemsNeeded);
+                                item.setItemStack(itemStack);
+                            }
+                            if (ws.sugar >= sugarNeeded) {
                                 brew(ws);
                             } else {
-                                CWUtil.sendActionBar(player, CWUtil.integrateColor("&5&l>> &dSugar added! &8(" + ws.sugar + "&7/" + getIntOption("sugar-needed") + "&8) &5&l<<"));
+                                CWUtil.sendActionBar(player, CWUtil.integrateColor("&5&l>> &dSugar added! &8(" + ws.sugar + "&7/" + sugarNeeded + "&8) &5&l<<"));
                             }
                         }
                     } else {

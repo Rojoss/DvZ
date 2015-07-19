@@ -62,7 +62,7 @@ public class BuildingBrick extends BaseAbility {
             dvz.logTimings("BuildingBrick.castAbility()[near shrine]", t);
             return;
         }
-        if (dvz.getMM().getActiveMap().getLocation("monster").distance(blocks.get(0).getLocation()) < 50f) {
+        if (dvz.getMM().getActiveMap().getLocation("monster").toVector().distance(blocks.get(0).getLocation().toVector()) < 50f) {
             CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cCan't build this close to the monster spawn! &4&l<<"));
             dvz.logTimings("BuildingBrick.castAbility()[near monster spawn]", t);
             return;
@@ -89,11 +89,7 @@ public class BuildingBrick extends BaseAbility {
                 block.getWorld().playSound(block.getLocation(), Sound.DIG_STONE, 0.8f, 1f);
                 player.updateInventory();
 
-                if (CWUtil.randomFloat() < 0.02f) {
-                    dvz.getPM().getPlayer(player).addClassExp(2);
-                } else {
-                    dvz.getPM().getPlayer(player).addClassExp(1);
-                }
+                dvz.getPM().getPlayer(player).addClassExp(3);
                 dvz.getSM().changeLocalStatVal(player, StatType.BUILDER_BRICK_USED, 1);
                 dvz.logTimings("BuildingBrick.castAbility()[place]", t);
                 return;

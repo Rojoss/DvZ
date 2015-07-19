@@ -5,6 +5,7 @@ import com.clashwars.cwcore.helpers.CWEntity;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.classes.DvzClass;
+import com.clashwars.dvz.classes.dwarves.Tailor;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -31,7 +32,7 @@ public class TailorWorkshop extends WorkShop {
     public void onBuild() {
         Long t = System.currentTimeMillis();
         //Spawn sheep
-        int sheepCount = DvzClass.TAILOR.getClassClass().getIntOption("sheep-amount");
+        int sheepCount = ((Tailor)DvzClass.TAILOR.getClassClass()).sheepAmount;
         for (int i = 0; i < sheepCount; i++) {
             int y = getOrigin().getBlockY();
             Cuboid inside = cuboid.clone();

@@ -52,7 +52,7 @@ public class BuildingBlock extends BaseAbility {
             dvz.logTimings("BuildingBlock.castAbility()[near shrine]", t);
             return;
         }
-        if (dvz.getMM().getActiveMap().getLocation("monster").distance(event.getBlock().getLocation()) < 50f) {
+        if (dvz.getMM().getActiveMap().getLocation("monster").toVector().distance(event.getBlock().getLocation().toVector()) < 50f) {
             dvz.logTimings("BuildingBlock.castAbility()[near monster spawn]", t);
             return;
         }
@@ -95,11 +95,7 @@ public class BuildingBlock extends BaseAbility {
         }
         if (placed) {
             dvz.getSM().changeLocalStatVal(player, StatType.BUILDER_BLOCK_USED, 1);
-            if (CWUtil.randomFloat() < 0.02f) {
-                dvz.getPM().getPlayer(player).addClassExp(2);
-            } else {
-                dvz.getPM().getPlayer(player).addClassExp(1);
-            }
+            dvz.getPM().getPlayer(player).addClassExp(3);
         }
         dvz.logTimings("BuildingBlock.castAbility()", t);
     }

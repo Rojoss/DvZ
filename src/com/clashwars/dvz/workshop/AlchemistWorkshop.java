@@ -4,6 +4,7 @@ import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.effect.effects.BoilEffect;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.dvz.classes.dwarves.Alchemist;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -86,7 +87,7 @@ public class AlchemistWorkshop extends WorkShop {
                 }
 
                 //Check if waited long enough as we don't wanna refill cauldrons every second.
-                if (iterations < getType().getClassClass().getIntOption("cauldron-refill-delay")) {
+                if (iterations < ((Alchemist)getType().getClassClass()).cauldronRefillDelay) {
                     return;
                 }
                 iterations = 0;

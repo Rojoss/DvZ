@@ -25,6 +25,8 @@ import org.bukkit.metadata.FixedMetadataValue;
 
 public class Baker extends DwarfClass {
 
+    private final int wheatPerFlour = 1;
+
     public Baker() {
         super();
         dvzClass = DvzClass.BAKER;
@@ -172,8 +174,8 @@ public class Baker extends DwarfClass {
             }
         }
 
-        int flourCount = (int)Math.floor(wheatCount / getIntOption("wheat-per-flour"));
-        int wheatToRemove = flourCount * getIntOption("wheat-per-flour");
+        int flourCount = (int)Math.floor(wheatCount / wheatPerFlour);
+        int wheatToRemove = flourCount * wheatPerFlour;
         if (wheatToRemove >= event.getItem().getItemStack().getAmount()) {
             wheatToRemove -= event.getItem().getItemStack().getAmount();
             event.getItem().getItemStack().setAmount(0);

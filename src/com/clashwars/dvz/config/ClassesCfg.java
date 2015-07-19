@@ -58,53 +58,11 @@ public class ClassesCfg extends EasyConfig {
 
         switch (c) {
             case MINER:
-                classData = loadDefault(classData, "workshop-types", "1");
-                classData = loadDefault(classData, "stone-drops", "2");
-                classData = loadDefault(classData, "ore-drops", "1");
-                classData = loadDefault(classData, "min-respawn-time", "200");
-                classData = loadDefault(classData, "max-respawn-time", "800");
-                classData = loadDefault(classData, "wood-respawn-time", "600");
-                classData = loadDefault(classData, "sticks-needed", "1");
-                break;
             case FLETCHER:
-                classData = loadDefault(classData, "workshop-types", "1");
-                classData = loadDefault(classData, "pig-drop-amount", "1");
-                classData = loadDefault(classData, "chicken-bonus-height", "5");
-                classData = loadDefault(classData, "flint-needed", "8");
-                classData = loadDefault(classData, "feathers-needed", "8");
-                classData = loadDefault(classData, "bow-product-chance", "0.33");
-                classData = loadDefault(classData, "min-arrow-amount", "16");
-                classData = loadDefault(classData, "max-arrow-amount", "64");
-                classData = loadDefault(classData, "flint-chance", "0.25");
-                classData = loadDefault(classData, "animal-respawn-time-min", "100");
-                classData = loadDefault(classData, "animal-respawn-time-max", "300");
-                classData = loadDefault(classData, "chicken-amount", "4");
-                classData = loadDefault(classData, "pig-amount", "2");
-                classData = loadDefault(classData, "wood-respawn-time", "600");
-                classData = loadDefault(classData, "sticks-needed", "1");
-                break;
             case TAILOR:
-                classData = loadDefault(classData, "workshop-types", "1");
-                classData = loadDefault(classData, "sheep-amount", "8");
-                classData = loadDefault(classData, "wool-drop-amount", "1");
-                classData = loadDefault(classData, "wool-regrow-min", "100");
-                classData = loadDefault(classData, "wool-regrow-max", "600");
-                classData = loadDefault(classData, "flower-respawn-time", "600");
-                classData = loadDefault(classData, "wool-needed", "8");
-                classData = loadDefault(classData, "reddye-needed", "1");
-                classData = loadDefault(classData, "yellowdye-needed", "1");
-                break;
             case ALCHEMIST:
-                classData = loadDefault(classData, "workshop-types", "1");
-                classData = loadDefault(classData, "cauldron-refill-delay", "4");
-                classData = loadDefault(classData, "melons-needed", "5");
-                classData = loadDefault(classData, "sugar-needed", "5");
-                classData = loadDefault(classData, "melon-respawn-time", "600");
-                classData = loadDefault(classData, "sugarcane-respawn-time", "200");
-                break;
             case BAKER:
                 classData = loadDefault(classData, "workshop-types", "1");
-                classData = loadDefault(classData, "wheat-per-flour", "5");
                 break;
         }
 
