@@ -111,8 +111,6 @@ public abstract class WorkShop {
             //Remove all entities in the cuboid if there are any.
             //For example if the server crashes the onDestroy() isn't called and the tailor workshop would still have the sheep.
             //This will just make sure that there wont be any entities in the workshop. (except players)
-            Debug.bc(cuboid.getCenterLoc());
-            Debug.bc(cuboid.getCenterLoc().getWorld());
             List<Entity> entities = CWUtil.getNearbyEntities(cuboid.getCenterLoc(), cuboid.getWidth() + 5, null);
             if (entities != null) {
                 for (Entity e : entities) {
