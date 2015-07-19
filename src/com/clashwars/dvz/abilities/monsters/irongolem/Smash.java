@@ -52,7 +52,7 @@ public class Smash extends BaseAbility {
             for (int y = loc.getBlockY() - radius; y < loc.getBlockY() + radius; y++) {
                 for (int z = loc.getBlockZ() - radius; z < loc.getBlockZ() + radius; z++) {
                     Block b = loc.getWorld().getBlockAt(x,y,z);
-                    if (undestroyableBlocks.contains(block.getType())) {
+                    if (undestroyableBlocks.contains(b.getType())) {
                         continue;
                     }
                     double distance = b.getLocation().distance(loc);

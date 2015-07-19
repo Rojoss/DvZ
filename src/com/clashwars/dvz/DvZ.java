@@ -130,7 +130,7 @@ public class DvZ extends JavaPlugin {
             hologram.delete();
         }
 
-        Bukkit.getScheduler().cancelTasks(this);
+        Bukkit.getScheduler().cancelAllTasks();
 
         log("disabled");
         logTimings("Dvz.onDisable()", t);
