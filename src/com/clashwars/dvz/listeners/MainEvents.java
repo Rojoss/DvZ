@@ -1,6 +1,8 @@
 package com.clashwars.dvz.listeners;
 
 import com.clashwars.cwcore.events.PlayerLeaveEvent;
+import com.clashwars.cwcore.hat.Hat;
+import com.clashwars.cwcore.hat.HatManager;
 import com.clashwars.cwcore.mysql.MySQL;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;

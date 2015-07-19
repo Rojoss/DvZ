@@ -2,6 +2,8 @@ package com.clashwars.dvz.player;
 
 import com.clashwars.cwcore.CooldownManager;
 import com.clashwars.cwcore.ItemMenu;
+import com.clashwars.cwcore.hat.Hat;
+import com.clashwars.cwcore.hat.HatManager;
 import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.ExpUtil;
@@ -225,6 +227,12 @@ public class CWPlayer {
 
                 banner.giveToPlayer(player);
             }
+        }
+
+        //Equip hat
+        Hat hat = HatManager.getHat(player);
+        if (hat != null && !hat.isEquipped()) {
+            hat.equip();
         }
 
         if (eggUse) {

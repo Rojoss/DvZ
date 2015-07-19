@@ -8,6 +8,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.VIP.BannerData;
+import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.DyeColor;
@@ -39,7 +40,7 @@ public class VIPEvents implements Listener {
 
     private DvZ dvz;
 
-    public VIPEvents(DvZ dvz) {
+    public VIPEvents(final DvZ dvz) {
         this.dvz = dvz;
 
         new BukkitRunnable() {
@@ -49,6 +50,9 @@ public class VIPEvents implements Listener {
                 Collection<Player> players = (Collection<Player>)DvZ.inst().getServer().getOnlinePlayers();
                 for (Player player : players) {
                     if (player.getGameMode() == GameMode.SPECTATOR || player.getGameMode() == GameMode.CREATIVE) {
+                        continue;
+                    }
+                    if (dvz.getPM().getPlayer(player).getPlayerClass() == DvzClass.SILVERFISH) {
                         continue;
                     }
                     if (player.hasPermission("rank.admin")) {
@@ -239,6 +243,9 @@ public class VIPEvents implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
+                if (dvz.getPM().getPlayer(event.getPlayer()).getPlayerClass() == DvzClass.SILVERFISH) {
+                    return;
+                }
                 equipHat(event.getPlayer());
             }
         }.runTaskLater(dvz, 20);
@@ -248,6 +255,9 @@ public class VIPEvents implements Listener {
      private void onEnable(PluginEnableEvent event) {
         Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
         for (Player player : players) {
+            if (dvz.getPM().getPlayer(player).getPlayerClass() == DvzClass.SILVERFISH) {
+                return;
+            }
             equipHat(player);
         }
     }
