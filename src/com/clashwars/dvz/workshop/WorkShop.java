@@ -1,6 +1,7 @@
 package com.clashwars.dvz.workshop;
 
 import com.clashwars.cwcore.cuboid.Cuboid;
+import com.clashwars.cwcore.debug.Debug;
 import com.clashwars.cwcore.dependencies.CWWorldGuard;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
@@ -110,13 +111,17 @@ public abstract class WorkShop {
             //Remove all entities in the cuboid if there are any.
             //For example if the server crashes the onDestroy() isn't called and the tailor workshop would still have the sheep.
             //This will just make sure that there wont be any entities in the workshop. (except players)
+            Debug.bc(cuboid.getCenterLoc());
+            Debug.bc(cuboid.getCenterLoc().getWorld());
             List<Entity> entities = CWUtil.getNearbyEntities(cuboid.getCenterLoc(), cuboid.getWidth() + 5, null);
-            for (Entity e : entities) {
-                if (e instanceof Player) {
-                    continue;
-                }
-                if (cuboid.contains(e)) {
-                    e.remove();
+            if (entities != null) {
+                for (Entity e : entities) {
+                    if (e instanceof Player) {
+                        continue;
+                    }
+                    if (cuboid.contains(e)) {
+                        e.remove();
+                    }
                 }
             }
 
