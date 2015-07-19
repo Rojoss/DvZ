@@ -308,17 +308,6 @@ public class CWPlayer {
             return;
         }
 
-        //Team
-        if (dvz.getBoard().hasTeam(dvzClass.getTeam() + getTeamSuffix())) {
-            List<Team> teamList = dvz.getBoard().getTeamList();
-            for (Team team : teamList) {
-                if (team.hasPlayer(player)) {
-                    team.removePlayer(player);
-                }
-            }
-            dvz.getBoard().getTeam(dvzClass.getTeam() + getTeamSuffix()).addPlayer(player);
-        }
-
         //Disguise
         if (dvzClass.getType() == ClassType.MONSTER || dvzClass.getType() == ClassType.DRAGON) {
             Util.disguisePlayer(player.getName(), dvzClass.getClassClass().getStrOption("disguise"), dvzClass);
