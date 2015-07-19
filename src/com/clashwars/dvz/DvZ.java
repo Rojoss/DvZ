@@ -273,10 +273,10 @@ public class DvZ extends JavaPlugin {
 
     private void setupBoard() {
         cwb = CWBoard.get("dvz");
-        cwb.init(true);
+        cwb.register();
 
         String[] nameSuffix = new String[] {"", "_v", "_s"};
-        String[] colorFormat = new String[] {"", "&l&o", "&l"};
+        String[] colorFormat = new String[] {"", "&l&bVIP &l&o", "&l&dSTAFF &l"};
         for (int i = 0; i < nameSuffix.length; i++) {
             cwb.addTeam("builder" + nameSuffix[i], "&9" + colorFormat[i], "", "&e" + colorFormat[i] + "Builder", true, true, NameTagVisibility.ALWAYS);
             cwb.addTeam("miner" + nameSuffix[i], "&8" + colorFormat[i], "", "&8" + colorFormat[i] + "Miner", true, true, NameTagVisibility.ALWAYS);
@@ -288,7 +288,10 @@ public class DvZ extends JavaPlugin {
             cwb.addTeam("dragonslayer" + nameSuffix[i], "&d" + colorFormat[i], "", "&d" + colorFormat[i] + "Dragon-Slayer", true, true, NameTagVisibility.ALWAYS);
         }
 
-        cwb.show();
+        for (Player player : getServer().getOnlinePlayers()) {
+            cwb.addPlayer(player);
+        }
+        cwb.show(true);
     }
 
     @Override

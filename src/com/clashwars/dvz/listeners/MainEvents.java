@@ -1,5 +1,6 @@
 package com.clashwars.dvz.listeners;
 
+import com.clashwars.cwcore.events.PlayerLeaveEvent;
 import com.clashwars.cwcore.mysql.MySQL;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
@@ -40,17 +41,11 @@ public class MainEvents implements Listener {
 
 
     @EventHandler
-    private void playerQuit(PlayerQuitEvent event) {
+    private void playerLeave(PlayerLeaveEvent event) {
         //Save when quiting.
         dvz.getPM().getPlayer(event.getPlayer()).savePlayer();
         dvz.getGM().calculateMonsterPerc();
-    }
-
-    @EventHandler
-    private void playerKick(PlayerKickEvent event) {
-        //Save when being kicked.
-        dvz.getPM().getPlayer(event.getPlayer()).savePlayer();
-        dvz.getGM().calculateMonsterPerc();
+        dvz.getBoard().removePlayer(event.getPlayer());
     }
 
 
@@ -61,6 +56,7 @@ public class MainEvents implements Listener {
         final CWPlayer cwp = dvz.getPM().getPlayer(player);
         Location spawnLoc = dvz.getGM().getUsedWorld().getSpawnLocation();
 
+        dvz.getBoard().addPlayer(player);
         String titleStr = "&6Welcome to &6&lDvZ&6!";
         String subtitleStr = "";
         if (cwp.getPlayerClass() != null && !cwp.getPlayerClass().isBaseClass()) {

@@ -74,7 +74,7 @@ public class Alchemist extends DwarfClass {
 
     //Check for using buckets/bottles on cauldrons.
     @EventHandler(priority = EventPriority.HIGH)
-    private void onInteract(DelayedPlayerInteractEvent event) {
+    private void onInteract(PlayerInteractEvent event) {
         Long t = System.currentTimeMillis();
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
