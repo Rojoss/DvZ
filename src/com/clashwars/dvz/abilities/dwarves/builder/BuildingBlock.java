@@ -52,7 +52,7 @@ public class BuildingBlock extends BaseAbility {
             dvz.logTimings("BuildingBlock.castAbility()[near shrine]", t);
             return;
         }
-        if (dvz.getMM().getActiveMap().getLocation("monster").toVector().distance(event.getBlock().getLocation().toVector()) < 50f) {
+        if (dvz.getMM().getActiveMap().getLocation("monster").toVector().distance(event.getBlock().getLocation().toVector()) < 100f) {
             dvz.logTimings("BuildingBlock.castAbility()[near monster spawn]", t);
             return;
         }

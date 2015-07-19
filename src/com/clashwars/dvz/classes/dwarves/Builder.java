@@ -49,7 +49,7 @@ public class Builder extends DwarfClass {
         DvzMap activeMap = dvz.getMM().getActiveMap();
         if (activeMap != null && event.getBlock().getLocation().distance(activeMap.getLocation("monster")) < 100f) {
             CWUtil.sendActionBar(event.getPlayer(), CWUtil.integrateColor("&4&l>> &cCan't build this close to the monster spawn! &4&l<<"));
-                    event.setCancelled(true);
+            event.setCancelled(true);
             dvz.logTimings("Builder.blockPlace()[monster spawn]", t);
             return;
         }
