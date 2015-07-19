@@ -38,11 +38,11 @@ import java.util.List;
 
 public class Alchemist extends DwarfClass {
 
-    private int melonsNeeeded = 4;
-    private int sugarNeeded = 4;
-    private int sugarcaneRespawnTime = 200;
-    private int melonRespawnTime = 500;
-    public int cauldronRefillDelay = 1;
+    private final int melonsNeeeded = 4;
+    private final int sugarNeeded = 4;
+    private final int sugarcaneRespawnTime = 200;
+    private final int melonRespawnTime = 500;
+    public final int cauldronRefillDelay = 1;
 
     public Alchemist() {
         super();
