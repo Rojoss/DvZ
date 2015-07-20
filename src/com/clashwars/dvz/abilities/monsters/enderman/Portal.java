@@ -150,8 +150,12 @@ public class Portal extends BaseAbility {
         }
 
         if (portalOwner.getName().equals(player.getName())) {
-            portalOwner.sendMessage(Util.formatMsg("&cYou have been killed because you deactivated your portal!"));
-            destroyPortal(true);
+            if (player.isSneaking()) {
+                portalOwner.sendMessage(Util.formatMsg("&cYou have been killed because you deactivated your portal!"));
+                destroyPortal(true);
+            } else {
+                portalOwner.sendMessage(Util.formatMsg("&c&lSneak and click again to destroy your portal!"));
+            }
             return;
         }
 
@@ -171,39 +175,6 @@ public class Portal extends BaseAbility {
                     portalOwner.sendMessage(Util.formatMsg("&cYou have been killed because your portal has been deactivated!"));
                     destroyPortal(true);
                 }
-            }
-        }
-    }
-
-    @EventHandler
-    private void projectileHit(ProjectileHitEvent event) {
-        Projectile projectile = event.getEntity();
-
-        if(!(projectile.getShooter() instanceof Player)) {
-            return;
-        }
-        Player player = (Player)projectile.getShooter();
-        World world = projectile.getWorld();
-
-        BlockIterator iterator = new BlockIterator(world, projectile.getLocation().toVector(), projectile.getVelocity().normalize(), 0, 4);
-        Block hitBlock = null;
-        while(iterator.hasNext()) {
-            hitBlock = iterator.next();
-            if(hitBlock.getType() != Material.AIR) {
-                break;
-            }
-        }
-
-        if (hitBlock.getType() == Material.DRAGON_EGG) {
-            if (activePortal == null) {
-                return;
-            }
-            CWPlayer cwp = dvz.getPM().getPlayer(player);
-            if (cwp.isDwarf()) {
-                dvz.getSM().changeLocalStatVal(player, StatType.DWARF_PORTALS_DESTROYED, 1);
-                Util.broadcast("&cThe portal has been destroyed by &4" + player.getName());
-                activePortal.getOwner().sendMessage("&cYou have been killed because your portal was shot!");
-                destroyPortal(true);
             }
         }
     }
