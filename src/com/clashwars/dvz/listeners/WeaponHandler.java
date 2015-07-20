@@ -94,11 +94,11 @@ public class WeaponHandler implements Listener {
                 return;
             }
 
-            if (enchantLvl == 1 && CWUtil.randomFloat() > 0.1f) {
+            if (enchantLvl == 1 && CWUtil.randomFloat() > 0.07f) {
                 return;
-            } else if (enchantLvl == 2 && CWUtil.randomFloat() > 0.2f) {
+            } else if (enchantLvl == 2 && CWUtil.randomFloat() > 0.14f) {
                 return;
-            } else if (enchantLvl == 3 && CWUtil.randomFloat() > 0.3f) {
+            } else if (enchantLvl == 3 && CWUtil.randomFloat() > 0.21f) {
                 return;
             }
 
