@@ -296,8 +296,8 @@ public class LobbyEvents implements Listener {
         name = CWUtil.removeColour(name.toLowerCase());
 
         for (DvzClass dvzClass : DvzClass.values()) {
-            if (dvzClass.toString().toLowerCase().equalsIgnoreCase(name)) {
-                player.performCommand("dvz class " + name);
+            if (dvzClass.toString().toLowerCase().equalsIgnoreCase(name) || (name.equalsIgnoreCase("VillagerGolem") && dvzClass == DvzClass.IRON_GOLEM)) {
+                player.performCommand("dvz class " + dvzClass.toString().toLowerCase().replace("_",""));
                 dvz.logTimings("LobbyEvents.showNpcInformation()", t);
                 return true;
             }
