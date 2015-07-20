@@ -303,7 +303,7 @@ public class StorageStruc extends Structure {
 
         items.add(new StorageItem("&6Bread", 38, Product.BREAD.getItem(), DvzClass.BAKER, 32));
 
-        items.add(new StorageItem("&a&lExperience", 44, Product.XP.getItem(), DvzClass.BASE, 1900));
+        items.add(new StorageItem("&a&lExperience", 44, Product.XP.getItem(), DvzClass.BASE, 1500));
     }
 
 
