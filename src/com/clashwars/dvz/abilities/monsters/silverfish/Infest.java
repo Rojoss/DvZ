@@ -83,7 +83,7 @@ public class Infest extends BaseAbility {
         runnable.player.showPlayer(runnable.target);
 
         CWUtil.sendActionBar(runnable.player, CWUtil.integrateColor("&8&l>> &dYou came out of " + runnable.target.getName() + "'s body! &8&l<<"));
-        int spawnCount = Math.min(Math.round((System.currentTimeMillis() - runnable.startTime) / 1000), (int)dvz.getGM().getMonsterPower(5, 10));
+        int spawnCount = Math.min(Math.round((System.currentTimeMillis() - runnable.startTime) / 1000) * 2, (int)dvz.getGM().getMonsterPower(5, 30));
 
         for (int i = 0; i < spawnCount; i++) {
             Location loc = runnable.target.getLocation().add(RandomUtils.getRandomCircleVector().multiply(0.5f).setY(1));
