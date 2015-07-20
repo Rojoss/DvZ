@@ -64,6 +64,6 @@ public class FlailChainRunnable extends BukkitRunnable {
         }
 
         dir = dir.multiply(-1);
-        targetPlayer.setVelocity(targetPlayer.getVelocity().add(dir.multiply(0.2f)));
+        targetPlayer.setVelocity(targetPlayer.getVelocity().add(new Vector(dir.getX() * 0.2f, dir.getY() * 0.1f, dir.getZ() * 0.2f)));
     }
 }
