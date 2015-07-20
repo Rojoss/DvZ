@@ -7,10 +7,12 @@ import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
 import com.clashwars.dvz.classes.ClassType;
+import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.maps.DvzMap;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.util.Util;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -42,7 +44,11 @@ public class GameRunnable extends BukkitRunnable {
 
         //Dragonslayer effect
         if (gm.getDragonSlayer() != null) {
-            ParticleEffect.SPELL_WITCH.display(0.2f, 0.4f, 0.2f, 0.01f, 5, gm.getDragonSlayer().getLocation());
+            if (gm.getDragonSlayer().getGameMode() == GameMode.SURVIVAL) {
+                if (dvz.getPM().getPlayer(gm.getDragonSlayer()).getPlayerClass() != DvzClass.SILVERFISH) {
+                    ParticleEffect.SPELL_WITCH.display(0.2f, 0.4f, 0.2f, 0.01f, 5, gm.getDragonSlayer().getLocation());
+                }
+            }
         }
 
         //Saving
