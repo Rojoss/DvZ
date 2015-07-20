@@ -28,7 +28,3 @@ commands:
     description: View and manage settings.
     usage: /<command>
     aliases: [prefs]
-  damagelog:
-    description: View your damage log
-    usage: /<command>
-    aliases: [dmglog,dlog,damage,dmg]

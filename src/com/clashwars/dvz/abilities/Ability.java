@@ -22,9 +22,6 @@ import com.clashwars.dvz.abilities.dwarves.dragonslayer.Horn;
 import com.clashwars.dvz.abilities.monsters.Hammer;
 import com.clashwars.dvz.abilities.monsters.Suicide;
 import com.clashwars.dvz.abilities.monsters.TeleportPortal;
-import com.clashwars.dvz.abilities.monsters.irongolem.GroundPound;
-import com.clashwars.dvz.abilities.monsters.irongolem.Smash;
-import com.clashwars.dvz.abilities.monsters.irongolem.Toss;
 import com.clashwars.dvz.abilities.monsters.blaze.Blast;
 import com.clashwars.dvz.abilities.monsters.blaze.Fireball;
 import com.clashwars.dvz.abilities.monsters.blaze.Glide;
@@ -37,6 +34,9 @@ import com.clashwars.dvz.abilities.monsters.creeper.Explode;
 import com.clashwars.dvz.abilities.monsters.enderman.Blink;
 import com.clashwars.dvz.abilities.monsters.enderman.Pickup;
 import com.clashwars.dvz.abilities.monsters.enderman.Portal;
+import com.clashwars.dvz.abilities.monsters.irongolem.GroundPound;
+import com.clashwars.dvz.abilities.monsters.irongolem.Smash;
+import com.clashwars.dvz.abilities.monsters.irongolem.Toss;
 import com.clashwars.dvz.abilities.monsters.silverfish.InfectStone;
 import com.clashwars.dvz.abilities.monsters.silverfish.Infest;
 import com.clashwars.dvz.abilities.monsters.silverfish.Roar;
@@ -51,7 +51,8 @@ import com.clashwars.dvz.abilities.monsters.witchvillager.PotionBomb;
 import com.clashwars.dvz.abilities.monsters.zombie.Infect;
 import com.clashwars.dvz.abilities.monsters.zombie.Rush;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public enum Ability {
     BASE(new BaseAbility(), SwapType.NONE, ""),

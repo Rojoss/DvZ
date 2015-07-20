@@ -1,8 +1,5 @@
 package com.clashwars.dvz.player;
 
-import java.sql.Timestamp;
-import java.util.UUID;
-
 public class PlayerSettings {
 
     //If this is false the player won't receive tips anymore.

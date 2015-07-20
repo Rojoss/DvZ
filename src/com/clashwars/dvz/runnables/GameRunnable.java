@@ -2,6 +2,7 @@ package com.clashwars.dvz.runnables;
 
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.cwstats.stats.internal.StatType;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
@@ -9,17 +10,11 @@ import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.maps.DvzMap;
 import com.clashwars.dvz.maps.ShrineBlock;
 import com.clashwars.dvz.maps.ShrineType;
-import com.clashwars.dvz.player.CWPlayer;
-import com.clashwars.cwstats.stats.internal.StatType;
 import com.clashwars.dvz.util.Util;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

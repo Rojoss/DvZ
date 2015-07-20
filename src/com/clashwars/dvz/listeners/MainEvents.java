@@ -1,35 +1,47 @@
 package com.clashwars.dvz.listeners;
 
+import com.clashwars.cwcore.damage.BaseDmg;
+import com.clashwars.cwcore.damage.Iattacker;
+import com.clashwars.cwcore.damage.log.DamageLog;
+import com.clashwars.cwcore.damage.log.DamageLogEntry;
+import com.clashwars.dvz.damage.AbilityDmg;
+import com.clashwars.cwcore.damage.types.CustomDmg;
+import com.clashwars.cwcore.damage.types.MeleeDmg;
+import com.clashwars.cwcore.damage.types.RangedDmg;
+import com.clashwars.cwcore.events.CustomDamageEvent;
+import com.clashwars.cwcore.events.CustomDeathEvent;
 import com.clashwars.cwcore.events.PlayerLeaveEvent;
-import com.clashwars.cwcore.hat.Hat;
-import com.clashwars.cwcore.hat.HatManager;
-import com.clashwars.cwcore.mysql.MySQL;
+import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.Title;
 import com.clashwars.cwcore.utils.CWUtil;
-import com.clashwars.cwcore.utils.Enjin;
+import com.clashwars.cwstats.stats.internal.StatType;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
+import com.clashwars.dvz.abilities.monsters.enderman.Pickup;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.player.PlayerSettings;
 import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
 
 public class MainEvents implements Listener {
 
@@ -208,4 +220,220 @@ public class MainEvents implements Listener {
         }
         dvz.logTimings("MainEvents.respawn()", t);
     }
+
+
+    @EventHandler
+    private void customDmgTake(CustomDamageEvent event) {
+        Player player = event.getPlayer();
+        CWPlayer cwp = dvz.getPM().getPlayer(player);
+
+        if (cwp.isMonster()) {
+            dvz.getSM().changeLocalStatVal(player, StatType.COMBAT_MONSTER_DAMAGE_TAKEN, (float)event.getDamage());
+        } else if (cwp.isDwarf()) {
+            dvz.getSM().changeLocalStatVal(player, StatType.COMBAT_DWARF_DAMAGE_TAKEN, (float)event.getDamage());
+        }
+
+        BaseDmg dmg = event.getDmgClass();
+        OfflinePlayer damager = null;
+        if (dmg instanceof Iattacker) {
+            damager = ((Iattacker)dmg).getAttacker();
+        }
+
+        if (damager != null) {
+            if (cwp.isMonster()) {
+                dvz.getSM().changeLocalStatVal(damager.getUniqueId(), StatType.COMBAT_DWARF_DAMAGE_DEALT, (float) event.getDamage());
+            } else if (cwp.isDwarf()) {
+                dvz.getSM().changeLocalStatVal(damager.getUniqueId(), StatType.COMBAT_MONSTER_DAMAGE_DEALT, (float)event.getDamage());
+            } else if (dvz.getGM().getDragonPlayer() != null && dvz.getGM().getDragonPlayer().getName().equalsIgnoreCase(cwp.getName())) {
+                dvz.getSM().changeLocalStatVal(damager.getUniqueId(), StatType.COMBAT_DRAGON_DAMAGE, (float)event.getDamage());
+            }
+        }
+    }
+
+
+    @EventHandler
+    private void customDeath(CustomDeathEvent event) {
+        Player player = event.getPlayer();
+        CWPlayer cwp = dvz.getPM().getPlayer(player);
+        OfflinePlayer killer = event.getKiller();
+        CWPlayer cwk = dvz.getPM().getPlayer(killer);
+
+        if (cwp.isMonster()) {
+            broadcastDeathMessage(event.getDamageLog(), killer, ClassType.MONSTER, CWUtil.integrateColor("&4>> &7&o" + event.getDeathMessage() + " &4<<"));
+            dvz.getSM().changeLocalStatVal(player, StatType.COMBAT_MONSTER_DEATHS, 1);
+
+            if (killer != null) {
+                if (cwk.isDwarf()) {
+                    dvz.getSM().changeLocalStatVal(killer.getUniqueId(), StatType.COMBAT_MONSTER_KILLS, 1);
+                }
+            }
+
+            //Reset witch/villager data
+            //TODO: Move this to witch/villager class
+            if (cwp.getPlayerClass() != null && (cwp.getPlayerClass() == DvzClass.WITCH || cwp.getPlayerClass() == DvzClass.VILLAGER)) {
+                cwp.getPlayerData().setbombUsed(false);
+                cwp.getPlayerData().setBuffUsed(false);
+            }
+
+            //Enderman died. (Drop picked up player)
+            //TODO: Move this to enderman class
+            if (cwp.getPlayerClass() == DvzClass.ENDERMAN) {
+                if (Pickup.pickupRunnables.containsKey(cwp.getUUID())) {
+                    Pickup.pickupRunnables.get(cwp.getUUID()).died = true;
+                }
+            }
+        } else if (cwp.isDwarf()) {
+            broadcastDeathMessage(event.getDamageLog(), killer, ClassType.DWARF, CWUtil.integrateColor("&6>> &7&o" + event.getDeathMessage() + " &6<<"));
+            dvz.getSM().changeLocalStatVal(player, StatType.COMBAT_DWARF_DEATHS, 1);
+
+            if (killer != null && dvz.getGM().getDragonPlayer() != null && dvz.getGM().getDragonPlayer().getName().equals(killer.getName())) {
+                dvz.getSM().changeLocalStatVal(player, StatType.COMBAT_DEATHS_BY_DRAGON, 1);
+            }
+
+            if (killer != null) {
+                if (cwk.isMonster()) {
+                    dvz.getSM().changeLocalStatVal(killer.getUniqueId(), StatType.COMBAT_DWARF_KILLS, 1);
+                }
+            }
+
+            //Dragon slayer died
+            if (dvz.getGM().getDragonSlayer() != null && dvz.getGM().getDragonSlayer().getName().equalsIgnoreCase(player.getName())) {
+                dvz.getGM().resetDragonSlayer();
+                Util.broadcast("&d&lThe DragonSlayer died!");
+            }
+        } else if (cwp.getPlayerClass().getType() == ClassType.DRAGON) {
+            broadcastDeathMessage(event.getDamageLog(), killer, ClassType.DRAGON, CWUtil.integrateColor("&5>> &7&o" + event.getDeathMessage() + " &5<<"));
+
+            //First dragon death
+            if (dvz.getGM().getState() == GameState.DRAGON && dvz.getGM().getDragonPlayer() != null && dvz.getGM().getDragonPlayer().getName().equalsIgnoreCase(player.getName())) {
+                Util.broadcast("&7======= &a&lThe dragon has been killed! &7=======");
+                if (killer != null) {
+                    dvz.getSM().changeLocalStatVal(killer.getUniqueId(), StatType.COMBAT_DRAGON_KILLS, 1);
+                    Util.broadcast("&a- &3" + killer.getName() + " &7is the &bDragonSlayer&7!");
+                    if (killer.isOnline()) {
+                        dvz.getGM().setDragonSlayer((Player)killer);
+                    }
+                } else {
+                    Util.broadcast("&a- &7Couldn't find the killer so there is no DragonSlayer.");
+                }
+                dvz.getGM().releaseMonsters(false);
+            }
+        } else {
+            //PvP arena
+            broadcastDeathMessage(event.getDamageLog(), killer, ClassType.DWARF, CWUtil.integrateColor("&6>> &7&o" + event.getDeathMessage() + " &6<<"));
+
+            if (killer != null && killer.isOnline()) {
+                Player killerP = (Player)killer;
+                if (dvz.getPM().getPlayer(killerP).isPvping()) {
+                    new CWItem(PotionType.INSTANT_HEAL, true, 1).addPotionEffect(PotionEffectType.HEAL, 2, 1).giveToPlayer(killerP);
+                }
+            }
+        }
+
+
+        //Destroy shrines if not any dwarves left.
+        //TODO: Move this to GameManager
+        /*
+        final ShrineType[] shrineTypes = new ShrineType[] {ShrineType.WALL, ShrineType.KEEP_1, ShrineType.KEEP_2};
+        new BukkitRunnable() {
+            int index = 0;
+            @Override
+            public void run() {
+                List<CWPlayer> dwarvesLeft = cwc.getPM().getPlayers(ClassType.DWARF, true, false);
+                if (dwarvesLeft == null || dwarvesLeft.size() == 0) {
+                    Set<ShrineBlock> shrineBlocks = cwc.getGM().getShrineBlocks(shrineTypes[index]);
+                    for (ShrineBlock shrineBlock : shrineBlocks) {
+                        if (shrineBlock != null && shrineBlock.isDestroyed() == false) {
+                            cwc.getGM().getShrineBlock(shrineBlock.getLocation()).damage(500);
+                        }
+                    }
+
+                    index++;
+                    if (index >= 3) {
+                        cancel();
+                        return;
+                    }
+                } else {
+                    cancel();
+                    return;
+                }
+            }
+        }.runTaskTimer(cwc, 60, 60);
+        */
+    }
+
+    private void broadcastDeathMessage(DamageLog dmgLog, OfflinePlayer killer, ClassType classType, String deathMsg) {
+        if (dmgLog == null || dmgLog.logOwner == null) {
+            Util.broadcast(deathMsg);
+            return;
+        }
+
+        //Dragon messages for everyone
+        if (classType == ClassType.DRAGON) {
+            Util.broadcast(deathMsg);
+            return;
+        }
+
+        //Get all damagers for assists.
+        List<UUID> damagers = new ArrayList<UUID>();
+        for (DamageLogEntry entry : dmgLog.log) {
+            if (entry.dmgClass instanceof Iattacker) {
+                if (((Iattacker)entry.dmgClass).hasAttacker()) {
+                    damagers.add(((Iattacker)entry.dmgClass).getAttacker().getUniqueId());
+                }
+            }
+        }
+
+        Collection<Player> players = (Collection<Player>) dvz.getServer().getOnlinePlayers();
+        for (Player player : players) {
+            String msg = deathMsg.replace(player.getName(), "&a" + player.getName() + "&7");
+            PlayerSettings settings = dvz.getSettingsCfg().getSettings(player.getUniqueId());
+            if (settings != null) {
+                //No messages at all
+                if (settings.dwarfDeathMessages == 0 && classType == ClassType.DWARF) {
+                    continue;
+                }
+                if (settings.monsterDeathMessages == 0 && classType == ClassType.MONSTER) {
+                    continue;
+                }
+
+                //All messages
+                if (settings.dwarfDeathMessages == 1 && classType == ClassType.DWARF) {
+                    player.sendMessage(CWUtil.integrateColor(msg));
+                    continue;
+                }
+                if (settings.monsterDeathMessages == 1 && classType == ClassType.MONSTER) {
+                    player.sendMessage(CWUtil.integrateColor(msg));
+                    continue;
+                }
+
+                //Personal kills/deaths/assists only
+                if (settings.dwarfDeathMessages == 2 && classType == ClassType.DWARF
+                        && ((killer != null && player.getUniqueId().equals(killer.getUniqueId())) || player.getUniqueId().equals(dmgLog.logOwner) || damagers.contains(player.getUniqueId()))) {
+                    player.sendMessage(CWUtil.integrateColor(msg));
+                    continue;
+                }
+                if (settings.monsterDeathMessages == 2 && classType == ClassType.MONSTER
+                        && ((killer != null && player.getUniqueId().equals(killer.getUniqueId())) || player.getUniqueId().equals(dmgLog.logOwner) || damagers.contains(player.getUniqueId()))) {
+                    player.sendMessage(CWUtil.integrateColor(msg));
+                    continue;
+                }
+
+                //Personal kills/deaths only
+                if (settings.dwarfDeathMessages == 3 && classType == ClassType.DWARF
+                        && ((killer != null && player.getUniqueId().equals(killer.getUniqueId())) || player.getUniqueId().equals(dmgLog.logOwner))) {
+                    player.sendMessage(CWUtil.integrateColor(msg));
+                    continue;
+                }
+                if (settings.monsterDeathMessages == 3 && classType == ClassType.MONSTER
+                        && ((killer != null && player.getUniqueId().equals(killer.getUniqueId())) || player.getUniqueId().equals(dmgLog.logOwner))) {
+                    player.sendMessage(CWUtil.integrateColor(msg));
+                    continue;
+                }
+            } else {
+                player.sendMessage(CWUtil.integrateColor(msg));
+            }
+        }
+    }
+
 }

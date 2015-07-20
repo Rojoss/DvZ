@@ -1,9 +1,9 @@
-package com.clashwars.dvz.damage.types;
+package com.clashwars.dvz.damage;
 
+import com.clashwars.cwcore.damage.BaseDmg;
+import com.clashwars.cwcore.damage.DmgType;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
-import com.clashwars.dvz.damage.BaseDmg;
-import com.clashwars.dvz.damage.DmgType;
 import org.bukkit.OfflinePlayer;
 
 public class AbilityDmg extends BaseDmg {

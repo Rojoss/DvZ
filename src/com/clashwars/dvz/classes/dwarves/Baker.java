@@ -1,10 +1,10 @@
 package com.clashwars.dvz.classes.dwarves;
 
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.cwstats.stats.internal.StatType;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
-import com.clashwars.cwstats.stats.internal.StatType;
 import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.workshop.BakerWorkshop;
 import com.clashwars.dvz.workshop.WorkShop;

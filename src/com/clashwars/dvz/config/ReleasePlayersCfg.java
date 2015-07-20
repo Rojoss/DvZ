@@ -2,7 +2,9 @@ package com.clashwars.dvz.config;
 
 import com.clashwars.cwcore.config.internal.EasyConfig;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class ReleasePlayersCfg extends EasyConfig {
 

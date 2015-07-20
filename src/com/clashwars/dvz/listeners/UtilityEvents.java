@@ -1,10 +1,10 @@
 package com.clashwars.dvz.listeners;
 
 import com.clashwars.cwcore.utils.CWUtil;
+import com.clashwars.cwstats.stats.internal.StatType;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.player.CWPlayer;
-import com.clashwars.cwstats.stats.internal.StatType;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Material;
 import org.bukkit.Sound;

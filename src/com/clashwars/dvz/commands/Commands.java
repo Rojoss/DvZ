@@ -4,11 +4,8 @@ import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.CooldownManager;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.cuboid.SelectionStatus;
-import com.clashwars.cwcore.hat.Hat;
-import com.clashwars.cwcore.hat.HatManager;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
-import com.clashwars.cwcore.utils.Enjin;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
 import com.clashwars.dvz.GameState;
@@ -26,17 +23,14 @@ import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.structures.internal.StructureType;
 import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.WorkShop;
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import org.json.simple.JSONObject;
 
 import java.util.*;
 
@@ -66,16 +60,6 @@ public class Commands {
             }
 
             dvz.getSettingsMenu().showMenu((Player) sender);
-            return true;
-        }
-
-        if (label.equalsIgnoreCase("dmglog") || label.equalsIgnoreCase("dmg") || label.equalsIgnoreCase("damagelog") || label.equalsIgnoreCase("dlog") || label.equalsIgnoreCase("damage")) {
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(Util.formatMsg("&cPlayer command only."));
-                return true;
-            }
-
-            dvz.getDamageLogMenu().showMenu((Player) sender);
             return true;
         }
 

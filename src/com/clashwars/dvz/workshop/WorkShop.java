@@ -1,7 +1,6 @@
 package com.clashwars.dvz.workshop;
 
 import com.clashwars.cwcore.cuboid.Cuboid;
-import com.clashwars.cwcore.debug.Debug;
 import com.clashwars.cwcore.dependencies.CWWorldGuard;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;

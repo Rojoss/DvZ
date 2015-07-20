@@ -1,6 +1,7 @@
 package com.clashwars.dvz.listeners;
 
 import com.clashwars.cwcore.CooldownManager;
+import com.clashwars.cwcore.damage.types.CustomDmg;
 import com.clashwars.cwcore.effect.Particle;
 import com.clashwars.cwcore.effect.effects.AnimatedCircleEffect;
 import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
@@ -8,7 +9,6 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.Product;
-import com.clashwars.dvz.damage.types.CustomDmg;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.runnables.FlailChainRunnable;
 import org.bukkit.Sound;
@@ -19,7 +19,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;

@@ -2,9 +2,10 @@ package com.clashwars.dvz;
 
 import com.clashwars.clashwars.ClashWars;
 import com.clashwars.cwcore.CWCore;
+import com.clashwars.cwcore.damage.DamageHandler;
+import com.clashwars.cwcore.damage.log.LogMenu;
 import com.clashwars.cwcore.debug.TimingsLog;
 import com.clashwars.cwcore.effect.EffectManager;
-import com.clashwars.cwcore.mysql.MySQL;
 import com.clashwars.cwcore.scoreboard.CWBoard;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwstats.CWStats;
@@ -19,8 +20,6 @@ import com.clashwars.dvz.classes.ClassManager;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.commands.Commands;
 import com.clashwars.dvz.config.*;
-import com.clashwars.dvz.damage.DamageHandler;
-import com.clashwars.dvz.damage.log.LogMenu;
 import com.clashwars.dvz.listeners.*;
 import com.clashwars.dvz.maps.MapManager;
 import com.clashwars.dvz.player.PlayerManager;
@@ -46,7 +45,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.NameTagVisibility;
 
-import java.sql.Connection;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -86,14 +84,12 @@ public class DvZ extends JavaPlugin {
     private PlayerManager pm;
     private WorkshopManager wm;
     private TipManager tm;
-    private DamageHandler dmgH;
 
     private ArmorMenu armorMenu;
     private ColorMenu colorMenu;
     private BannerMenu bannerMenu;
     private PatternMenu patternMenu;
     private SettingsMenu settingsMenu;
-    private LogMenu logMenu;
 
     private TimingsLog timingsLog;
     boolean timingsEnabled = false;
@@ -210,14 +206,11 @@ public class DvZ extends JavaPlugin {
         tm = new TipManager();
         gm.calculateMonsterPerc();
 
-        dmgH = new DamageHandler(this);
-
         armorMenu = new ArmorMenu(this);
         colorMenu = new ColorMenu(this);
         bannerMenu = new BannerMenu(this);
         patternMenu = new PatternMenu(this);
         settingsMenu = new SettingsMenu(this);
-        logMenu = new LogMenu(this);
 
         registerEvents();
 
@@ -260,8 +253,6 @@ public class DvZ extends JavaPlugin {
         pm.registerEvents(bannerMenu, this);
         pm.registerEvents(patternMenu, this);
         pm.registerEvents(settingsMenu, this);
-        pm.registerEvents(logMenu, this);
-        pm.registerEvents(dmgH, this);
         pm.registerEvents(new WeaponHandler(this), this);
     }
 
@@ -423,10 +414,6 @@ public class DvZ extends JavaPlugin {
         return releasePlayersCfg;
     }
 
-    public DamageHandler getDmgH() {
-        return dmgH;
-    }
-
 
     public EffectManager getEM() {
         return em;
@@ -482,10 +469,6 @@ public class DvZ extends JavaPlugin {
 
     public SettingsMenu getSettingsMenu() {
         return settingsMenu;
-    }
-
-    public LogMenu getDamageLogMenu() {
-        return logMenu;
     }
 
 }

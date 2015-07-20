@@ -1,7 +1,10 @@
 package com.clashwars.dvz.abilities.monsters.chicken;
 
 import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
-import com.clashwars.cwcore.helpers.*;
+import com.clashwars.cwcore.helpers.CWEntity;
+import com.clashwars.cwcore.helpers.CWItem;
+import com.clashwars.cwcore.helpers.EntityTag;
+import com.clashwars.cwcore.helpers.PoseType;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
@@ -15,7 +18,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.EulerAngle;
 
 public class LayEgg extends BaseAbility {

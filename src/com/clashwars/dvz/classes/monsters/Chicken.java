@@ -1,12 +1,12 @@
 package com.clashwars.dvz.classes.monsters;
 
+import com.clashwars.dvz.damage.AbilityDmg;
 import com.clashwars.cwcore.helpers.CWEntity;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.dwarves.bonus.Camouflage;
 import com.clashwars.dvz.classes.DvzClass;
-import com.clashwars.dvz.damage.types.AbilityDmg;
 import com.clashwars.dvz.listeners.custom.GameResetEvent;
 import com.clashwars.dvz.util.DvzItem;
 import org.bukkit.Bukkit;

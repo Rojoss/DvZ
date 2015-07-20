@@ -1,10 +1,10 @@
 package com.clashwars.dvz.runnables;
 
+import com.clashwars.cwcore.damage.types.CustomDmg;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
-import com.clashwars.dvz.damage.types.CustomDmg;
 import com.clashwars.dvz.util.Util;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
