@@ -299,7 +299,7 @@ public class Fletcher extends DwarfClass {
         if (CWUtil.randomFloat() <= flintChance) {
             dvz.getSM().changeLocalStatVal(event.getPlayer(), StatType.FLETCHER_FLINT_COLLECTED, 1);
             dvz.getPM().getPlayer(player).addClassExp(1);
-            block.getWorld().dropItemNaturally(block.getLocation().add(0.5f, 0.5f, 0.5f), Product.FLINT.getItem());
+            CWUtil.dropItemStack(block.getLocation(), Product.FLINT.getItem(), dvz, player);
         }
         dvz.logTimings("Fletcher.blockBreak()", t);
     }

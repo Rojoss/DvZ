@@ -126,10 +126,10 @@ public class Tailor extends DwarfClass {
 
         event.setCancelled(false);
         if (block.getData() == 3) {
-            block.getWorld().dropItem(block.getLocation(), Product.DYE_1.getItem());
+            CWUtil.dropItemStack(block.getLocation(), Product.DYE_1.getItem(), dvz, player);
             dvz.getSM().changeLocalStatVal(player, StatType.TAILOR_WHITE_FLOWERS_COLLECTED, 1);
         } else if (block.getData() == 1) {
-            block.getWorld().dropItem(block.getLocation(), Product.DYE_2.getItem());
+            CWUtil.dropItemStack(block.getLocation(), Product.DYE_2.getItem(), dvz, player);
             dvz.getSM().changeLocalStatVal(player, StatType.TAILOR_BLUE_FLOWERS_COLLECTED, 1);
         }
         dvz.getPM().getPlayer(player).addClassExp(3);
