@@ -20,6 +20,7 @@ public class IronGolem extends MobClass {
         abilities.add(Ability.TOSS);
         abilities.add(Ability.SMASH);
         abilities.add(Ability.GROUND_POUND);
+        abilities.add(Ability.FLOWER_TRAIL);
     }
 
     @Override

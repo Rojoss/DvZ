@@ -34,6 +34,7 @@ import com.clashwars.dvz.abilities.monsters.creeper.Explode;
 import com.clashwars.dvz.abilities.monsters.enderman.Blink;
 import com.clashwars.dvz.abilities.monsters.enderman.Pickup;
 import com.clashwars.dvz.abilities.monsters.enderman.Portal;
+import com.clashwars.dvz.abilities.monsters.irongolem.FlowerTrail;
 import com.clashwars.dvz.abilities.monsters.irongolem.GroundPound;
 import com.clashwars.dvz.abilities.monsters.irongolem.Smash;
 import com.clashwars.dvz.abilities.monsters.irongolem.Toss;
@@ -98,6 +99,7 @@ public enum Ability {
     TOSS(new Toss(), SwapType.NONE, "{0} was tossed by {1}"),
     SMASH(new Smash(), SwapType.NONE, "{0} died from {1}'s smashed rock"),
     GROUND_POUND(new GroundPound(), SwapType.NONE, "{0} died from {1}'s ground pound"),
+    FLOWER_TRAIL(new FlowerTrail(), SwapType.NONE, ""),
 
     //Dragon abilities
     BURN(new Burn(), SwapType.NONE, "{0} burned to death from the dragons heat"),
