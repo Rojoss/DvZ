@@ -18,7 +18,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 
 public class Util {
 
@@ -152,4 +154,19 @@ public class Util {
         DvZ.inst().getSM().changeLocalStatVal(player, StatType.MONSTER_SHRINE_DAMAGE, amount);
         return true;
     }
+
+    public static Long timeTillGame() {
+        // Game starts at 10AM in Phoenix.
+        Date now = new Date();
+        Date gameTime = new Date();
+        if (now.getHours() >= 10 && now.getMinutes() >= 0 && now.getSeconds() >= 0) {
+            gameTime.setTime(gameTime.getTime() + 86400000);
+        }
+        gameTime.setHours(10);
+        gameTime.setMinutes(0);
+        gameTime.setSeconds(0);
+
+        return gameTime.getTime() - System.currentTimeMillis();
+    }
+
 }

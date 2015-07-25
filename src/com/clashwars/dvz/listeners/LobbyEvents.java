@@ -33,6 +33,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Date;
 import java.util.Set;
 
 public class LobbyEvents implements Listener {
@@ -310,7 +311,8 @@ public class LobbyEvents implements Listener {
         Long t = System.currentTimeMillis();
         GameState state = dvz.getGM().getState();
         if (state == GameState.CLOSED || Util.isTest()) {
-            event.setMotd(CWUtil.integrateColor("&4&lClashWars &6&lDwarves &2&lVS &c&lZombies\n&cNo DvZ right now!"));
+            event.setMotd(CWUtil.integrateColor("&4&lClashWars &6&lDwarves &2&lVS &c&lZombies\n&cNo DvZ right now! &4&l" +
+                CWUtil.formatTime(Util.timeTillGame(), "%H&c:&4&l%M&c:&4&l%S", true) + " &ctill the next game!"));
             return;
         }
         if (state == GameState.SETUP) {

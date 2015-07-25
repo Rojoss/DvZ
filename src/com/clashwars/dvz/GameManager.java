@@ -59,17 +59,12 @@ public class GameManager {
         setState(GameState.SETUP);
         if (!nextGame) {
             Util.broadcast("&7========== &c&lDvZ has ended! &7==========");
-            Util.broadcast("&c- &7Come back again later for more DvZ!");
-            Util.broadcast("&c- &7Make sure to follow us on Twitch to know when DvZ starts!");
-            Util.broadcast("&c- &9&lhttp://twitch.tv/clashwars");
-            Util.broadcast("&c- &9&lhttp://clashwars.com");
+            Util.broadcast("&c- &7Come back again tomorrow for more DvZ!");
             setState(GameState.CLOSED);
             Util.broadcastTitle(new Title("&c&lDvZ has ended!", "&7Come back again later for more DvZ!", 10, 500, 30));
         } else {
             Util.broadcast("&7========== &a&lDvZ is resetting! &7==========");
             Util.broadcast("&a- &7A new game will be starting soon.");
-            Util.broadcast("&a- &7If you're not watching the stream yet make sure to do!");
-            Util.broadcast("&a- &9&lhttp://twitch.tv/clashwars");
             Util.broadcastTitle(new Title("&a&lDvZ is resetting!", "&7A new game will be starting soon.", 10, 100, 30));
         }
 
@@ -187,8 +182,6 @@ public class GameManager {
         Util.broadcast("&7========== &a&lDvZ has opened! &7==========");
         Util.broadcast("&a- &7The game will be starting soon so please wait.");
         Util.broadcast("&a- &7Beat the parkour to get 3 classes instead of 2!");
-        Util.broadcast("&a- &7If you're not watching the stream yet make sure to do!");
-        Util.broadcast("&a- &9&lhttp://twitch.tv/clashwars");
         Util.broadcastTitle(new Title("&a&lDvZ has opened!", "&7The game will be starting soon so please wait.", 10, 100, 30));
         dvz.getServer().dispatchCommand(dvz.getServer().getConsoleSender(), "hd reload");
 

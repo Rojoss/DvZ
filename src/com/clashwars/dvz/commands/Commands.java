@@ -1242,29 +1242,36 @@ public class Commands {
 
 
             sender.sendMessage(CWUtil.integrateColor("&8========== &4&lDvZ Game Information &8=========="));
-            if (Util.isTest()) {
-                sender.sendMessage(CWUtil.integrateColor("&6Game State&8: &c&lServer is in test mode!"));
+            if (gm.getState() == GameState.CLOSED) {
+                sender.sendMessage(CWUtil.integrateColor("&6Game State&8: &cThere is no game right now!"));
+                sender.sendMessage(CWUtil.integrateColor("&6Next game&8: " + CWUtil.formatTime(Util.timeTillGame(), "&4&l%H&c:&4&l%M&c:&4&l%S", true)));
+                sender.sendMessage(CWUtil.integrateColor("&7Check out the wiki for more information about the game!"));
+                sender.sendMessage(CWUtil.integrateColor("&9&lwiki.clashwars.com"));
             } else {
-                sender.sendMessage(CWUtil.integrateColor("&6Game State&8: &5" + gm.getState().getColor() + gm.getState().getName() + " &8(&7Speed: &a" + gm.getSpeed() + "&7)"));
-            }
-
-            if (gm.getState() == GameState.DRAGON) {
-                sender.sendMessage(CWUtil.integrateColor("&6Dragon power&8: &d" + gm.getDragonPower() + "&8/&53"));
-            }
-            sender.sendMessage(CWUtil.integrateColor("&6Monster power&8: &d" + ((int)gm.getMonsterPower(10)) + "&8/&510"));
-            sender.sendMessage(CWUtil.integrateColor("&6Shrines&8:" + shrineMsg));
-            sender.sendMessage(CWUtil.integrateColor("&6Players&8: &a&l" + dvz.getPM().getPlayers(ClassType.DWARF, true, true).size() + " &2Dwarves &6&lVS &c&l"
-                    + dvz.getPM().getPlayers(ClassType.MONSTER, true, true).size() + " &4Zombies &8(&7" + dvz.getServer().getOnlinePlayers().size() + "&8)"));
-            if (sender instanceof Player) {
-                Player player = (Player)sender;
-                CWPlayer cwp = dvz.getPM().getPlayer(player);
-                sender.sendMessage(CWUtil.integrateColor("&8============== &4&lPersonal Info &8=============="));
-                sender.sendMessage(CWUtil.integrateColor("&6Class&8: &5" + cwp.getPlayerClass().getClassClass().getDisplayName()));
-                if (cwp.isDwarf()) {
-                    sender.sendMessage(CWUtil.integrateColor("&6Class LVL/XP&8: &a&l" + cwp.getPlayerData().getClassLvl() + "&8[&2" + cwp.getClassExp() + "&8]"));
+                if (Util.isTest()) {
+                    sender.sendMessage(CWUtil.integrateColor("&6Game State&8: &c&lServer is in test mode!"));
+                } else {
+                    sender.sendMessage(CWUtil.integrateColor("&6Game State&8: &5" + gm.getState().getColor() + gm.getState().getName() + " &8(&7Speed: &a" + gm.getSpeed() + "&7)"));
                 }
+
+                if (gm.getState() == GameState.DRAGON) {
+                    sender.sendMessage(CWUtil.integrateColor("&6Dragon power&8: &d" + gm.getDragonPower() + "&8/&53"));
+                }
+                sender.sendMessage(CWUtil.integrateColor("&6Monster power&8: &d" + ((int)gm.getMonsterPower(10)) + "&8/&510"));
+                sender.sendMessage(CWUtil.integrateColor("&6Shrines&8:" + shrineMsg));
+                sender.sendMessage(CWUtil.integrateColor("&6Players&8: &a&l" + dvz.getPM().getPlayers(ClassType.DWARF, true, true).size() + " &2Dwarves &6&lVS &c&l"
+                        + dvz.getPM().getPlayers(ClassType.MONSTER, true, true).size() + " &4Zombies &8(&7" + dvz.getServer().getOnlinePlayers().size() + "&8)"));
+                if (sender instanceof Player) {
+                    Player player = (Player)sender;
+                    CWPlayer cwp = dvz.getPM().getPlayer(player);
+                    sender.sendMessage(CWUtil.integrateColor("&8============== &4&lPersonal Info &8=============="));
+                    sender.sendMessage(CWUtil.integrateColor("&6Class&8: &5" + cwp.getPlayerClass().getClassClass().getDisplayName()));
+                    if (cwp.isDwarf()) {
+                        sender.sendMessage(CWUtil.integrateColor("&6Class LVL/XP&8: &a&l" + cwp.getPlayerData().getClassLvl() + "&8[&2" + cwp.getClassExp() + "&8]"));
+                    }
+                }
+                sender.sendMessage(CWUtil.integrateColor("&8======= &4Use &c/dvz help &4for all commands &8======="));
             }
-            sender.sendMessage(CWUtil.integrateColor("&8======= &4Use &c/dvz help &4for all commands &8======="));
             dvz.logTimings("Commands.onCommand()[/dvz]", t);
             return true;
         }
