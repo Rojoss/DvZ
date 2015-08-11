@@ -43,6 +43,7 @@ import com.clashwars.dvz.abilities.monsters.silverfish.Infest;
 import com.clashwars.dvz.abilities.monsters.silverfish.Roar;
 import com.clashwars.dvz.abilities.monsters.skeleton.Mount;
 import com.clashwars.dvz.abilities.monsters.skeleton.Rapidfire;
+import com.clashwars.dvz.abilities.monsters.spider.Climb;
 import com.clashwars.dvz.abilities.monsters.spider.Poison;
 import com.clashwars.dvz.abilities.monsters.spider.PoisonAttack;
 import com.clashwars.dvz.abilities.monsters.spider.Web;
@@ -78,6 +79,7 @@ public enum Ability {
     POISON_ATTACK(new PoisonAttack(), SwapType.NONE, "{0} died from {1}'s poison attack"),
     POISON(new Poison(), SwapType.NONE, "{0} died from {1}'s poison cloud"),
     WEB(new Web(), SwapType.NONE, ""),
+    CLIMB(new Climb(), SwapType.NONE, ""),
     EXPLODE(new Explode(), SwapType.NONE, "{0} died from {1}'s creeper explosion"),
     SHOOT(new Shoot(), SwapType.NONE, "{0} burned to death by {1}'s shoot"),
     GLIDE(new Glide(), SwapType.NONE, ""),
@@ -99,6 +101,7 @@ public enum Ability {
     TOSS(new Toss(), SwapType.NONE, "{0} was tossed by {1}"),
     SMASH(new Smash(), SwapType.NONE, "{0} died from {1}'s smashed rock"),
     GROUND_POUND(new GroundPound(), SwapType.NONE, "{0} died from {1}'s ground pound"),
+    FLOWER_TRAIL(new FlowerTrail(), SwapType.NONE, ""),
     FLOWER_TRAIL(new FlowerTrail(), SwapType.NONE, ""),
 
     //Dragon abilities

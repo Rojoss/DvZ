@@ -15,7 +15,7 @@ public class IronGolem extends MobClass {
     public IronGolem() {
         super();
         dvzClass = DvzClass.IRON_GOLEM;
-        classItem = new DvzItem(Material.IRON_BLOCK, 1, (short)0, displayName, 90, -1);
+        classItem = new DvzItem(Material.IRON_BLOCK, 1, (short)0, displayName, 100, -1);
 
         abilities.add(Ability.TOSS);
         abilities.add(Ability.SMASH);
