@@ -54,6 +54,9 @@ public class VIPEvents implements Listener {
                     if (dvz.getPM().getPlayer(player).getPlayerClass() == DvzClass.SILVERFISH) {
                         continue;
                     }
+                    if (dvz.getPM().getPlayer(player).getPlayerClass() == DvzClass.SLIME) {
+                        continue;
+                    }
                     if (player.hasPermission("rank.admin")) {
                         ParticleEffect.BLOCK_DUST.display(new ParticleEffect.BlockData(Material.REDSTONE_BLOCK, (byte)0), 0.3f, 0.1f, 0.3f, 0, 3, player.getLocation());
                     } else if (player.hasPermission("rank.mod")) {
@@ -245,6 +248,9 @@ public class VIPEvents implements Listener {
                 if (dvz.getPM().getPlayer(event.getPlayer()).getPlayerClass() == DvzClass.SILVERFISH) {
                     return;
                 }
+                if (dvz.getPM().getPlayer(event.getPlayer()).getPlayerClass() == DvzClass.SLIME) {
+                    return;
+                }
                 equipHat(event.getPlayer());
             }
         }.runTaskLater(dvz, 20);
@@ -255,7 +261,10 @@ public class VIPEvents implements Listener {
         Collection<Player> players = (Collection<Player>)dvz.getServer().getOnlinePlayers();
         for (Player player : players) {
             if (dvz.getPM().getPlayer(player).getPlayerClass() == DvzClass.SILVERFISH) {
-                return;
+                continue;
+            }
+            if (dvz.getPM().getPlayer(player).getPlayerClass() == DvzClass.SLIME) {
+                continue;
             }
             equipHat(player);
         }

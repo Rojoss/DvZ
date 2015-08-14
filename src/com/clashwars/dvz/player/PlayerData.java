@@ -17,6 +17,7 @@ public class PlayerData {
     private boolean buffUsed = false;
     private boolean bombUsed = false;
     private boolean isBuffed = false;
+    private int slimeSize = 3;
     private boolean testing = false;
     private boolean pvping = false;
 
@@ -104,6 +105,14 @@ public class PlayerData {
         this.isBuffed = buffed;
     }
 
+    public int getSlimeSize() {
+        return slimeSize;
+    }
+
+    public void setSlimeSize(int slimeSize) {
+        this.slimeSize = slimeSize;
+    }
+
     public boolean isTesting() {
         return testing;
     }
@@ -119,4 +128,5 @@ public class PlayerData {
     public void setPvping(boolean pvping) {
         this.pvping = pvping;
     }
+
 }

@@ -43,6 +43,10 @@ import com.clashwars.dvz.abilities.monsters.silverfish.Infest;
 import com.clashwars.dvz.abilities.monsters.silverfish.Roar;
 import com.clashwars.dvz.abilities.monsters.skeleton.Mount;
 import com.clashwars.dvz.abilities.monsters.skeleton.Rapidfire;
+import com.clashwars.dvz.abilities.monsters.slime.SlimeSpray;
+import com.clashwars.dvz.abilities.monsters.slime.Splash;
+import com.clashwars.dvz.abilities.monsters.slime.Split;
+import com.clashwars.dvz.abilities.monsters.slime.Swap;
 import com.clashwars.dvz.abilities.monsters.spider.Climb;
 import com.clashwars.dvz.abilities.monsters.spider.Poison;
 import com.clashwars.dvz.abilities.monsters.spider.PoisonAttack;
@@ -102,7 +106,10 @@ public enum Ability {
     SMASH(new Smash(), SwapType.NONE, "{0} died from {1}'s smashed rock"),
     GROUND_POUND(new GroundPound(), SwapType.NONE, "{0} died from {1}'s ground pound"),
     FLOWER_TRAIL(new FlowerTrail(), SwapType.NONE, ""),
-    FLOWER_TRAIL(new FlowerTrail(), SwapType.NONE, ""),
+    SPLIT(new Split(), SwapType.NONE, ""),
+    SWAP(new Swap(), SwapType.NONE, ""),
+    SPLASH(new Splash(), SwapType.NONE, "{0} died from {1}'s splash"),
+    SLIME_SPRAY(new SlimeSpray(), SwapType.NONE, "{0} died from {1}'s slime"),
 
     //Dragon abilities
     BURN(new Burn(), SwapType.NONE, "{0} burned to death from the dragons heat"),

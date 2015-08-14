@@ -10,6 +10,7 @@ import com.clashwars.dvz.util.Util;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -67,7 +68,7 @@ public class ProtectEvents implements Listener {
         //Don't allow hitting mobs
         if (!(event.getEntity() instanceof Player)) {
             //Allow hitting monsters during monster time for like endermite etc as a dwarf.
-            if (event.getEntity() instanceof Monster && gm.isMonsters() && dvz.getPM().getPlayer(damagerPlayer).isDwarf()) {
+            if (event.getEntity() instanceof LivingEntity && gm.isMonsters() && dvz.getPM().getPlayer(damagerPlayer).isDwarf()) {
                event.setCancelled(false);
             } else {
                 event.setCancelled(true);

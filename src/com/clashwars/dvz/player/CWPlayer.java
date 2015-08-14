@@ -71,6 +71,7 @@ public class CWPlayer {
         }
 
         data.setPvping(false);
+        data.setSlimeSize(3);
         player.getInventory().clear();
         player.getInventory().setHelmet(new CWItem(Material.AIR));
         player.getInventory().setChestplate(new CWItem(Material.AIR));
@@ -136,6 +137,7 @@ public class CWPlayer {
         data.setbombUsed(false);
         data.setBuffUsed(false);
         data.setBuffed(false);
+        data.setSlimeSize(3);
 
         color = CWUtil.getRandomColor();
     }
@@ -165,7 +167,11 @@ public class CWPlayer {
 
         //Disguise
         if (dvzClass.getType() == ClassType.MONSTER || dvzClass.getType() == ClassType.DRAGON) {
-            Util.disguisePlayer(player.getName(), c.getStrOption("disguise"), dvzClass);
+            String disguise = c.getStrOption("disguise");
+            if (dvzClass == DvzClass.SLIME) {
+                disguise += " setSize 3";
+            }
+            Util.disguisePlayer(player.getName(), disguise, dvzClass);
         }
 
         //Team
@@ -352,6 +358,11 @@ public class CWPlayer {
 
     public PlayerData getPlayerData() {
         return data;
+    }
+
+    public void setPlayerData(PlayerData data) {
+        this.data = data;
+        savePlayer();
     }
 
 

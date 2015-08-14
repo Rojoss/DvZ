@@ -34,6 +34,7 @@ public enum DvzClass {
     CHICKEN(ClassType.MONSTER, "monster", new Chicken(), StatType.CHICKEN_PICKS, new String[]{"chickens"}),
     SILVERFISH(ClassType.MONSTER, "monster", new Silverfish(), StatType.SILVERFISH_PICKS, new String[]{"broodmother"}),
     IRON_GOLEM(ClassType.MONSTER, "monster", new IronGolem(), StatType.IRONGOLEM_PICKS, new String[]{"golem"}),
+    SLIME(ClassType.MONSTER, "monster", new Slime(), StatType.SLIME_PICKS, new String[]{"slimes"}),
 
     DRAGON(ClassType.BASE, null, new DragonClass(), null, new String[]{"dragons"}),
     FIREDRAGON(ClassType.DRAGON, null, new FireDragon(), null, new String[]{"firedragons", "firedragon", "fire"}),
