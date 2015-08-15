@@ -89,7 +89,7 @@ public class Roar extends BaseAbility {
                             break;
                         }
 
-                        if (block.hasMetadata("infected") || CWUtil.randomFloat() > 0.7f) {
+                        if (block.hasMetadata("infected") || CWUtil.randomFloat() > 0.5f) {
                             int count = (int)dvz.getGM().getMonsterPower(1, 2);
                             for (int c = 0; c < count; c++) {
                                 CWEntity silverfish = CWEntity.create(EntityType.SILVERFISH, block.getLocation().add(0.5f, 0.5f, 0.5f));
