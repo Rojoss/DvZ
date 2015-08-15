@@ -44,7 +44,7 @@ public class Toss extends BaseAbility {
         }
 
         new AbilityDmg(target, 0, ability, player);
-        target.setVelocity(new Vector(0, dvz.getGM().getMonsterPower(0.75f,0.75f), 0));
+        target.setVelocity(new Vector(0, dvz.getGM().getMonsterPower(1f, 1f), 0));
         player.getWorld().playSound(player.getLocation(), Sound.IRONGOLEM_THROW, 1, 0.6f);
         ParticleEffect.CLOUD.display(0.3f, 0.5f, 0.3f, 0, 20, target.getLocation());
     }
