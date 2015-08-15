@@ -1,5 +1,6 @@
 package com.clashwars.dvz.runnables;
 
+import com.clashwars.cwcore.debug.Debug;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.listeners.WeaponHandler;
@@ -64,6 +65,12 @@ public class FlailChainRunnable extends BukkitRunnable {
         }
 
         dir = dir.multiply(-1);
-        targetPlayer.setVelocity(targetPlayer.getVelocity().add(new Vector(dir.getX() * 0.2f, dir.getY() * 0.1f, dir.getZ() * 0.2f)));
+        double y = dir.getY();
+        if (y < 0) {
+            y *= 0.2f;
+        } else {
+            y *= 0.1f;
+        }
+        targetPlayer.setVelocity(targetPlayer.getVelocity().add(new Vector(dir.getX() * 0.2f, y, dir.getZ() * 0.2f)));
     }
 }
