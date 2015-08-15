@@ -100,16 +100,16 @@ public class Smash extends BaseAbility {
         block.getWorld().playSound(block.getLocation(), Sound.ZOMBIE_WOOD, 0.1f, 2);
         ParticleEffect.SMOKE_NORMAL.display(0.5f, 0.5f, 0.5f, 0, 5, block.getLocation().add(0.5f, 0.5f, 0.5f));
 
-        List<Player> players = CWUtil.getNearbyPlayers(block.getLocation(), dvz.getGM().getMonsterPower(0.5f, 2f));
+        List<Player> players = CWUtil.getNearbyPlayers(block.getLocation(), dvz.getGM().getMonsterPower(1f, 4f));
         for (Player p : players) {
             if(dvz.getPM().getPlayer(p).isDwarf()) {
 
                 if (caster != null && caster.isOnline()) {
                     Player casterP = (Player)caster;
                     double distance = p.getLocation().distance(casterP.getLocation());
-                    new AbilityDmg(p, CWUtil.lerp(0.05d, 1, (double) distance / 8), ability, caster);
+                    new AbilityDmg(p, CWUtil.lerp(0.1d, 1f, (double) distance / 8), ability, caster);
                 } else {
-                    new AbilityDmg(p, 0.5d, ability);
+                    new AbilityDmg(p, 0.75d, ability);
                 }
             }
         }
