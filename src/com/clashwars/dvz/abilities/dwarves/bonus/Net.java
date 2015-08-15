@@ -16,6 +16,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
@@ -69,19 +71,19 @@ public class Net extends BaseAbility {
             public void run() {
                 event.getBlock().setType(Material.AIR);
             }
-        }.runTaskLater(dvz, 5);
+        }.runTaskLater(dvz, 3);
 
         final BlockFace[] dirs = new BlockFace[] {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
-        final List<Player> players = CWUtil.getNearbyPlayers(event.getEntity().getLocation(), 2.5f);
+        final List<Player> players = CWUtil.getNearbyPlayers(event.getEntity().getLocation(), 5f);
         for (final Player p : players) {
             if (dvz.getPM().getPlayer((Player) p).isDwarf()) {
                 continue;
             }
+            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 200, 5), true);
 
             final Block castBlock = p.getLocation().getBlock();
             for (BlockFace dir : dirs) {
                 castBlock.getRelative(dir).setType(Material.WEB);
-                castBlock.getRelative(dir).getRelative(BlockFace.UP).setType(Material.WEB);
             }
 
             new BukkitRunnable() {
@@ -90,9 +92,6 @@ public class Net extends BaseAbility {
                     for (BlockFace dir : dirs) {
                         if (castBlock.getRelative(dir).getType() == Material.WEB) {
                             castBlock.getRelative(dir).setType(Material.AIR);
-                        }
-                        if (castBlock.getRelative(dir).getRelative(BlockFace.UP).getType() == Material.WEB) {
-                            castBlock.getRelative(dir).getRelative(BlockFace.UP).setType(Material.AIR);
                         }
                     }
                 }
