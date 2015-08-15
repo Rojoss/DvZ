@@ -38,7 +38,7 @@ public class Leap extends BaseAbility {
         }
 
         boolean nearbyMonster = false;
-        List<Player> players = CWUtil.getNearbyPlayers(player.getLocation(), 10);
+        List<Player> players = CWUtil.getNearbyPlayers(player.getLocation(), 15);
         for (Player p : players) {
             if (dvz.getPM().getPlayer(p).isMonster()) {
                 nearbyMonster = true;
@@ -48,11 +48,11 @@ public class Leap extends BaseAbility {
 
         Vector dir = player.getLocation().getDirection();
         if (nearbyMonster) {
-            player.setVelocity(player.getVelocity().add(new Vector(dir.getX() * 1.8f, 0.5f, dir.getZ() * 1.8f)));
+            player.setVelocity(player.getVelocity().add(new Vector(dir.getX() * 1.2f, 0.3f, dir.getZ() * 1.2f)));
             player.getWorld().playSound(player.getLocation(), Sound.BAT_TAKEOFF, 0.25f, 1.8f);
             ParticleEffect.CRIT_MAGIC.display(0.8f, 0.2f, 0.8f, 0, 15, player.getLocation());
         } else {
-            player.setVelocity(player.getVelocity().add(new Vector(dir.getX() * 2.5f, 0.8f, dir.getZ() * 2.5f)));
+            player.setVelocity(player.getVelocity().add(new Vector(dir.getX() * 2.2f, 0.7f, dir.getZ() * 2.2f)));
             player.getWorld().playSound(player.getLocation(), Sound.BAT_TAKEOFF, 0.5f, 1.5f);
             ParticleEffect.CRIT_MAGIC.display(0.8f, 0.2f, 0.8f, 0, 30, player.getLocation());
         }
