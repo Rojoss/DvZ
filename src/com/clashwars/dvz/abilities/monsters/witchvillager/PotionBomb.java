@@ -160,16 +160,16 @@ public class PotionBomb extends BaseAbility {
                             cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int)dvz.getGM().getMonsterPower(100, 180) + pe.getDuration(), 0), true);
                             blindAdded = true;
                         } else if (pe.getType().equals(PotionEffectType.POISON)) {
-                            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(120, 240) + pe.getDuration(), 0), true);
+                            cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(150, 250) + pe.getDuration(), 0), true);
                             poisonAdded = true;
                         }
                     }
 
                     if (!blindAdded) {
-                        cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int)dvz.getGM().getMonsterPower(80, 160), 0));
+                        cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int)dvz.getGM().getMonsterPower(100, 180), 0));
                     }
                     if (!poisonAdded) {
-                        cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(100, 200), 0));
+                        cwp.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(150, 250), 0));
                     }
 
                     new AbilityDmg(cwp.getPlayer(), 0, ability, player);
