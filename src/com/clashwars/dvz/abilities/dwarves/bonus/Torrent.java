@@ -72,7 +72,7 @@ public class Torrent extends BaseAbility {
                 continue;
             }
 
-            new AbilityDmg(p, 0, ability, player);
+            new AbilityDmg(p, 5, ability, player);
 
             //The closer to target the further up. (If on the edge push away instead of up)
             double distance = p.getLocation().distance(targetBlock.getLocation());
