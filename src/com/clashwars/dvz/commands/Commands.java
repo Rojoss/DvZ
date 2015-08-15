@@ -21,6 +21,7 @@ import com.clashwars.dvz.maps.ShrineType;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.player.PlayerManager;
 import com.clashwars.dvz.structures.internal.StructureType;
+import com.clashwars.dvz.util.DvzItem;
 import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.WorkShop;
 import org.bukkit.Location;
@@ -191,6 +192,7 @@ public class Commands {
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " power {-100<>100} &8- &5Add/remove extra monster power."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " setclass {type} [player] &8- &5Force set your class."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " product [name] [amt] &8- &5Give yourself [amt] products."));
+                    sender.sendMessage(CWUtil.integrateColor("&6/" + label + " castitem [name] [amt] &8- &5Give yourself [amt] cast items."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " fixws [player] &8- &5Rebuild someone his workshop."));
                     sender.sendMessage(CWUtil.integrateColor("&6/" + label + " loc {name} [block] &8- &5Set a location at ur location."));
                     sender.sendMessage(CWUtil.integrateColor("&7(Or at the block on cursor within 5 blocks if 'block' is specified)"));
@@ -595,6 +597,51 @@ public class Commands {
 
                     product.getItem(amount).giveToPlayer(player);
                     dvz.logTimings("Commands.onCommand()[/dvz product]", t);
+                    return true;
+                }
+
+
+
+                //##########################################################################################################################
+                //################################################ /dvz castitem [name] [amt] ###############################################
+                //##########################################################################################################################
+                if (args[0].equalsIgnoreCase("castitem")) {
+                    if (!(sender instanceof Player)) {
+                        sender.sendMessage(Util.formatMsg("&cPlayer command only."));
+                        return true;
+                    }
+                    Player player = (Player)sender;
+
+                    if (!sender.isOp() && !sender.hasPermission("dvz.admin")) {
+                        sender.sendMessage(Util.formatMsg("Insufficient permissions."));
+                        return true;
+                    }
+
+                    if (args.length <= 1 || Ability.fromString(args[1]) == null) {
+                        sender.sendMessage(Util.formatMsg("&cInvalid ability specified."));
+                        String abilities = "&c";
+                        for (Ability a : Ability.values()) {
+                            abilities += a.toString().toLowerCase().replace("_","") + "&8, &c";
+                        }
+                        sender.sendMessage(Util.formatMsg("&4Abilities&8: &c" + abilities));
+                        return true;
+                    }
+                    Ability ability = Ability.fromString(args[1]);
+
+                    int amount = 1;
+                    if (args.length > 2) {
+                        amount = Math.max(CWUtil.getInt(args[2]), 1);
+                    }
+
+                    if (ability.getAbilityClass().getCastItem() == null) {
+                        sender.sendMessage(Util.formatMsg("This ability has no cast item!"));
+                        return true;
+                    }
+
+                    DvzItem item = ability.getAbilityClass().getCastItem();
+                    item.setAmount(amount);
+                    item.giveToPlayer(player);
+                    dvz.logTimings("Commands.onCommand()[/dvz castitem]", t);
                     return true;
                 }
 
