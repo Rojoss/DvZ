@@ -16,7 +16,7 @@ public class TeleportPortal extends BaseAbility {
     public TeleportPortal() {
         super();
         ability = Ability.TELEPORT_PORTAL;
-        castItem = new DvzItem(Material.EYE_OF_ENDER, 1, (short)0, displayName, 999, 7);
+        castItem = new DvzItem(Material.EYE_OF_ENDER, 1, (short)0, displayName, 999, 8);
     }
 
 

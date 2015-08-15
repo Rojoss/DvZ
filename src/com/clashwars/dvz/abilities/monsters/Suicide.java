@@ -17,7 +17,7 @@ public class Suicide extends BaseAbility {
         ability = Ability.SUICIDE;
         //displayName = "&4&lSuicide";
         //description = "&4Kill &7yourself when you're stuck somewhere.\n&cYou will get the same classes as before.\n&cSo you &4can't abuse &cit to get new classes!";
-        castItem = new DvzItem(Material.GHAST_TEAR, 1, (short)0, displayName, 0, 8);
+        castItem = new DvzItem(Material.GHAST_TEAR, 1, (short)0, displayName, 0, 9);
     }
 
     @Override
