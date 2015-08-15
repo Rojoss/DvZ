@@ -9,6 +9,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.Product;
+import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.runnables.FlailChainRunnable;
 import org.bukkit.Sound;
@@ -51,6 +52,16 @@ public class WeaponHandler implements Listener {
             return;
         }
 
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+
+        Player damaged = (Player)event.getEntity();
+        CWPlayer cwDamaged = dvz.getPM().getPlayer(damaged);
+        if (!cwDamaged.isMonster()) {
+            return;
+        }
+
         //Swing battleaxe
         if (CWUtil.compareItems(damager.getItemInHand(), Product.BATTLEAXE.getItem(), true, false)) {
             int enchantLvl = damager.getItemInHand().getEnchantmentLevel(Enchantment.LUCK);
@@ -89,6 +100,10 @@ public class WeaponHandler implements Listener {
 
         //Lifesteal sword
         if (CWUtil.compareItems(damager.getItemInHand(), Product.GREATSWORD.getItem(), true, false)) {
+            if (cwDamaged.getPlayerClass() == DvzClass.IRON_GOLEM) {
+                return;
+            }
+
             int enchantLvl = damager.getItemInHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
             if (enchantLvl <= 0) {
                 return;
