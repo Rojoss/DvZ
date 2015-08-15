@@ -36,14 +36,8 @@ public class Landmine extends BaseAbility {
         castActions = new ArrayList<Action>(Arrays.asList(new Action[]{Action.LEFT_CLICK_BLOCK, Action.RIGHT_CLICK_BLOCK}));
 
         new BukkitRunnable() {
-            boolean give = true;
-
             @Override
             public void run() {
-                give = !give;
-                if (!dvz.getGM().isMonsters() && !give) {
-                    return;
-                }
                 List<CWPlayer> players = dvz.getPM().getPlayers(ClassType.DWARF, true, false);
                 for (CWPlayer cwp : players) {
                     if (cwp.getPlayerData().getDwarfAbilitiesReceived().contains(ability)) {
@@ -61,7 +55,7 @@ public class Landmine extends BaseAbility {
                     }
                 }
             }
-        }.runTaskTimer(dvz, 0, 600);
+        }.runTaskTimer(dvz, 0, 400);
     }
 
     @Override
@@ -135,9 +129,9 @@ public class Landmine extends BaseAbility {
         for (Player p : players) {
             if (dvz.getPM().getPlayer(p).isMonster()) {
                 if (owner == null) {
-                    new AbilityDmg(p, 8, ability);
+                    new AbilityDmg(p, 6, ability);
                 } else {
-                    new AbilityDmg(p, 8, ability, owner);
+                    new AbilityDmg(p, 6, ability, owner);
                 }
                 CWUtil.sendActionBar(p, CWUtil.integrateColor("&4&l>> &8Hit by a landmine! &4&l<<"));
             }
