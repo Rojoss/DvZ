@@ -6,6 +6,7 @@ import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.abilities.dwarves.bonus.Forcefield;
 import com.clashwars.dvz.damage.AbilityDmg;
 import com.clashwars.dvz.player.CWPlayer;
 import com.clashwars.dvz.util.DvzItem;
@@ -62,6 +63,9 @@ public class SlimeSpray extends BaseAbility {
                             List<Player> nearby = CWUtil.getNearbyPlayers(slimeball.getLocation(), 2);
                             for (Player p : nearby) {
                                 if (!dvz.getPM().getPlayer(p).isDwarf()) {
+                                    continue;
+                                }
+                                if (Forcefield.inForcefield(p.getLocation())) {
                                     continue;
                                 }
                                 p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int)dvz.getGM().getMonsterPower(40, 100), 1), true);

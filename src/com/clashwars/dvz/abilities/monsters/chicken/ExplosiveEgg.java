@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.monsters.chicken;
 
+import com.clashwars.dvz.abilities.dwarves.bonus.Forcefield;
 import com.clashwars.dvz.damage.AbilityDmg;
 import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -58,12 +59,16 @@ public class ExplosiveEgg extends BaseAbility {
             return;
         }
 
+        if (Forcefield.inForcefield(egg.getLocation())) {
+            return;
+        }
+
         egg.getWorld().playSound(event.getEntity().getLocation(), Sound.EXPLODE, 1, 1.5f);
         ParticleEffect.EXPLOSION_LARGE.display(dvz.getGM().getMonsterPower(0.5f, 2f), dvz.getGM().getMonsterPower(0.5f, 2f), dvz.getGM().getMonsterPower(0.5f, 2f), 0, 10, egg.getLocation(), 500);
         ParticleEffect.SMOKE_LARGE.display(dvz.getGM().getMonsterPower(0.5f, 2f), dvz.getGM().getMonsterPower(0.5f, 2f), dvz.getGM().getMonsterPower(0.5f, 2f), 0, 150, egg.getLocation(), 500);
-        List<Player> players = CWUtil.getNearbyPlayers(egg.getLocation(), (int)dvz.getGM().getMonsterPower(1, 2));
+        List<Player> players = CWUtil.getNearbyPlayers(egg.getLocation(), (int)dvz.getGM().getMonsterPower(1, 2.5f));
         for (Player p : players) {
-            if (dvz.getPM().getPlayer((Player)p).isDwarf()) {
+            if (dvz.getPM().getPlayer((Player)p).isDwarf() && !Forcefield.inForcefield(p.getLocation())) {
                 new AbilityDmg(p, dvz.getGM().getMonsterPower(1,5), ability, (Player)egg.getShooter());
                 p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int) dvz.getGM().getMonsterPower(20, 80), 1));
                 ParticleEffect.SMOKE_LARGE.display(0.5f, 0.5f, 0.5f, 0, 50, p.getLocation());

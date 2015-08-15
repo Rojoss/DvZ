@@ -8,6 +8,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwcore.utils.RandomUtils;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
+import com.clashwars.dvz.abilities.dwarves.bonus.Forcefield;
 import com.clashwars.dvz.classes.monsters.Slime;
 import com.clashwars.dvz.damage.AbilityDmg;
 import com.clashwars.dvz.player.CWPlayer;
@@ -71,7 +72,7 @@ public class Splash extends BaseAbility {
         float radius = data.getSlimeSize() * 3 + dvz.getGM().getMonsterPower(0, 4);
         List<Player> nearbyPlayers = CWUtil.getNearbyPlayers(player.getLocation(), radius);
         for (Player p : nearbyPlayers) {
-            if (dvz.getPM().getPlayer(p).isDwarf()) {
+            if (dvz.getPM().getPlayer(p).isDwarf() && !Forcefield.inForcefield(p.getLocation())) {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int)dvz.getGM().getMonsterPower(40, 100), data.getSlimeSize()));
                 new AbilityDmg(p, data.getSlimeSize() * 2 + dvz.getGM().getMonsterPower(0, 3), Ability.SPLASH);
             }

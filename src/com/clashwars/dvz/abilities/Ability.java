@@ -127,8 +127,10 @@ public enum Ability {
     TORRENT(new Torrent(), SwapType.DWARF_ABILITY, "{0} died from {1}'s water torrent"),
     LAND_MINE(new Landmine(), SwapType.DWARF_ABILITY, "{0} was blown to pieces by {1}'s mine"),
     NET(new Net(), SwapType.DWARF_ABILITY, ""),
-    //FIRESTAFF(new FireStaff(), SwapType.DWARF_ABILITY, "{0} burnt to a crisp by {1}'s Firestaff"),
-    CAMOUFLAGE(new Camouflage(), SwapType.DWARF_ABILITY, "");
+    FIRESTAFF(new FireStaff(), SwapType.DWARF_ABILITY, "{0} burnt to a crisp by {1}'s Firestaff"),
+    CAMOUFLAGE(new Camouflage(), SwapType.DWARF_ABILITY, ""),
+    FORCEFIELD(new Forcefield(), SwapType.DWARF_ABILITY, ""),
+    TURRET(new Turret(), SwapType.DWARF_ABILITY, "{0} was shot by {1}'s turret");
 
 
 

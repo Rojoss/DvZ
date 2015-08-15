@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.monsters.creeper;
 
+import com.clashwars.dvz.abilities.dwarves.bonus.Forcefield;
 import com.clashwars.dvz.damage.AbilityDmg;
 import com.clashwars.cwcore.damage.types.CustomDmg;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -133,7 +134,7 @@ public class Explode extends BaseAbility {
                 if (p.getUniqueId().equals(caster.getUniqueId())) {
                     continue;
                 }
-                if (dvz.getPM().getPlayer(p).isDwarf()) {
+                if (dvz.getPM().getPlayer(p).isDwarf() && !Forcefield.inForcefield(p.getLocation())) {
                     new AbilityDmg(p, 0.5f * power, ability, caster);
                     Vector dir = p.getLocation().toVector().subtract(loc.toVector()).normalize();
                     p.setVelocity(p.getVelocity().add(dir.multiply(2.5f)));
@@ -159,6 +160,9 @@ public class Explode extends BaseAbility {
                         continue;
                     }
                     if (distance > power / 2  && CWUtil.randomFloat() > 0.5f) {
+                        continue;
+                    }
+                    if (Forcefield.inForcefield(block.getLocation().add(0.5f, 0.5f, 0.5f))) {
                         continue;
                     }
 

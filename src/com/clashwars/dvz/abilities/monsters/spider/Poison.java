@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.monsters.spider;
 
+import com.clashwars.dvz.abilities.dwarves.bonus.Forcefield;
 import com.clashwars.dvz.damage.AbilityDmg;
 import com.clashwars.cwcore.effect.Particle;
 import com.clashwars.cwcore.effect.effects.ExpandingCircleEffect;
@@ -47,7 +48,7 @@ public class Poison extends BaseAbility {
 
         List<Player> players = CWUtil.getNearbyPlayers(player.getLocation(), (float)range * 1.5f);
         for (Player p : players) {
-            if(dvz.getPM().getPlayer(p).isDwarf()) {
+            if(dvz.getPM().getPlayer(p).isDwarf() && !Forcefield.inForcefield(p.getLocation())) {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)dvz.getGM().getMonsterPower(100) + 40, 2));
                 ParticleEffect.CRIT.display(1, 0.5f, 1, 0.01f, 10, p.getLocation());
                 new AbilityDmg(p, 0, ability, player);

@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.monsters.blaze;
 
+import com.clashwars.dvz.abilities.dwarves.bonus.Forcefield;
 import com.clashwars.dvz.damage.AbilityDmg;
 import com.clashwars.cwcore.effect.Particle;
 import com.clashwars.cwcore.effect.effects.ExpandingCircleEffect;
@@ -49,7 +50,7 @@ public class Blast extends BaseAbility {
             public void run() {
                 List<Player> players = CWUtil.getNearbyPlayers(player.getLocation(), radius);
                 for (Player p : players) {
-                    if (dvz.getPM().getPlayer((Player)p).isDwarf()) {
+                    if (dvz.getPM().getPlayer((Player)p).isDwarf() && !Forcefield.inForcefield(p.getLocation())) {
                         new AbilityDmg(p, 1, ability, player);
                         p.setFireTicks((int) dvz.getGM().getMonsterPower(80) + 40);
                         player.getWorld().playSound(p.getLocation(), Sound.BLAZE_HIT, 0.5f, 0);

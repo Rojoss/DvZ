@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.monsters.blaze;
 
+import com.clashwars.dvz.abilities.dwarves.bonus.Forcefield;
 import com.clashwars.dvz.damage.AbilityDmg;
 import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -74,6 +75,10 @@ public class Fireball extends BaseAbility {
         final Location l = event.getEntity().getLocation();
 
         if (!getDvzClasses().contains(dvz.getPM().getPlayer(player).getPlayerClass())) {
+            return;
+        }
+
+        if (Forcefield.inForcefield(l)) {
             return;
         }
 

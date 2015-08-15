@@ -1,5 +1,6 @@
 package com.clashwars.dvz.abilities.monsters.irongolem;
 
+import com.clashwars.dvz.abilities.dwarves.bonus.Forcefield;
 import com.clashwars.dvz.damage.AbilityDmg;
 import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.packet.ParticleEffect;
@@ -48,7 +49,7 @@ public class GroundPound extends BaseAbility {
                 ParticleEffect.CLOUD.display(radius,0.3f,radius, 0.1f, 200, player.getLocation());
                 List<Player> players = CWUtil.getNearbyPlayers(player.getLocation(), radius + 1);
                 for (Player p : players) {
-                    if(dvz.getPM().getPlayer(p).isDwarf()) {
+                    if(dvz.getPM().getPlayer(p).isDwarf() && !Forcefield.inForcefield(p.getLocation())) {
                         new AbilityDmg(p, 2, ability, player);
                         Vector dir = p.getLocation().toVector().subtract(player.getLocation().toVector()).normalize();
                         p.setVelocity(player.getVelocity().add(dir.setY(1.5f)));
