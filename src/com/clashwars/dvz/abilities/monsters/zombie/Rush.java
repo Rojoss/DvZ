@@ -57,7 +57,7 @@ public class Rush extends BaseAbility {
             @Override
             public void run() {
                 iterations++;
-                if (iterations >= 4) {
+                if (iterations >= 7) {
                     iterations = 0;
                     if (target != CWUtil.getTargetedPlayer(player, (int)dvz.getGM().getMonsterPower(20, 50))) {
                         player.setWalkSpeed(dvzClass.getClassClass().getSpeed());
