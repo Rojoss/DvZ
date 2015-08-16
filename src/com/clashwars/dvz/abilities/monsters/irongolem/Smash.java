@@ -7,6 +7,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.abilities.Ability;
 import com.clashwars.dvz.abilities.BaseAbility;
 import com.clashwars.dvz.util.DvzItem;
+import com.clashwars.dvz.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -55,6 +56,9 @@ public class Smash extends BaseAbility {
                 for (int z = loc.getBlockZ() - radius; z < loc.getBlockZ() + radius; z++) {
                     Block b = loc.getWorld().getBlockAt(x,y,z);
                     if (undestroyableBlocks.contains(b.getType())) {
+                        continue;
+                    }
+                    if (Util.isProtected(b.getLocation().toVector())) {
                         continue;
                     }
                     double distance = b.getLocation().distance(loc);

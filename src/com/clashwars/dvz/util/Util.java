@@ -18,9 +18,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 public class Util {
 
@@ -88,13 +86,40 @@ public class Util {
         return !DvZ.inst().getUndestroyableBlocks().contains(mat);
     }
 
+    public static boolean isProtected(Vector location) {
+        return DvZ.inst().getGameCfg().PROTECTED_BLOCKS.contains(CWUtil.vecToString(location));
+    }
+
+    public static void addProtected(Vector location) {
+        String v = CWUtil.vecToString(location);
+        if (!DvZ.inst().getGameCfg().PROTECTED_BLOCKS.contains(v)) {
+            DvZ.inst().getGameCfg().PROTECTED_BLOCKS.add(v);
+        }
+    }
+
+    public static void removeProtected(Vector location) {
+        String v = CWUtil.vecToString(location);
+        if (DvZ.inst().getGameCfg().PROTECTED_BLOCKS.contains(v)) {
+            DvZ.inst().getGameCfg().PROTECTED_BLOCKS.remove(v);
+        }
+    }
+
+    public static List<Vector> getProtected() {
+        List<Vector> result = new ArrayList<Vector>();
+        List<String> strings = DvZ.inst().getGameCfg().PROTECTED_BLOCKS;
+        for (String vStr : strings) {
+            result.add(CWUtil.vecFromString(vStr));
+        }
+        return result;
+    }
+
     public static Vector getDragonMouthPos(Location playerLoc) {
         Long t = System.currentTimeMillis();
         double pitch = Math.PI /2;
         double yaw  = ((playerLoc.getYaw() + 90) * Math.PI) / 180;
         Vector castVec = new org.bukkit.util.Vector(((float)Math.sin(pitch) * Math.cos(yaw)), ((float)Math.cos(pitch)), ((float)Math.sin(pitch) * Math.sin(yaw)));
-        castVec.multiply(6);
-        castVec.add(playerLoc.toVector());
+        castVec.multiply(6.5f);
+        castVec.add(playerLoc.toVector().setY(playerLoc.getY() + 1f));
         DvZ.inst().logTimings("Util.getDragonMouthPos()", t);
         return castVec;
     }
@@ -168,5 +193,7 @@ public class Util {
 
         return gameTime.getTime() - System.currentTimeMillis();
     }
+
+
 
 }

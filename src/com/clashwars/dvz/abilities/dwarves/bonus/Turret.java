@@ -2,6 +2,7 @@ package com.clashwars.dvz.abilities.dwarves.bonus;
 
 import com.clashwars.cwcore.events.DelayedPlayerInteractEvent;
 import com.clashwars.cwcore.helpers.CWEntity;
+import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.GameState;
@@ -19,15 +20,19 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Turret extends BaseAbility {
 
@@ -43,6 +48,9 @@ public class Turret extends BaseAbility {
             @Override
             public void run() {
                 for (final ArmorStand turret : turrets) {
+                    if (turret == null || turret.getHelmet() == null || turret.getHelmet().getType() != Material.DISPENSER) {
+                        continue;
+                    }
                     final List<Player> targets = new ArrayList<Player>();
                     List<Entity> nearby = turret.getNearbyEntities(10, 5, 10);
                     for (Entity e : nearby) {
@@ -160,6 +168,8 @@ public class Turret extends BaseAbility {
         CWEntity armorStand = CWEntity.create(EntityType.ARMOR_STAND, player.getLocation().getBlock().getLocation().add(0.5f, 0f, 0.5f));
         player.getLocation().getBlock().setType(Material.SPRUCE_FENCE);
         player.getLocation().getBlock().getRelative(BlockFace.UP).setType(Material.SPRUCE_FENCE);
+        Util.addProtected(player.getLocation().getBlock().getLocation().toVector());
+        Util.addProtected(player.getLocation().getBlock().getRelative(BlockFace.UP).getLocation().toVector());
         armorStand.setHelmet(new ItemStack(Material.DISPENSER));
         armorStand.setArmorstandVisibility(false);
         armorStand.setArmorstandPlate(true);
@@ -215,12 +225,35 @@ public class Turret extends BaseAbility {
         if (!dvz.getPM().getPlayer(event.getPlayer()).isMonster()) {
             return;
         }
+        destroyTurret(stand, false);
+    }
+
+    @EventHandler
+    private void pluginUnload(PluginDisableEvent event) {
+        List<ArmorStand> turretsClone = new ArrayList<ArmorStand>(turrets);
+        for (ArmorStand turret : turretsClone) {
+            destroyTurret(turret, true);
+        }
+        turrets.clear();
+    }
+
+    @EventHandler
+    private void entityDespawn(EntityDeathEvent event) {
+
+    }
+
+    private void destroyTurret(ArmorStand stand, boolean giveBack) {
         if (!stand.hasMetadata("turret")) {
             return;
         }
         Player owner = dvz.getServer().getPlayer(stand.getMetadata("turret").get(0).asString());
         if (owner != null) {
             owner.sendMessage(Util.formatMsg("&c&lYour turret has been destroyed!"));
+            if (giveBack) {
+                CWItem item = getCastItem().clone();
+                item.setAmount(1);
+                item.giveToPlayer(owner);
+            }
         }
 
         ParticleEffect.EXPLOSION_NORMAL.display(1,1,1,0, 5, stand.getLocation());
@@ -228,6 +261,8 @@ public class Turret extends BaseAbility {
 
         turrets.remove(stand);
         stand.remove();
+        Util.removeProtected(stand.getLocation().getBlock().getLocation().toVector());
+        Util.removeProtected(stand.getLocation().getBlock().getRelative(BlockFace.UP).getLocation().toVector());
         if (stand.getLocation().getBlock().getType() == Material.SPRUCE_FENCE) {
             stand.getLocation().getBlock().setType(Material.AIR);
         }

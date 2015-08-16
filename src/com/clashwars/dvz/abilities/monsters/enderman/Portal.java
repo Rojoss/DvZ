@@ -95,6 +95,9 @@ public class Portal extends BaseAbility {
             }
 
             activePortal = new PortalData(player, portalLoc, cuboid);
+            if (activePortal.getEgg() != null) {
+                Util.addProtected(activePortal.getEgg().getBlock().getLocation().toVector());
+            }
 
             player.teleport(portalLoc.clone().add(1,1,0));
             CWUtil.removeItemsFromHand(player, 1);
@@ -224,6 +227,7 @@ public class Portal extends BaseAbility {
 
         if (activePortal.getEgg() != null) {
             activePortal.getEgg().getBlock().setType(Material.AIR);
+            Util.removeProtected(activePortal.getEgg().getBlock().getLocation().toVector());
         }
 
         ParticleEffect.EXPLOSION_HUGE.display(0, 3, 0, 0, 5, activePortal.getEgg().getBlock().getLocation(), 500);

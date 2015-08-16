@@ -155,6 +155,9 @@ public class Explode extends BaseAbility {
                         }
                         continue;
                     }
+                    if (Util.isProtected(block.getLocation().toVector())) {
+                        continue;
+                    }
                     double distance = block.getLocation().distance(blockCenter);
                     if (distance > power+1 / 2) {
                         continue;

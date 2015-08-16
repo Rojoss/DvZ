@@ -98,6 +98,7 @@ public class GameManager {
         resetDragonSlayer();
         setSpeed(2);
         dvz.getGameCfg().EXTRA_MONSTER_POWER = 0;
+        dvz.getGameCfg().PROTECTED_BLOCKS.clear();
 
         HashMap<UUID, BannerData> banners = new HashMap<UUID, BannerData>(dvz.getBannerCfg().getBanners());
         for (Map.Entry<UUID, BannerData> banner : banners.entrySet()) {

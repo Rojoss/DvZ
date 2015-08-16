@@ -26,6 +26,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.server.PluginDisableEvent;
@@ -181,6 +182,7 @@ public class PotionBomb extends BaseAbility {
         Util.broadcast("&6A bomb has been placed at&8: &c" + bomb.getBlockX() + "&7, &a" + bomb.getBlockY() + "&7, &9" + bomb.getBlockZ());
         Util.broadcast("&6If not destroyed, it will explode in &a&l" + fuseTime / 20 + " &6seconds!");
         bombs.put(bomb.getBlock().getLocation(), bt);
+        Util.addProtected(bomb.getBlock().getLocation().toVector());
 
         dvz.getPM().getPlayer(player).getPlayerData().setbombUsed(true);
 
@@ -206,19 +208,14 @@ public class PotionBomb extends BaseAbility {
         }.runTaskTimer(dvz, 10, 1);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void blockDestroy(BlockBreakEvent event) {
         Block bomb;
 
-        if(bombs.containsKey(event.getBlock().getLocation())) {
-            bomb = event.getBlock();
-        } else if (bombs.containsKey(event.getBlock().getRelative(0, 1, 0).getLocation())) {
-            bomb = event.getBlock().getRelative(0, 1, 0);
-        } else if (bombs.containsKey(event.getBlock().getRelative(0, -1, 0).getLocation())) {
-            bomb = event.getBlock().getRelative(0, -1, 0);
-        } else {
+        if(!bombs.containsKey(event.getBlock().getLocation())) {
             return;
         }
+        bomb = event.getBlock();
 
         event.setCancelled(true);
 
@@ -256,6 +253,7 @@ public class PotionBomb extends BaseAbility {
     public void fixGround(Block bomb) {
         bomb.getRelative(0, -1, 0).setType(bomb.getRelative(1, -1, 0).getType());
         bomb.setType(Material.AIR);
+        Util.removeProtected(bomb.getLocation().toVector());
         bomb.getRelative(0, -19, 0).setType(Material.STONE);
     }
 

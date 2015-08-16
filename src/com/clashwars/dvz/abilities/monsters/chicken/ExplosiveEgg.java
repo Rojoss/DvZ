@@ -89,6 +89,9 @@ public class ExplosiveEgg extends BaseAbility {
                         }
                         continue;
                     }
+                    if (Util.isProtected(block.getLocation().toVector())) {
+                        continue;
+                    }
                     double distance = block.getLocation().distance(blockCenter);
                     if (distance > radius) {
                         continue;

@@ -155,6 +155,11 @@ public class Pickup extends BaseAbility {
             return;
         }
 
+        if (Util.isProtected(block.getLocation().toVector())) {
+            CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cThis block can't be picked up! &4&l<<"));
+            return;
+        }
+
         if (onCooldown(player, "block", getIntOption("block-cooldown"))) {
             return;
         }

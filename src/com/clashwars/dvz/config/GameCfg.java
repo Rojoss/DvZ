@@ -2,7 +2,9 @@ package com.clashwars.dvz.config;
 
 import com.clashwars.cwcore.config.internal.EasyConfig;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class GameCfg extends EasyConfig {
 
@@ -15,6 +17,7 @@ public class GameCfg extends EasyConfig {
     public String GAME__DRAGON_SLAYER = "";
     public Long GAME__START_TIME;
     public HashMap<String, Integer> STORAGE_PRODUCTS = new HashMap<String, Integer>();
+    public List<String> PROTECTED_BLOCKS = new ArrayList<String>();
 
     public GameCfg(String fileName) {
         this.setFile(fileName);
