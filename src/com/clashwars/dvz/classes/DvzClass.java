@@ -1,10 +1,7 @@
 package com.clashwars.dvz.classes;
 
 import com.clashwars.cwstats.stats.internal.StatType;
-import com.clashwars.dvz.classes.dragons.AirDragon;
-import com.clashwars.dvz.classes.dragons.DragonClass;
-import com.clashwars.dvz.classes.dragons.FireDragon;
-import com.clashwars.dvz.classes.dragons.WaterDragon;
+import com.clashwars.dvz.classes.dragons.*;
 import com.clashwars.dvz.classes.dwarves.*;
 import com.clashwars.dvz.classes.monsters.*;
 
@@ -39,7 +36,8 @@ public enum DvzClass {
     DRAGON(ClassType.BASE, null, new DragonClass(), null, new String[]{"dragons"}),
     FIREDRAGON(ClassType.DRAGON, null, new FireDragon(), null, new String[]{"firedragons", "firedragon", "fire"}),
     WATERDRAGON(ClassType.DRAGON, null, new WaterDragon(), null, new String[]{"waterdragons", "waterdragon", "water"}),
-    AIRDRAGON(ClassType.DRAGON, null, new AirDragon(), null, new String[]{"airdragons", "airdragon", "air"});
+    AIRDRAGON(ClassType.DRAGON, null, new AirDragon(), null, new String[]{"airdragons", "airdragon", "air"}),
+    ICEDRAGON(ClassType.DRAGON, null, new IceDragon(), null, new String[]{"icedragons", "icedragon", "ice"});
 
     private ClassType type;
     private String team;

@@ -1,5 +1,6 @@
 package com.clashwars.dvz.listeners;
 
+import com.clashwars.cwcore.debug.Debug;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.GameManager;
@@ -17,9 +18,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
@@ -160,12 +159,6 @@ public class ProtectEvents implements Listener {
         //Don't allow breaking block underneath plants.
         blockType = event.getBlock().getRelative(BlockFace.UP).getType();
         if (blockType == Material.SUGAR_CANE_BLOCK || blockType == Material.RED_ROSE)  {
-            event.setCancelled(true);
-            return;
-        }
-
-        //Don't allow breaking ice (will create water)
-        if (blockType == Material.ICE || blockType == Material.PACKED_ICE) {
             event.setCancelled(true);
             return;
         }
@@ -374,6 +367,13 @@ public class ProtectEvents implements Listener {
         Player target = (Player)event.getTarget();
         if (dvz.getPM().getPlayer(target).isMonster()) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    private void iceToWater(BlockBreakEvent event) {
+        if (event.getBlock().getType() == Material.ICE) {
+            event.getBlock().setType(Material.AIR);
         }
     }
 }

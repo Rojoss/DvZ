@@ -8,6 +8,9 @@ import com.clashwars.dvz.abilities.dragons.air.WindStorm;
 import com.clashwars.dvz.abilities.dragons.fire.Burn;
 import com.clashwars.dvz.abilities.dragons.fire.FireBreath;
 import com.clashwars.dvz.abilities.dragons.fire.FireFly;
+import com.clashwars.dvz.abilities.dragons.ice.Hail;
+import com.clashwars.dvz.abilities.dragons.ice.IceSpike;
+import com.clashwars.dvz.abilities.dragons.ice.SnowSpray;
 import com.clashwars.dvz.abilities.dragons.water.Geyser;
 import com.clashwars.dvz.abilities.dragons.water.ToxicRain;
 import com.clashwars.dvz.abilities.dragons.water.WaterBubble;
@@ -121,6 +124,9 @@ public enum Ability {
     WIND(new Wind(), SwapType.NONE, "{0} was blown away by wind and died"),
     WINDSTORM(new WindStorm(), SwapType.NONE, "{0} died during a wind storm"),
     AIRSHIELD(new AirShield(), SwapType.NONE, "{0} died from a reflected arrow by the dragon"),
+    ICESPIKE(new IceSpike(), SwapType.NONE, "{0} died from the ice spike"),
+    HAIL(new Hail(), SwapType.NONE, "{0} didn't survive the hailstorm"),
+    SNOW_SPRAY(new SnowSpray(), SwapType.NONE, "{0} died from a snowball"),
 
     //Dwarf bonus abilities
     LEAP(new Leap(), SwapType.DWARF_ABILITY, "{0} died while trying to leap away"),
