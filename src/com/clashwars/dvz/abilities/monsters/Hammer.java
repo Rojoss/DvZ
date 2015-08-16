@@ -54,6 +54,10 @@ public class Hammer extends BaseAbility {
             return;
         }
 
+        if (Util.isProtected(block.getLocation().toVector())) {
+            return;
+        }
+
 
         //Shrine destroying stuff
         ParticleEffect effect = ParticleEffect.SMOKE_NORMAL;
