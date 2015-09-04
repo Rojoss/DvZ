@@ -40,7 +40,7 @@ public class Turret extends BaseAbility {
 
     public Turret() {
         super();
-        ability = Ability.TURRET;
+        //ability = Ability.TURRET;
         castItem = new DvzItem(Material.DISPENSER, 5, (short)0, displayName, -1, -1, false);
 
         //Shoot a projectile every 30 ticks for each turret.
@@ -210,7 +210,7 @@ public class Turret extends BaseAbility {
             return;
         }
         event.setCancelled(true);
-        new AbilityDmg(damaged, 2, Ability.TURRET, shooter);
+        //new AbilityDmg(damaged, 2, Ability.TURRET, shooter);
     }
 
     @EventHandler

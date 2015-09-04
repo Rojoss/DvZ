@@ -2,7 +2,7 @@ main : com.clashwars.dvz.DvZ
 name: DvZ
 version: 0.1
 description: Dwarves VS Zombies plugin.
-depend: [CWCore,ClashWars,CWStats]
+depend: [CWCore,ClashWars,CWStats,CWVote]
 commands:
   dvz:
     description: Main dvz command

@@ -4,6 +4,10 @@ import com.clashwars.cwcore.damage.BaseDmg;
 import com.clashwars.cwcore.damage.Iattacker;
 import com.clashwars.cwcore.damage.log.DamageLog;
 import com.clashwars.cwcore.damage.log.DamageLogEntry;
+import com.clashwars.cwvote.events.ShopItemPurchaseEvent;
+import com.clashwars.dvz.abilities.Ability;
+import com.clashwars.dvz.classes.dwarves.DwarfClass;
+import com.clashwars.dvz.config.RewardsCfg;
 import com.clashwars.dvz.damage.AbilityDmg;
 import com.clashwars.cwcore.damage.types.CustomDmg;
 import com.clashwars.cwcore.damage.types.MeleeDmg;
@@ -22,6 +26,7 @@ import com.clashwars.dvz.abilities.monsters.enderman.Pickup;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.player.CWPlayer;
+import com.clashwars.dvz.player.PlayerData;
 import com.clashwars.dvz.player.PlayerSettings;
 import com.clashwars.dvz.util.Util;
 import com.clashwars.dvz.workshop.WorkShop;
@@ -37,10 +42,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 public class MainEvents implements Listener {
@@ -433,6 +435,156 @@ public class MainEvents implements Listener {
             } else {
                 player.sendMessage(CWUtil.integrateColor(msg));
             }
+        }
+    }
+
+    @EventHandler
+    private void itemPurchase(ShopItemPurchaseEvent event) {
+        String name = event.getShopItem().name;
+        Player player = event.getPlayer();
+        CWPlayer cwp = dvz.getPM().getPlayer(player);
+        UUID uuid = cwp.getUUID();
+        RewardsCfg rewardsCfg = dvz.getRewardsCfg();
+        if (name.equalsIgnoreCase("&b&lExtra dwarf class")) {
+            if (!dvz.getGM().isStarted() || dvz.getGM().getState() == GameState.OPENED) {
+                cwp.sendMessage(Util.formatMsg("&cThe game needs to be started to purchase this!"));
+                event.setCancelled(true);
+                return;
+            }
+            if (cwp.getPlayerClass() != DvzClass.DWARF) {
+                cwp.sendMessage(Util.formatMsg("&cYou already picked a class!"));
+                event.setCancelled(true);
+                return;
+            }
+
+            Set<DvzClass> classOptions = cwp.getClassOptions();
+            if (classOptions.size() >= dvz.getCM().getClasses(ClassType.DWARF).size()) {
+                cwp.sendMessage(Util.formatMsg("&cYou already received all classes."));
+                event.setCancelled(true);
+                return;
+            }
+            cwp.giveRandomClassItems(ClassType.DWARF, 1);
+            player.updateInventory();
+        } else if (name.equalsIgnoreCase("&3&lExtra dwarf class")) {
+            int extraDwarf = rewardsCfg.getExtraDwarf(uuid);
+            if (extraDwarf == 4) {
+                cwp.sendMessage(Util.formatMsg("&cYou can't have more than 4 extra dwarf classes!"));
+                event.setCancelled(true);
+                return;
+            }
+            rewardsCfg.setExtraDwarf(uuid, 1);
+            cwp.sendMessage(Util.formatMsg("&6From now on you'll receive an extra dwarf class option each game!"));
+        } else if (name.equalsIgnoreCase("&b&lVirtual structures")) {
+            if (rewardsCfg.hasStructureCmds(uuid)) {
+                cwp.sendMessage(Util.formatMsg("&cYou already purchased this!"));
+                event.setCancelled(true);
+                return;
+            }
+            rewardsCfg.addStructureCmds(uuid);
+            cwp.sendMessage(Util.formatMsg("&6You will be able to use all structure commands during the game!"));
+        } else if (name.equalsIgnoreCase("&3&l/storage command")) {
+            if (!dvz.getGM().isStarted()) {
+                cwp.sendMessage(Util.formatMsg("&cThe game needs to be started to purchase this!"));
+                event.setCancelled(true);
+                return;
+            }
+            if (rewardsCfg.hasStorageCmd(uuid)) {
+                cwp.sendMessage(Util.formatMsg("&cYou already purchased this!"));
+                event.setCancelled(true);
+                return;
+            }
+            rewardsCfg.addStorageCmd(uuid);
+            cwp.sendMessage(Util.formatMsg("&6From now on you can use &3/storage&6!"));
+        } else if (name.equalsIgnoreCase("&3&l/furnace command")) {
+            if (!dvz.getGM().isStarted()) {
+                cwp.sendMessage(Util.formatMsg("&cThe game needs to be started to purchase this!"));
+                event.setCancelled(true);
+                return;
+            }
+            if (rewardsCfg.hasFurnaceCmd(uuid)) {
+                cwp.sendMessage(Util.formatMsg("&cYou already purchased this!"));
+                event.setCancelled(true);
+                return;
+            }
+            rewardsCfg.addFurnaceCmd(uuid);
+            cwp.sendMessage(Util.formatMsg("&6From now on you can use &3/furnace&6!"));
+        } else if (name.equalsIgnoreCase("&3&l/enchant command")) {
+            if (!dvz.getGM().isStarted()) {
+                cwp.sendMessage(Util.formatMsg("&cThe game needs to be started to purchase this!"));
+                event.setCancelled(true);
+                return;
+            }
+            if (rewardsCfg.hasEnchantCmd(uuid)) {
+                cwp.sendMessage(Util.formatMsg("&cYou already purchased this!"));
+                event.setCancelled(true);
+                return;
+            }
+            rewardsCfg.addFurnaceCmd(uuid);
+            cwp.sendMessage(Util.formatMsg("&6From now on you can use &3/enchant&6!"));
+        } else if (name.equalsIgnoreCase("&b&lDwarf ability")) {
+            if (!dvz.getGM().isStarted()) {
+                cwp.sendMessage(Util.formatMsg("&cThe game needs to be started to purchase this!"));
+                event.setCancelled(true);
+                return;
+            }
+            if (!cwp.isDwarf()) {
+                cwp.sendMessage(Util.formatMsg("&cYou need to be a dwarf to purchase this!"));
+                event.setCancelled(true);
+                return;
+            }
+            PlayerData pData = cwp.getPlayerData();
+            if (pData.getDwarfAbilitiesReceived().size() == DwarfClass.bonusAbilities.size()) {
+                cwp.sendMessage(Util.formatMsg("&cYou already received all the abilities!"));
+                event.setCancelled(true);
+                return;
+            }
+
+            List<Ability> tempBonusAbilities = new ArrayList<>(DwarfClass.bonusAbilities);
+            boolean given = false;
+            for (int i = 0; i < 20; i++) { //Max try give a random one that the player didn't receive yet 20 times
+                Ability ability = CWUtil.random(tempBonusAbilities);
+                if (pData.getDwarfAbilitiesReceived().contains(ability)) {
+                    tempBonusAbilities.remove(ability);
+                    continue;
+                }
+
+                ability.getAbilityClass().getCastItem().giveToPlayer(cwp.getPlayer());
+                cwp.sendMessage(Util.formatMsg("&2You received the &a&l" + ability.getAbilityClass().getDisplayName() + " &2ability!"));
+                cwp.addDwarfAbility(ability);
+                given = true;
+                break;
+            }
+
+            //Just give a random one if it didn't find one.
+            if (!given) {
+                Ability ability = CWUtil.random(tempBonusAbilities);
+                ability.getAbilityClass().getCastItem().giveToPlayer(cwp.getPlayer());
+                cwp.sendMessage(Util.formatMsg("&2You received the &a&l" + ability.getAbilityClass().getDisplayName() + " &2ability!"));
+            }
+        } else if (name.equalsIgnoreCase("&b&l+3% monster classes")) {
+            if (!dvz.getGM().isStarted()) {
+                cwp.sendMessage(Util.formatMsg("&cThe game needs to be started to purchase this!"));
+                event.setCancelled(true);
+                return;
+            }
+            rewardsCfg.setExtraMonster(uuid, 3);
+            cwp.sendMessage(Util.formatMsg("&6You'll receive +3% extra monster classes! &8[&2Total&7: &a&l+&a" + rewardsCfg.getExtraMonster(uuid) + "&8]"));
+        } else if (name.equalsIgnoreCase("&b&l+6% monster classes")) {
+            if (!dvz.getGM().isStarted()) {
+                cwp.sendMessage(Util.formatMsg("&cThe game needs to be started to purchase this!"));
+                event.setCancelled(true);
+                return;
+            }
+            rewardsCfg.setExtraMonster(uuid, 6);
+            cwp.sendMessage(Util.formatMsg("&6You'll receive +6% extra monster classes! &8[&2Total&7: &a&l+&a" + rewardsCfg.getExtraMonster(uuid) + "&8]"));
+        } else if (name.equalsIgnoreCase("&b&l+10% monster classes")) {
+            if (!dvz.getGM().isStarted()) {
+                cwp.sendMessage(Util.formatMsg("&cThe game needs to be started to purchase this!"));
+                event.setCancelled(true);
+                return;
+            }
+            rewardsCfg.setExtraMonster(uuid, 10);
+            cwp.sendMessage(Util.formatMsg("&6You'll receive +10% extra monster classes! &8[&2Total&7: &a&l+&a" + rewardsCfg.getExtraMonster(uuid) + "&8]"));
         }
     }
 

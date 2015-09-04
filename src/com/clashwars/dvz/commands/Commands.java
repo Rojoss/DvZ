@@ -4,6 +4,7 @@ import com.clashwars.cwcore.CWCore;
 import com.clashwars.cwcore.CooldownManager;
 import com.clashwars.cwcore.cuboid.Cuboid;
 import com.clashwars.cwcore.cuboid.SelectionStatus;
+import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.packet.ParticleEffect;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
@@ -72,9 +73,11 @@ public class Commands {
             }
             Player player = (Player)sender;
 
-            if (!player.isOp() && !player.hasPermission("cmd.storage")) {
-                sender.sendMessage(Util.formatMsg("&3Purchase &a&lVIP &3to be able to use the virtual storage."));
-                return true;
+            if (!dvz.getRewardsCfg().hasStorageCmd(player.getUniqueId()) && !dvz.getRewardsCfg().hasStructureCmds(player.getUniqueId())) {
+                if (!player.isOp() && !player.hasPermission("cmd.storage")) {
+                    sender.sendMessage(Util.formatMsg("&3Purchase &a&lVIP &3to be able to use the virtual storage."));
+                    return true;
+                }
             }
 
             if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted() || (Util.isTest() && !Util.canTest(player))) {
@@ -94,9 +97,11 @@ public class Commands {
             }
             Player player = (Player)sender;
 
-            if (!player.isOp() && !player.hasPermission("cmd.furnace")) {
-                sender.sendMessage(Util.formatMsg("&3Purchase &a&lVIP &3to be able to use the virtual furnace."));
-                return true;
+            if (!dvz.getRewardsCfg().hasFurnaceCmd(player.getUniqueId()) && !dvz.getRewardsCfg().hasStructureCmds(player.getUniqueId())) {
+                if (!player.isOp() && !player.hasPermission("cmd.furnace")) {
+                    sender.sendMessage(Util.formatMsg("&3Purchase &a&lVIP &3to be able to use the virtual furnace."));
+                    return true;
+                }
             }
 
             if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted() || (Util.isTest() && !Util.canTest(player))) {
@@ -116,9 +121,11 @@ public class Commands {
             }
             Player player = (Player)sender;
 
-            if (!player.isOp() && !player.hasPermission("cmd.enchant")) {
-                sender.sendMessage(Util.formatMsg("&3Purchase &a&lVIP &3to be able to use virtual enchanting."));
-                return true;
+            if (!dvz.getRewardsCfg().hasEnchantCmd(player.getUniqueId()) && !dvz.getRewardsCfg().hasStructureCmds(player.getUniqueId())) {
+                if (!player.isOp() && !player.hasPermission("cmd.enchant")) {
+                    sender.sendMessage(Util.formatMsg("&3Purchase &a&lVIP &3to be able to use virtual enchanting."));
+                    return true;
+                }
             }
 
             if (!dvz.getPM().getPlayer(player).isDwarf() || !dvz.getGM().isStarted() || (Util.isTest() && !Util.canTest(player))) {
@@ -638,7 +645,7 @@ public class Commands {
                         return true;
                     }
 
-                    DvzItem item = ability.getAbilityClass().getCastItem();
+                    CWItem item = ability.getAbilityClass().getCastItem().clone();
                     item.setAmount(amount);
                     item.giveToPlayer(player);
                     dvz.logTimings("Commands.onCommand()[/dvz castitem]", t);

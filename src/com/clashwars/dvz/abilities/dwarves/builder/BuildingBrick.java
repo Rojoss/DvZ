@@ -88,7 +88,7 @@ public class BuildingBrick extends BaseAbility {
                 block.getWorld().playSound(block.getLocation(), Sound.DIG_STONE, 0.8f, 1f);
                 player.updateInventory();
 
-                dvz.getPM().getPlayer(player).addClassExp(3);
+                dvz.getPM().getPlayer(player).addClassExp(4);
                 dvz.getSM().changeLocalStatVal(player, StatType.BUILDER_BRICK_USED, 1);
                 dvz.logTimings("BuildingBrick.castAbility()[place]", t);
                 return;

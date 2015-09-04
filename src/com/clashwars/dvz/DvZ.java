@@ -6,11 +6,14 @@ import com.clashwars.cwcore.damage.DamageHandler;
 import com.clashwars.cwcore.damage.log.LogMenu;
 import com.clashwars.cwcore.debug.TimingsLog;
 import com.clashwars.cwcore.effect.EffectManager;
+import com.clashwars.cwcore.helpers.CWItem;
 import com.clashwars.cwcore.scoreboard.CWBoard;
 import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.cwstats.CWStats;
 import com.clashwars.cwstats.stats.DataManager;
 import com.clashwars.cwstats.stats.StatsManager;
+import com.clashwars.cwvote.CWVote;
+import com.clashwars.cwvote.shop.ShopItem;
 import com.clashwars.dvz.VIP.ArmorMenu;
 import com.clashwars.dvz.VIP.BannerMenu;
 import com.clashwars.dvz.VIP.ColorMenu;
@@ -74,6 +77,7 @@ public class DvZ extends JavaPlugin {
     private BannerCfg bannerCfg;
     private PlayerSettingsCfg settingsCfg;
     private ReleasePlayersCfg releasePlayersCfg;
+    private RewardsCfg rewardsCfg;
 
     private Commands cmds;
 
@@ -161,6 +165,13 @@ public class DvZ extends JavaPlugin {
         }
         cws = (CWStats)plugin;
 
+        plugin = getServer().getPluginManager().getPlugin("CWVote");
+        if (plugin == null || !(plugin instanceof CWVote)) {
+            log("CWVote dependency couldn't be loaded! Vote rewards won't be added!");
+        } else {
+            addVoteRewards();
+        }
+
         permission = cwcore.getDM().getPermissions();
         if (permission == null) {
             log("Vault permissions couldn't be loaded.");
@@ -197,6 +208,8 @@ public class DvZ extends JavaPlugin {
         settingsCfg.load();
         releasePlayersCfg = new ReleasePlayersCfg("plugins/DvZ/data/ReleasePlayers.yml");
         releasePlayersCfg.load();
+        rewardsCfg = new RewardsCfg("plugins/DvZ/data/Rewards.yml");
+        rewardsCfg.load();
 
         mm = new MapManager(this);
         gm = new GameManager(this);
@@ -284,6 +297,29 @@ public class DvZ extends JavaPlugin {
             cwb.addPlayer(player);
         }
         cwb.show(true);
+    }
+
+    private void addVoteRewards() {
+        new ShopItem("&b&lExtra dwarf class", 1, new CWItem(Material.DIAMOND_PICKAXE),
+                new String[] {"&7Get an extra dwarf class option.", "&cThis will be for one game!"}, "dvz");
+        new ShopItem("&3&lExtra dwarf class", 75, new CWItem(Material.DIAMOND_PICKAXE),
+                new String[] {"&7Get an extra dwarf class option.", "&2This will last forever!"}, "dvz");
+        new ShopItem("&b&lVirtual structures", 1, new CWItem(Material.CHEST),
+                new String[] {"&7Get access to structure commands.", "&b/storage&8, &b/enchant&8, &b/furnace", "&cThis will be for one game!"}, "dvz");
+        new ShopItem("&3&l/storage command", 50, new CWItem(Material.CHEST),
+                new String[] {"&7Get access to the &b/storage &7command.", "&2This will last forever!"}, "dvz");
+        new ShopItem("&3&l/furnace command", 50, new CWItem(Material.FURNACE),
+                new String[] {"&7Get access to the &b/furnace &7command.", "&2This will last forever!"}, "dvz");
+        new ShopItem("&3&l/enchant command", 40, new CWItem(Material.ENCHANTMENT_TABLE),
+                new String[] {"&7Get access to the &b/enchant &7command.", "&2This will last forever!"}, "dvz");
+        new ShopItem("&b&lDwarf ability", 1, new CWItem(Material.BLAZE_ROD),
+                new String[] {"&7Get a random dwarf ability.", "&cThis will be for one game!"}, "dvz");
+        new ShopItem("&b&l+3% monster classes", 1, new CWItem(Material.MONSTER_EGG, 3, (byte)54),
+                new String[] {"&73% extra chance for each monster class.", "&cThis will be for one game!"}, "dvz");
+        new ShopItem("&b&l+6% monster classes", 2, new CWItem(Material.MONSTER_EGG, 6, (byte)54),
+                new String[] {"&76% extra chance for each monster class.", "&cThis will be for one game!"}, "dvz");
+        new ShopItem("&b&l+10% monster classes", 3, new CWItem(Material.MONSTER_EGG, 10, (byte)54),
+                new String[] {"&710% extra chance for each monster class.", "&cThis will be for one game!"}, "dvz");
     }
 
     @Override
@@ -412,6 +448,10 @@ public class DvZ extends JavaPlugin {
 
     public ReleasePlayersCfg getReleasePlayersCfg() {
         return releasePlayersCfg;
+    }
+
+    public RewardsCfg getRewardsCfg() {
+        return rewardsCfg;
     }
 
 

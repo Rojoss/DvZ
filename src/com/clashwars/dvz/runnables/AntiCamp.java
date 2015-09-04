@@ -31,7 +31,6 @@ public class AntiCamp extends BukkitRunnable {
         if (dvz.getMM().getActiveMap() == null || dvz.getMM().getActiveMap().getWorld() == null) {
             return;
         }
-        World world = dvz.getMM().getActiveMap().getWorld();
         monsterLoc = dvz.getMM().getActiveMap().getLocation("monster");
     }
 

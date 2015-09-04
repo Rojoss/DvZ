@@ -3,6 +3,7 @@ package com.clashwars.dvz.player;
 import com.clashwars.cwcore.CooldownManager;
 import com.clashwars.cwcore.ItemMenu;
 import com.clashwars.cwcore.damage.log.DamageLog;
+import com.clashwars.cwcore.debug.Debug;
 import com.clashwars.cwcore.hat.Hat;
 import com.clashwars.cwcore.hat.HatManager;
 import com.clashwars.cwcore.helpers.CWItem;
@@ -356,6 +357,45 @@ public class CWPlayer {
         dvz.logTimings("CWPlayer.giveClassItems()", t);
     }
 
+    public void giveRandomClassItems(ClassType type, int amount) {
+        Player player = getPlayer();
+        if (type == ClassType.MONSTER) {
+            Map<DvzClass, BaseClass> classOptions = dvz.getCM().getRandomClasses(player, type, amount);
+            for (DvzClass c : classOptions.keySet()) {
+                if (classOptions.get(c) != null && classOptions.get(c).getClassItem() != null) {
+                    classOptions.get(c).getClassItem().giveToPlayer(player);
+                }
+            }
+        } else {
+            List<DvzClass> allDwarfClasses = new ArrayList<>(dvz.getCM().getClasses(type).keySet());
+            List<DvzClass> options = new ArrayList<DvzClass>();
+            for (DvzClass dvzClass : allDwarfClasses) {
+                //Debug.bcOps(dvzClass);
+                if (!getClassOptions().contains(dvzClass)) {
+                    //Debug.bcOps("Adding as option!");
+                    options.add(dvzClass);
+                }
+            }
+            //Debug.bcOps(options.size());
+            //Debug.bcOps(options);
+            int optionsCount = options.size();
+            //Debug.bcOps("Giving " + amount + " random classes");
+            for (int i = 0; i < amount && i < optionsCount; i++) {
+                //Debug.bcOps(i);
+                DvzClass option = CWUtil.random(options);
+                //Debug.bcOps(option);
+                addClassOption(option);
+                //Debug.bc(option.getClassClass().getClassItem());
+                if (option.getClassClass().getClassItem() != null) {
+                    //Debug.bcOps("Giving class item!");
+                    option.getClassClass().getClassItem().giveToPlayer(player);
+                }
+                options.remove(option);
+            }
+        }
+
+    }
+
     public PlayerData getPlayerData() {
         return data;
     }
@@ -396,6 +436,14 @@ public class CWPlayer {
 
     public void setClassOptions(Set<DvzClass> classOptions) {
         data.setClassOptions(classOptions);
+    }
+
+    public void addClassOption(DvzClass dvzClass) {
+        Set<DvzClass> classOptions = data.getClassOptions();
+        if (!classOptions.contains(dvzClass)) {
+            classOptions.add(dvzClass);
+            data.setClassOptions(classOptions);
+        }
     }
 
     public void removeClassOption(DvzClass dvzClass) {

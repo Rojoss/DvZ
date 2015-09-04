@@ -60,42 +60,45 @@ public class BuildingBlock extends BaseAbility {
         Block block = event.getBlock();
         boolean placed = false;
         int blockCount = getIntOption("blocks");
-        for (int x = 0; x < blockCount; x++) {
-            Block b = block.getRelative(0, x, 0);
+        for (int x = -1; x <= 1; x++) {
+            for (int y = 0; y < blockCount; y++) {
+                for (int z = -1; z <= 1; z++) {
+                    Block b = block.getRelative(x, y, z);
 
-            if (b.getType() != Material.AIR && b.getType() != Material.BRICK) {
-                break;
-            }
-
-            for (int i = 0; i < 9; i++) {
-                ItemStack item = player.getInventory().getItem(i);
-                if (item != null && item.getType() == Material.SMOOTH_BRICK) {
-
-                    if (!onCooldown(player)) {
-                        if (x == 0) {
-                            event.getBlockReplacedState().setType(item.getType());
-                            event.getBlockReplacedState().setRawData(item.getData().getData());
-                        } else {
-                            b.setType(item.getType());
-                            b.setData(item.getData().getData());
-                        }
-                        placed = true;
-
-                        CWUtil.removeItemsFromSlot(player.getInventory(), i, 1);
-                        ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(item.getType(), item.getData().getData()), 0.5f, 0.5f, 0.5f, 0.1f, 5, b.getLocation().add(0.5f, 0.5f, 0.5f));
-                        block.getWorld().playSound(b.getLocation(), Sound.DIG_STONE, 0.8f, 1f);
-                        player.updateInventory();
+                    if (b.getType() != Material.AIR && b.getType() != Material.BRICK) {
+                        continue;
                     }
-                    break;
+
+                    for (int i = 0; i < 9; i++) {
+                        ItemStack item = player.getInventory().getItem(i);
+                        if (item != null && item.getType() == Material.SMOOTH_BRICK) {
+
+                            if (y == 0 && x == 0 && z == 0) {
+                                event.getBlockReplacedState().setType(item.getType());
+                                event.getBlockReplacedState().setRawData(item.getData().getData());
+                            } else {
+                                b.setType(item.getType());
+                                b.setData(item.getData().getData());
+                            }
+                            placed = true;
+
+                            CWUtil.removeItemsFromSlot(player.getInventory(), i, 1);
+                            ParticleEffect.BLOCK_CRACK.display(new ParticleEffect.BlockData(item.getType(), item.getData().getData()), 0.5f, 0.5f, 0.5f, 0.1f, 5, b.getLocation().add(0.5f, 0.5f, 0.5f));
+                            block.getWorld().playSound(b.getLocation(), Sound.DIG_STONE, 0.8f, 1f);
+                            player.updateInventory();
+                            break;
+                        }
+                    }
+                    if (!placed) {
+                        CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cNo more stone in your hotbar! &4&l<<"));
+                        break;
+                    }
                 }
-            }
-            if (!placed) {
-                CWUtil.sendActionBar(player, CWUtil.integrateColor("&4&l>> &cNo more stone in your hotbar! &4&l<<"));
             }
         }
         if (placed) {
             dvz.getSM().changeLocalStatVal(player, StatType.BUILDER_BLOCK_USED, 1);
-            dvz.getPM().getPlayer(player).addClassExp(3);
+            dvz.getPM().getPlayer(player).addClassExp(4);
         }
         dvz.logTimings("BuildingBlock.castAbility()", t);
     }

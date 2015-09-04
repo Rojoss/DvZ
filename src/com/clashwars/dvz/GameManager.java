@@ -10,6 +10,7 @@ import com.clashwars.dvz.abilities.dwarves.bonus.Camouflage;
 import com.clashwars.dvz.classes.ClassType;
 import com.clashwars.dvz.classes.DvzClass;
 import com.clashwars.dvz.config.GameCfg;
+import com.clashwars.dvz.config.RewardsCfg;
 import com.clashwars.dvz.listeners.custom.GameOpenEvent;
 import com.clashwars.dvz.listeners.custom.GameResetEvent;
 import com.clashwars.dvz.listeners.custom.GameStartEvent;
@@ -107,6 +108,9 @@ public class GameManager {
             dvz.getBannerCfg().setBanner(banner.getKey(), banner.getValue());
             dvz.getBannerMenu().tempBanners.put(banner.getKey(), banner.getValue());
         }
+
+        dvz.getRewardsCfg().resetStructureCmds();
+        dvz.getRewardsCfg().resetExtraMonster();
 
         Util.broadcastAdmins(Util.formatMsg("&6Reset progress&8: &5All data has been removed/reset"));
 

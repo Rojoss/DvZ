@@ -162,7 +162,8 @@ public class LobbyEvents implements Listener {
                                         dvz.logTimings("LobbyEvents.interact()[already all classes]", t);
                                         return;
                                     }
-                                    cwp.giveClassItems(ClassType.DWARF, false, 1);
+                                    cwp.giveRandomClassItems(ClassType.DWARF, 1);
+                                    player.updateInventory();
                                 }
                             }
                         }

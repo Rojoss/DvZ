@@ -6,6 +6,7 @@ import com.clashwars.cwcore.utils.CWUtil;
 import com.clashwars.dvz.DvZ;
 import com.clashwars.dvz.Product;
 import com.clashwars.dvz.abilities.Ability;
+import com.clashwars.dvz.config.RewardsCfg;
 import com.clashwars.dvz.player.CWPlayer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -65,18 +66,19 @@ public class ClassManager {
         Map<DvzClass, BaseClass> classes = getClasses(type);
         HashMap<DvzClass, BaseClass> randomclasses = new HashMap<DvzClass, BaseClass>();
         BaseClass c;
+        RewardsCfg rewardsCfg = dvz.getRewardsCfg();
 
         if (type == ClassType.MONSTER) {
             //Loop through all monsters and check weight/chance.
             for (DvzClass dvzClass : classes.keySet()) {
                 c = classes.get(dvzClass);
                 double weight = c.getWeight();
-                if (player.hasPermission("vip.gold")) {
-                    weight += 0.08;
-                }
                 if (player.hasPermission("vip.diamond")) {
+                    weight += 0.08;
+                } else if (player.hasPermission("vip.gold")) {
                     weight += 0.03;
                 }
+                weight += (float)rewardsCfg.getExtraMonster(player.getUniqueId()) / 100;
                 if (CWUtil.randomFloat() <= weight) {
                     randomclasses.put(dvzClass, c);
                 }
@@ -103,6 +105,9 @@ public class ClassManager {
                     }
                 }
             }
+
+            //Get bonus classes for vote rewards
+            classCount += rewardsCfg.getExtraDwarf(player.getUniqueId());
 
             if (classCount > classes.size()) {
                 classCount = classes.size();

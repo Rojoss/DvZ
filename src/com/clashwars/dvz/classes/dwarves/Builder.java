@@ -67,7 +67,7 @@ public class Builder extends DwarfClass {
         }
 
         event.setCancelled(false);
-        dvz.getPM().getPlayer(player).addClassExp(2);
+        dvz.getPM().getPlayer(player).addClassExp(3);
 
         dvz.getSM().changeLocalStatVal(player, StatType.BUILDER_STONE_PLACED, 1);
         dvz.logTimings("Builder.blockPlace()", t);

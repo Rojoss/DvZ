@@ -135,8 +135,8 @@ public enum Ability {
     NET(new Net(), SwapType.DWARF_ABILITY, ""),
     FIRESTAFF(new FireStaff(), SwapType.DWARF_ABILITY, "{0} burnt to a crisp by {1}'s Firestaff"),
     CAMOUFLAGE(new Camouflage(), SwapType.DWARF_ABILITY, ""),
-    FORCEFIELD(new Forcefield(), SwapType.DWARF_ABILITY, ""),
-    TURRET(new Turret(), SwapType.DWARF_ABILITY, "{0} was shot by {1}'s turret");
+    FORCEFIELD(new Forcefield(), SwapType.DWARF_ABILITY, "");
+    //TURRET(new Turret(), SwapType.DWARF_ABILITY, "{0} was shot by {1}'s turret");
 
 
 

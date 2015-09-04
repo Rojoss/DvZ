@@ -53,7 +53,7 @@ public class SummonStone extends BaseAbility {
                     cancel();
                 }
             }
-        }.runTaskTimer(dvz, 0, 5);
+        }.runTaskTimer(dvz, 0, 3);
         dvz.getSM().changeLocalStatVal(player, StatType.BUILDER_STONE_SUMMONED, 32);
         dvz.logTimings("SummonStone.castAbility()", t);
     }

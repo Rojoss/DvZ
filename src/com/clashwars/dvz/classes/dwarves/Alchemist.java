@@ -133,7 +133,7 @@ public class Alchemist extends DwarfClass {
             player.playSound(block.getLocation(), Sound.SPLASH2, 1.0f, 2.0f);
             player.getItemInHand().setType(Material.WATER_BUCKET);
             block.setData((byte)0);
-            dvz.getPM().getPlayer(player).addClassExp(1);
+            dvz.getPM().getPlayer(player).addClassExp(3);
             dvz.getSM().changeLocalStatVal(player, StatType.ALCHEMIST_CAULDRONS_EMPTIED, 1);
         }
         dvz.logTimings("Alchemist.onInteract()", t);
@@ -381,10 +381,12 @@ public class Alchemist extends DwarfClass {
         //Put item in chest and if chest is full drop it at chest.
         CWItem item;
         if (ws.melons > 0) {
-            item = Ability.HEAL_POTION.getAbilityClass().getCastItem();
+            item = Ability.HEAL_POTION.getAbilityClass().getCastItem().clone();
+            item.setAmount(1);
             dvz.getSM().changeLocalStatVal(ws.getOwner(), StatType.ALCHEMIST_HEALTH_POTS, 1);
         } else {
-            item = Ability.SPEED_POTION.getAbilityClass().getCastItem();
+            item = Ability.SPEED_POTION.getAbilityClass().getCastItem().clone();
+            item.setAmount(1);
             dvz.getSM().changeLocalStatVal(ws.getOwner(), StatType.ALCHEMIST_SPEED_POTS, 1);
         }
         if (item != null) {
@@ -409,7 +411,7 @@ public class Alchemist extends DwarfClass {
         ws.melons = 0;
         ws.sugar = 0;
 
-        dvz.getPM().getPlayer(ws.getOwner()).addClassExp(70);
+        dvz.getPM().getPlayer(ws.getOwner()).addClassExp(90);
         // + 3 per melon broken
         // + 1 per sugarcane broken
         // + 1 per bucket filled

@@ -18,7 +18,7 @@ import java.util.List;
 
 public class DwarfClass extends BaseClass {
 
-    protected static List<Ability> bonusAbilities = new ArrayList<Ability>();
+    public static List<Ability> bonusAbilities = new ArrayList<Ability>();
 
     public DwarfClass() {
         super();

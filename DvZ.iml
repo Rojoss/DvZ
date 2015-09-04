@@ -63,5 +63,15 @@
     </orderEntry>
     <orderEntry type="module" module-name="ClashWars" />
     <orderEntry type="module" module-name="CWStats" />
+    <orderEntry type="module" module-name="CWVote" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../_BUILDS/CWVote.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
